@@ -528,7 +528,7 @@ function LoadConfig () {
 		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 25 # [tier] == 100", //maras
 		"[Type] == Belt && [Quality] == Crafted && [flag] != ethereal # [FCR] >= 10 && [MaxHP] >= 15 && [fireresist] >= 20 && [lightresist] >= 20 # [tier] == 95", //caster belt
 		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100", //arach's
-		"[name] == heavybracers && [quality] == set && [flag] != ethereal # [fcr] >= 20 # [tier] == 100",// trangs
+		"[name] == heavybracers && [quality] == set && [flag] != ethereal # [fcr] >= 20 # [tier] == 100", // trangs
 		"[type] == circlet && [quality] == rare # [paladinskills] == 2 && [fcr] >= 20 && ([maxhp] >= 30 || [maxmana] >= 60) && [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 60 # [tier] == 100",
 	];
 	NTIP.arrayLooping(setupSORCERESS);
