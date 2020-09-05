@@ -525,9 +525,14 @@ function LoadConfig () {
 
 	switch (finalBuild) {
 	case 'Smiter':
-		Config.Recipes.push([Recipe.Blood.Gloves, "Vampirebone Gloves"]);
-		Config.Recipes.push([Recipe.Blood.Belt, "Mesh Belt"]);
-		Config.Recipes.push([Recipe.Blood.Belt, "mithril coil"]);
+		if (Item.getEquippedItem(10).tier < 95) {// crafted blood gloves
+			Config.Recipes.push([Recipe.Blood.Gloves, "Vampirebone Gloves"]);
+		}
+
+		if (Item.getEquippedItem(8).tier < 95) {// crafted blood belt
+			Config.Recipes.push([Recipe.Blood.Belt, "Mesh Belt"]);
+			Config.Recipes.push([Recipe.Blood.Belt, "mithril coil"]);
+		}
 
 		var setupSMITER = [
 			"[name] == lightplatedboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 50 # [tier] == 100",
@@ -562,9 +567,14 @@ function LoadConfig () {
 
 		break;
 	case 'Hammerdin':
-		Config.Recipes.push([Recipe.Caster.Gloves, "Bramble Mitts"]);
-		Config.Recipes.push([Recipe.Caster.Belt, "Sharkskin Belt"]);
-		Config.Recipes.push([Recipe.Caster.Belt, "Vampirefang Belt"]);
+		if (Item.getEquippedItem(10).tier < 95) {// crafted caster gloves
+			Config.Recipes.push([Recipe.Caster.Gloves, "Bramble Mitts"]);
+		}
+
+		if (Item.getEquippedItem(8).tier < 95) {// crafted caster belt
+			Config.Recipes.push([Recipe.Caster.Belt, "Sharkskin Belt"]);
+			Config.Recipes.push([Recipe.Caster.Belt, "Vampirefang Belt"]);
+		}
 
 		var setupHAMMERDIN = [
 			"[type] == boots && [quality] == unique && [flag] != ethereal # [frw] >= 20 && [maxhp] >= 55 && [dexterity] == 15 # [tier] == 100",
