@@ -1,6 +1,6 @@
 # SoloLeveling
 
-A script for BlizzHackers / Kolbot to level D2LOD characters from 0 to 99
+A script for BlizzHackers / Kolbot to level Diablo 2 LoD characters from 0 to 99.
 
 ## Installation
 
