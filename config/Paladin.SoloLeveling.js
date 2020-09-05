@@ -229,8 +229,7 @@ function LoadConfig () {
 	// Character Build Setup
 	const respecOne = 25;
 	const respecTwo = 85;
-	//const respecTwo = global.respec2;
-	//D2Bot.printToConsole(respecLevel);
+
 	const startBuild = "Start"; // build ends when reaching lvl 25
 	const middleBuild = "Hammerdin"; // starts at 25 ends when reaching lvl 85
 	const startBelt = ["hp", "hp", "hp", "hp"];
