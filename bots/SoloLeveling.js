@@ -3,8 +3,8 @@
 *	@author		isid0re
 *	@desc		Power leveling for any class type. Just make a character and name it. Uses a predefine buildtemplates.
 *				Make sure kolbot difficulty is set to "highest"
-*	@TODO		1 add dynamic tiers for autoequip 
-*				2 equip 2nd spirit on slot 2. 
+*	@TODO		1 add dynamic tiers for autoequip
+*				2 equip 2nd spirit on slot 2.
 *				3 setup global respec variables for character levels
 */
 
@@ -35,7 +35,6 @@ function SoloLeveling () {
 		return me.getQuest(id, state);
 	};
 
-	//Town, Pots, and Storage
 	this.townTasks = function () {
 		this.unfinishedQuests();
 		Town.checkQuestItems();
@@ -63,7 +62,7 @@ function SoloLeveling () {
 	};
 
 	this.unfinishedQuests = function () {
-		//Radament skill book 
+		//Radament skill book
 		let book = me.getItem(552);
 
 		if (book) {
@@ -79,10 +78,10 @@ function SoloLeveling () {
 
 			print('SoloLeveling: used Radament skill book');
 		}
-		
+
 		// anya scroll of resistance
 		let scroll = me.getItem(646);
-		
+
 		if (scroll) {
 			if (scroll.location === 7) {
 				Town.move('stash');
@@ -96,10 +95,10 @@ function SoloLeveling () {
 
 			print('SoloLeveling: used scroll of resistance');
 		}
-	
-		return true; 
+
+		return true;
 	};
-	
+
 	this.buyPots = function (quantity) {
 
 		let npc;
@@ -165,15 +164,15 @@ function SoloLeveling () {
 	};
 
 	this.organizeStash = function () {
-		
+
 		me.overhead('organize stash');
 		Town.move('stash');
-		
+
 		let fit = { sizex: 6, sizey: 8 };
 
 		if (!Storage.Stash.CanFit(fit)) {
 			me.cancel();
-			
+
 			return me.findItems(-1, -1, 7)
 				.sort((a, b) => b.sizex * b.sizey - a.sizex * a.sizey)
 				.forEach(c => Storage.Stash.MoveTo(me.itemoncursor ? getUnit(101) : c, true));
@@ -200,18 +199,19 @@ function SoloLeveling () {
 
 	this.clearJunk = function () {
 		let junk = me.getItems();
+
 		for (let count = 0; count < junk.length; count += 1) {
 			if (junk[count].location === 7 && //inventory
-				!Pickit.checkItem(junk[count]).result == 1 && //Pickit.js NTIP wants (line 27)
+				!Pickit.checkItem(junk[count]).result === 1 && //Pickit.js NTIP wants (line 27)
 				!Cubing.keepItem(junk[count]) && // keep cubing items
 				!Runewords.keepItem(junk[count]) && // keep runeword items
-				!CraftingSystem.keepItem(junk[count]) // keep crafting items 
+				!CraftingSystem.keepItem(junk[count]) // keep crafting items
 			) {
 				me.overhead('clear out junk');
 				junk[count].drop();
 			}
 		}
-		
+
 		return true;
 	};
 
@@ -274,28 +274,28 @@ function SoloLeveling () {
 
 	this.equipCTA = function () {
 		let cta = me.getItems()
-		.filter(item => 
-			item.getPrefix(20519) // The call to arms prefix
-			&& [1,3,6,7].indexOf(item.location) > -1 // Needs to be on either of these locations
+			.filter(item =>
+				item.getPrefix(20519) // The call to arms prefix
+			&& [1, 3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
 		  )
-		  .sort((a,b) => a.location-b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
+		  .sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
 		  .first();
 
 		if (cta) {
 		  if (cta.location === 1) {
-			return true; 
+				return true;
 		  } else {
-			Town.move('stash');
-			Storage.Inventory.MoveTo(cta);
-			Attack.weaponSwitch(2); // To the slot you want it to be
-			cta.equip();
-			Attack.weaponSwitch();
+				Town.move('stash');
+				Storage.Inventory.MoveTo(cta);
+				Attack.weaponSwitch(2); // To the slot you want it to be
+				cta.equip();
+				Attack.weaponSwitch();
 		  }
 		}
 
-		return true; 
-	}
-		
+		return true;
+	};
+
 	this.characterRespec = function () {// Akara reset for build change
 		if (this.checkQuest(41, 0)) {
 			return true;
@@ -313,8 +313,8 @@ function SoloLeveling () {
 
 			delay(me.ping * 2);
 			Misc.useMenu(0x2ba0); //click reset stats
-			Misc.useMenu(3401); // click ok 
-			
+			Misc.useMenu(3401); // click ok
+
 			delay((me.ping * 2) + 1000);
 
 			Town.clearBelt();
@@ -334,9 +334,9 @@ function SoloLeveling () {
 	// Scripts to execute for leveling
 	this.startrun = function () {
 		me.overhead('setup SoloLeveling');
-		
+
 		delay(250);
-		me.overhead('adding quest items to NTIP_CheckList');	
+		me.overhead('adding quest items to NTIP_CheckList');
 		var questItems = [
 			"[Name] == ScrollOfInifuss",
 			"[Name] == KeyToTheCairnStones",
@@ -356,7 +356,7 @@ function SoloLeveling () {
 			"[Name] == Khalim'sWill"
 		];
 		NTIP.arrayLooping(questItems);
-		
+
 		delay(250);
 		me.overhead('adding general items to NTIP_CheckList');
 		var generalItems = [
@@ -385,34 +385,34 @@ function SoloLeveling () {
 			"[name] >= pulrune && [name] <= zodrune"
 		];
 		NTIP.arrayLooping(generalItems);
-		
+
 		delay(250);
-		
+
 		Town.reviveMerc();
-		
-		if(!!me.getMerc() == true) {
+
+		if (!!me.getMerc() === true) {
 			me.overhead('setup merc');
 			var setupMerc = [
 				"[type] == polearm && [flag] == runeword # [lifeleech] >= 7 # [MercTier] == 2",
 				"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [MercTier] == 3",
-				"[Type] == armor && [flag] == runeword && [flag] != ethereal # [ias] == 45 && [coldresist] == 30 # [MercTier] == 3", 
+				"[Type] == armor && [flag] == runeword && [flag] != ethereal # [ias] == 45 && [coldresist] == 30 # [MercTier] == 3",
 				"[Type] == armor && [flag] == runeword && [flag] == ethereal # [ias] == 45 && [coldresist] == 30 # [MercTier] == 4",
 			];
 			NTIP.arrayLooping(setupMerc);
-			
-			if(Item.getEquippedItemMerc(1).tier <= 2) {//Gface
+
+			if (Item.getEquippedItemMerc(1).tier <= 2) {//Gface
 				NTIP.addLine("[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 3");
 			}
-			
-			if(Item.getEquippedItemMerc(1).tier <= 1) {//Tal's
+
+			if (Item.getEquippedItemMerc(1).tier <= 1) {//Tal's
 				NTIP.addLine("[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 2");
 			}
-			
-			if(me.diff == 1 && Item.getEquippedItemMerc(1).tier <= 0) {//Fire Resist Helm
+
+			if (me.diff === 1 && Item.getEquippedItemMerc(1).tier <= 0) {//Fire Resist Helm
 				NTIP.addLine("[type] == helm # [fireresist] >= 20 # [MercTier] == 1");
 			}
-			
-			if(Item.getEquippedItemMerc(4).tier <= 2) {//Insight
+
+			if (Item.getEquippedItemMerc(4).tier <= 2) {//Insight
 				var Insight = [
 					"[Name] == RalRune # # [MaxQuantity] == 1",
 					"[Name] == TirRune # # [MaxQuantity] == 1",
@@ -438,7 +438,7 @@ function SoloLeveling () {
 				Config.Recipes.push([Recipe.Socket.Weapon, "Cryptic Axe", Roll.Eth]);
 				Config.Recipes.push([Recipe.Socket.Weapon, "Great Poleaxe", Roll.NonEth]);
 				Config.Recipes.push([Recipe.Socket.Weapon, "Great Poleaxe", Roll.Eth]);
-				
+
 				Config.Runewords.push([Runeword.Insight, "War Scythe"]);
 				Config.Runewords.push([Runeword.Insight, "Bill"]);
 				Config.Runewords.push([Runeword.Insight, "Battle Scythe"]);
@@ -449,15 +449,15 @@ function SoloLeveling () {
 				Config.Runewords.push([Runeword.Insight, "greatpoleaxe"]);
 				Config.KeepRunewords.push("[type] == polearm # [meditationaura] >= 12");
 			}
-			
-			if(Item.getEquippedItemMerc(4).tier <= 1) {//Strength
+
+			if (Item.getEquippedItemMerc(4).tier <= 1) {//Strength
 				var Strength = [
 					"[Name] == AmnRune # # [MaxQuantity] == 1",
 					"[Name] == TirRune # # [MaxQuantity] == 1",
 					"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] == Normal # [Sockets] == 2 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(Strength);
-				
+
 				Config.Runewords.push([Runeword.Strength, "Voulge"]);
 				Config.Runewords.push([Runeword.Strength, "Poleaxe"]);
 				Config.Runewords.push([Runeword.Strength, "Scythe"]);
@@ -465,20 +465,20 @@ function SoloLeveling () {
 				Config.Runewords.push([Runeword.Strength, "Halberd"]);
 				Config.Runewords.push([Runeword.Strength, "Battle Scythe"]);
 				Config.Runewords.push([Runeword.Strength, "Partizan"]);
-				Config.Runewords.push([Runeword.Strength, "Grim Scythe"]);	
+				Config.Runewords.push([Runeword.Strength, "Grim Scythe"]);
 				Config.KeepRunewords.push("[type] == polearm # [lifeleech] >= 7");
 			}
-			
-			if(me.diff == 1 && Item.getEquippedItemMerc(4).tier <= 0) {//Life Leach Polearm
+
+			if (me.diff === 1 && Item.getEquippedItemMerc(4).tier <= 0) {//Life Leach Polearm
 				NTIP.addLine("[type] == polearm # [lifeleech] >= 7  # [MercTier] == 1");
 			}
-			
-			if(Item.getEquippedItemMerc(3).tier <= 3) {//Treachery
+
+			if (Item.getEquippedItemMerc(3).tier <= 3) {//Treachery
 				var Treachery = [
-				"[Name] == ShaelRune # # [MaxQuantity] == 1",
-				"[Name] == ThulRune # # [MaxQuantity] == 1",
-				"[Name] == LemRune # # [MaxQuantity] == 1",
-				"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] == ethereal # [Sockets] == 0",
+					"[Name] == ShaelRune # # [MaxQuantity] == 1",
+					"[Name] == ThulRune # # [MaxQuantity] == 1",
+					"[Name] == LemRune # # [MaxQuantity] == 1",
+					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] == ethereal # [Sockets] == 0",
 				];
 				NTIP.arrayLooping(Treachery);
 
@@ -486,32 +486,32 @@ function SoloLeveling () {
 				Config.Recipes.push([Recipe.Socket.Armor, "Mage Plate"]);
 				Config.Recipes.push([Recipe.Socket.Armor, "Wire Fleece"]);
 				Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
-			
+
 				Config.Runewords.push([Runeword.Treachery, "Archon Plate"]);
 				Config.Runewords.push([Runeword.Treachery, "Mage Plate"]);
 				Config.Runewords.push([Runeword.Treachery, "Wire Fleece"]);
 				Config.Runewords.push([Runeword.Treachery, "Dusk Shroud"]);
 				Config.KeepRunewords.push("[Type] == armor # [ias] == 45 && [coldresist] == 30");
 			}
-			
-			if(Item.getEquippedItemMerc(3).tier <= 2) { //NonEth Treachery
+
+			if (Item.getEquippedItemMerc(3).tier <= 2) { //NonEth Treachery
 				NTIP.addLine("([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3)");
-			};
-			
-			if(me.diff == 1 && Item.getEquippedItemMerc(3).tier <= 1) {//MaxHP armor
+			}
+
+			if (me.diff === 1 && Item.getEquippedItemMerc(3).tier <= 1) {//MaxHP armor
 				NTIP.addLine("[type] == armor # [maxhp] >= 90 # [MercTier] == 2");
 			}
 
-			if(me.diff == 1 && Item.getEquippedItemMerc(3).tier <= 0) {//MaxHP armor
+			if (me.diff === 1 && Item.getEquippedItemMerc(3).tier <= 0) {//MaxHP armor
 				NTIP.addLine("[type] == armor # [maxhp] >= 60 # [MercTier] == 1");
 			}
 		}
-		
+
 		delay(250);
-		
+
 		this.clearJunk();
 		this.organizeStash();
-		
+
 		return true;
 	};
 
@@ -579,9 +579,9 @@ function SoloLeveling () {
 		if (!Pather.moveToExit([17, 19], true)) {
 			print("Failed to move to Mausoleum");
 		}
-		
+
 		Attack.clearLevel();
-				
+
 		return true;
 	};
 
@@ -661,9 +661,9 @@ function SoloLeveling () {
 
 		Pather.useWaypoint(6);
 		Precast.doPrecast(true);
-		
+
 		try {
-			Pather.moveToExit([20, 21, 22, 23, 24, 25], true);		
+			Pather.moveToExit([20, 21, 22, 23, 24, 25], true);
 			Pather.moveToPreset(me.area, 2, 580);
 			Attack.clear(20, 0, getLocaleString(2875));
 		} catch (err) {
@@ -727,13 +727,13 @@ function SoloLeveling () {
 		Pather.moveTo(22572, 9582);
 		Pather.moveTo(22554, 9566);
 		Pather.moveTo(22546, 9554);
-		
+
 		try {
 			Attack.kill(156); // kill Andariel
 		} catch (err) {
 			print('Failed to kill Andy');
 		}
-		
+
 		delay(2000); // Wait for minions to die.
 		Pickit.pickItems();
 
@@ -780,21 +780,21 @@ function SoloLeveling () {
 
 		Pickit.pickItems();
 		Town.goToTown();
-		
+
 		let book = me.getItem(552);
 
 		if (book) {
 		  if (book.location === 7) {
-			Town.move('stash');
-			Storage.Inventory.MoveTo(book);
-			delay(300);
-			clickItem(1, book);
+				Town.move('stash');
+				Storage.Inventory.MoveTo(book);
+				delay(300);
+				clickItem(1, book);
 		  } else {
-			delay(300);
-			clickItem(1, book);
+				delay(300);
+				clickItem(1, book);
 		  }
-		}			
-		
+		}
+
 		Town.move(NPC.Atma);
 		let atma = getUnit(1, NPC.Atma);
 
@@ -824,7 +824,7 @@ function SoloLeveling () {
 		Pather.moveToPreset(me.area, 2, 354);
 
 		Attack.securePosition(me.x, me.y, 30, 3000, true);
-	
+
 		let gbox = getUnit(2, 354);
 		Misc.openChest(gbox);
 		delay(300);
@@ -917,7 +917,7 @@ function SoloLeveling () {
 			print('Failed to kill summoner');
 		}
 
-		if (this.checkQuest(13, 0)){
+		if (this.checkQuest(13, 0)) {
 			return true;
 		} else {
 			let journal = getUnit(2, 357);
@@ -928,7 +928,7 @@ function SoloLeveling () {
 					delay(1000);
 					me.cancel();
 				}
-				
+
 				if (Pather.getPortal(46)) {
 					break;
 				}
@@ -1209,7 +1209,7 @@ function SoloLeveling () {
 
 		Pather.moveToPreset(me.area, 2, 407);
 		Attack.clear(0x7);
-		
+
 		let gbox = getUnit(2, 407);
 
 		Misc.openChest(gbox);
@@ -1567,13 +1567,13 @@ function SoloLeveling () {
 		Pather.moveToExit(102, true);
 		Pather.moveTo(17692, 8023);
 		Pather.moveTo(17591, 8070);
-		
+
 		try {
 			Attack.kill(242);
 		} catch (err) {
 			print('Failed to kill Mephisto');
 		}
-		
+
 		Pickit.pickItems();
 
 		Pather.moveTo(17581, 8070);
@@ -2062,18 +2062,18 @@ function SoloLeveling () {
 		delay(500);
 
 		let scroll = me.getItem(646);
-		
+
 		if (scroll) {
 			clickItem(1, scroll);
 		}
-		
+
 		print('SoloLeveling: used scroll of resistance');
 
 		return true;
 	};
 
 	this.ancients = function () {
-		
+
 		if (!Pather.accessToAct(5)) {
 			return true;
 		}
@@ -2081,16 +2081,16 @@ function SoloLeveling () {
 		if (me.charlvl < 20 && me.diff === 0 || me.charlvl < 40 && me.diff === 1 || me.charlvl < 60 && me.diff === 2 ) {
 			return true;
 		}
-		
+
 		for (let attempt = 0; attempt < 5; attempt += 1) {
-		
+
 			if (this.checkQuest(39, 0)) {
-					return true;
+				return true;
 			}
-			
+
 			this.townTasks();
 			me.overhead("ancients");
-			
+
 			Pather.useWaypoint(118, true);
 			Precast.doPrecast(true);
 
@@ -2461,39 +2461,41 @@ function SoloLeveling () {
 	return true;
 }
 
-// Start Global Variables 
+// Start Global Variables
 
-//respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid]; 
+//respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 const respecLevel = {
 	One: function () {
 		let respecOne = [ 0, 25, 25, 25, 0, 0, 0][me.classid];
+
 		return respecOne;
 	},
 
 	Two: function () {
 		let respecTwo = [ 0, 85, 85, 85, 0, 0, 0][me.classid];
+
 		return false;
 	}
 };
 
 //NTIP INJECTOR
 NTIP.addLine = function (itemString) {
-		
-		let info = {
-			line: 1,
-			file: "SoloLeveling",
-			string: line
-		};
 
-		let line = NTIP.ParseLineInt(itemString, info);
-
-		if (line) {
-			NTIP_CheckList.push(line);
-			stringArray.push(info);
-		}
-
-		return true;
+	let info = {
+		line: 1,
+		file: "SoloLeveling",
+		string: line
 	};
+
+	let line = NTIP.ParseLineInt(itemString, info);
+
+	if (line) {
+		NTIP_CheckList.push(line);
+		stringArray.push(info);
+	}
+
+	return true;
+};
 
 NTIP.arrayLooping = function (arraytoloop) {
 	for (let q = 0; q < arraytoloop.length; q += 1) {
@@ -2585,9 +2587,9 @@ Item.equipMerc = function (item, bodyLoc) {
 };
 
 Item.getEquippedItemMerc = function (bodyLoc) {
-	let mercenary = me.getMerc();	
+	let mercenary = me.getMerc();
 	var item = mercenary.getItem();
-	
+
 	if (item) {
 		do {
 			if (item.bodylocation === bodyLoc && item.location === 1) {
@@ -2743,7 +2745,7 @@ Item.autoEquipMerc = function () {
 					classid = items[0].classid;
 
 					if (this.equipMerc(items[0], bodyLoc[j])) {
-						me.overhead("equiped merc item.")
+						me.overhead("equiped merc item.");
 					}
 
 					break;
