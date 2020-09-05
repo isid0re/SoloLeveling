@@ -495,7 +495,7 @@ function SoloLeveling () {
 			}
 
 			if (Item.getEquippedItemMerc(3).tier <= 2) { //NonEth Treachery
-				NTIP.addLine("([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3)");
+				NTIP.addLine("([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1");
 			}
 
 			if (me.diff === 1 && Item.getEquippedItemMerc(3).tier <= 1) {//MaxHP armor

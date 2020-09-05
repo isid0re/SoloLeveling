@@ -14,6 +14,7 @@ function LoadConfig () {
 	Config.HealStatus = true;
 	Config.UseMerc = true;
 	Config.MercWatch = true;
+	Config.ClearInvOnStart = false;
 
 	// Potion settings
 	Config.UseHP = 75;
@@ -232,7 +233,7 @@ function LoadConfig () {
 
 	const startBuild = "Start"; // build ends when reaching lvl 25
 	const middleBuild = "Hammerdin"; // starts at 25 ends when reaching lvl 85
-	const startBelt = ["hp", "hp", "hp", "hp"];
+	const startBelt = ["hp", "hp", "hp", "mp"];
 	const middleBelt = ["hp", "hp", "mp", "mp"];
 	const finalBelt = ["hp", "hp", "mp", "rv"];
 	Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
@@ -336,6 +337,49 @@ function LoadConfig () {
 		NTIP.arrayLooping(TiersTillRespecOne);
 	}
 
+	if (Item.getEquippedItem(3).tier < 4) {// Stealth
+		var stealth = [
+			"[Name] == TalRune # # [MaxQuantity] == 1",
+			"[Name] == EthRune # # [MaxQuantity] == 1",
+			"[Name] == StuddedLeather && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
+		];
+		NTIP.arrayLooping(stealth);
+
+		Config.Runewords.push([Runeword.Stealth, "Studded Leather"]);
+		Config.KeepRunewords.push("[type] == armor # [frw] == 25 && [poisonresist] == 30");
+	}
+
+	if (Item.getEquippedItem(4).tier < 3) {// Steel
+		var steel = [
+			"[Name] == TirRune # # [MaxQuantity] == 1",
+			"[Name] == ElRune # # [MaxQuantity] == 1",
+			"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
+		];
+		NTIP.arrayLooping(steel);
+
+		Config.Runewords.push([Runeword.Steel, "Mace"]);
+		Config.KeepRunewords.push("[type] == mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
+	}
+
+	if (Item.getEquippedItem(5).tier < 4) {// Ancients' Pledge
+		var AncientsPledge = [
+			"[Name] == RalRune # # [MaxQuantity] == 1",
+			"[Name] == OrtRune # # [MaxQuantity] == 1",
+			"[Name] == TalRune # # [MaxQuantity] == 1",
+			"([Name] == LargeShield || [Name] == KiteShield || [Name] == BoneShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+		];
+		NTIP.arrayLooping(AncientsPledge);
+
+		if (!me.getItem(618)) {
+			Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+		}
+
+		Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
+		Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
+		Config.Runewords.push([Runeword.AncientsPledge, "Bone Shield"]);
+		Config.KeepRunewords.push("[type] == shield # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
+	}
+
 	if (Item.getEquippedItem(1).tier < 4) {// Lore
 		var Lore = [
 			"[Name] == OrtRune # # [MaxQuantity] == 1",
@@ -353,24 +397,14 @@ function LoadConfig () {
 			Config.Recipes.push([Recipe.Rune, "Amn Rune"]);
 		}
 
-		Config.Runewords.push([Runeword.Lore, "Circlet"]);
-		Config.Runewords.push([Runeword.Lore, "Full Helm"]);
-		Config.Runewords.push([Runeword.Lore, "Mask"]);
-		Config.Runewords.push([Runeword.Lore, "Crown"]);
-		Config.Runewords.push([Runeword.Lore, "Bone Visage"]);
-		Config.KeepRunewords.push("[type] == helm # [LightResist] >= 25");
-	}
-
-	if (Item.getEquippedItem(4).tier < 3) {// Steel
-		var steel = [
-			"[Name] == TirRune # # [MaxQuantity] == 1",
-			"[Name] == ElRune # # [MaxQuantity] == 1",
-			"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
-		];
-		NTIP.arrayLooping(steel);
-
-		Config.Runewords.push([Runeword.Steel, "Mace"]);
-		Config.KeepRunewords.push("[type] == mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
+		if (me.getItem(621)) {
+			Config.Runewords.push([Runeword.Lore, "Circlet"]);
+			Config.Runewords.push([Runeword.Lore, "Full Helm"]);
+			Config.Runewords.push([Runeword.Lore, "Mask"]);
+			Config.Runewords.push([Runeword.Lore, "Crown"]);
+			Config.Runewords.push([Runeword.Lore, "Bone Visage"]);
+			Config.KeepRunewords.push("[type] == helm # [LightResist] >= 25");
+		}
 	}
 
 	if (Item.getEquippedItem(4).tier < 5) {// Spirit Sword
@@ -397,44 +431,6 @@ function LoadConfig () {
 		Config.Runewords.push([Runeword.Spirit, "Crystal Sword"]);
 		Config.Runewords.push([Runeword.Spirit, "Broad Sword"]);
 		Config.KeepRunewords.push("[type] == sword # [fcr] >= 33 && [maxmana] >= 89");
-	}
-
-	if (me.getItem(636)) {// CTA need Ohm first
-		if (!haveItem("sword", "runeword", "Call To Arms")) {
-
-			var CTA = [
-				"[Name] == AmnRune # # [MaxQuantity] == 1",
-				"[Name] == RalRune # # [MaxQuantity] == 1",
-				"[Name] == MalRune",
-				"[Name] == IstRune",
-				"[Name] == OhmRune",
-				"([Name] == CrystalSword || [Name] == Flail) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
-			];
-			NTIP.arrayLooping(CTA);
-
-			Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
-			Config.Runewords.push([Runeword.CallToArms, "flail"]);
-			Config.KeepRunewords.push("[type] == sword || [type] == mace # [plusskillbattleorders] >= 1");
-		}
-	}
-
-	if (Item.getEquippedItem(5).tier < 4) {// Ancients' Pledge
-		var AncientsPledge = [
-			"[Name] == RalRune # # [MaxQuantity] == 1",
-			"[Name] == OrtRune # # [MaxQuantity] == 1",
-			"[Name] == TalRune # # [MaxQuantity] == 1",
-			"([Name] == LargeShield || [Name] == KiteShield || [Name] == BoneShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-		];
-		NTIP.arrayLooping(AncientsPledge);
-
-		if (!me.getItem(618)) {
-			Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
-		}
-
-		Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
-		Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
-		Config.Runewords.push([Runeword.AncientsPledge, "Bone Shield"]);
-		Config.KeepRunewords.push("[type] == shield # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
 	}
 
 	if (Item.getEquippedItem(5).tier < 5) {// Spirit shield
@@ -477,18 +473,6 @@ function LoadConfig () {
 		Config.KeepRunewords.push("[type] == auricshields # [fcr] >= 33 && [maxmana] >= 89");
 	}
 
-	if (Item.getEquippedItem(3).tier < 4) {// Stealth
-		var stealth = [
-			"[Name] == TalRune # # [MaxQuantity] == 1",
-			"[Name] == EthRune # # [MaxQuantity] == 1",
-			"[Name] == StuddedLeather && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
-		];
-		NTIP.arrayLooping(stealth);
-
-		Config.Runewords.push([Runeword.Stealth, "Studded Leather"]);
-		Config.KeepRunewords.push("[type] == armor # [frw] == 25 && [poisonresist] == 30");
-	}
-
 	if (Item.getEquippedItem(3).tier < 6) {// Smoke
 		var Smoke = [
 			"[Name] == NefRune # # [MaxQuantity] == 1",
@@ -512,14 +496,35 @@ function LoadConfig () {
 			"[Name] == JahRune",
 			"[Name] == IthRune # # [MaxQuantity] == 1",
 			"[Name] == BerRune",
-			"[Name] == MagePlate && [Flag] != Ethereal && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 3)",
+			"[Name] == MagePlate && [Flag] != Ethereal && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
 		];
 		NTIP.arrayLooping(Enigma);
 
 		Config.Recipes.push([Recipe.Socket.Armor, "Mage Plate", Roll.NonEth]);
 
-		Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
-		Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
+		if (me.getItem(639) && me.getItem(640)) {
+			Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
+			Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
+		}
+	}
+
+	if (me.getItem(636)) {// CTA need Ohm first
+		if (!haveItem("sword", "runeword", "Call To Arms")) {
+
+			var CTA = [
+				"[Name] == AmnRune # # [MaxQuantity] == 1",
+				"[Name] == RalRune # # [MaxQuantity] == 1",
+				"[Name] == MalRune",
+				"[Name] == IstRune",
+				"[Name] == OhmRune",
+				"([Name] == CrystalSword || [Name] == Flail) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
+			];
+			NTIP.arrayLooping(CTA);
+
+			Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
+			Config.Runewords.push([Runeword.CallToArms, "flail"]);
+			Config.KeepRunewords.push("[type] == sword || [type] == mace # [plusskillbattleorders] >= 1");
+		}
 	}
 
 	switch (finalBuild) {
