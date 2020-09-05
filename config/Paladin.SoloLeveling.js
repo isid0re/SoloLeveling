@@ -1,4 +1,4 @@
-// Paladin.Hammerdin.js config file
+// Paladin.SoloLeveling.js config file
 function LoadConfig () {
 	Scripts.UserAddon = false; // !!!YOU MUST SET THIS TO FALSE IF YOU WANT TO RUN BOSS/AREA SCRIPTS!!!
 
