@@ -276,21 +276,21 @@ function SoloLeveling () {
 		let cta = me.getItems()
 			.filter(item =>
 				item.getPrefix(20519) // The call to arms prefix
-			&& [1, 3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
-		  )
-		  .sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
-		  .first();
+				&& [1, 3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
+			)
+			.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
+			.first();
 
 		if (cta) {
-		  if (cta.location === 1) {
+			if (cta.location === 1) {
 				return true;
-		  } else {
+			} else {
 				Town.move('stash');
 				Storage.Inventory.MoveTo(cta);
 				Attack.weaponSwitch(2); // To the slot you want it to be
 				cta.equip();
 				Attack.weaponSwitch();
-		  }
+			}
 		}
 
 		return true;
@@ -335,7 +335,7 @@ function SoloLeveling () {
 	this.startrun = function () {
 		me.overhead('setup SoloLeveling');
 
-		delay(250);
+		delay(500);
 		me.overhead('adding quest items to NTIP_CheckList');
 		var questItems = [
 			"[Name] == ScrollOfInifuss",
@@ -508,9 +508,6 @@ function SoloLeveling () {
 		}
 
 		delay(250);
-
-		this.clearJunk();
-		this.organizeStash();
 
 		return true;
 	};
