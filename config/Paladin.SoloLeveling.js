@@ -458,14 +458,23 @@ function LoadConfig () {
 		if (!haveItem("shield", "runeword", "Spirit")) {
 			var SpiritShield = [
 				"[Name] == TalRune # # [MaxQuantity] == 1",
-				"[Name] == ThulRune # # [MaxQuantity] == 1",
+				"[Name] == ThulRune # # [MaxQuantity] == 1", 
 				"[Name] == OrtRune # # [MaxQuantity] == 1",
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
-				"[Name] == Monarch && [Flag] != Ethereal && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
+				"([Name] == Targe || [Name] == Rondache || [Name] == HeraldicShield || [Name] == AerinShield || [Name] == CrownShield || [Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] == Normal # [fireresist] >= 20 && ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(SpiritShield);
 
-			Config.Recipes.push([Recipe.Socket.Shield, "Monarch", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Targe", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Rondache", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Heraldic Shield", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Aerin Shield", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Crown Shield", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Akaran Targe", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Akaran Rondache", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Gilded Shield", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Protector Shield", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Shield, "Sacred Targe", Roll.NonEth]);
 
 			if (!me.getItem(618)) {
 				Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
@@ -475,8 +484,15 @@ function LoadConfig () {
 				Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
 			}
 
-			Config.Runewords.push([Runeword.Spirit, "Monarch"]);
-			Config.KeepRunewords.push("[type] == shield # [fcr] >= 33 && [maxmana] >= 89");
+			Config.Runewords.push([Runeword.Spirit, "Akaran Targe"]);
+			Config.Runewords.push([Runeword.Spirit, "Akaran Rondache"]);
+			Config.Runewords.push([Runeword.Spirit, "Sacred Targe"]);
+			Config.Runewords.push([Runeword.Spirit, "Sacred Rondache"]);
+			Config.Runewords.push([Runeword.Spirit, "Gilded Shield"]);
+			Config.Runewords.push([Runeword.Spirit, "Protector Shield"]);
+			Config.Runewords.push([Runeword.Spirit, "Kurast Shield"]);
+			Config.Runewords.push([Runeword.Spirit, "Zakarum Shield"]);
+			Config.KeepRunewords.push("[type] == auricshields # [fcr] >= 33 && [maxmana] >= 89");
 		}
 	}
 
