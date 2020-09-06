@@ -367,16 +367,20 @@ function LoadConfig () {
 	}
 
 	if (Item.getEquippedItem(4).tier < 3 && me.diff === 0) {// Leaf
-		if (!haveItem("stavesandrods", "runeword", "Leaf")) {
+		if (!haveItem("staff", "runeword", "Leaf")) {
 			var leaf = [
 				"[Name] == TirRune # # [MaxQuantity] == 1",
 				"[Name] == RalRune # # [MaxQuantity] == 1",
-				"[type] == stavesandrods && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [skillfireball] >= 2 && [Sockets] == 2 # [MaxQuantity] == 1"
+				"[type] == staff && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior && [level] <= 24 # [skillfireball] >= 2 && [Sockets] == 2 # [MaxQuantity] == 1"
 			];
 			NTIP.arrayLooping(leaf);
 
-			Config.Runewords.push([Runeword.Leaf, "stavesandrods"]);
-			Config.KeepRunewords.push("[type] == stavesandrods # [coldresist] >= 33");
+			Config.Runewords.push([Runeword.Leaf, "short staff"]);
+			Config.Runewords.push([Runeword.Leaf, "long staff"]);
+			Config.Runewords.push([Runeword.Leaf, "gnarled staff"]);
+			Config.Runewords.push([Runeword.Leaf, "battle staff"]);
+			Config.Runewords.push([Runeword.Leaf, "war staff"]);
+			Config.KeepRunewords.push("[type] == staff # [coldresist] >= 33");
 		}
 	}
 
