@@ -334,9 +334,9 @@ function SoloLeveling () {
 	// Scripts to execute for leveling
 	this.startrun = function () {
 		me.overhead('setup SoloLeveling');
-
 		delay(500);
-		me.overhead('adding quest items to NTIP_CheckList');
+
+		me.overhead('add quest items to NTIP_CheckList');
 		var questItems = [
 			"[Name] == ScrollOfInifuss",
 			"[Name] == KeyToTheCairnStones",
@@ -356,9 +356,9 @@ function SoloLeveling () {
 			"[Name] == Khalim'sWill"
 		];
 		NTIP.arrayLooping(questItems);
+		delay(500);
 
-		delay(250);
-		me.overhead('adding general items to NTIP_CheckList');
+		me.overhead('add general items to NTIP_CheckList');
 		var generalItems = [
 			"[name] == gold # [gold] >= 500",
 			"[name] == minorhealingpotion",
@@ -385,8 +385,7 @@ function SoloLeveling () {
 			"[name] >= pulrune && [name] <= zodrune"
 		];
 		NTIP.arrayLooping(generalItems);
-		
-		delay(250);
+		delay(500);
 
 		Town.reviveMerc();
 
@@ -507,8 +506,9 @@ function SoloLeveling () {
 			}
 		}
 
-		delay(250);
-		me.overhead('starting SoloLeveling');
+		delay(500);
+		me.overhead('start SoloLeveling');
+		delay(500);
 
 		return true;
 	};

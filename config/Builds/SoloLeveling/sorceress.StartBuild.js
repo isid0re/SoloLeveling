@@ -5,7 +5,7 @@
 
 const build = {
 	stats: [
-		["energy", 10],
+		["vitality", 25],
 		["strength", 25],
 		["energy", 50],
 		["vitality", "all"]
@@ -14,7 +14,7 @@ const build = {
 		[36, 6], // Fire Bolt
 		[42, 1], // Static
 		[43, 1], // telekensis
-		[40, 1], // Frozen Armor 1
+		[40, 1], // Frozen Armor
 		[36, 9], // Fire Bolt
 		[47, 6], //Fireball
 		[54, 1], //Teleport
