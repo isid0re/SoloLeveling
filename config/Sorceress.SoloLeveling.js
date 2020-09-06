@@ -80,7 +80,7 @@ function LoadConfig () {
 	Config.FHR = 255; // 0 - disable, 1 to 255 - set value of faster hit recovery
 	Config.FBR = 255; // 0 - disable, 1 to 255 - set value of faster block recovery
 	Config.IAS = 255; // 0 - disable, 1 to 255 - set value of increased attack speed
-	Config.PacketCasting = 2; // 0 = disable, 1 = packet teleport, 2 = full packet casting.
+	Config.PacketCasting = 1; // 0 = disable, 1 = packet teleport, 2 = full packet casting.
 	Config.WaypointMenu = true;
 
 	// Monster skip config
@@ -119,8 +119,8 @@ function LoadConfig () {
 	Config.AutoBuild.DebugMode = true;
 
 	// Class specific config
-	Config.NoTele = me.charlvl < 25 ? true : false; // Restrict char from teleporting. Useful for low level/low mana chars
-	Config.Dodge = false; // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
+	Config.NoTele = me.charlvl < 18 ? true : false; // Restrict char from teleporting. Useful for low level/low mana chars
+	Config.Dodge = true; // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
 	Config.DodgeRange = 15; // Distance to keep from monsters.
 	Config.DodgeHP = 85; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
@@ -207,7 +207,11 @@ function LoadConfig () {
 			throw new Error("No alias for type '" + type + "'");
 		}
 
-		iName = iName.toLowerCase();
+
+		if (iName !== undefined) {
+			iName = iName.toLowerCase();
+		}
+
 		let items = me.getItems();
 		let itemCHECK = false;
 
@@ -248,7 +252,9 @@ function LoadConfig () {
 
 	var TiersTillRespecOne = [
 		//weapon
-		"[type] == stavesandrods && [flag] == runeword # [coldresist] >= 33 # [tier] == 30",
+		"([type] == staff || [Type] == Orb) && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[FireSkillTab]+[SkillMeteor]+[SkillFireball] >= 2 # [Tier] == 1",
+		"([type] == staff || [Type] == Orb) && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[FireSkillTab]+[SkillMeteor]+[SkillFireball] >= 2 && [FCR] >= 20 # [Tier] == 2",
+		"[type] == staff && [flag] == runeword # [coldresist] >= 33 # [tier] == 30",
 		//helmet
 		"([type] == circlet || [type] == helm) && [flag] != ethereal # ([fireresist] || [lightresist] || [coldresist] || [poisonresist]) > 0 # [tier] == 1",
 		"([type] == circlet || [type] == helm) && [flag] != ethereal # ([fireresist] || [lightresist]) >= 10 # [tier] == 2",
@@ -266,9 +272,7 @@ function LoadConfig () {
 		"[type] == armor && [flag] != ethereal # ([maxhp] || [fireresist] || [lightresist] ||[coldresist]) >= 20 # [tier] == 3",
 		"[type] == armor && [flag] == runeword # [frw] == 25 && [poisonresist] == 30 # [tier] == 4",
 		//shield
-		"[type] == shield && [flag] != ethereal # [fireresist]+[lightresist]+[coldresist] > 0 # [tier] == 1",
-		"[type] == shield && [flag] != ethereal # [fireresist]+[lightresist]+[coldresist] > 10 # [tier] == 2",
-		"[type] == shield && [flag] != ethereal # [fireresist]+[lightresist]+[coldresist] > 20 # [tier] == 3",
+		"[type] == shield && [flag] != ethereal # [fireresist]+[lightresist]+[coldresist] > 30 # [tier] == 3",
 		//gloves
 		"[type] == gloves && [flag] != ethereal # ([fireresist] || [lightresist]) > 0 # [tier] == 1",
 		"[type] == gloves && [flag] != ethereal # ([fireresist] || [lightresist]) > 10 # [tier] == 2",
@@ -282,14 +286,14 @@ function LoadConfig () {
 
 	var tiers = [
 		//weapon
-		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 # [Tier] == 2",
-		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && [FCR] >= 20 # [Tier] == 3",
-		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 4 # [Tier] == 4",
-		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 4 && [FCR] >= 20 # [Tier] == 5",
-		"[type] == sword && [flag] == runeword # [fcr] >= 25 && [maxmana] >= 89 # [tier] == 6",
-		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 6 && [FCR] >= 20 # [Tier] == 7",
-		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 6 && [FCR] >= 20 && ([FireResist]+[ColdResist]+[LightResist]+[PoisonResist] > 10 || [MaxMana]+[MaxHP] > 10) # [Tier] == 8",
-		"[Name] == SwirlingCrystal && [Flag] != Ethereal && [Quality] == Set # [SkillColdMastery] == 2 # [Tier] == 9",
+		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 # [Tier] == 3",
+		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && [FCR] >= 20 # [Tier] == 4",
+		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 4 # [Tier] == 5",
+		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 4 && [FCR] >= 20 # [Tier] == 6",
+		"[type] == sword && [flag] == runeword # [fcr] >= 25 && [maxmana] >= 89 # [tier] == 7",
+		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 6 && [FCR] >= 20 # [Tier] == 8",
+		"[Type] == Orb && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 6 && [FCR] >= 20 && ([FireResist]+[ColdResist]+[LightResist]+[PoisonResist] > 10 || [MaxMana]+[MaxHP] > 10) # [Tier] == 9",
+		"[Name] == SwirlingCrystal && [Flag] != Ethereal && [Quality] == Set # [SkillColdMastery] == 2 # [Tier] == 10",
 		//helmet
 		"([type] == helm || [type] == circlet) && [flag] != ethereal && [quality] >= magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 # [Tier] == 4",
 		"[type] == helm && [flag] == runeword # [itemallskills] == 1 && [LightResist] >= 30 # [tier] == 5",

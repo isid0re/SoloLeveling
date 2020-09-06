@@ -385,7 +385,7 @@ function SoloLeveling () {
 			"[name] >= pulrune && [name] <= zodrune"
 		];
 		NTIP.arrayLooping(generalItems);
-
+		
 		delay(250);
 
 		Town.reviveMerc();
@@ -508,6 +508,7 @@ function SoloLeveling () {
 		}
 
 		delay(250);
+		me.overhead('starting SoloLeveling');
 
 		return true;
 	};

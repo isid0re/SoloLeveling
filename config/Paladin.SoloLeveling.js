@@ -63,7 +63,7 @@ function LoadConfig () {
 	Config.MaxGameTime = 7200;
 	Config.MiniShopBot = true;
 	Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
-	Config.TownCheck = true;
+	Config.TownCheck = me.findItem("tbk", 0, 3);
 	Config.LogExperience = true; // Print experience statistics in the manager.
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
@@ -80,7 +80,7 @@ function LoadConfig () {
 	Config.FHR = 255; // 0 - disable, 1 to 255 - set value of faster hit recovery
 	Config.FBR = 255; // 0 - disable, 1 to 255 - set value of faster block recovery
 	Config.IAS = 255; // 0 - disable, 1 to 255 - set value of increased attack speed
-	Config.PacketCasting = 2; // 0 = disable, 1 = packet teleport, 2 = full packet casting.
+	Config.PacketCasting = 1; // 0 = disable, 1 = packet teleport, 2 = full packet casting.
 	Config.WaypointMenu = true;
 
 	// Monster skip config
@@ -204,7 +204,10 @@ function LoadConfig () {
 			throw new Error("No alias for type '" + type + "'");
 		}
 
-		iName = iName.toLowerCase();
+		if (iName !== undefined) {
+			iName = iName.toLowerCase();
+		}
+
 		let items = me.getItems();
 		let itemCHECK = false;
 
@@ -233,7 +236,7 @@ function LoadConfig () {
 
 	const startBuild = "Start"; // build ends when reaching lvl 25
 	const middleBuild = "Hammerdin"; // starts at 25 ends when reaching lvl 85
-	const playStyle = finalBuild !== "Hammerdin" ? Melee : Caster; 
+	const playStyle = finalBuild !== 'Hammerdin' ? 'Melee' : 'Caster';
 	const startBelt = ["hp", "hp", "hp", "mp"];
 	const middleBelt = ["hp", "hp", "mp", "mp"];
 	const finalBelt = ["hp", "hp", "mp", "rv"];
@@ -275,7 +278,7 @@ function LoadConfig () {
 		//ammy
 		"[type] == amulet && [quality] <= rare # ([fireresist] || [lightresist]) > 0 # [tier] == 1",
 		"[type] == amulet && [quality] <= rare # ([fireresist] || [lightresist]) > 20 # [tier] == 2",
-		//rings	
+		//rings
 		"[type] == ring # ([fireresist] || [lightresist]) > 20 # [tier] == 2",
 		"[type] == ring # ([fireresist] || [lightresist]) > 0 # [tier] == 1",
 	];
@@ -283,7 +286,7 @@ function LoadConfig () {
 	var tiers = [
 		//weapon
 		"[type] == mace && [flag] == runeword # [ias] >= 25 # [tier] == 3",
-		"Name] == WarScepter && [Flag] != Ethereal && [Quality] == Set # # [Tier] == 4",
+		"[Name] == WarScepter && [Flag] != Ethereal && [Quality] == Set # # [tier] == 4",
 		"([Type] == Hammer || [Type] == Mace || [Type] == Sword || [Type] == Scepter) && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab]+[SkillBlessedHammer]+[SkillConcentration] >= 2 # [Tier] == 5",
 		"([Type] == Hammer || [Type] == Mace || [Type] == Sword || [Type] == Scepter) && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab]+[SkillBlessedHammer]+[SkillConcentration] >= 4 # [Tier] == 6",
 		"[type] == sword && [flag] == runeword # [fcr] >= 25 && [maxmana] >= 89 # [tier] == 7",
@@ -302,7 +305,7 @@ function LoadConfig () {
 		"[type] == boots && [quality] >= magic && [flag] != ethereal # [frw] >= 10 && [fireresist]+[lightresist] >= 40 # [tier] == 5",
 		"[type] == boots && [quality] >= magic && [flag] != ethereal # [frw] >= 10 && ([fireresist]+[coldresist]+[lightresist] >= 60 || [maxhp] >= 45) && [dexterity] >= 5 # [tier] == 6",
 		"[type] == boots && [quality] >= magic && [flag] != ethereal # [frw] >= 20 && [maxhp] >= 35 && [FireResist]+[ColdResist]+[LightResist]+[PoisonResist] >= 60 # [tier] == 7",
-		"[type] == boots && (([quality] == unique || [quality] == set) && [flag] != ethereal # [frw] >= 20 && [maxhp] >= 45 && ([dexterity] == 15 || [fireresist] >= 40) # [tier] == 8",
+		"[type] == boots && ([quality] == unique || [quality] == set) && [flag] != ethereal # [frw] >= 20 && [maxhp] >= 45 && ([dexterity] == 15 || [fireresist] >= 40) # [tier] == 8",
 		//armor
 		"[type] == armor && [quality] == magic && [flag] != ethereal # [fireresist]+[coldresist]+[lightresist]+[poisonresist] > 30 || [MaxHP] > 80 # [Tier] == 5",
 		"[type] == armor && [quality] == magic && [flag] != ethereal # [fireresist]+[coldresist]+[lightresist]+[poisonresist] > 30 && [MaxHP] > 30 # [Tier] == 6",
