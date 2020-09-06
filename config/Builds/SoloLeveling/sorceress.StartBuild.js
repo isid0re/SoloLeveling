@@ -5,9 +5,8 @@
 
 const build = {
 	stats: [
-		["vitality", 25],
-		["strength", 25],
 		["energy", 50],
+		["strength", 25],
 		["vitality", "all"]
 	],
 	skills: [
