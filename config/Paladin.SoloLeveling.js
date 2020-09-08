@@ -9,8 +9,8 @@ function LoadConfig () {
 	//const finalBuild = "Zealot";
 
 	// Town settings
-	Config.HealHP = 65;
-	Config.HealMP = 65;
+	Config.HealHP = 99;
+	Config.HealMP = 99;
 	Config.HealStatus = true;
 	Config.UseMerc = true;
 	Config.MercWatch = true;
@@ -231,8 +231,6 @@ function LoadConfig () {
 	};
 
 	// Character Build Setup
-	const respecOne = 25;
-	const respecTwo = 85;
 
 	const startBuild = "Start"; // build ends when reaching lvl 25
 	const middleBuild = "Hammerdin"; // starts at 25 ends when reaching lvl 85
@@ -433,7 +431,7 @@ function LoadConfig () {
 				"[Name] == ThulRune # # [MaxQuantity] == 1",
 				"[Name] == OrtRune # # [MaxQuantity] == 1",
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
-				"([Name] == BroadSword || [Name] == CrystalSword) && [Quality] == Normal && [level] >= 26 # ([Sockets] == 0 || [Sockets] == 4)# [MaxQuantity] == 1",
+				"([Name] == BroadSword || [Name] == CrystalSword) && [Quality] == Normal && [level] >= 26 # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(SpiritSword);
 

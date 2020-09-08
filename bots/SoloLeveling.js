@@ -5,7 +5,6 @@
 *				Make sure kolbot difficulty is set to "highest"
 *	@TODO		1 add dynamic tiers for autoequip
 *				2 equip 2nd spirit on slot 2.
-*				3 setup global respec variables for character levels
 */
 
 if (!isIncluded("common/Misc.js")) {
@@ -147,7 +146,6 @@ function SoloLeveling () {
 
 	this.drinkPots = function () {
 		let classIds = ["yps", "wms", "vps", ];
-		me.overhead('drinking ' + classIds.name);
 
 		for (let totalpots = 0; totalpots < classIds.length; totalpots++) {
 			let chugs = me.getItem(classIds[totalpots]);
@@ -216,6 +214,8 @@ function SoloLeveling () {
 	};
 
 	this.gamePacket = function (bytes) {// Merc hiring and gear management
+		let id;
+
 		switch (bytes[0]) {
 		case 0x4e:
 			id = (bytes[2] << 8) + bytes[1];
@@ -301,7 +301,7 @@ function SoloLeveling () {
 			return true;
 		}
 
-		if (me.charlvl === 25 || me.charlvl === 85) {
+		if (me.charlvl === respecOne || me.charlvl === respecTwo) {
 			Town.goToTown(1);
 			Town.move(NPC.Akara);
 
@@ -407,7 +407,7 @@ function SoloLeveling () {
 				NTIP.addLine("[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 2");
 			}
 
-			if (me.diff === 1 && Item.getEquippedItemMerc(1).tier <= 0) {//Fire Resist Helm
+			if (me.diff !== 2 && Item.getEquippedItemMerc(1).tier <= 0) {//Fire Resist Helm
 				NTIP.addLine("[type] == helm # [fireresist] >= 20 # [MercTier] == 1");
 			}
 
@@ -468,7 +468,7 @@ function SoloLeveling () {
 				Config.KeepRunewords.push("[type] == polearm # [lifeleech] >= 7");
 			}
 
-			if (me.diff === 1 && Item.getEquippedItemMerc(4).tier <= 0) {//Life Leach Polearm
+			if (me.diff !== 2 && Item.getEquippedItemMerc(4).tier <= 0) {//Life Leach Polearm
 				NTIP.addLine("[type] == polearm # [lifeleech] >= 7  # [MercTier] == 1");
 			}
 
@@ -497,11 +497,11 @@ function SoloLeveling () {
 				NTIP.addLine("([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1");
 			}
 
-			if (me.diff === 1 && Item.getEquippedItemMerc(3).tier <= 1) {//MaxHP armor
+			if (me.diff !== 2 && Item.getEquippedItemMerc(3).tier <= 1) {//MaxHP armor
 				NTIP.addLine("[type] == armor # [maxhp] >= 90 # [MercTier] == 2");
 			}
 
-			if (me.diff === 1 && Item.getEquippedItemMerc(3).tier <= 0) {//MaxHP armor
+			if (me.diff !== 2 && Item.getEquippedItemMerc(3).tier <= 0) {//MaxHP armor
 				NTIP.addLine("[type] == armor # [maxhp] >= 60 # [MercTier] == 1");
 			}
 		}
@@ -521,6 +521,10 @@ function SoloLeveling () {
 
 		this.townTasks();
 		me.overhead("den");
+
+		if (me.diff <= 0) {
+			Config.OpenChests = true;
+		}
 
 		Pather.moveToExit([2, 8], false);
 
@@ -551,6 +555,10 @@ function SoloLeveling () {
 			Pather.useWaypoint(1);
 		} else {
 			Town.goToTown();
+		}
+
+		if (me.diff <= 0) {
+			Config.OpenChests = false;
 		}
 
 		Town.move(NPC.Akara);
@@ -782,15 +790,15 @@ function SoloLeveling () {
 		let book = me.getItem(552);
 
 		if (book) {
-		  if (book.location === 7) {
+			if (book.location === 7) {
 				Town.move('stash');
 				Storage.Inventory.MoveTo(book);
 				delay(300);
 				clickItem(1, book);
-		  } else {
+			} else {
 				delay(300);
 				clickItem(1, book);
-		  }
+			}
 		}
 
 		Town.move(NPC.Atma);
@@ -1389,6 +1397,8 @@ function SoloLeveling () {
 			this.travincal();
 		}
 
+		Town.doChores();
+
 		Town.move("stash");
 
 		if (!Town.openStash()) {
@@ -1563,8 +1573,17 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		Pather.moveToExit(102, true);
-		Pather.moveTo(17692, 8023);
-		Pather.moveTo(17591, 8070);
+
+		Town.goToTown();
+		this.townTasks();
+		Town.buyAntidotes(10);
+		this.drinkPots();
+		Pather.usePortal(102, me.name);
+
+		Pather.moveTo(17692, 8048);
+		Pather.moveTo(17563, 8072);
+
+		Config.MercWatch = false;
 
 		try {
 			Attack.kill(242);
@@ -1573,6 +1592,8 @@ function SoloLeveling () {
 		}
 
 		Pickit.pickItems();
+
+		Config.MercWatch = true;
 
 		Pather.moveTo(17581, 8070);
 		Pather.usePortal(null);
@@ -2459,22 +2480,11 @@ function SoloLeveling () {
 	return true;
 }
 
-// Start Global Variables
+// Start Global Variables and functions
 
 //respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecLevel = {
-	One: function () {
-		let respecOne = [ 0, 25, 25, 25, 0, 0, 0][me.classid];
-
-		return respecOne;
-	},
-
-	Two: function () {
-		let respecTwo = [ 0, 85, 85, 85, 0, 0, 0][me.classid];
-
-		return false;
-	}
-};
+const respecOne = [ 0, 30, 25, 25, 0, 0, 0][me.classid];
+const respecTwo = [ 0, 75, 85, 85, 0, 0, 0][me.classid];
 
 //NTIP INJECTOR
 NTIP.addLine = function (itemString) {

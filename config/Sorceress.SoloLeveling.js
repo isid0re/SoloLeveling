@@ -9,15 +9,15 @@ function LoadConfig () {
 	//const finalBuild = "Blova";
 
 	// Town settings
-	Config.HealHP = 65;
-	Config.HealMP = 65;
+	Config.HealHP = 99;
+	Config.HealMP = 99;
 	Config.HealStatus = true;
 	Config.UseMerc = true;
 	Config.MercWatch = true;
 	Config.ClearInvOnStart = false;
 
 	// Potion settings
-	Config.UseHP = 75;
+	Config.UseHP = 85;
 	Config.UseRejuvHP = 65;
 	Config.UseMP = 15;
 	Config.UseMercHP = 75;
@@ -45,7 +45,7 @@ function LoadConfig () {
 	Config.AutoEquip = true;
 
 	// Pickit config.
-	Config.PickRange = 12;
+	Config.PickRange = 20;
 	Config.FastPick = true;
 	Config.ItemInfo = true;
 	Config.CainID.Enable = false;
@@ -119,9 +119,9 @@ function LoadConfig () {
 	Config.AutoBuild.DebugMode = true;
 
 	// Class specific config
-	Config.NoTele = me.charlvl < 18 ? true : false; // Restrict char from teleporting. Useful for low level/low mana chars
-	Config.Dodge = true; // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
-	Config.DodgeRange = 15; // Distance to keep from monsters.
+	Config.NoTele = me.charlvl < 25 ? true : false; // Restrict char from teleporting. Useful for low level/low mana chars
+	Config.Dodge = me.charlvl < 7 ? false : true; // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
+	Config.DodgeRange = 9; // Distance to keep from monsters.
 	Config.DodgeHP = 85; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
 	Config.CastStatic = 20; // Cast static until the target is at designated life percent. 100 = disabled.
@@ -235,16 +235,15 @@ function LoadConfig () {
 	};
 
 	// Character Build Setup
-	const respecOne = 25;
-	const respecTwo = 85;
-
-	const startBuild = "Start"; // build ends when reaching lvl 25
-	const middleBuild = "Blizzard"; // starts at 25 ends when reaching lvl 85
+	const startBuild = "Start"; // build ends when reaching lvl 30
+	const middleBuild = "Blizzard"; // starts at 30 ends when reaching lvl 75
 	const startBelt = ["hp", "hp", "hp", "mp"];
 	const middleBelt = ["hp", "hp", "mp", "mp"];
 	const finalBelt = ["hp", "hp", "mp", "rv"];
 	Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
 	this.configBelt();
+
+	Config.NoTele = me.charlvl < 25 ? true : false;
 
 	Config.AutoSkill.Build = specPush("skills");
 	Config.AutoStat.Build = specPush("stats");
@@ -375,7 +374,7 @@ function LoadConfig () {
 			var leaf = [
 				"[Name] == TirRune # # [MaxQuantity] == 1",
 				"[Name] == RalRune # # [MaxQuantity] == 1",
-				"[type] == staff && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior && [level] <= 24 # [skillfireball] >= 2 && [Sockets] == 2 # [MaxQuantity] == 1"
+				"[type] == staff && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior && [level] <= 24 # [ItemAllSkills]+[SorceressSkills]+[FireSkillTab]+[SkillFirebolt]+[SkillFireball] >= 2 && [Sockets] == 2 # [MaxQuantity] == 1"
 			];
 			NTIP.arrayLooping(leaf);
 
@@ -445,7 +444,7 @@ function LoadConfig () {
 				"[Name] == ThulRune # # [MaxQuantity] == 1",
 				"[Name] == OrtRune # # [MaxQuantity] == 1",
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
-				"([Name] == BroadSword || [Name] == CrystalSword) && [Quality] == Normal && [level] >= 26 # ([Sockets] == 0 || [Sockets] == 4)# [MaxQuantity] == 1",
+				"([Name] == BroadSword || [Name] == CrystalSword) && [Quality] == Normal && [level] >= 26 # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(SpiritSword);
 
