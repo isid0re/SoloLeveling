@@ -431,7 +431,7 @@ function LoadConfig () {
 				"[Name] == ThulRune # # [MaxQuantity] == 1",
 				"[Name] == OrtRune # # [MaxQuantity] == 1",
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
-				"([Name] == BroadSword || [Name] == CrystalSword) && [Quality] == Normal && [level] >= 26 # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
+				"([Name] == BroadSword || [Name] == CrystalSword) && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 4) && [level] >= 26 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(SpiritSword);
 

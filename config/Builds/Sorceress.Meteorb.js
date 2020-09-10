@@ -40,7 +40,7 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.AttackSkill = [-1, 64, 47, 64, 47, 56, -1];
 			Config.LowManaSkill = [0, 0];
-
+			Config.SkipImmune = ["fire and cold"];
 		}
 	},
 

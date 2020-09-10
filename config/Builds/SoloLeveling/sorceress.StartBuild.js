@@ -8,6 +8,7 @@ const build = {
 		["vitality", 35],
 		["energy", 50],
 		["strength", 41],
+		["energy", 85],
 		["vitality", "all"]
 	],
 	skills: [
