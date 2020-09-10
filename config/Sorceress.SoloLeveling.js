@@ -373,7 +373,7 @@ function LoadConfig () {
 			var leaf = [
 				"[Name] == TirRune # # [MaxQuantity] == 1",
 				"[Name] == RalRune # # [MaxQuantity] == 1",
-				"[type] == staff && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [ItemAllSkills]+[SorceressSkills]+[SkillFireball] >= 2 && [Sockets] == 2 && [level] <= 25 # [MaxQuantity] == 1"
+				"[type] == staff && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [ItemAllSkills]+[SorceressSkills]+[FireSkillTab]+[SkillFireball] >= 2 && [Sockets] == 2 # [MaxQuantity] == 1"
 			];
 			NTIP.arrayLooping(leaf);
 
