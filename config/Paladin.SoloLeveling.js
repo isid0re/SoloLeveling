@@ -346,7 +346,7 @@ function LoadConfig () {
 		NTIP.arrayLooping(TiersTillRespecOne);
 	}
 
-	if (Item.getEquippedItem(3).tier < 4 && me.diff == 0) {// Stealth
+	if (Item.getEquippedItem(3).tier < 4 && me.diff === 0) { // Stealth
 		if (!haveItem("armor", "runeword", "Stealth")) {
 			var stealth = [
 				"[Name] == TalRune # # [MaxQuantity] == 1",
@@ -360,7 +360,7 @@ function LoadConfig () {
 		}
 	}
 
-	if (Item.getEquippedItem(4).tier < 3 && me.diff == 0) {// Steel
+	if (Item.getEquippedItem(4).tier < 3 && me.diff === 0) { // Steel
 		if (!haveItem("sword", "runeword", "Steel")) {
 			var steel = [
 				"[Name] == TirRune # # [MaxQuantity] == 1",
@@ -374,7 +374,7 @@ function LoadConfig () {
 		}
 	}
 
-	if (Item.getEquippedItem(5).tier < 4) {// Ancients' Pledge
+	if (Item.getEquippedItem(5).tier < 4) { // Ancients' Pledge
 		if (!haveItem("shield", "runeword", "Ancients' Pledge")) {
 			var AncientsPledge = [
 				"[Name] == RalRune # # [MaxQuantity] == 1",
@@ -395,7 +395,7 @@ function LoadConfig () {
 		}
 	}
 
-	if (Item.getEquippedItem(1).tier < 4) {// Lore
+	if (Item.getEquippedItem(1).tier < 4) { // Lore
 		if (!haveItem("helm", "runeword", "Lore")) {
 			var Lore = [
 				"[Name] == OrtRune # # [MaxQuantity] == 1",
@@ -424,7 +424,7 @@ function LoadConfig () {
 		}
 	}
 
-	if (Item.getEquippedItem(4).tier < 5) {// Spirit Sword
+	if (Item.getEquippedItem(4).tier < 5) { // Spirit Sword
 		if (!haveItem("sword", "runeword", "Spirit")) {
 			var SpiritSword = [
 				"[Name] == TalRune # # [MaxQuantity] == 1",
@@ -452,7 +452,7 @@ function LoadConfig () {
 		}
 	}
 
-	if (Item.getEquippedItem(5).tier < 5) {// Spirit shield
+	if (Item.getEquippedItem(5).tier < 5) { // Spirit shield
 		if (!haveItem("shield", "runeword", "Spirit")) {
 			var SpiritShield = [
 				"[Name] == TalRune # # [MaxQuantity] == 1",
@@ -494,7 +494,7 @@ function LoadConfig () {
 		}
 	}
 
-	if (Item.getEquippedItem(3).tier < 6) {// Smoke
+	if (Item.getEquippedItem(3).tier < 6) { // Smoke
 		if (!haveItem("armor", "runeword", "Smoke")) {
 			var Smoke = [
 				"[Name] == NefRune # # [MaxQuantity] == 1",
@@ -514,7 +514,7 @@ function LoadConfig () {
 		}
 	}
 
-	if (Item.getEquippedItem(3).tier < 100) {// Enigma
+	if (Item.getEquippedItem(3).tier < 100) { // Enigma
 		var Enigma = [
 			"[Name] == JahRune",
 			"[Name] == IthRune # # [MaxQuantity] == 1",
@@ -531,7 +531,7 @@ function LoadConfig () {
 		}
 	}
 
-	if (me.getItem(636)) {// CTA need Ohm first
+	if (me.getItem(636)) { // CTA need Ohm first
 		if (!haveItem("sword", "runeword", "Call To Arms")) {
 
 			var CTA = [
@@ -610,7 +610,7 @@ function LoadConfig () {
 			"[Type] == Belt && [Quality] == Crafted && [flag] != ethereal # [FCR] >= 10 && [MaxHP] >= 15 && [fireresist] >= 20 && [lightresist] >= 20 # [tier] == 95", //caster belt
 			"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100", //arach's
 			"[Type] == Gloves && [Quality] == Crafted && [flag] != ethereal # [strength] >= 5 && [dexterity] >= 5 && [maxhp] >= 20 && [fireresist]+[coldresist] >= 40 # [tier] == 95", //crafted gloves
-			"[name] == heavybracers && [quality] == set && [flag] != ethereal # [fcr] >= 20 # [tier] == 100",// trangs
+			"[name] == heavybracers && [quality] == set && [flag] != ethereal # [fcr] >= 20 # [tier] == 100", // trangs
 			"[type] == circlet && [quality] == rare # [paladinskills] == 2 && [fcr] >= 20 && ([maxhp] >= 30 || [maxmana] >= 60) && [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 60 # [tier] == 100",
 		];
 		NTIP.arrayLooping(setupCASTER);
