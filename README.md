@@ -15,7 +15,7 @@ This script is designed to be plug and play with [blizzhackers/kolbot](https://g
 1. Select the character config file for the class you want to build.
 2. Save a copy of this config file with your new characters name. For example,
 ```
-Paladin.config.js >> Paladin.PutYourCharacterNameHere.js
+Paladin.SoloLeveling.js >> Paladin.YourCharacterNameGoesHere.js
 ```
 3. Select the finalbuild you want to have by removing the // lines. The following example shows the finalbuild selected will be a Hammerdin:  
 ```
@@ -25,6 +25,11 @@ Scripts.SoloLeveling = true; // *** Leveling Script  ***
 	//const finalBuild = "Smiter";
 	//const finalBuild = "Zealot";
 ``` 
+4. Add a profile in D2Bot as you normally would using the character name as spelled in the selected config file.
+5. Ensure the Difficulty is set to HIGHEST.
+6. Use the D2BotLead.dbj entry script.
+7. Click apply.
+8. Run the Bot. 
 
 ## Contributing
 
