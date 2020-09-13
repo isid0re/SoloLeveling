@@ -52,9 +52,16 @@ function SoloLeveling () {
 		this.equipCTA();
 		Item.autoEquip();
 		Item.autoEquipMerc();
-		this.organizeInventory();
 		this.clearJunk();
+		this.organizeStash();
+		Town.stash(true);
+		this.organizeInventory();
 		this.characterRespec();
+
+		if ((me.classid !== 1 || me.classid < respecOne) && (me.area === 40 || me.area === 75)) {
+			this.buyPots(5, "Stamina");
+			this.drinkPots();
+		}
 
 		return true;
 	};
@@ -135,9 +142,9 @@ function SoloLeveling () {
 		return true;
 	};
 
-	this.buyPots = function (quantity) {
+	this.buyPots = function (quantity, type) {
 
-		let npc;
+		let npc, jugs;
 
 		switch (me.area) {
 		case 1:
@@ -149,8 +156,8 @@ function SoloLeveling () {
 			npc = getUnit(1, NPC.Lysander);
 			break;
 		case 75:
-			Town.move(NPC.Ormus);
-			npc = getUnit(1, NPC.Ormus);
+			Town.move(NPC.Alkor);
+			npc = getUnit(1, NPC.Alkor);
 			break;
 		case 103:
 			Town.move(NPC.Jamella);
@@ -167,10 +174,26 @@ function SoloLeveling () {
 		}
 
 		Misc.useMenu(0x0D44);
-		let jugs = npc.getItem(517); // thawing
-		print('SoloLeveling: buying ' + quantity + ' Thawing Potions');
 
-		for (let totalthawingpotions = 0; totalthawingpotions < quantity; totalthawingpotions++) {
+		switch (type) {
+		case "Thawing":
+			jugs = npc.getItem("wms");
+
+			break;
+		case "Stamina":
+			jugs = npc.getItem("vps");
+
+			break;
+		case "Antidote":
+			jugs = npc.getItem("yps");
+
+			break;
+		}
+
+		print('SoloLeveling: buying ' + quantity + ' ' + type + ' Potions');
+
+		for (let totalspecialpotions = 0; totalspecialpotions < quantity; totalspecialpotions++) {
+
 			if (jugs) {
 				jugs.buy(false);
 			}
@@ -194,6 +217,8 @@ function SoloLeveling () {
 				} while (chugs.getNext());
 			}
 		}
+
+		print('SoloLeveling: drank Special Potions');
 
 		return true;
 	};
@@ -236,14 +261,33 @@ function SoloLeveling () {
 		let junk = me.getItems();
 
 		for (let count = 0; count < junk.length; count += 1) {
-			if (junk[count].location === 7 && //inventory
-				!Pickit.checkItem(junk[count]).result === 1 && //Pickit.js NTIP wants (line 27)
+			if (junk[count].location === 7 && //stash
+				Pickit.checkItem(junk[count]).result === 0 && //Pickit.js NTIP unwanted (line 26)
+				Pickit.checkItem(junk[count]).result === 4 && //Pickit.js NTIP sell (line 30)
 				!Cubing.keepItem(junk[count]) && // keep cubing items
 				!Runewords.keepItem(junk[count]) && // keep runeword items
 				!CraftingSystem.keepItem(junk[count]) // keep crafting items
 			) {
 				me.overhead('clear out junk');
 				junk[count].drop();
+			}
+
+			if (!!me.getMerc() === true) {
+				let merctier = NTIP.GetMercTier(junk[count]);
+				let mercbodyLoc = Item.getBodyLocMerc(junk[count]);
+
+				if (merctier > 0 && mercbodyLoc) {
+					for (let bodypart = 0; bodypart < mercbodyLoc.length; bodypart += 1) {
+						let equippedTier = Item.getEquippedItemMerc(mercbodyLoc[bodypart]).tier;
+
+						if ((junk[count].location === 7 || junk[count].location === 3) && //stash or inventory
+							merctier <= equippedTier
+						) {
+							me.overhead('clear out merc junk');
+							junk[count].drop();
+						}
+					}
+				}
 			}
 		}
 
@@ -528,7 +572,7 @@ function SoloLeveling () {
 			case -1:
 				this.configInsight(); // 3
 				this.configStrength(); // 2
-				NTIP.addLine("[type] == polearm # [lifeleech] >= 3  # [MaxQuantity] == 1 && [MercTier] == 1"); //1
+				NTIP.addLine("[type] == polearm # [lifeleech] >= 3  # [MercTier] == 1"); //1
 
 				break;
 			case 1:
@@ -766,6 +810,8 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("countess");
 
+		Config.OpenChests = 2;
+
 		Pather.useWaypoint(6);
 		Precast.doPrecast(true);
 
@@ -778,6 +824,9 @@ function SoloLeveling () {
 		}
 
 		Pickit.pickItems();
+
+		Config.OpenChests = (me.classid !== 1 && me.diff !== 2) ? false : true;
+		Config.OpenChests = (me.classid === 1 && me.diff !== 0) ? true : false;
 
 		return true;
 	};
@@ -824,7 +873,7 @@ function SoloLeveling () {
 
 		Town.goToTown();
 		this.townTasks();
-		Town.buyAntidotes(10);
+		this.buyPots(10, "Antidote"); // antidote
 		this.drinkPots();
 		Pather.usePortal(37, me.name);
 
@@ -1260,7 +1309,7 @@ function SoloLeveling () {
 
 		Town.goToTown();
 		this.townTasks();
-		this.buyPots(10); // thawing
+		this.buyPots(10, "Thawing"); // thawing
 		this.drinkPots();
 		Pather.usePortal(null, me.name);
 
@@ -1310,7 +1359,7 @@ function SoloLeveling () {
 
 		Town.goToTown();
 		Town.doChores();
-		Town.buyAntidotes(10);
+		this.buyPots(10, "Antidote"); // antidote
 		this.drinkPots();
 		Pather.usePortal(85, me.name);
 
@@ -1680,7 +1729,7 @@ function SoloLeveling () {
 
 		Town.goToTown();
 		this.townTasks();
-		Town.buyAntidotes(10);
+		this.buyPots(10, "Antidote"); // antidote
 		this.drinkPots();
 		Pather.usePortal(102, me.name);
 
@@ -1850,7 +1899,6 @@ function SoloLeveling () {
 		};
 
 		this.diabloPrep = function () {
-
 			let tick = getTickCount();
 
 			while (getTickCount() - tick < 17500) {
@@ -1910,8 +1958,8 @@ function SoloLeveling () {
 					return true;
 				}
 			}
-
-			throw new Error("Diablo not found");
+			
+			return false;
 		};
 
 		this.openSeal = function (classid) {
@@ -1970,6 +2018,7 @@ function SoloLeveling () {
 		me.overhead("diablo");
 		Pather.useWaypoint(107);
 		Precast.doPrecast(true);
+		Pather.moveToExit(108, true);
 		this.initLayout();
 		this.openSeal(395);
 		this.openSeal(396);
@@ -2010,11 +2059,20 @@ function SoloLeveling () {
 		}
 
 		Pather.moveTo(7788, 5292);
-		this.diabloPrep();
 
-		Attack.kill(243); // Diablo
+		try{
+			this.diabloPrep();
+		} catch (err) {
+			print('Diablo not found');
+		}
+
+		try {
+			Attack.kill(243); // Diablo
+		} catch (err) {
+			print('Failed to kill Diablo');
+		}
+
 		Pickit.pickItems();
-
 		Town.goToTown();
 
 		Town.move(NPC.Tyrael);
@@ -2241,8 +2299,8 @@ function SoloLeveling () {
 			me.overhead('updated settings');
 			Object.assign(Config, updateConfig);
 
-			this.buyPots(10); // thawing
-			Town.buyAntidotes(10); // antidote
+			this.buyPots(10, "Thawing"); // thawing
+			this.buyPots(10, "Antidote"); // antidote
 			this.drinkPots();
 			this.townTasks();
 
@@ -2542,7 +2600,13 @@ function SoloLeveling () {
 		}
 
 		Pather.moveTo(15134, 5923);
-		Attack.kill(544); // Baal
+
+		try {
+			Attack.kill(544); // Baal
+		} catch (err) {
+			print('Failed to kill Baal');
+		}
+
 		Pickit.pickItems();
 
 		return true;
@@ -2587,7 +2651,7 @@ function SoloLeveling () {
 // Start Global Variables and functions
 
 //respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 30, 25, 25, 0, 0, 0][me.classid];
+const respecOne = [ 0, 25, 25, 25, 0, 0, 0][me.classid];
 const respecTwo = [ 0, 75, 85, 85, 0, 0, 0][me.classid];
 
 //NTIP INJECTOR
@@ -2617,7 +2681,7 @@ NTIP.arrayLooping = function (arraytoloop) {
 	return true;
 };
 
-//	MERC AUTO EQUIP - credit to dzik
+//	MERC AUTO EQUIP - modified from dzik's
 Item.hasMercTier = function (item) {
 	return Config.AutoEquip && NTIP.GetMercTier(item) > 0 && !me.classic;
 };
@@ -2637,7 +2701,7 @@ Item.canEquipMerc = function (item, bodyLoc) {
 		return false;
 	}
 
-	let curr = this.getEquippedItemMerc(bodyLoc);
+	let curr = Item.getEquippedItemMerc(bodyLoc);
 
 	if (item.getStat(92) > mercenary.getStat(12) || item.dexreq > mercenary.getStat(2) - curr.dex || item.strreq > mercenary.getStat(0) - curr.str) { // Higher requirements
 		return false;
@@ -2647,7 +2711,7 @@ Item.canEquipMerc = function (item, bodyLoc) {
 };
 
 Item.equipMerc = function (item, bodyLoc) {
-	if (!this.canEquipMerc(item, bodyLoc)) {
+	if (!Item.canEquipMerc(item, bodyLoc)) {
 		return false;
 	}
 
@@ -2775,14 +2839,14 @@ Item.autoEquipCheckMerc = function (item) {
 
 	var i,
 		tier = NTIP.GetMercTier(item),
-		bodyLoc = this.getBodyLocMerc(item);
+		bodyLoc = Item.getBodyLocMerc(item);
 
 	if (tier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
 			// Low tier items shouldn't be kept if they can't be equipped
-			var oldTier = this.getEquippedItemMerc(bodyLoc[i]).tier;
+			var oldTier = Item.getEquippedItemMerc(bodyLoc[i]).tier;
 
-			if (tier > oldTier && (this.canEquipMerc(item) || !item.getFlag(0x10))) {
+			if (tier > oldTier && (Item.canEquipMerc(item) || !item.getFlag(0x10))) {
 				return true;
 			}
 		}
@@ -2835,11 +2899,11 @@ Item.autoEquipMerc = function () {
 		items.sort(sortEq);
 
 		tier = NTIP.GetMercTier(items[0]);
-		bodyLoc = this.getBodyLocMerc(items[0]);
+		bodyLoc = Item.getBodyLocMerc(items[0]);
 
 		if (tier > 0 && bodyLoc) {
 			for (j = 0; j < bodyLoc.length; j += 1) {
-				if ([3, 7].indexOf(items[0].location) > -1 && tier > this.getEquippedItemMerc(bodyLoc[j]).tier) { // khalim's will adjustment
+				if ([3, 7].indexOf(items[0].location) > -1 && tier > Item.getEquippedItemMerc(bodyLoc[j]).tier) { // khalim's will adjustment
 					if (!items[0].getFlag(0x10)) { // unid
 						tome = me.findItem(519, 0, 3);
 						scroll = me.findItem(530, 0, 3);
@@ -2856,7 +2920,7 @@ Item.autoEquipMerc = function () {
 					gid = items[0].gid;
 					classid = items[0].classid;
 
-					if (this.equipMerc(items[0], bodyLoc[j])) {
+					if (Item.equipMerc(items[0], bodyLoc[j])) {
 						me.overhead("equiped merc item.");
 					}
 
