@@ -272,16 +272,32 @@ function SoloLeveling () {
 				junk[count].drop();
 			}
 
+			let stashtier = NTIP.GetTier(junk[count]);
+			let bodyLoc = Item.getBodyLoc(junk[count]);
+
+			if (stashtier > 0 && bodyLoc) {
+				for (let bodypart = 0; bodypart < bodyLoc.length; bodypart += 1) {
+					let equippedTier = Item.getEquippedItem(bodyLoc[bodypart]).tier;
+
+					if ((junk[count].location === 7) && //stash
+						stashtier <= equippedTier
+					) {
+						me.overhead('clear out junk');
+						junk[count].drop();
+					}
+				}
+			}
+
 			if (!!me.getMerc() === true) {
 				let merctier = NTIP.GetMercTier(junk[count]);
 				let mercbodyLoc = Item.getBodyLocMerc(junk[count]);
 
 				if (merctier > 0 && mercbodyLoc) {
-					for (let bodypart = 0; bodypart < mercbodyLoc.length; bodypart += 1) {
-						let equippedTier = Item.getEquippedItemMerc(mercbodyLoc[bodypart]).tier;
+					for (let mercbodypart = 0; mercbodypart < mercbodyLoc.length; mercbodypart += 1) {
+						let mercequippedTier = Item.getEquippedItemMerc(mercbodyLoc[mercbodypart]).tier;
 
 						if ((junk[count].location === 7 || junk[count].location === 3) && //stash or inventory
-							merctier <= equippedTier
+							merctier <= mercequippedTier
 						) {
 							me.overhead('clear out merc junk');
 							junk[count].drop();
@@ -554,6 +570,10 @@ function SoloLeveling () {
 					"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] == Normal # [Sockets] == 2 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(Strength);
+
+				Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+				Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
+				Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
 
 				Config.Runewords.push([Runeword.Strength, "Voulge"]);
 				Config.Runewords.push([Runeword.Strength, "Poleaxe"]);
@@ -914,11 +934,11 @@ function SoloLeveling () {
 			return true;
 		}
 
-		this.townTasks();
-
 		if (Config.UseMerc) {
 			this.getMerc();
 		}
+
+		this.townTasks();
 
 		me.overhead("radament");
 
