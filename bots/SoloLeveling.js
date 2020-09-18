@@ -36,6 +36,11 @@ function SoloLeveling () {
 
 	this.townTasks = function () {
 		this.unfinishedQuests();
+		Cubing.doCubing();
+		Runewords.makeRunewords();
+		this.equipCTA();
+		Item.autoEquip();
+		Town.stash(true);
 		Town.heal();
 		Town.identify();
 		Town.clearInventory();
@@ -47,19 +52,15 @@ function SoloLeveling () {
 		Town.shopItems();
 		Town.gamble();
 		Town.reviveMerc();
-		Cubing.doCubing();
-		Runewords.makeRunewords();
-		this.equipCTA();
-		Item.autoEquip();
 		Item.autoEquipMerc();
 		this.clearJunk();
-		this.organizeStash();
 		Town.stash(true);
+		this.organizeStash();
 		this.organizeInventory();
 		this.characterRespec();
 
-		if ((me.classid !== 1 || me.classid < respecOne) && (me.area === 40 || me.area === 75)) {
-			this.buyPots(5, "Stamina");
+		if ((me.classid !== 1 || me.classid === 1 && me.charlvl < respecOne) && (me.area === 40 || me.area === 75)) {
+			this.buyPots(8, "Stamina");
 			this.drinkPots();
 		}
 
@@ -228,7 +229,7 @@ function SoloLeveling () {
 		me.overhead('organize stash');
 		Town.move('stash');
 
-		let fit = { sizex: 6, sizey: 8 };
+		let fit = { sizex: 6, sizey: 4 };
 
 		if (!Storage.Stash.CanFit(fit)) {
 			me.cancel();
@@ -288,7 +289,7 @@ function SoloLeveling () {
 				}
 			}
 
-			if (!!me.getMerc() === true) {
+			if (me.getMerc()) {
 				let merctier = NTIP.GetMercTier(junk[count]);
 				let mercbodyLoc = Item.getBodyLocMerc(junk[count]);
 
@@ -367,8 +368,73 @@ function SoloLeveling () {
 		}
 
 		removeEventListener("gamepacket", this.gamePacket);
+		this.setupMerc();
 
 		return false;
+	};
+
+	this.setupMerc = function () {
+
+		if (me.gametype === 0) {
+			return true;
+		}
+
+		if (!me.getMerc()) {
+			return true;
+		}
+
+		me.overhead('setup merc');
+
+		var mercHelm = [
+			"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [Merctier] == 4",
+			"[Name] == sallet && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 3",
+			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 && [enhanceddefense] >= 30 # [maxquantity] == 1 && [Merctier] == 2",
+			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [maxquantity] == 1 && [Merctier] == 1",		];
+		NTIP.arrayLooping(mercHelm);
+
+		var mercArmor = [
+			"[Type] == armor && [flag] == runeword && [flag] == ethereal # [ias] == 45 && [coldresist] == 30 # [Merctier] == 12",
+			"[Type] == armor && [flag] == runeword && [flag] != ethereal # [ias] == 45 && [coldresist] == 30 # [Merctier] == 11",
+			"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # # [Merctier] == 10",
+			"[type] == armor # [defense] >= 500 && [maxhp] >= 90 # [MaxQuantity] == 1 && [Merctier] == 9",
+			"[type] == armor # [defense] >= 475 && [maxhp] >= 90 # [MaxQuantity] == 1 && [Merctier] == 8",
+			"[type] == armor # [defense] >= 450 && [maxhp] >= 80  # [MaxQuantity] == 1 && [Merctier] == 7",
+			"[type] == armor # [defense] >= 425 && [maxhp] >= 80  # [MaxQuantity] == 1 && [Merctier] == 6",
+			"[type] == armor # [defense] >= 375 && [maxhp] >= 60 # [MaxQuantity] == 1 && [Merctier] == 5",
+			"[type] == armor # [defense] >= 350 && [maxhp] >= 60 # [MaxQuantity] == 1 && [Merctier] == 4",
+			"[type] == armor # [defense] >= 325 && [maxhp] >= 40 # [MaxQuantity] == 1 && [Merctier] == 3",
+			"[type] == armor # [defense] >= 300 && [maxhp] >= 40 # [MaxQuantity] == 1 && [Merctier] == 2",
+			"[type] == armor # [defense] >= 300 # [MaxQuantity] == 1 && [Merctier] == 1",
+		];
+		NTIP.arrayLooping(mercArmor);
+
+		var mercWeapon = [
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [Merctier] == 14",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [Merctier] == 13",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [Merctier] == 12",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 14 # [Merctier] == 11",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 13 # [Merctier] == 10",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [Merctier] == 9",
+			"[type] == polearm && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 8",
+			"[Type] == Polearm # [EnhancedDamage] >= 65 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 7",
+			"[Type] == Polearm # [EnhancedDamage] >= 40 && [LifeLeech] >= 7  # [MaxQuantity] == 1 && [Merctier] == 6",
+			"[Type] == Polearm # [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 5",
+			"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 4",
+			"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 3",
+			"[Type] == Polearm # [lifeleech] >= 4 # [MaxQuantity] == 1 && [Merctier] == 2",
+			"[Type] == Polearm # [lifeleech] >= 3 # [MaxQuantity] == 1 && [Merctier] == 1",
+		];
+		NTIP.arrayLooping(mercWeapon);
+
+		return true;
+	};
+
+	this.equipMerc = function () {
+		if (me.gametype === 1) {
+			Item.autoEquipMerc();
+		}
+
+		return true;
 	};
 
 	this.equipCTA = function () {
@@ -411,8 +477,10 @@ function SoloLeveling () {
 			}
 
 			delay(me.ping * 2);
-			Misc.useMenu(0x2ba0); //click reset stats
-			Misc.useMenu(3401); // click ok
+
+			if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
+				return false;
+			}
 
 			delay((me.ping * 2) + 1000);
 
@@ -488,463 +556,7 @@ function SoloLeveling () {
 
 		Town.heal();
 		Town.reviveMerc();
-
-		if (!!me.getMerc() === true) {
-			me.overhead('setup merc');
-			var setupMerc = [
-				"[type] == polearm && [flag] == runeword # [lifeleech] >= 7 # [MercTier] == 8",
-				"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [MercTier] == 9",
-				"[type] == polearm && [flag] == runeword # [meditationaura] >= 13 # [MercTier] == 10",
-				"[type] == polearm && [flag] == runeword # [meditationaura] >= 14 # [MercTier] == 11",
-				"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [MercTier] == 12",
-				"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [MercTier] == 13",
-				"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [MercTier] == 14",
-				"[Type] == armor && [flag] == runeword && [flag] != ethereal # [ias] == 45 && [coldresist] == 30 # [MercTier] == 10",
-				"[Type] == armor && [flag] == runeword && [flag] == ethereal # [ias] == 45 && [coldresist] == 30 # [MercTier] == 11",
-			];
-			NTIP.arrayLooping(setupMerc);
-
-			switch (Item.getEquippedItemMerc(1).tier) {// helm setup
-			case -1:
-				var helm0 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == helm # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == helm # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == helm # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == helm # [maxhp] >= 50 # [MercTier] == 5",
-					"[type] == helm # [maxhp] >= 40 # [MercTier] == 4",
-					"[type] == helm # [maxhp] >= 30 # [MercTier] == 3",
-					"[type] == helm # [maxhp] >= 20 # [MercTier] == 2",
-					"[type] == helm # [maxhp] >= 10 # [MercTier] == 1",
-				];
-				NTIP.arrayLooping(helm0);
-
-				break;
-			case 1:
-				var helm1 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == helm # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == helm # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == helm # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == helm # [maxhp] >= 50 # [MercTier] == 5",
-					"[type] == helm # [maxhp] >= 40 # [MercTier] == 4",
-					"[type] == helm # [maxhp] >= 30 # [MercTier] == 3",
-					"[type] == helm # [maxhp] >= 20 # [MercTier] == 2",
-				];
-				NTIP.arrayLooping(helm1);
-
-				break;
-			case 2:
-				var helm2 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == helm # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == helm # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == helm # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == helm # [maxhp] >= 50 # [MercTier] == 5",
-					"[type] == helm # [maxhp] >= 40 # [MercTier] == 4",
-					"[type] == helm # [maxhp] >= 30 # [MercTier] == 3",
-				];
-				NTIP.arrayLooping(helm2);
-
-				break;
-			case 3:
-				var helm3 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == helm # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == helm # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == helm # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == helm # [maxhp] >= 50 # [MercTier] == 5",
-					"[type] == helm # [maxhp] >= 40 # [MercTier] == 4",
-				];
-				NTIP.arrayLooping(helm3);
-
-				break;
-			case 4:
-				var helm4 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == helm # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == helm # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == helm # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == helm # [maxhp] >= 50 # [MercTier] == 5",
-				];
-				NTIP.arrayLooping(helm4);
-
-				break;
-			case 5:
-				var helm5 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == helm # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == helm # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == helm # [maxhp] >= 60 # [MercTier] == 6",
-				];
-				NTIP.arrayLooping(helm5);
-
-				break;
-			case 6:
-				var helm6 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == helm # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == helm # [maxhp] >= 70 # [MercTier] == 7",
-				];
-				NTIP.arrayLooping(helm6);
-
-				break;
-			case 7:
-				var helm7 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == helm # [maxhp] >= 80 # [MercTier] == 8",
-				];
-				NTIP.arrayLooping(helm7);
-
-				break;
-			case 8:
-				var helm8 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-					"[type] == helm # [maxhp] >= 90 # [MercTier] == 9",
-				];
-				NTIP.arrayLooping(helm8);
-
-				break;
-			case 9:
-				var helm9 = [
-					"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11",
-					"[name] == deathmask && [quality] == set # [fireresist] >= 12 # [merctier] == 10",
-				];
-				NTIP.arrayLooping(helm9);
-
-				break;
-			case 10:
-				NTIP.addLine("[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [merctier] == 11");
-
-				break;
-			}
-
-			this.configInsight = function () {
-				var Insight = [
-					"[Name] == RalRune # # [MaxQuantity] == 1",
-					"[Name] == TirRune # # [MaxQuantity] == 1",
-					"[Name] == TalRune # # [MaxQuantity] == 1",
-					"[Name] == SolRune # # [MaxQuantity] == 1",
-					"([Name] == warscythe || [Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe || [Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe) && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(Insight);
-
-				Config.Recipes.push([Recipe.Socket.Weapon, "war scythe"]);
-				Config.Recipes.push([Recipe.Socket.Weapon, "bill"]);
-				Config.Recipes.push([Recipe.Socket.Weapon, "battle scythe"]);
-				Config.Recipes.push([Recipe.Socket.Weapon, "partizan"]);
-				Config.Recipes.push([Recipe.Socket.Weapon, "grim scythe"]);
-				Config.Recipes.push([Recipe.Socket.Weapon, "thresher"]);
-				Config.Recipes.push([Recipe.Socket.Weapon, "Cryptic Axe"]);
-				Config.Recipes.push([Recipe.Socket.Weapon, "Great Poleaxe"]);
-
-				Config.Runewords.push([Runeword.Insight, "War Scythe"]);
-				Config.Runewords.push([Runeword.Insight, "Bill"]);
-				Config.Runewords.push([Runeword.Insight, "Battle Scythe"]);
-				Config.Runewords.push([Runeword.Insight, "Partizan"]);
-				Config.Runewords.push([Runeword.Insight, "Grim Scythe"]);
-				Config.Runewords.push([Runeword.Insight, "thresher"]);
-				Config.Runewords.push([Runeword.Insight, "crypticaxe"]);
-				Config.Runewords.push([Runeword.Insight, "greatpoleaxe"]);
-				Config.KeepRunewords.push("[type] == polearm # [meditationaura] >= 12");
-
-				return true;
-			};
-
-			this.configStrength = function () {
-				var Strength = [
-					"[Name] == AmnRune # # [MaxQuantity] == 1",
-					"[Name] == TirRune # # [MaxQuantity] == 1",
-					"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] == Normal # [Sockets] == 2 # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(Strength);
-
-				Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
-				Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
-				Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
-
-				Config.Runewords.push([Runeword.Strength, "Voulge"]);
-				Config.Runewords.push([Runeword.Strength, "Poleaxe"]);
-				Config.Runewords.push([Runeword.Strength, "Scythe"]);
-				Config.Runewords.push([Runeword.Strength, "War Scythe"]);
-				Config.Runewords.push([Runeword.Strength, "Halberd"]);
-				Config.Runewords.push([Runeword.Strength, "Battle Scythe"]);
-				Config.Runewords.push([Runeword.Strength, "Partizan"]);
-				Config.Runewords.push([Runeword.Strength, "Grim Scythe"]);
-				Config.KeepRunewords.push("[type] == polearm # [lifeleech] >= 7");
-
-				return true;
-			};
-
-			switch (Item.getEquippedItemMerc(4).tier) {// weapon setup
-			case -1:
-				this.configInsight();
-				this.configStrength();
-				var weapon0 = [
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 7",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 6",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 5",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 4",
-					"([Type] == Spear || [Type] == Polearm) # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 3",
-					"([Type] == Spear || [Type] == Polearm) # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 2",
-					"([Type] == Spear || [Type] == Polearm) # [lifeleech] >= 3  # [MercTier] == 1",
-				];
-				NTIP.arrayLooping(weapon0);
-
-				break;
-			case 1:
-				this.configInsight();
-				this.configStrength();
-				var weapon1 = [
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 7",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 6",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 5",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 4",
-					"([Type] == Spear || [Type] == Polearm) # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 3",
-					"([Type] == Spear || [Type] == Polearm) # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 2",
-				];
-				NTIP.arrayLooping(weapon1);
-
-				break;
-			case 2:
-				this.configInsight();
-				this.configStrength();
-				var weapon2 = [
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 7",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 6",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 5",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 4",
-					"([Type] == Spear || [Type] == Polearm) # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 3",
-				];
-				NTIP.arrayLooping(weapon2);
-
-				break;
-			case 3:
-				this.configInsight();
-				this.configStrength();
-				var weapon3 = [
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 7",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 6",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 5",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 4",
-				];
-				NTIP.arrayLooping(weapon3);
-
-				break;
-			case 4:
-				this.configInsight();
-				this.configStrength();
-				var weapon4 = [
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 7",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 6",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Exceptional # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 5",
-				];
-				NTIP.arrayLooping(weapon4);
-
-				break;
-			case 5:
-				this.configInsight();
-				this.configStrength();
-				var weapon5 = [
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 7",
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 40 || [LifeLeech] > 3 # [MercTier] == 6",
-				];
-				NTIP.arrayLooping(weapon5);
-
-				break;
-			case 6:
-				this.configInsight();
-				this.configStrength();
-				var weapon6 = [
-					"([Type] == Spear || [Type] == Polearm) && [Class] == Elite # [EnhancedDamage] > 65 && [LifeLeech] > 5 # [MercTier] == 7",
-				];
-				NTIP.arrayLooping(weapon6);
-
-				break;
-			case 7:
-				this.configInsight();
-				this.configStrength();
-
-				break;
-			case 8:
-			case 9:
-			case 10:
-			case 11:
-			case 12:
-			case 13:
-				this.configInsight();
-
-				break;
-			}
-
-			this.configTreachery = function () {
-				var Treachery = [
-					"[Name] == ShaelRune # # [MaxQuantity] == 1",
-					"[Name] == ThulRune # # [MaxQuantity] == 1",
-					"[Name] == LemRune # # [MaxQuantity] == 1",
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] == ethereal # [Sockets] == 0",
-				];
-				NTIP.arrayLooping(Treachery);
-
-				Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate"]);
-				Config.Recipes.push([Recipe.Socket.Armor, "Mage Plate"]);
-				Config.Recipes.push([Recipe.Socket.Armor, "Wire Fleece"]);
-				Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
-
-				Config.Runewords.push([Runeword.Treachery, "Archon Plate"]);
-				Config.Runewords.push([Runeword.Treachery, "Mage Plate"]);
-				Config.Runewords.push([Runeword.Treachery, "Wire Fleece"]);
-				Config.Runewords.push([Runeword.Treachery, "Dusk Shroud"]);
-				Config.KeepRunewords.push("[Type] == armor # [ias] == 45 && [coldresist] == 30");
-
-			};
-
-			switch (Item.getEquippedItemMerc(3).tier) {// armor setup
-			case -1:
-				this.configTreachery();
-				var armor0 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == armor # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == armor # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == armor # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == armor # [maxhp] >= 50 # [MercTier] == 5",
-					"[type] == armor # [maxhp] >= 40 # [MercTier] == 4",
-					"[type] == armor # [maxhp] >= 30 # [MercTier] == 3",
-					"[type] == armor # [maxhp] >= 20 # [MercTier] == 2",
-					"[type] == armor # [maxhp] >= 10 # [MercTier] == 1",
-				];
-				NTIP.arrayLooping(armor0);
-
-				break;
-			case 1:
-				this.configTreachery();
-				var armor1 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == armor # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == armor # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == armor # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == armor # [maxhp] >= 50 # [MercTier] == 5",
-					"[type] == armor # [maxhp] >= 40 # [MercTier] == 4",
-					"[type] == armor # [maxhp] >= 30 # [MercTier] == 3",
-					"[type] == armor # [maxhp] >= 20 # [MercTier] == 2",
-				];
-				NTIP.arrayLooping(armor1);
-
-				break;
-			case 2:
-				this.configTreachery();
-				var armor2 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == armor # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == armor # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == armor # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == armor # [maxhp] >= 50 # [MercTier] == 5",
-					"[type] == armor # [maxhp] >= 40 # [MercTier] == 4",
-					"[type] == armor # [maxhp] >= 30 # [MercTier] == 3",
-				];
-				NTIP.arrayLooping(armor2);
-
-				break;
-			case 3:
-				this.configTreachery();
-				var armor3 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == armor # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == armor # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == armor # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == armor # [maxhp] >= 50 # [MercTier] == 5",
-					"[type] == armor # [maxhp] >= 40 # [MercTier] == 4",
-				];
-				NTIP.arrayLooping(armor3);
-
-				break;
-			case 4:
-				this.configTreachery();
-				var armor4 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == armor # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == armor # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == armor # [maxhp] >= 60 # [MercTier] == 6",
-					"[type] == armor # [maxhp] >= 50 # [MercTier] == 5",
-				];
-				NTIP.arrayLooping(armor4);
-
-				break;
-			case 5:
-				this.configTreachery();
-				var armor5 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == armor # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == armor # [maxhp] >= 70 # [MercTier] == 7",
-					"[type] == armor # [maxhp] >= 60 # [MercTier] == 6",
-				];
-				NTIP.arrayLooping(armor5);
-
-				break;
-			case 6:
-				this.configTreachery();
-				var armor6 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == armor # [maxhp] >= 80 # [MercTier] == 8",
-					"[type] == armor # [maxhp] >= 70 # [MercTier] == 7",
-				];
-				NTIP.arrayLooping(armor6);
-
-				break;
-			case 7:
-				this.configTreachery();
-				var armor7 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-					"[type] == armor # [maxhp] >= 80 # [MercTier] == 8",
-				];
-				NTIP.arrayLooping(armor7);
-
-				break;
-			case 8:
-				this.configTreachery();
-				var armor8 = [
-					"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
-					"[type] == armor # [maxhp] >= 90 # [MercTier] == 9",
-				];
-				NTIP.arrayLooping(armor8);
-
-				break;
-			case 9:
-				this.configTreachery();
-				NTIP.addLine("([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] != ethereal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1"); //noneth treach base
-				break;
-			case 10:
-				this.configTreachery();
-
-				break;
-			}
-		}
-
+		this.setupMerc();
 		delay(500);
 		me.overhead('start SoloLeveling');
 		delay(500);
@@ -1011,7 +623,7 @@ function SoloLeveling () {
 	};
 
 	this.mausoleum = function () {
-		if (me.diff <= 1) {
+		if (me.diff !== 2) {
 			return true;
 		}
 
@@ -1031,7 +643,7 @@ function SoloLeveling () {
 	};
 
 	this.tristam = function () {
-		if (me.diff <= 1 || this.checkQuest(4, 0)) {
+		if (me.diff !== 2 || this.checkQuest(4, 0)) {
 			return true;
 		}
 
@@ -1127,7 +739,7 @@ function SoloLeveling () {
 
 	this.pits = function () {
 
-		if (me.diff <= 1) {
+		if (me.diff !== 2) {
 			return true;
 		}
 
@@ -1200,11 +812,7 @@ function SoloLeveling () {
 	};
 
 	this.radament = function () {
-		if (this.checkQuest(9, 0)) {
-			return true;
-		}
-
-		if (!Pather.accessToAct(2))	{
+		if (!Pather.accessToAct(2) || this.checkQuest(9, 0)) {
 			return true;
 		}
 
@@ -1256,13 +864,9 @@ function SoloLeveling () {
 
 	this.cube = function () {
 
-		if (me.getItem(549)) {
+		if (!Pather.accessToAct(2) || me.getItem(549)) {
 			return true;
 		} // skip cube
-
-		if (!Pather.accessToAct(2)) {
-			return true;
-		}
 
 		this.townTasks();
 		me.overhead("cube");
@@ -1293,13 +897,9 @@ function SoloLeveling () {
 
 	this.amulet = function () {
 
-		if (me.getItem(91) || me.getItem(521) || this.checkQuest(11, 0)) {
+		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || this.checkQuest(11, 0)) {
 			return true;
 		} // skip amulet
-
-		if (!Pather.accessToAct(2)) {
-			return true;
-		}
 
 		this.townTasks();
 		me.overhead("amulet");
@@ -1318,12 +918,16 @@ function SoloLeveling () {
 		Pather.moveTo(15045, 14051);
 
 		let altar = getUnit(2, 149);
-
 		Misc.openChest(altar);
-		delay(300);
-		Pickit.pickItems();
-		Town.goToTown();
+		delay(500 + me.ping);
 
+		let viperammy = getUnit(4, 521);
+
+		if (!Pickit.pickItem(viperammy)) {
+			Pickit.pickItems();
+		}
+
+		Town.goToTown();
 		Town.move(NPC.Drognan);
 
 		let drognan = getUnit(1, NPC.Drognan);
@@ -1346,11 +950,7 @@ function SoloLeveling () {
 
 	this.summoner = function () {
 
-		if (!Pather.accessToAct(2)) {
-			return true;
-		}
-
-		if (me.diff <= 1 && this.checkQuest(13, 0)) {
+		if (!Pather.accessToAct(2) || me.diff !== 2 && this.checkQuest(13, 0)) {
 			return true;
 		}
 
@@ -1365,6 +965,8 @@ function SoloLeveling () {
 			Attack.clear(15, 0, 250); // The SummonerAttack.clear(15, 0, 250); // The Summoner
 		} catch (err) {
 			print('Failed to kill summoner');
+
+			return false;
 		}
 
 		if (this.checkQuest(13, 0)) {
@@ -1394,12 +996,12 @@ function SoloLeveling () {
 
 	this.staff = function () {
 
-		if (me.getItem(91) || me.getItem(92) || this.checkQuest(10, 0)) {
+		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || this.checkQuest(10, 0)) {
 			return true;
 		} // skip script already cubed horadric staff
 
-		if (!Pather.accessToAct(2)) {
-			return true;
+		if (!me.getItem(521)) {
+			this.amulet();
 		}
 
 		this.townTasks();
@@ -1413,10 +1015,13 @@ function SoloLeveling () {
 		}
 
 		let gbox = getUnit(2, 356);
-
 		Misc.openChest(gbox);
-		delay(300);
-		Pickit.pickItems();
+		let shaft = getUnit(4, 92);
+		delay(500 + me.ping);
+
+		if (!Pickit.pickItem(shaft)) {
+			Pickit.pickItems();
+		}
 
 		Town.goToTown();
 
@@ -1433,29 +1038,32 @@ function SoloLeveling () {
 	};
 
 	this.cubeStaff = function () {
-		this.townTasks();
-		this.organizeInventory();
 
 		let shaft = me.getItem("msf");
 		let ammy = me.getItem("vip");
 
 		if (!shaft || !ammy) {
+			me.overhead("missing pieces to make staff");
+
 			return false;
 		}
 
 		Storage.Cube.MoveTo(ammy);
 		Storage.Cube.MoveTo(shaft);
 		Cubing.openCube();
-		me.overhead("made staff");
+
 		transmute();
 		delay(750 + me.ping);
 
 		let hstaff = me.getItem(91);
 
 		if (!hstaff) {
+			me.overhead("failed to make staff");
+
 			return false;
 		}
 
+		me.overhead("made staff");
 		Storage.Inventory.MoveTo(hstaff);
 		me.cancel();
 
@@ -1563,33 +1171,26 @@ function SoloLeveling () {
 
 	this.duriel = function () {
 
-		if (!Pather.accessToAct(2)) {
+		if (!Pather.accessToAct(2) || this.checkQuest(14, 0)) {
 			return true;
 		}
 
-		if (this.checkQuest(14, 0)) {
-			return true;
+		if (!me.getItem(521)) {
+			this.amulet();
+		}
+
+		if (!me.getItem(92)) {
+			this.staff();
 		}
 
 		this.townTasks();
 		me.overhead("duriel");
 
-		if (me.inTown) {
-			if (!me.getItem(521)) {
-				this.amulet();
-			}
-
-			if (!me.getItem(92)) {
-				this.staff();
-			}
-
-			if (!me.getItem(91)) {
-				this.cubeStaff();
-			}
-
-			Pather.useWaypoint(46, true);
+		if (!me.getItem(91)) {
+			this.cubeStaff();
 		}
 
+		Pather.useWaypoint(46, true);
 		Precast.doPrecast(true);
 
 		Pather.moveToExit(getRoom().correcttomb, true);
@@ -1605,12 +1206,18 @@ function SoloLeveling () {
 		this.townTasks();
 		this.buyPots(10, "Thawing"); // thawing
 		this.drinkPots();
+		Config.MercWatch = false;
 		Pather.usePortal(null, me.name);
 
 		delay(1000);
 
-		Pather.useUnit(2, 100, 73);
-		Attack.kill(211);
+		try {
+			Pather.useUnit(2, 100, 73);
+			Attack.kill(211); // kill duriel
+		} catch (err) {
+			print('Failed to kill Duriel');
+		}
+
 		Pickit.pickItems();
 
 		if (!this.checkQuest(15, 0)) {
@@ -1627,19 +1234,16 @@ function SoloLeveling () {
 		}
 
 		this.meshifTalk();
+		Config.MercWatch = true;
 
 		return true;
 	};
 
 	this.eye = function () {
 
-		if (me.getItem(553) || me.getItem(174) || this.checkQuest(18, 0)) {
+		if (!Pather.accessToAct(3) || me.getItem(553) || me.getItem(174) || this.checkQuest(18, 0)) {
 			return true;
 		} // skip eye
-
-		if (!Pather.accessToAct(3)) {
-			return true;
-		}
 
 		this.townTasks();
 		me.overhead("eye");
@@ -1663,8 +1267,13 @@ function SoloLeveling () {
 		let gbox = getUnit(2, 407);
 
 		Misc.openChest(gbox);
-		delay(300);
-		Pickit.pickItems();
+		delay(500 + me.ping);
+		let eye = getUnit(4, 553);
+
+		if (!Pickit.pickItem(eye)) {
+			Pickit.pickItems();
+		}
+
 		Town.goToTown();
 
 		if (me.getItem(553)) {
@@ -1679,13 +1288,9 @@ function SoloLeveling () {
 
 	this.heart = function () {
 
-		if (me.getItem(554) || me.getItem(174) || this.checkQuest(18, 0)) {
+		if (!Pather.accessToAct(3) || me.getItem(554) || me.getItem(174) || this.checkQuest(18, 0)) {
 			return true;
 		} // skip heart
-
-		if (!Pather.accessToAct(3)) {
-			return true;
-		}
 
 		this.townTasks();
 		me.overhead("heart");
@@ -1701,8 +1306,13 @@ function SoloLeveling () {
 		let gbox = getUnit(2, 405);
 
 		Misc.openChest(gbox);
-		delay(300);
-		Pickit.pickItems();
+		delay(500 + me.ping);
+		let heart = getUnit(4, 554);
+
+		if (!Pickit.pickItem(heart)) {
+			Pickit.pickItems();
+		}
+
 		Town.goToTown();
 
 		if (me.getItem(554)) {
@@ -1717,11 +1327,7 @@ function SoloLeveling () {
 
 	this.tome = function () {
 
-		if (this.checkQuest(17, 0)) {
-			return true;
-		}
-
-		if (!Pather.accessToAct(3)) {
+		if (!Pather.accessToAct(3) || this.checkQuest(17, 0)) {
 			return true;
 		}
 
@@ -1738,8 +1344,13 @@ function SoloLeveling () {
 		let stand = getUnit(2, 193);
 
 		Misc.openChest(stand);
-		delay(300);
-		Pickit.pickItems();
+		delay(500 + me.ping);
+		let tome = getUnit(4, 548);
+
+		if (!Pickit.pickItem(tome)) {
+			Pickit.pickItems();
+		}
+
 		Town.goToTown();
 
 		Town.move(NPC.Alkor);
@@ -1756,13 +1367,9 @@ function SoloLeveling () {
 
 	this.brain = function () {
 
-		if (me.getItem(555) || me.getItem(174) || this.checkQuest(18, 0)) {
+		if (!Pather.accessToAct(3) || me.getItem(555) || me.getItem(174) || this.checkQuest(18, 0)) {
 			return true;
 		} // skip brain
-
-		if (!Pather.accessToAct(3)) {
-			return true;
-		}
 
 		this.townTasks();
 		me.overhead("brain");
@@ -1778,8 +1385,12 @@ function SoloLeveling () {
 		let gbox = getUnit(2, 406);
 
 		Misc.openChest(gbox);
-		delay(300);
-		Pickit.pickItems();
+		delay(500 + me.ping);
+		let brain = getUnit(4, 555);
+
+		if (!Pickit.pickItem(brain)) {
+			Pickit.pickItems();
+		}
 
 		Town.goToTown();
 
@@ -1794,11 +1405,7 @@ function SoloLeveling () {
 	};
 
 	this.lowerkurast = function () {
-		if (!Pather.accessToAct(3)) {
-			return true;
-		}
-
-		if (me.diff !== 2) {
+		if (!Pather.accessToAct(3) || me.diff !== 2) {
 			return true;
 		}
 
@@ -1920,11 +1527,7 @@ function SoloLeveling () {
 
 	this.travincal = function () {
 
-		if (!Pather.accessToAct(3)) {
-			return true;
-		}
-
-		if (me.diff <= 0 && this.checkQuest(21, 0)) {
+		if (!Pather.accessToAct(3) || me.diff <= 0 && this.checkQuest(21, 0)) {
 			return true;
 		}
 
@@ -2005,11 +1608,7 @@ function SoloLeveling () {
 
 	this.mephisto = function () {
 
-		if (!Pather.accessToAct(3)) {
-			return true;
-		}
-
-		if (me.diff === 0 && this.checkQuest(22, 0)) {
+		if (!Pather.accessToAct(3) || me.diff === 0 && this.checkQuest(22, 0)) {
 			return true;
 		}
 
@@ -2023,14 +1622,13 @@ function SoloLeveling () {
 
 		Town.goToTown();
 		this.townTasks();
+		this.buyPots(10, "Thawing"); // thawing
 		this.buyPots(10, "Antidote"); // antidote
 		this.drinkPots();
 		Pather.usePortal(102, me.name);
 
 		Pather.moveTo(17692, 8048);
 		Pather.moveTo(17563, 8072);
-
-		Config.MercWatch = false;
 
 		try {
 			Attack.kill(242);
@@ -2040,8 +1638,6 @@ function SoloLeveling () {
 
 		Pickit.pickItems();
 
-		Config.MercWatch = true;
-
 		Pather.moveTo(17581, 8070);
 		Pather.usePortal(null);
 
@@ -2050,11 +1646,7 @@ function SoloLeveling () {
 
 	this.izual = function () {
 
-		if (this.checkQuest(25, 0)) {
-			return true;
-		}
-
-		if (!Pather.accessToAct(4)) {
+		if (this.checkQuest(25, 0) || !Pather.accessToAct(4)) {
 			return true;
 		}
 
@@ -2066,7 +1658,12 @@ function SoloLeveling () {
 
 		if (!this.checkQuest(25, 1)) {
 			Pather.moveToPreset(105, 1, 256);
-			Attack.kill(256);
+
+			try {
+				Attack.kill(256);
+			} catch (err) {
+				print('Failed to kill Izual');
+			}
 		}
 
 		Town.goToTown();
@@ -2313,6 +1910,7 @@ function SoloLeveling () {
 		Pather.useWaypoint(107);
 		Precast.doPrecast(true);
 		Pather.moveToExit(108, true);
+
 		this.initLayout();
 		this.openSeal(395);
 		this.openSeal(396);
@@ -2354,7 +1952,7 @@ function SoloLeveling () {
 
 		Pather.moveTo(7788, 5292);
 
-		try{
+		try {
 			this.diabloPrep();
 		} catch (err) {
 			print('Diablo not found');
@@ -2367,8 +1965,12 @@ function SoloLeveling () {
 		}
 
 		Pickit.pickItems();
-		Town.goToTown();
 
+		if (me.gametype === 0) {
+			return true;
+		}
+
+		Town.goToTown();
 		Town.move(NPC.Tyrael);
 
 		let tyrael = getUnit(1, NPC.Tyrael);
@@ -2391,11 +1993,7 @@ function SoloLeveling () {
 
 	this.shenk = function () {
 
-		if (this.checkQuest(35, 1)) {
-			return true;
-		}
-
-		if (!Pather.accessToAct(5)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(35, 1)) {
 			return true;
 		}
 
@@ -2418,11 +2016,7 @@ function SoloLeveling () {
 
 	this.saveBarby = function () {
 
-		if (this.checkQuest(36, 0)) {
-			return true;
-		}
-
-		if (!Pather.accessToAct(5)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(36, 0)) {
 			return true;
 		}
 
@@ -2491,11 +2085,7 @@ function SoloLeveling () {
 
 	this.anya = function () {
 
-		if (this.checkQuest(37, 1)) {
-			return true;
-		}
-
-		if (!Pather.accessToAct(5)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(37, 1)) {
 			return true;
 		}
 
@@ -2503,7 +2093,6 @@ function SoloLeveling () {
 		me.overhead("anya");
 
 		Pather.useWaypoint(113, true);
-
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(114, true) || !Pather.moveToPreset(me.area, 2, 460)) {
@@ -2549,11 +2138,7 @@ function SoloLeveling () {
 
 	this.ancients = function () {
 
-		if (!Pather.accessToAct(5)) {
-			return true;
-		}
-
-		if (me.charlvl < 20 && me.diff === 0 || me.charlvl < 40 && me.diff === 1 || me.charlvl < 60 && me.diff === 2 ) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || me.charlvl < 20 && me.diff === 0 || me.charlvl < 40 && me.diff === 1 || me.charlvl < 60 && me.diff === 2 ) {
 			return true;
 		}
 
@@ -2596,11 +2181,11 @@ function SoloLeveling () {
 			this.buyPots(10, "Thawing"); // thawing
 			this.buyPots(10, "Antidote"); // antidote
 			this.drinkPots();
-			this.townTasks();
-
 			Pather.usePortal(120, me.name);
 
-			Pather.moveTo(10048, 12628);
+			if (!Pather.moveToPreset(me.area, 2, 546)) {
+				throw new Error("Failed to move to ancients' altar");
+			}
 
 			let altar = getUnit(2, 546);
 			Pather.moveToUnit(altar);
@@ -2639,7 +2224,7 @@ function SoloLeveling () {
 
 	this.baal = function () {
 
-		if (!Pather.accessToAct(5)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5)) {
 			return true;
 		}
 
@@ -2931,7 +2516,7 @@ function SoloLeveling () {
 	this.runsequence();
 	let level = ['Normal', 'Nightmare', 'Hell'][me.diff];
 
-	if (this.checkQuest(40, 0)) {
+	if (this.checkQuest(40, 0) || me.gametype === 0 && this.checkQuest(26,0)) {
 		D2Bot.printToConsole('SoloLeving: ' + level + ' difficulty completed. Character Level: ' + me.charlvl + '. Running script again!');
 	} else {
 		D2Bot.printToConsole('SoloLeveling run completed. Running script again!');
@@ -2943,9 +2528,8 @@ function SoloLeveling () {
 }
 
 // Start Global Variables and functions
-
-//respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 25, 25, 25, 0, 0, 0][me.classid];
+//Respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+const respecOne = [ 0, 30, 25, 25, 0, 0, 0][me.classid];
 const respecTwo = [ 0, 75, 85, 85, 0, 0, 0][me.classid];
 
 //NTIP INJECTOR
