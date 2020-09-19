@@ -393,21 +393,21 @@ function LoadConfig () {
 
 		if (me.diff === 0) { // Steel, Stealth & AP
 
-			if (me.charlvl < respecOne) { //Steel
-				NTIP.addLine("[type] == mace && [flag] == runeword # [ias] >= 25 # [tier] == 30");
+			if (Item.getEquippedItem(4).tier < 3) { // Steel
+				if (me.charlvl < respecOne) { //Steel
+					NTIP.addLine("[type] == mace && [flag] == runeword # [ias] >= 25 # [tier] == 30");
+				}
 
-				if (Item.getEquippedItem(4).tier < 3) { // Steel
-					if (!haveItem("sword", "runeword", "Steel")) {
-						var steel = [
-							"[Name] == TirRune # # [MaxQuantity] == 1",
-							"[Name] == ElRune # # [MaxQuantity] == 1",
-							"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
-						];
-						NTIP.arrayLooping(steel);
+				if (!haveItem("sword", "runeword", "Steel")) {
+					var steel = [
+						"[Name] == TirRune # # [MaxQuantity] == 1",
+						"[Name] == ElRune # # [MaxQuantity] == 1",
+						"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
+					];
+					NTIP.arrayLooping(steel);
 
-						Config.Runewords.push([Runeword.Steel, "Mace"]);
-						Config.KeepRunewords.push("[type] == mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
-					}
+					Config.Runewords.push([Runeword.Steel, "Mace"]);
+					Config.KeepRunewords.push("[type] == mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
 				}
 			}
 
@@ -675,8 +675,7 @@ function LoadConfig () {
 				//helmet -- shako
 				//belt
 				"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100", //arach's
-				//boots
-				"[name] == lightplatedboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 50 # [tier] == 100", //goblin toes
+				//boots -- using WaterWalks
 				//armor -- using Enigma
 				//shield -- using Spirit runeword
 				//gloves -- using magefist
