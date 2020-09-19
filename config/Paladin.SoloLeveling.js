@@ -559,7 +559,7 @@ function LoadConfig () {
 				Config.Recipes.push([Runeword.Sanctuary, "Protector Shield"]);
 				Config.Recipes.push([Runeword.Sanctuary, "Sacred Rondache"]);
 				Config.Recipes.push([Runeword.Sanctuary, "Sacred Targe"]);
-				
+
 				Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist] >= 50");
 			}
 		}
@@ -580,7 +580,7 @@ function LoadConfig () {
 				Config.Recipes.push([Recipe.Socket.Armor, "ScarabHusk", Roll.NonEth]);
 			}
 
-			if (me.getItem(639) && me.getItem(640)) { 
+			if (me.getItem(639) && me.getItem(640)) {
 				Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
