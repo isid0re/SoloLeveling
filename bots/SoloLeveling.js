@@ -273,6 +273,15 @@ function SoloLeveling () {
 				junk[count].drop();
 			}
 
+			if (me.charlvl > respecOne && me.classid === 3) { // adjustment for Steel mace on Pally
+				let mace = me.getItem(19);
+
+				if (mace && mace.location === 7) {
+					me.overhead('clear out junk');
+					mace.drop();
+				}
+			}
+
 			let stashtier = NTIP.GetTier(junk[count]);
 			let bodyLoc = Item.getBodyLoc(junk[count]);
 
@@ -2529,8 +2538,8 @@ function SoloLeveling () {
 
 // Start Global Variables and functions
 //Respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 30, 25, 25, 0, 0, 0][me.classid];
-const respecTwo = [ 0, 75, 85, 85, 0, 0, 0][me.classid];
+const respecOne = [ 0, 30, 0, 25, 0, 0, 0][me.classid];
+const respecTwo = [ 0, 75, 0, 85, 0, 0, 0][me.classid];
 
 //NTIP INJECTOR
 NTIP.addLine = function (itemString) {

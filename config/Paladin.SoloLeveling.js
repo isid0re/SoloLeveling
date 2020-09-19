@@ -247,8 +247,8 @@ function LoadConfig () {
 
 	var tiers = [
 		//weapon
-		"([Type] == Hammer || [Type] == Mace || [Type] == Scepter) && [flag] != ethereal # [enhanceddamage] >= 10 # [tier] == 1",
-		"([Type] == Hammer || [Type] == Mace || [Type] == Scepter) && [flag] != ethereal # [enhanceddamage] >= 20 # [tier] == 2",
+		"[Type] == Scepter && [flag] != ethereal # [enhanceddamage] >= 10 # [tier] == 1",
+		"[Type] == Scepter && [flag] != ethereal # [enhanceddamage] >= 20 # [tier] == 2",
 		"[Name] == WarScepter && [Flag] != Ethereal && [Quality] == Set # # [tier] == 4",
 		"([Type] == Hammer || [Type] == Mace || [Type] == Sword || [Type] == Scepter) && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab]+[SkillBlessedHammer]+[SkillConcentration] >= 2 # [Tier] == 5",
 		"([Type] == Hammer || [Type] == Mace || [Type] == Sword || [Type] == Scepter) && [Flag] != Ethereal && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab]+[SkillBlessedHammer]+[SkillConcentration] >= 4 # [Tier] == 6",
@@ -393,13 +393,10 @@ function LoadConfig () {
 
 		if (me.diff === 0) { // Steel, Stealth & AP
 
-			if (Item.getEquippedItem(4).tier < 3) { // Steel
-				if (me.charlvl < respecOne) { //Steel
-					NTIP.addLine("[type] == mace && [flag] == runeword # [ias] >= 25 # [tier] == 30");
-				}
-
+			if (me.charlvl < respecOne) { //Steel
 				if (!haveItem("sword", "runeword", "Steel")) {
 					var steel = [
+						"[type] == mace && [flag] == runeword # [ias] >= 25 # [tier] == 30",
 						"[Name] == TirRune # # [MaxQuantity] == 1",
 						"[Name] == ElRune # # [MaxQuantity] == 1",
 						"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
