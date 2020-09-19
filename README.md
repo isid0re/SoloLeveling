@@ -20,7 +20,6 @@ Paladin.SoloLeveling.js >> Paladin.YourCharacterNameGoesHere.js
 3. Select the finalbuild you want to have by removing the // lines. The following example shows the finalbuild selected will be a Hammerdin:  
 ```
 Scripts.SoloLeveling = true; // *** Leveling Script  ***
-	//const finalBuild = "Auradin";
 	const finalBuild = "Hammerdin";
 	//const finalBuild = "Smiter";
 	//const finalBuild = "Zealot";
