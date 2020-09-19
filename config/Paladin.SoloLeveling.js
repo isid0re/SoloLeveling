@@ -377,14 +377,15 @@ function LoadConfig () {
 			"[type] == armor && [flag] == runeword # [frw] >= 45 # [tier] == 100", //Enigma
 			//shield
 			"([type] == shield || [type] == auricshields) && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 # [tier] == 10", //ap
-			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 # [tier] == 5", // spirit
-			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 10 # [tier] == 11", // spirit
-			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 20 # [tier] == 12", // spirit
-			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 25 # [tier] == 13", // spirit
-			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 30 # [tier] == 14", // spirit
-			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 35 # [tier] == 15", // spirit
-			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 40 # [tier] == 16", // spirit
-			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 45 # [tier] == 17", // spirit
+			"([type] == shield || [type] == auricshields) && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 200 # [tier] == 11", // sanctuary
+			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 # [tier] == 12", // spirit
+			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 10 # [tier] == 13", // spirit
+			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 20 # [tier] == 14", // spirit
+			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 25 # [tier] == 15", // spirit
+			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 30 # [tier] == 16", // spirit
+			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 35 # [tier] == 17", // spirit
+			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 40 # [tier] == 18", // spirit
+			"([type] == shield || [type] == auricshields) && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 45 # [tier] == 19", // spirit
 			//gloves
 			"[name] == heavybracers && [quality] == set && [flag] != ethereal # [fcr] >= 20 # [tier] == 10",
 		];
@@ -527,6 +528,42 @@ function LoadConfig () {
 			}
 		}
 
+		if (Item.getEquippedItem(5).tier < 11) { // Sanctuary
+			if (!haveItem("shield", "runeword", "Sanctuary")) {
+				var Sanctuary = [
+					"[Name] == KoRune # # [MaxQuantity] == 2",
+					"[Name] == MalRune",
+					"([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredRondache || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] > 0 && [Sockets] == 3 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(Sanctuary);
+
+				if (me.diff === 2) {
+					NTIP.addLine("([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredRondache || [Name] == SacredTarge) && [Quality] == Normal #  # [fireresist] > 20 && [Sockets] == 0 # [MaxQuantity] == 1");
+
+					Config.Recipes.push([Recipe.Socket.Shield, "Akaran Targe"]);
+					Config.Recipes.push([Recipe.Socket.Shield, "Akaran Rondache"]);
+					Config.Recipes.push([Recipe.Socket.Shield, "Gilded Shield"]);
+					Config.Recipes.push([Recipe.Socket.Shield, "Protector Shield"]);
+					Config.Recipes.push([Recipe.Socket.Shield, "Sacred Rondache"]);
+					Config.Recipes.push([Recipe.Socket.Shield, "Sacred Targe"]);
+				}
+
+				if (!me.getItem(632)) { // Cube to Mal Rune
+					Config.Recipes.push([Recipe.Rune, "Pul Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
+				}
+
+				Config.Recipes.push([Runeword.Sanctuary, "Akaran Targe"]);
+				Config.Recipes.push([Runeword.Sanctuary, "Akaran Rondache"]);
+				Config.Recipes.push([Runeword.Sanctuary, "Gilded Shield"]);
+				Config.Recipes.push([Runeword.Sanctuary, "Protector Shield"]);
+				Config.Recipes.push([Runeword.Sanctuary, "Sacred Rondache"]);
+				Config.Recipes.push([Runeword.Sanctuary, "Sacred Targe"]);
+				
+				Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist] >= 50");
+			}
+		}
+
 		if (Item.getEquippedItem(3).tier < 100) { // Enigma
 			var Enigma = [
 				"[Name] == JahRune",
@@ -543,7 +580,7 @@ function LoadConfig () {
 				Config.Recipes.push([Recipe.Socket.Armor, "ScarabHusk", Roll.NonEth]);
 			}
 
-			if (me.getItem(639) && me.getItem(640)) {
+			if (me.getItem(639) && me.getItem(640)) { 
 				Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
@@ -590,15 +627,14 @@ function LoadConfig () {
 			}
 
 			var finalMELEE = [
-				//weapon -- using Black runeword 
+				//weapon -- using Black runeword
 				//helmet
 				"[name] == wingedhelm && [quality] == set # [fhr] >= 30 # [tier] == 100", // gface
 				//belt -- using Dungo's
 				//boots
-				"[name] == lightplatedboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 50 # [tier] == 100", //gtoes
+				"[name] == lightplatedboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 50 # [tier] == 100", //goblin toes
 				//armor -- using Enigma
 				//shield
-				"[Name] == SacredRondache && [Quality] == unique # [EnhancedDefense] >= 180 && [PaladinSkills] >= 2 && [Enhanceddamage] >= 40 && [itemtohitpercent] >= 40 && [magicdamagereduction] >= 5", // alma negra
 				"[Name] == GildedShield && [Quality] == unique # [EnhancedDefense] >= 185 # [tier] == 100", //hoz
 				//gloves
 				"[name] == vampirebonegloves && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 100 && [strength] >= 12 && [lifeleech] >= 9  # [tier] == 100", // drac's
@@ -664,7 +700,7 @@ function LoadConfig () {
 						"[Name] == ThulRune # # [MaxQuantity] == 1",
 						"[Name] == OrtRune # # [MaxQuantity] == 1",
 						"[Name] == AmnRune # # [MaxQuantity] == 1",
-						"([Name] == BroadSword || [Name] == CrystalSword || [Name] == LongSword) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
+						"([Name] == BroadSword || [Name] == CrystalSword) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
 					];
 					NTIP.arrayLooping(SpiritSword);
 
@@ -673,7 +709,6 @@ function LoadConfig () {
 
 						Config.Recipes.push([Recipe.Socket.Weapon, "Crystal Sword"]);
 						Config.Recipes.push([Recipe.Socket.Weapon, "Broad Sword"]);
-						Config.Recipes.push([Recipe.Socket.Weapon, "Long Sword"]);
 					}
 
 					if (!me.getItem(620)) { //Amn Rune
@@ -684,7 +719,6 @@ function LoadConfig () {
 
 					Config.Runewords.push([Runeword.Spirit, "Crystal Sword"]);
 					Config.Runewords.push([Runeword.Spirit, "Broad Sword"]);
-					Config.Runewords.push([Runeword.Spirit, "Long Sword"]);
 					Config.KeepRunewords.push("[type] == sword # [fcr] >= 25 && [maxmana] >= 89");
 				}
 			}
