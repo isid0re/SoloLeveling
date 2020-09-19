@@ -5,7 +5,7 @@
 
 const build = {
 	stats: [
-		["strength", 115], ["dexterity", "block"], ["vitality", "all"]
+		["strength", 115], ["vitality", "300"], ["dexterity", "block"], ["vitality", "all"]
 	],
 	skills: [
 		[97, 20], //smite

@@ -1,16 +1,14 @@
 /**
  *    @filename   paladin.startBuild.js
- *    @desc       paladin build for before level 25  a simplified firedin
+ *    @desc       paladin build for before respecOne
  */
 
 const build = {
 	stats: [
-		["vitality", 35],
-		["strength", 47],
-		["dexterity", 35],
-		["vitality", 85],
-		["dexterity", "block"],
-		["vitality", "all"]
+		["vitality", 80], // base 25
+		["dexterity", 27], // base 20
+		["strength", 47], //base 25
+		["vitality", "all"],
 	],
 	skills: [
 		[98, 1],

@@ -335,7 +335,7 @@ function LoadConfig () {
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 && [FCR] >= 10 && [FireResist]+[ColdResist]+[LightResist] > 25 && [MaxMana]+[MaxHP] > 15 # [tier] == 20",
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 && [FCR] >= 10 && [FireResist]+[ColdResist]+[LightResist] > 25 && [MaxMana]+[MaxHP] > 20 # [tier] == 21",
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 && [FCR] >= 10 && [FireResist]+[ColdResist]+[LightResist] > 25 && [MaxMana]+[MaxHP] > 25 # [tier] == 22",
-		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 2 && [fcr] >= 20 && ([MaxMana] || [MaxHP]) > 30 && [fireresist]+[coldresist]+[lightresist] >= 30 # [tier] == 25",
+		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 2 && [fcr] >= 10 && ([MaxMana] || [MaxHP]) > 30 && [fireresist]+[coldresist]+[lightresist] >= 30 # [tier] == 25",
 		//rings
 		"[Type] == Ring # [FireResist]+[ColdResist]+[LightResist]+[PoisonResist] > 10 || [MaxMana]+[MaxHP] > 10 # [Tier] == 1",
 		"[Type] == Ring # [FireResist]+[ColdResist]+[LightResist]+[PoisonResist] > 20 || [MaxMana]+[MaxHP] > 20 # [Tier] == 2",
@@ -527,7 +527,7 @@ function LoadConfig () {
 			}
 		}
 
-		if (Item.getEquippedItem(3).tier < 8) { // Smoke
+		if (Item.getEquippedItem(3).tier < 9) { // Smoke
 			if (!haveItem("armor", "runeword", "Smoke")) {
 				var Smoke = [
 					"[Name] == NefRune # # [MaxQuantity] == 1",
