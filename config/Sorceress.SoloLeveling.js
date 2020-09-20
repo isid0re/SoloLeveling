@@ -206,7 +206,6 @@ function LoadConfig () {
 			throw new Error("No alias for type '" + type + "'");
 		}
 
-
 		if (iName !== undefined) {
 			iName = iName.toLowerCase();
 		}
@@ -218,10 +217,10 @@ function LoadConfig () {
 
 			switch (flag) {
 			case 'crafted':
-				itemCHECK = !!(items[i].getFlag(NTIPAliasQuality.crafted));
+				itemCHECK = !!(items[i].getFlag(NTIPAliasQuality["crafted"]));
 				break;
 			case 'runeword':
-				itemCHECK = !!(items[i].getFlag(NTIPAliasFlag.runeword)) && items[i].fname.toLowerCase().includes(iName);
+				itemCHECK = !!(items[i].getFlag(NTIPAliasFlag["runeword"])) && items[i].fname.toLowerCase().includes(iName);
 				break;
 			}
 
