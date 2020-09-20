@@ -322,7 +322,7 @@ function LoadConfig () {
 		"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 30 && [MaxMana]+[MaxHP] > 20 # [Tier] == 8",
 		"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 30 && [MaxMana]+[MaxHP] > 25 # [Tier] == 9",
 		"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 30 && [MaxMana]+[MaxHP] > 30 # [Tier] == 10",
-		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] > 0 || [MaxMana]+[MaxHP] > 0 || [FCR] >= 10)# [tier] == 11",
+		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] >= 0 || [MaxMana]+[MaxHP] >= 0 || [FCR] >= 0)# [tier] == 11",
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] > 10 || [MaxMana]+[MaxHP] > 10 || [FCR] >= 10)# [tier] == 12",
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] > 15 || [MaxMana]+[MaxHP] > 15 || [FCR] >= 10)# [tier] == 13",
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] > 20 || [MaxMana]+[MaxHP] > 20 || [FCR] >= 10)# [tier] == 14",
@@ -647,7 +647,7 @@ function LoadConfig () {
 					Config.Recipes.push([Recipe.Socket.Weapon, "Broad Sword"]);
 				}
 
-				if (!me.getItem(620)) { //Amn Rune
+				if (!me.getItem(620) && me.diff !== 2) { //Amn Rune
 					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
@@ -671,9 +671,11 @@ function LoadConfig () {
 
 					Config.Recipes.push([Recipe.Socket.Shield, "Monarch", Roll.NonEth]);
 
-					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
+					if (!me.getItem(620) && me.diff !== 2) { //Amn Rune
+						Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+						Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
+						Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
+					}
 
 					Config.Runewords.push([Runeword.Spirit, "Monarch"]);
 					Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 35 && [maxmana] >= 89");

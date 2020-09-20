@@ -319,7 +319,7 @@ function LoadConfig () {
 		"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 30 && [MaxMana]+[MaxHP] > 20 # [Tier] == 8",
 		"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 30 && [MaxMana]+[MaxHP] > 25 # [Tier] == 9",
 		"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 30 && [MaxMana]+[MaxHP] > 30 # [Tier] == 10",
-		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] > 0 || [MaxMana]+[MaxHP] > 0 || [FCR] >= 10)# [tier] == 11",
+		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] >= 0 || [MaxMana]+[MaxHP] >= 0 || [FCR] >= 0)# [tier] == 11",
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] > 10 || [MaxMana]+[MaxHP] > 10 || [FCR] >= 10)# [tier] == 12",
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] > 15 || [MaxMana]+[MaxHP] > 15 || [FCR] >= 10)# [tier] == 13",
 		"[Type] == Amulet && [Quality] >= Magic # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 1 && ([FireResist]+[ColdResist]+[LightResist] > 20 || [MaxMana]+[MaxHP] > 20 || [FCR] >= 10)# [tier] == 14",
@@ -684,6 +684,32 @@ function LoadConfig () {
 			break;
 		}
 
+		var Treachery = [ // merc Treachery
+			"[Name] == ShaelRune # # [MaxQuantity] == 1",
+			"[Name] == ThulRune # # [MaxQuantity] == 1",
+			"[Name] == LemRune # # [MaxQuantity] == 1",
+			"([Name] == HellforgePlate || [Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3",
+		];
+		NTIP.arrayLooping(Treachery);
+
+		if (me.diff === 2) {
+			NTIP.addLine("([Name] == HellforgePlate || [Name] == ArchonPlate || [Name] == DuskShroud || [Name] == MagePlate || [Name] == WireFleece) && [Quality] == Normal && [Flag] == Ethereal # [Sockets] == 0");
+
+			Config.Recipes.push([Recipe.Socket.Armor, "Hellforge Plate"]);
+			Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate"]);
+			Config.Recipes.push([Recipe.Socket.Armor, "Mage Plate"]);
+			Config.Recipes.push([Recipe.Socket.Armor, "Wire Fleece"]);
+			Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
+		}
+
+		Config.Runewords.push([Runeword.Treachery, "Hellforge Plate"]);
+		Config.Runewords.push([Runeword.Treachery, "Archon Plate"]);
+		Config.Runewords.push([Runeword.Treachery, "Mage Plate"]);
+		Config.Runewords.push([Runeword.Treachery, "Wire Fleece"]);
+		Config.Runewords.push([Runeword.Treachery, "Dusk Shroud"]);
+
+		Config.KeepRunewords.push("[Type] == armor # [ias] == 45 && [coldresist] == 30");
+
 		if (me.ladder > 0) { // Ladder runewords - Spirit Sword/Shield & Insight
 
 			if (Item.getEquippedItem(4).tier < 7) { // Spirit Sword
@@ -704,7 +730,7 @@ function LoadConfig () {
 						Config.Recipes.push([Recipe.Socket.Weapon, "Broad Sword"]);
 					}
 
-					if (!me.getItem(620)) { //Amn Rune
+					if (!me.getItem(620) && me.diff !== 2) { //Amn Rune
 						Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 						Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
 						Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
@@ -737,7 +763,7 @@ function LoadConfig () {
 					Config.Recipes.push([Recipe.Socket.Shield, "Sacred Targe"]);
 				}
 
-				if (!me.getItem(620)) { //Amn Rune
+				if (!me.getItem(620) && me.diff !== 2) { //Amn Rune
 					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
