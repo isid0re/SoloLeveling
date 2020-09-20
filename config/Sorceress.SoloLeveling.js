@@ -218,10 +218,10 @@ function LoadConfig () {
 
 			switch (flag) {
 			case 'crafted':
-				itemCHECK = !!(items[i].getFlag(NTIPAliasQuality["crafted"]));
+				itemCHECK = !!(items[i].getFlag(NTIPAliasQuality.crafted));
 				break;
 			case 'runeword':
-				itemCHECK = !!(items[i].getFlag(NTIPAliasFlag["runeword"])) && items[i].fname.toLowerCase().includes(iName);
+				itemCHECK = !!(items[i].getFlag(NTIPAliasFlag.runeword)) && items[i].fname.toLowerCase().includes(iName);
 				break;
 			}
 
@@ -484,7 +484,7 @@ function LoadConfig () {
 			var Strength = [
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
 				"[Name] == TirRune # # [MaxQuantity] == 1",
-				"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] == Normal # [Sockets] == 2 # [MaxQuantity] == 1",
+				"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd) && [Quality] == Normal # [Sockets] == 2 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Strength);
 
@@ -499,9 +499,6 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Strength, "Scythe"]);
 			Config.Runewords.push([Runeword.Strength, "War Scythe"]);
 			Config.Runewords.push([Runeword.Strength, "Halberd"]);
-			Config.Runewords.push([Runeword.Strength, "Battle Scythe"]);
-			Config.Runewords.push([Runeword.Strength, "Partizan"]);
-			Config.Runewords.push([Runeword.Strength, "Grim Scythe"]);
 
 			Config.KeepRunewords.push("[type] == polearm # [lifeleech] >= 7");
 		}
@@ -695,9 +692,8 @@ function LoadConfig () {
 			NTIP.arrayLooping(Insight);
 
 			if (me.diff !== 2) {
-				NTIP.addLine("([Name] == warscythe || [Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+				NTIP.addLine("([Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
 
-				Config.Runewords.push([Runeword.Insight, "War Scythe"]);
 				Config.Runewords.push([Runeword.Insight, "Bill"]);
 				Config.Runewords.push([Runeword.Insight, "Battle Scythe"]);
 				Config.Runewords.push([Runeword.Insight, "Partizan"]);

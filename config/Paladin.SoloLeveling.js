@@ -478,7 +478,7 @@ function LoadConfig () {
 			var Strength = [
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
 				"[Name] == TirRune # # [MaxQuantity] == 1",
-				"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] == Normal # [Sockets] == 2 # [MaxQuantity] == 1",
+				"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd) && [Quality] == Normal # [Sockets] == 2 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Strength);
 
@@ -493,9 +493,6 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Strength, "Scythe"]);
 			Config.Runewords.push([Runeword.Strength, "War Scythe"]);
 			Config.Runewords.push([Runeword.Strength, "Halberd"]);
-			Config.Runewords.push([Runeword.Strength, "Battle Scythe"]);
-			Config.Runewords.push([Runeword.Strength, "Partizan"]);
-			Config.Runewords.push([Runeword.Strength, "Grim Scythe"]);
 
 			Config.KeepRunewords.push("[type] == polearm # [lifeleech] >= 7");
 		}
@@ -535,7 +532,7 @@ function LoadConfig () {
 				NTIP.arrayLooping(Sanctuary);
 
 				if (me.diff === 2) {
-					NTIP.addLine("([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredRondache || [Name] == SacredTarge) && [Quality] == Normal #  # [fireresist] > 20 && [Sockets] == 0 # [MaxQuantity] == 1");
+					NTIP.addLine("([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredRondache || [Name] == SacredTarge) && [Quality] == Normal # [fireresist] > 20 && [Sockets] == 0 # [MaxQuantity] == 1");
 
 					Config.Recipes.push([Recipe.Socket.Shield, "Akaran Targe"]);
 					Config.Recipes.push([Recipe.Socket.Shield, "Akaran Rondache"]);
@@ -606,7 +603,7 @@ function LoadConfig () {
 			}
 		}
 
-		switch(playStyle) {
+		switch (playStyle) {
 		case 'Melee':
 			if (!haveItem("mace", "runeword", "Black") && me.charlvl >= respecTwo) {
 				var Black = [
@@ -725,12 +722,12 @@ function LoadConfig () {
 					"[Name] == ThulRune # # [MaxQuantity] == 1",
 					"[Name] == OrtRune # # [MaxQuantity] == 1",
 					"[Name] == AmnRune # # [MaxQuantity] == 1",
-					"([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredRondache || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] > 0 && [Sockets] == 4 # [MaxQuantity] == 1",
+					"([Name] == Targe || [Name] == Rondache || [Name] == HeraldicShield ||[Name] == AerinShield || [Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredRondache || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] > 0 && [Sockets] == 4 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(SpiritShield);
 
 				if (me.diff === 2) {
-					NTIP.addLine("([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredRondache || [Name] == SacredTarge) && [Quality] == Normal #  # [fireresist] > 20 && [Sockets] == 0 # [MaxQuantity] == 1");
+					NTIP.addLine("([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredRondache || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] == Normal # [fireresist] > 20 && [Sockets] == 0 # [MaxQuantity] == 1");
 
 					Config.Recipes.push([Recipe.Socket.Shield, "Akaran Targe"]);
 					Config.Recipes.push([Recipe.Socket.Shield, "Akaran Rondache"]);
@@ -746,12 +743,17 @@ function LoadConfig () {
 					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
 				}
 
+				Config.Runewords.push([Runeword.Spirit, "Targe"]);
+				Config.Runewords.push([Runeword.Spirit, "Rondache"]);
+				Config.Runewords.push([Runeword.Spirit, "Heraldic Shield"]);
+				Config.Runewords.push([Runeword.Spirit, "Aerin Shield"]);
 				Config.Runewords.push([Runeword.Spirit, "Akaran Targe"]);
 				Config.Runewords.push([Runeword.Spirit, "Akaran Rondache"]);
+				Config.Runewords.push([Runeword.Spirit, "Protector Shield"]);
+				Config.Runewords.push([Runeword.Spirit, "Gilded Shield"]);
 				Config.Runewords.push([Runeword.Spirit, "Sacred Targe"]);
 				Config.Runewords.push([Runeword.Spirit, "Sacred Rondache"]);
-				Config.Runewords.push([Runeword.Spirit, "Gilded Shield"]);
-				Config.Runewords.push([Runeword.Spirit, "Protector Shield"]);
+
 				Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 25 && [maxmana] >= 89");
 			}
 
@@ -766,9 +768,8 @@ function LoadConfig () {
 			NTIP.arrayLooping(Insight);
 
 			if (me.diff !== 2) {
-				NTIP.addLine("([Name] == warscythe || [Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+				NTIP.addLine("([Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
 
-				Config.Runewords.push([Runeword.Insight, "War Scythe"]);
 				Config.Runewords.push([Runeword.Insight, "Bill"]);
 				Config.Runewords.push([Runeword.Insight, "Battle Scythe"]);
 				Config.Runewords.push([Runeword.Insight, "Partizan"]);

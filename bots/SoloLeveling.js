@@ -263,6 +263,15 @@ function SoloLeveling () {
 
 		for (let count = 0; count < junk.length; count += 1) {
 			if (junk[count].location === 7 && //stash
+				!junk[count].classid === 92 && // Staff of Kings
+				!junk[count].classid === 173 && // Khalim's Flail
+				!junk[count].classid === 521 && // Viper Amulet
+				!junk[count].classid === 546 && // Jade Figurine
+				!junk[count].classid === 549 && // Cube
+				!junk[count].classid === 552 && // Book of Skill
+				!junk[count].classid === 553 && // Khalim's Eye
+				!junk[count].classid === 554 && // Khalim's Heart
+				!junk[count].classid === 555 && // Khalim's Brain
 				Pickit.checkItem(junk[count]).result === 0 && //Pickit.js NTIP unwanted (line 26)
 				Pickit.checkItem(junk[count]).result === 4 && //Pickit.js NTIP sell (line 30)
 				!Cubing.keepItem(junk[count]) && // keep cubing items
@@ -273,13 +282,13 @@ function SoloLeveling () {
 				junk[count].drop();
 			}
 
-			if (me.charlvl > respecOne && me.classid === 3) { // adjustment for Steel mace on Pally
-				let mace = me.getItem(19);
-
-				if (mace && mace.location === 7) {
-					me.overhead('clear out junk');
-					mace.drop();
-				}
+			if (me.charlvl > respecOne && // adjustment for Steel mace
+				me.classid === 3 && // Paladin
+				junk[count].location === 7 && //stash
+				junk[count].classid === 19 // mace
+			) {
+				me.overhead('clear out junk');
+				junk[count].drop();
 			}
 
 			let stashtier = NTIP.GetTier(junk[count]);
@@ -314,6 +323,15 @@ function SoloLeveling () {
 						}
 					}
 				}
+			}
+
+			if (me.diff === 2 && // clearout leftover normal nightmare merc rune bases
+				junk[count].location === 7 && // stash
+				junk[count].classid >= 58 && // merc strength polearms
+				junk[count].classid <= 62 // voulge, scythe, poleaxe, halberd, and warscythe
+			) {
+				me.overhead('clear out merc junk');
+				junk[count].drop();
 			}
 		}
 
@@ -2525,7 +2543,7 @@ function SoloLeveling () {
 	this.runsequence();
 	let level = ['Normal', 'Nightmare', 'Hell'][me.diff];
 
-	if (this.checkQuest(40, 0) || me.gametype === 0 && this.checkQuest(26,0)) {
+	if (this.checkQuest(40, 0) || me.gametype === 0 && this.checkQuest(26, 0)) {
 		D2Bot.printToConsole('SoloLeving: ' + level + ' difficulty completed. Character Level: ' + me.charlvl + '. Running script again!');
 	} else {
 		D2Bot.printToConsole('SoloLeveling run completed. Running script again!');
