@@ -423,14 +423,14 @@ function SoloLeveling () {
 			"[Type] == armor && [flag] == runeword && [flag] == ethereal # [ias] == 45 && [coldresist] == 30 # [Merctier] == 12",
 			"[Type] == armor && [flag] == runeword && [flag] != ethereal # [ias] == 45 && [coldresist] == 30 # [Merctier] == 11",
 			"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # # [Merctier] == 10",
-			"[type] == armor # [defense] >= 500 && [maxhp] >= 90 # [MaxQuantity] == 1 && [Merctier] == 9",
-			"[type] == armor # [defense] >= 475 && [maxhp] >= 90 # [MaxQuantity] == 1 && [Merctier] == 8",
-			"[type] == armor # [defense] >= 450 && [maxhp] >= 80  # [MaxQuantity] == 1 && [Merctier] == 7",
-			"[type] == armor # [defense] >= 425 && [maxhp] >= 80  # [MaxQuantity] == 1 && [Merctier] == 6",
-			"[type] == armor # [defense] >= 375 && [maxhp] >= 60 # [MaxQuantity] == 1 && [Merctier] == 5",
-			"[type] == armor # [defense] >= 350 && [maxhp] >= 60 # [MaxQuantity] == 1 && [Merctier] == 4",
-			"[type] == armor # [defense] >= 325 && [maxhp] >= 40 # [MaxQuantity] == 1 && [Merctier] == 3",
-			"[type] == armor # [defense] >= 300 && [maxhp] >= 40 # [MaxQuantity] == 1 && [Merctier] == 2",
+			"[type] == armor # [defense] >= 500 # [MaxQuantity] == 1 && [Merctier] == 9",
+			"[type] == armor # [defense] >= 475 # [MaxQuantity] == 1 && [Merctier] == 8",
+			"[type] == armor # [defense] >= 450 # [MaxQuantity] == 1 && [Merctier] == 7",
+			"[type] == armor # [defense] >= 425 # [MaxQuantity] == 1 && [Merctier] == 6",
+			"[type] == armor # [defense] >= 375 # [MaxQuantity] == 1 && [Merctier] == 5",
+			"[type] == armor # [defense] >= 350 # [MaxQuantity] == 1 && [Merctier] == 4",
+			"[type] == armor # [defense] >= 325 # [MaxQuantity] == 1 && [Merctier] == 3",
+			"[type] == armor # [defense] >= 300 # [MaxQuantity] == 1 && [Merctier] == 2",
 			"[type] == armor # [defense] >= 300 # [MaxQuantity] == 1 && [Merctier] == 1",
 		];
 		NTIP.arrayLooping(mercArmor);
@@ -924,7 +924,7 @@ function SoloLeveling () {
 
 	this.amulet = function () {
 
-		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || this.checkQuest(11, 0)) {
+		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || this.checkQuest(10, 0)) {
 			return true;
 		} // skip amulet
 
@@ -2767,7 +2767,6 @@ Item.autoEquipMerc = function () {
 
 	var i, j, tier, bodyLoc, tome, gid, classid, scroll,
 		items = me.findItems(-1, 0);
-		//items = me.findItems();
 
 	if (!items) {
 		return false;
@@ -2826,7 +2825,14 @@ Item.autoEquipMerc = function () {
 					classid = items[0].classid;
 
 					if (Item.equipMerc(items[0], bodyLoc[j])) {
-						me.overhead("equiped merc item.");
+						print("SoloLeveling: equipped merc item.");
+
+					}
+
+					let cursorItem = getUnit(100);
+
+					if (cursorItem) {
+						cursorItem.drop();
 					}
 
 					break;

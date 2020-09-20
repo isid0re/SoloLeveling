@@ -46,7 +46,7 @@ function LoadConfig () {
 
 	// Pickit config.
 	Config.PickRange = 20;
-	Config.FastPick = true;
+	Config.FastPick = false;
 	Config.ItemInfo = true;
 	Config.CainID.Enable = false;
 	Config.FieldID = false;
