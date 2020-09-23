@@ -282,7 +282,7 @@ function SoloLeveling () {
 				junk[count].drop();
 			}
 
-			if (me.charlvl > respecOne && // adjustment for Steel mace
+			if (me.charlvl >= respecOne && // adjustment for Steel mace
 				me.classid === 3 && // Paladin
 				junk[count].location === 7 && //stash
 				junk[count].classid === 19 // mace
@@ -1128,6 +1128,8 @@ function SoloLeveling () {
 		if (item && item.toCursor()) {
 			Storage.Inventory.MoveTo(item);
 		}
+
+		delay(750 + me.ping);
 
 		return true;
 	};

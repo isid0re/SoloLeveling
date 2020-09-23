@@ -61,7 +61,7 @@ function LoadConfig () {
 	// General config
 	Config.MinGameTime = 400;
 	Config.MaxGameTime = 7200;
-	Config.MiniShopBot = true;
+	Config.MiniShopBot = me.diff !== 2 ? true : false;
 	Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
 	Config.TownCheck = me.findItem("tbk", 0, 3);
 	Config.LogExperience = true; // Print experience statistics in the manager.
