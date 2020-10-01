@@ -276,12 +276,11 @@ function SoloLeveling () {
 				junk[count].drop();
 			}
 
-			if (me.diff === 2 && // clearout leftover normal nightmare items
+			if (me.diff === 2 && // clearout bad stashed items
 				junk[count].location === 7 && // stash
-				junk[count].classid >= 58 && // merc polearms
-				junk[count].classid <= 62 && // voulge, scythe, poleaxe, halberd, and warscythe
-				(junk[count].classid === 19 && junk[count].getStatEx("sockets") === 2) && // steel mace
-				(junk[count].classid === 29 && junk[count].getStatEx("sockets") >= 1 && junk[count].getStatEx("sockets") <= 3) // crystal sword bad sockets
+				(junk[count].classid === 19 && junk[count].getStatEx("sockets") === 2) && // pally mace
+				(junk[count].classid >= 29 && junk[count].classid <= 31 && junk[count].getStatEx("sockets") >= 1 && junk[count].getStatEx("sockets") <= 3) && // bad spirit sword
+				(junk[count].classid >= 58 && junk[count].classid <= 62) // merc strength polearms 
 			) {
 				me.overhead('clear out junk');
 				junk[count].drop();
@@ -401,10 +400,12 @@ function SoloLeveling () {
 		me.overhead('setup merc');
 
 		var mercHelm = [
-			"[name] == deathmask && [quality] == set # [lifeleech] >= 10 # [Merctier] == 4",
-			"[Name] == sallet && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 3",
+			"[name] == demonhead && [quality] == unique && [flag] != ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [maxquantity] == 1 && [Merctier] == 5",
+			"[name] == deathmask && [quality] == set # [lifeleech] >= 10 # [maxquantity] == 1 && [Merctier] == 4",
+			"[Name] == sallet && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [maxquantity] == 1 && [tier] == 3",
 			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 && [enhanceddefense] >= 30 # [maxquantity] == 1 && [Merctier] == 2",
-			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [maxquantity] == 1 && [Merctier] == 1",		];
+			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [maxquantity] == 1 && [Merctier] == 1",
+		];
 		NTIP.arrayLooping(mercHelm);
 
 		var mercArmor = [

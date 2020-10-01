@@ -475,7 +475,7 @@ function LoadConfig () {
 					"[Name] == PulRune",
 					"[Name] == KoRune # # [MaxQuantity] == 1",
 					"[Name] == VexRune",
-					"[Name] == Flail && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
+					"([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(HotO);
 
@@ -486,6 +486,7 @@ function LoadConfig () {
 					Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
 				}
 
+				Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
 				Config.Runewords.push([Runeword.HeartoftheOak, "Flail"]);
 				Config.KeepRunewords.push("[Type] == mace # [FCR] == 40");
 			}
