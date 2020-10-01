@@ -63,7 +63,7 @@ function LoadConfig () {
 	Config.MiniShopBot = true;
 	Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
 	Config.TownCheck = me.findItem("tbk", 0, 3);
-	Config.LogExperience = true; // Print experience statistics in the manager.
+	Config.LogExperience = false; // Print experience statistics in the manager.
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
 	Config.OpenChests = me.diff !== 2 ? false : true;
@@ -544,7 +544,7 @@ function LoadConfig () {
 		];
 		NTIP.arrayLooping(Treachery);
 
-		if (me.diff === 2) {
+		if (me.diff !== 0) {
 			NTIP.addLine("([Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] == Normal && [Flag] == Ethereal # [Sockets] == 0");
 
 			Config.Recipes.push([Recipe.Socket.Armor, "Hellforge Plate"]);
@@ -561,6 +561,7 @@ function LoadConfig () {
 			Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
 		}
 
+		Config.Runewords.push([Runeword.Treachery, "Mage Plate"]);
 		Config.Runewords.push([Runeword.Treachery, "Hellforge Plate"]);
 		Config.Runewords.push([Runeword.Treachery, "Kraken Shell"]);
 		Config.Runewords.push([Runeword.Treachery, "Archon Plate"]);
@@ -577,7 +578,6 @@ function LoadConfig () {
 		Config.KeepRunewords.push("[Type] == armor # [ias] == 45 && [coldresist] == 30");
 
 		if (me.ladder > 0) { // Ladder runewords - Spirit Sword/Shield & Insight
-
 			if (Item.getEquippedItem(4).tier < 14) { // Spirit Sword
 				if (!haveItem("sword", "runeword", "Spirit")) {
 					var SpiritSword = [
@@ -661,11 +661,6 @@ function LoadConfig () {
 
 			if (me.diff !== 2) {
 				NTIP.addLine("([Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
-
-				Config.Runewords.push([Runeword.Insight, "Bill"]);
-				Config.Runewords.push([Runeword.Insight, "Battle Scythe"]);
-				Config.Runewords.push([Runeword.Insight, "Partizan"]);
-				Config.Runewords.push([Runeword.Insight, "Grim Scythe"]);
 			}
 
 			Config.Recipes.push([Recipe.Socket.Weapon, "thresher"]);
@@ -673,6 +668,10 @@ function LoadConfig () {
 			Config.Recipes.push([Recipe.Socket.Weapon, "Great Poleaxe"]);
 			Config.Recipes.push([Recipe.Socket.Weapon, "Giant Thresher"]);
 
+			Config.Runewords.push([Runeword.Insight, "Bill"]);
+			Config.Runewords.push([Runeword.Insight, "Battle Scythe"]);
+			Config.Runewords.push([Runeword.Insight, "Partizan"]);
+			Config.Runewords.push([Runeword.Insight, "Grim Scythe"]);
 			Config.Runewords.push([Runeword.Insight, "Thresher"]);
 			Config.Runewords.push([Runeword.Insight, "Cryptic Axe"]);
 			Config.Runewords.push([Runeword.Insight, "Great Poleaxe"]);
