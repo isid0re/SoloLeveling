@@ -1639,27 +1639,31 @@ function SoloLeveling () {
 
 		Pickit.pickItems();
 
-		if (!this.checkQuest(21, 0)) {
+		let Ismail = getUnit(1, "Ismail Vilehand");
+		let Toorc = getUnit(1, "Toorc Icefist");
 
-			if (!me.inTown) {
-				Town.goToTown();
-			}
-
-			Town.doChores();
-			this.cubeFlail();
-			this.equipFlail();
-
-			if (!Pather.usePortal(83, me.name)) {
-				throw new Error("Travincal = failed to go back from town");
-			}
-
-			Config.PacketCasting = 1;
-			this.smashOrb();
-			Pickit.pickItems();
-			Item.autoEquip();
-			Pather.moveToExit(100, true);
-			Pather.getWP(101);
+		if (this.checkQuest(21, 0) || Ismail && !Attack.canAttack(Ismail) || Toorc && !Attack.canAttack(Toorc)) {
+			return true;
 		}
+
+		if (!me.inTown) {
+			Town.goToTown();
+		}
+
+		Town.doChores();
+		this.cubeFlail();
+		this.equipFlail();
+
+		if (!Pather.usePortal(83, me.name)) {
+			throw new Error("Travincal = failed to go back from town");
+		}
+
+		Config.PacketCasting = 1;
+		this.smashOrb();
+		Pickit.pickItems();
+		Item.autoEquip();
+		Pather.moveToExit(100, true);
+		Pather.getWP(101);
 
 		return true;
 	};
