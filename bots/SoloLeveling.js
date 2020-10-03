@@ -276,11 +276,15 @@ function SoloLeveling () {
 				junk[count].drop();
 			}
 
-			if (me.diff === 2 && // clearout bad stashed items
+			if (me.diff === 2 && // clearout bad base items
 				junk[count].location === 7 && // stash
-				(junk[count].classid === 19 && junk[count].getStatEx("sockets") === 2) && // pally mace
-				(junk[count].classid >= 29 && junk[count].classid <= 31 && junk[count].getStatEx("sockets") >= 1 && junk[count].getStatEx("sockets") <= 3) && // bad spirit sword
-				(junk[count].classid >= 58 && junk[count].classid <= 62) // merc strength polearms 
+					(junk[count].classid === 19 || // pally mace
+						junk[count].classid === 330 || // large shields
+						junk[count].classid >= 29 && junk[count].classid <= 31 && junk[count].getStat(194) > 0 && junk[count].getStat(194) < 4 || //  bad spirit base
+						junk[count].classid >= 58 && junk[count].classid <= 62 || // merc strength polearms
+						junk[count].classid >= 151 && junk[count].classid <= 155 && junk[count].getStat(194) > 0 && junk[count].getStat(194) < 4 || //  bad insight base
+						junk[count].classid >= 255 && junk[count].classid <= 258 && junk[count].getStat(194) > 0 && junk[count].getStat(194) < 4 //  bad insight base
+					)
 			) {
 				me.overhead('clear out junk');
 				junk[count].drop();
@@ -293,7 +297,7 @@ function SoloLeveling () {
 				for (let bodypart = 0; bodypart < bodyLoc.length; bodypart += 1) {
 					let equippedTier = Item.getEquippedItem(bodyLoc[bodypart]).tier;
 
-					if ((junk[count].location === 7) && //stash
+					if ((junk[count].location === 7 || junk[count].location === 3) && //stash or inventory
 						!Cubing.keepItem(junk[count]) &&
 						stashtier <= equippedTier
 					) {

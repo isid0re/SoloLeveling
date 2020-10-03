@@ -106,7 +106,7 @@ function LoadConfig () {
 	//AutoStat
 	Config.AutoStat.Enabled = true;
 	Config.AutoStat.Save = 0;
-	Config.AutoStat.BlockChance = 75;
+	Config.AutoStat.BlockChance = 55;
 	Config.AutoStat.UseBulk = true;
 
 	//AutoSkill
