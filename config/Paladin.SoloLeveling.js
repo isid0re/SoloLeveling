@@ -357,14 +357,8 @@ function LoadConfig () {
 				"[Name] == JahRune",
 				"[Name] == IthRune # # [MaxQuantity] == 1",
 				"[Name] == BerRune",
-				"([Name] == MagePlate || [Name] == DuskShroud || [Name] == WyrmHide || [Name] == ScarabHusk) && [Flag] != Ethereal && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Enigma);
-
-			Config.Recipes.push([Recipe.Socket.Armor, "Mage Plate", Roll.NonEth]);
-			Config.Recipes.push([Recipe.Socket.Armor, "DuskShroud", Roll.NonEth]);
-			Config.Recipes.push([Recipe.Socket.Armor, "WyrmHide", Roll.NonEth]);
-			Config.Recipes.push([Recipe.Socket.Armor, "ScarabHusk", Roll.NonEth]);
 
 			if (me.getItem(639) && me.getItem(640)) {
 				Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
@@ -540,7 +534,7 @@ function LoadConfig () {
 			"[Name] == ShaelRune # # [MaxQuantity] == 1",
 			"[Name] == ThulRune # # [MaxQuantity] == 1",
 			"[Name] == LemRune # # [MaxQuantity] == 1",
-			"([Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3",
+			"([Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3",
 		];
 		NTIP.arrayLooping(Treachery);
 

@@ -348,7 +348,6 @@ function LoadConfig () {
 				"[Name] == HelRune # # [MaxQuantity] == 1",
 				"[Name] == LumRune # # [MaxQuantity] == 1",
 				"[Name] == FalRune # # [MaxQuantity] == 1",
-				"([Name] == MagePlate || [Name] == DuskShroud || [Name] == WyrmHide || [Name] == ScarabHusk) && [Flag] != Ethereal && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Lionheart);
 
@@ -366,11 +365,6 @@ function LoadConfig () {
 			if (!me.getItem(628)) { // Cube to Fal Rune
 				Config.Recipes.push([Recipe.Rune, "Ko Rune"]); // cube Ko to Fal
 			}
-
-			Config.Recipes.push([Recipe.Socket.Armor, "Mage Plate"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "WyrmHide"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Scarab Husk"]);
 
 			Config.Runewords.push([Runeword.Lionheart, "Mage Plate"]);
 			Config.Runewords.push([Runeword.Lionheart, "Dusk Shroud"]);
@@ -449,7 +443,7 @@ function LoadConfig () {
 			"[Name] == ShaelRune # # [MaxQuantity] == 1",
 			"[Name] == ThulRune # # [MaxQuantity] == 1",
 			"[Name] == LemRune # # [MaxQuantity] == 1",
-			"([Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3",
+			"([Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3",
 		];
 		NTIP.arrayLooping(Treachery);
 
