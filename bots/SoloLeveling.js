@@ -272,8 +272,7 @@ function SoloLeveling () {
 				!Runewords.keepItem(junk[count]) && // Don't throw runeword ingredients
 				!CraftingSystem.keepItem(junk[count]) // Don't throw crafting system ingredients
 			) {
-				//junk[count].drop();
-				if(junk[count].drop()){
+				if (junk[count].drop()) {
 					me.overhead('cleared junk');
 				}
 			}
@@ -287,9 +286,9 @@ function SoloLeveling () {
 					let equippedTier = Item.getEquippedItem(bodyLoc[bodypart]).tier;
 
 					if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
-						stashtier <= equippedTier // drop same tier or less items 
+						stashtier <= equippedTier // drop same tier or less items
 					) {
-						if(junk[count].drop()){
+						if (junk[count].drop()) {
 							me.overhead('cleared junk');
 						}
 					}
@@ -306,9 +305,9 @@ function SoloLeveling () {
 						let mercequippedTier = Item.getEquippedItemMerc(mercbodyLoc[mercbodypart]).tier;
 
 						if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
-							merctier <= mercequippedTier // drop same merctier or less items 
+							merctier <= mercequippedTier // drop same merctier or less items
 						) {
-							if(junk[count].drop()){
+							if (junk[count].drop()) {
 								me.overhead('cleared merc junk');
 							}
 						}
