@@ -265,31 +265,20 @@ function SoloLeveling () {
 		let junk = me.getItems();
 
 		for (let count = 0; count < junk.length; count += 1) {
-
-			if (junk[count].location === 7 && //stash
-				!Pickit.checkItem(junk[count]).result === 1 && //Pickit.js NTIP wanted (line 26)
-				!Cubing.keepItem(junk[count]) && // keep cubing items
-				!Runewords.keepItem(junk[count]) && // keep runeword items
-				!CraftingSystem.keepItem(junk[count]) // keep crafting items
+			// unwanted items runes / bad bases
+			if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
+				(Pickit.checkItem(junk[count]).result === 0 || Pickit.checkItem(junk[count]).result === 4) && // drop unwanted
+				!Cubing.keepItem(junk[count]) && // Don't throw cubing ingredients
+				!Runewords.keepItem(junk[count]) && // Don't throw runeword ingredients
+				!CraftingSystem.keepItem(junk[count]) // Don't throw crafting system ingredients
 			) {
-				me.overhead('clear out junk');
-				junk[count].drop();
+				//junk[count].drop();
+				if(junk[count].drop()){
+					me.overhead('cleared junk');
+				}
 			}
 
-			if (me.diff === 2 && // clearout bad base items
-				junk[count].location === 7 && // stash
-					(junk[count].classid === 19 || // pally mace
-						junk[count].classid === 330 || // large shields
-						junk[count].classid >= 29 && junk[count].classid <= 31 && junk[count].getStat(194) > 0 && junk[count].getStat(194) < 4 || //  bad spirit base
-						junk[count].classid >= 58 && junk[count].classid <= 62 || // merc strength polearms
-						junk[count].classid >= 151 && junk[count].classid <= 155 && junk[count].getStat(194) > 0 && junk[count].getStat(194) < 4 || //  bad insight base
-						junk[count].classid >= 255 && junk[count].classid <= 258 && junk[count].getStat(194) > 0 && junk[count].getStat(194) < 4 //  bad insight base
-					)
-			) {
-				me.overhead('clear out junk');
-				junk[count].drop();
-			}
-
+			// unwanted tier'ed autoequip
 			let stashtier = NTIP.GetTier(junk[count]);
 			let bodyLoc = Item.getBodyLoc(junk[count]);
 
@@ -297,16 +286,17 @@ function SoloLeveling () {
 				for (let bodypart = 0; bodypart < bodyLoc.length; bodypart += 1) {
 					let equippedTier = Item.getEquippedItem(bodyLoc[bodypart]).tier;
 
-					if ((junk[count].location === 7 || junk[count].location === 3) && //stash or inventory
-						!Cubing.keepItem(junk[count]) &&
-						stashtier <= equippedTier
+					if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
+						stashtier <= equippedTier // drop same tier or less items 
 					) {
-						me.overhead('clear out junk');
-						junk[count].drop();
+						if(junk[count].drop()){
+							me.overhead('cleared junk');
+						}
 					}
 				}
 			}
 
+			// unwanted tier'ed merc autoequip
 			if (me.getMerc()) {
 				let merctier = NTIP.GetMercTier(junk[count]);
 				let mercbodyLoc = Item.getBodyLocMerc(junk[count]);
@@ -315,12 +305,12 @@ function SoloLeveling () {
 					for (let mercbodypart = 0; mercbodypart < mercbodyLoc.length; mercbodypart += 1) {
 						let mercequippedTier = Item.getEquippedItemMerc(mercbodyLoc[mercbodypart]).tier;
 
-						if ((junk[count].location === 7 || junk[count].location === 3) && //stash or inventory
-							!Cubing.keepItem(junk[count]) &&
-							merctier <= mercequippedTier
+						if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
+							merctier <= mercequippedTier // drop same merctier or less items 
 						) {
-							me.overhead('clear out merc junk');
-							junk[count].drop();
+							if(junk[count].drop()){
+								me.overhead('cleared merc junk');
+							}
 						}
 					}
 				}
@@ -579,6 +569,7 @@ function SoloLeveling () {
 
 		me.overhead('general items added');
 		var generalItems = [
+			"[name] == tomeoftownportal",
 			"[name] == gold # [gold] >= 500",
 			"[name] == minorhealingpotion",
 			"[name] == lighthealingpotion",
@@ -764,7 +755,7 @@ function SoloLeveling () {
 	};
 
 	this.countess = function () {
-		if (me.diff === 2 && me.charlvl < respecTwo) {
+		if (me.diff === 2 && me.charlvl < respecTwo || me.diff === 2 && me.classid === 1) {
 			return true;
 		}
 
@@ -962,7 +953,7 @@ function SoloLeveling () {
 
 		Pather.moveToExit([45, 58, 61], true);
 
-		if ( me.classid !== 1 || me.classid === 1 && me.charlvl <= 17 ) {
+		if (me.classid !== 1 || me.classid === 1 && me.charlvl <= respecOne) {
 			Pather.moveTo(15065, 14047);
 			Pather.moveTo(15063, 14066);
 			Pather.moveTo(15051, 14066);
