@@ -4,7 +4,6 @@
 *	@desc		Power leveling for any class type. Just make a character and name it. Uses a predefine buildtemplates.
 *				Make sure kolbot difficulty is set to "highest"
 *	@TODO		1 add dynamic tiers for autoequip
-*				2 equip 2nd spirit on slot 2.
 */
 
 if (!isIncluded("common/Misc.js")) {
@@ -38,8 +37,9 @@ function SoloLeveling () {
 		this.unfinishedQuests();
 		Cubing.doCubing();
 		Runewords.makeRunewords();
-		this.equipCTA();
+		this.equipSWAP();
 		Item.autoEquip();
+		Item.autoEquipMerc();
 		Town.stash(true);
 		Town.heal();
 		Town.identify();
@@ -53,6 +53,7 @@ function SoloLeveling () {
 		Town.gamble();
 		Town.reviveMerc();
 		Item.autoEquipMerc();
+		Item.autoEquip();
 		this.clearJunk();
 		Town.stash(true);
 		this.organizeStash();
@@ -337,9 +338,9 @@ function SoloLeveling () {
 
 	this.getMerc = function () {
 		//	Variable = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-		// mercAura = ["Holy Freeze", "Prayer", "Might", "Holy Freeze", "Defiance", "Blessed Aim", "Holy Freeze"][me.classid];
-		let mercType = [114, 99, 98, 114, 104, 108, 114][me.classid];
-		let mercDiff = [1, 0, 1, 1, 0, 0, 1][me.classid];
+		// mercAura = ["Holy Freeze", "Holy Freeze", "Might", "Holy Freeze", "Defiance", "Blessed Aim", "Holy Freeze"][me.classid];
+		let mercType = [114, 114, 98, 114, 104, 108, 114][me.classid];
+		let mercDiff = [1, 1, 1, 1, 0, 0, 1][me.classid];
 
 		if (me.diff !== mercDiff) {
 			return true;
@@ -393,11 +394,14 @@ function SoloLeveling () {
 		me.overhead('setup merc');
 
 		var mercHelm = [
-			"[name] == demonhead && [quality] == unique && [flag] != ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [maxquantity] == 1 && [Merctier] == 5",
-			"[name] == deathmask && [quality] == set # [lifeleech] >= 10 # [maxquantity] == 1 && [Merctier] == 4",
-			"[Name] == sallet && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [maxquantity] == 1 && [tier] == 3",
-			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 && [enhanceddefense] >= 30 # [maxquantity] == 1 && [Merctier] == 2",
-			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [maxquantity] == 1 && [Merctier] == 1",
+			"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [Merctier] == 8", //andy's
+			"[name] == grimhelm && [quality] == unique # [lifeleech] >= 6 && [enhanceddefense] >= 100 # [Merctier] == 7", //vampgaze
+			"[Name] == wingedhelm && [quality] == set # [lifeleech] >= 9 &&[enhanceddefense] >= 12 # [merctier] == 6", //gface
+			"[Name] == casque && [quality] == unique # [lifeleech] >= 5 &&[enhanceddefense] >= 200 # [merctier] == 5", // stealskull
+			"[Name] == grandcrown && [quality] == unique # [lifeleech] >= 9 &&[enhanceddefense] >= 160 # [merctier] == 4", // crown of thieves
+			"[Name] == sallet && [quality] == unique # [enhanceddefense] >= 160 # [merctier] == 3", //rockstopper
+			"[name] == deathmask && [quality] == set # [lifeleech] >= 10 # [Merctier] == 2", //talrashas
+			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [Merctier] == 1",
 		];
 		NTIP.arrayLooping(mercHelm);
 
@@ -474,11 +478,32 @@ function SoloLeveling () {
 		return true;
 	};
 
-	this.equipCTA = function () {
+	this.equipSWAP = function () {
+		let spirit = me.getItems()
+			.filter(item =>
+				item.getPrefix(20635) // The spirit shield prefix
+				&& item.classid !== 29 // broad sword
+				&& item.classid !== 30 // crystal sword
+				&& item.classid !== 31 // crystal sword
+				&& [3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
+			)
+			.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
+			.first();
+
+		if (spirit) {
+			if (Item.getEquippedItem(12).tier < 0) {
+				Town.move('stash');
+				Storage.Inventory.MoveTo(spirit);
+				Attack.weaponSwitch(); // switch to slot 2
+				spirit.equip();
+				Attack.weaponSwitch();
+			}
+		}
+
 		let cta = me.getItems()
 			.filter(item =>
 				item.getPrefix(20519) // The call to arms prefix
-				&& [1, 3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
+				&& [1, 3, 6, 7].indexOf(item.location) > -1 // Needs to be on one these locations
 			)
 			.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
 			.first();
@@ -489,7 +514,7 @@ function SoloLeveling () {
 			} else {
 				Town.move('stash');
 				Storage.Inventory.MoveTo(cta);
-				Attack.weaponSwitch(2); // To the slot you want it to be
+				Attack.weaponSwitch(); // switch to slot 2
 				cta.equip();
 				Attack.weaponSwitch();
 			}
@@ -1119,18 +1144,25 @@ function SoloLeveling () {
 	this.placeStaff = function () {
 		let tick = getTickCount();
 		let orifice = getUnit(2, 152);
+		let hstaff = me.getItem(91);
 
 		if (!orifice) {
 			return false;
 		}
 
-		Misc.openChest(orifice);
+		if (hstaff) {
+			if (hstaff.location === 7) {
+				Town.goToTown();
+				Storage.Inventory.MoveTo(hstaff);
+				Pather.usePortal(null, me.name);
+			}
+		}
 
-		let hstaff = me.getItem(91);
+		Misc.openChest(orifice);
 
 		if (!hstaff) {
 			if (getTickCount() - tick < 500) {
-				delay(500);
+				delay(500 + me.ping);
 			}
 
 			return false;
@@ -1551,7 +1583,7 @@ function SoloLeveling () {
 			}
 		}
 
-		delay(me.ping * 2 + 100);
+		delay(750 + me.ping);
 
 		Pickit.pickItems(); // Will hopefully pick up the character's weapon if it was dropped.
 
@@ -1567,7 +1599,8 @@ function SoloLeveling () {
 			if (orb) {
 				Skill.cast(0, 0, orb);
 
-				delay(500);
+				delay(750 + me.ping);
+
 			}
 		}
 
@@ -1643,11 +1676,13 @@ function SoloLeveling () {
 		Town.doChores();
 		this.cubeFlail();
 		this.equipFlail();
+		delay(250 + me.ping);
 
 		if (!Pather.usePortal(83, me.name)) {
 			throw new Error("Travincal = failed to go back from town");
 		}
 
+		delay(250 + me.ping);
 		Config.PacketCasting = 1;
 		this.smashOrb();
 		Pickit.pickItems();

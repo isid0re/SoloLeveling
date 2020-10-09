@@ -352,7 +352,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == armor # [fireresist] == 50");
 		}
 
-		if (Item.getEquippedItem(3).tier < 100 && me.diff === 2) { // Enigma
+		if (Item.getEquippedItem(3).tier < 100) { // Enigma
 			var Enigma = [
 				"[Name] == JahRune",
 				"[Name] == IthRune # # [MaxQuantity] == 1",
@@ -365,9 +365,9 @@ function LoadConfig () {
 				Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Enigma, "ScarabHusk", Roll.NonEth]);
-
-				Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
 			}
+
+			Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
 		}
 
 		//shield
