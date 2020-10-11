@@ -4,7 +4,7 @@ A script for BlizzHackers / Kolbot to level Diablo 2 LoD characters from 0 to 99
 
 ## Installation
 
-This script is designed to be plug and play with [blizzhackers/kolbot](https://github.com/blizzhackers/kolbot) after you've installed Kolbot per it's installation instructions. 
+This script is designed to be plug and play with [blizzhackers/kolbot](https://github.com/blizzhackers/kolbot) after you've installed Kolbot per it's installation instructions. If you are downloading Kolbot from the discord link use the "New Development" link.
 
 1. Download SoloLeveling 
 2. Copy ```SoloLeveling.js``` from ```SoloLeveling\bots\``` to ```Kolbot\d2bs\kolbot\libs\bots\```
