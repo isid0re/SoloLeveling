@@ -5,7 +5,7 @@ function LoadConfig () {
 	Scripts.SoloLeveling = true; // *** Leveling Script turn off when ready ***
 	const finalBuild = "Meteorb";
 	//const finalBuild = "Blizzard";
-	//const finalBuild = "Lightning";
+	//const finalBuild = "BLizzBaller";
 	//const finalBuild = "Blova";
 
 	// Town settings
@@ -61,7 +61,7 @@ function LoadConfig () {
 	// General config
 	Config.MinGameTime = 400;
 	Config.MaxGameTime = 7200;
-	Config.MiniShopBot =true;
+	Config.MiniShopBot = true;
 	Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
 	Config.TownCheck = me.findItem("tbk", 0, 3);
 	Config.LogExperience = false; // Print experience statistics in the manager.
@@ -121,7 +121,7 @@ function LoadConfig () {
 	// Class specific config
 	Config.Dodge = !!me.getSkill(40, 0); // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
 	Config.DodgeRange = 15; // Distance to keep from monsters.
-	Config.DodgeHP = 85; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
+	Config.DodgeHP = 95; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
 	Config.CastStatic = 50;
 	Config.StaticList = ["Izual", "Diablo", "Colenzo the Annihilator", "Achmel the Cursed", "Bartuc the Bloody", "Ventar the Unholy", "Lister the Tormentor", "Baal"];
@@ -234,7 +234,7 @@ function LoadConfig () {
 
 	// Character Build Setup
 	const startBuild = "Start"; // build ends when reaching lvl 30
-	const middleBuild = "Blizzard"; // starts at 30 ends when reaching lvl 75
+	const middleBuild = "BlizzBaller"; // starts at 30 ends when reaching lvl 75
 	const startBelt = ["hp", "hp", "hp", "mp"];
 	const middleBelt = ["hp", "hp", "mp", "mp"];
 	const finalBelt = ["hp", "hp", "mp", "rv"];
@@ -510,27 +510,25 @@ function LoadConfig () {
 			}
 
 			if (Item.getEquippedItem(5).tier < 19) { // Spirit shield
-				if (!haveItem("shield", "runeword", "Spirit")) {
-					var SpiritShield = [
-						"[Name] == TalRune # # [MaxQuantity] == 1",
-						"[Name] == ThulRune # # [MaxQuantity] == 1",
-						"[Name] == OrtRune # # [MaxQuantity] == 1",
-						"[Name] == AmnRune # # [MaxQuantity] == 1",
-						"[Name] == Monarch && [Flag] != Ethereal && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
-					];
-					NTIP.arrayLooping(SpiritShield);
+				var SpiritShield = [
+					"[Name] == TalRune # # [MaxQuantity] == 1",
+					"[Name] == ThulRune # # [MaxQuantity] == 1",
+					"[Name] == OrtRune # # [MaxQuantity] == 1",
+					"[Name] == AmnRune # # [MaxQuantity] == 1",
+					"[Name] == Monarch && [Flag] != Ethereal && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(SpiritShield);
 
-					Config.Recipes.push([Recipe.Socket.Shield, "Monarch", Roll.NonEth]);
+				Config.Recipes.push([Recipe.Socket.Shield, "Monarch", Roll.NonEth]);
 
-					if (!me.getItem(620) && me.diff !== 2) { //Amn Rune
-						Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
-						Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
-						Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
-					}
-
-					Config.Runewords.push([Runeword.Spirit, "Monarch"]);
-					Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 35 && [maxmana] >= 89");
+				if (!me.getItem(620) && me.diff !== 2) { //Amn Rune
+					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
 				}
+
+				Config.Runewords.push([Runeword.Spirit, "Monarch"]);
+				Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 35 && [maxmana] >= 89");
 			}
 
 			// merc Insight

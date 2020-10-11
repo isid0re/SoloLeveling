@@ -337,14 +337,10 @@ function SoloLeveling () {
 	};
 
 	this.getMerc = function () {
-		//	Variable = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-		// mercAura = ["Holy Freeze", "Holy Freeze", "Might", "Holy Freeze", "Defiance", "Blessed Aim", "Holy Freeze"][me.classid];
+		// Variable = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+		// mercAura = ["HolyFreeze", "HolyFreeze", "Might", "HolyFreeze", "Defiance", "BlessedAim", "HolyFreeze"][me.classid];
 		let mercType = [114, 114, 98, 114, 104, 108, 114][me.classid];
 		let mercDiff = [1, 1, 1, 1, 0, 0, 1][me.classid];
-
-		if (me.diff !== mercDiff) {
-			return true;
-		}
 
 		if (me.getMerc() || me.mercrevivecost) {//got the right aura stop function
 			merc = me.getMerc();
@@ -366,18 +362,36 @@ function SoloLeveling () {
 		if (greiz && greiz.openMenu()) {
 			while (mercId.length > 0) {
 				Misc.useMenu(0x0D45);
-				sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
-				delay(500);
-				merc = me.getMerc();
 
-				if (merc.getSkill(mercType, 1)) {
-					return true;
+				if (me.diff !== mercDiff) {
+					sendPacket(1, 0x36, 4, greiz.gid, 4, 104); //defiance aura
+					delay(500 + me.ping);
+					merc = me.getMerc();
+
+					if (merc.getSkill(104, 1)) {
+						removeEventListener("gamepacket", this.gamePacket);
+						this.setupMerc();
+
+						return true;
+					}
+				}
+
+				if (me.diff === mercDiff) {
+					sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
+					delay(500 + me.ping);
+					merc = me.getMerc();
+
+					if (merc.getSkill(mercType, 1)) {
+						removeEventListener("gamepacket", this.gamePacket);
+						this.setupMerc();
+
+						return true;
+					}
 				}
 			}
 		}
 
 		removeEventListener("gamepacket", this.gamePacket);
-		this.setupMerc();
 
 		return false;
 	};
