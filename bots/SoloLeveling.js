@@ -336,7 +336,7 @@ function SoloLeveling () {
 		}
 	};
 
-	this.getMerc = function () {
+	this.hireMerc = function () {
 		// Variable = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 		// mercAura = ["HolyFreeze", "HolyFreeze", "Might", "HolyFreeze", "Defiance", "BlessedAim", "HolyFreeze"][me.classid];
 		let mercType = [114, 114, 98, 114, 104, 108, 114][me.classid];
@@ -350,50 +350,46 @@ function SoloLeveling () {
 			}
 		}
 
-		me.overhead('getting merc');
+		this.selectMerc = function () {
+			let greiz = getUnit(1, NPC.Greiz);
+
+			if (greiz && greiz.openMenu()) {
+				while (mercId.length > 0) {
+					Misc.useMenu(0x0D45);
+					sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
+					delay(500 + me.ping);
+					merc = me.getMerc();
+
+					if (me.diff !== mercDiff) { //temp hire with defiance aura
+						if (merc.getSkill(104, 1)) {
+
+							return true;
+						}
+					}
+
+					if (me.diff === mercDiff) {
+						if (merc.getSkill(mercType, 1)) {
+
+							return true;
+						}
+					}
+				}
+			}
+
+			return false;
+		};
+
+		me.overhead('hiring merc');
 
 		Town.goToTown(2);
 		Pather.moveTo(5041, 5055);
 		addEventListener("gamepacket", this.gamePacket);
 		Town.move(NPC.Greiz);
-
-		let greiz = getUnit(1, NPC.Greiz);
-
-		if (greiz && greiz.openMenu()) {
-			while (mercId.length > 0) {
-				Misc.useMenu(0x0D45);
-
-				if (me.diff !== mercDiff) {
-					sendPacket(1, 0x36, 4, greiz.gid, 4, 104); //defiance aura
-					delay(500 + me.ping);
-					merc = me.getMerc();
-
-					if (merc.getSkill(104, 1)) {
-						removeEventListener("gamepacket", this.gamePacket);
-						this.setupMerc();
-
-						return true;
-					}
-				}
-
-				if (me.diff === mercDiff) {
-					sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
-					delay(500 + me.ping);
-					merc = me.getMerc();
-
-					if (merc.getSkill(mercType, 1)) {
-						removeEventListener("gamepacket", this.gamePacket);
-						this.setupMerc();
-
-						return true;
-					}
-				}
-			}
-		}
-
+		this.selectMerc();
 		removeEventListener("gamepacket", this.gamePacket);
+		this.setupMerc();
 
-		return false;
+		return true;
 	};
 
 	this.setupMerc = function () {
@@ -901,7 +897,7 @@ function SoloLeveling () {
 		}
 
 		if (Config.UseMerc) {
-			this.getMerc();
+			this.hireMerc();
 		}
 
 		this.townTasks();
@@ -2566,8 +2562,9 @@ function SoloLeveling () {
 			delay(500);
 		}
 
-		if (me.diff === 1 && me.getStat(39) < 150 && me.getStat(41) < 150) { // fire and lightning resists check - want minimum 50 each for hell
-			print("SoloLeveling: lacking resists for Hell difficulty");
+		if (me.diff === 1 && (me.getStat(39) < 150 || me.getStat(41) < 150) || me.getStat(43) < 100) { // fr, lr, cr check - fr/lr >=50 cr >= 0 for hell.
+			D2Bot.printToConsole('SoloLeveling: missing resists. not attacking Baal');
+			print('SoloLeveling: missing resists for Hell difficulty.');
 
 			return true;
 		}
