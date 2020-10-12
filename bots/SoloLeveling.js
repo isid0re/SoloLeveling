@@ -1499,7 +1499,7 @@ function SoloLeveling () {
 	};
 
 	this.lowerkurast = function () {
-		if (!Pather.accessToAct(3) || me.diff !== 2) {
+		if (!Pather.accessToAct(3) || me.diff === 0) {
 			return true;
 		}
 
