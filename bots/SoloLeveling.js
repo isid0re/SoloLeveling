@@ -39,7 +39,7 @@ function SoloLeveling () {
 		Runewords.makeRunewords();
 		this.equipSWAP();
 		Item.autoEquip();
-		Item.autoEquipMerc();
+		this.equipMerc();
 		Town.stash(true);
 		Town.heal();
 		Town.identify();
@@ -52,7 +52,8 @@ function SoloLeveling () {
 		Town.shopItems();
 		Town.gamble();
 		Town.reviveMerc();
-		Item.autoEquipMerc();
+		this.hireMerc();
+		this.equipMerc();
 		Item.autoEquip();
 		this.clearJunk();
 		Town.stash(true);
@@ -122,6 +123,28 @@ function SoloLeveling () {
 
 			item.interact();
 			print('SoloLeveling: used potion of life');
+		}
+
+		//LamEssen's Tome
+		let tome = me.getItem(548);
+
+		if (tome) {
+			if (tome.location === 7) {
+				Town.move('stash');
+				Storage.Inventory.MoveTo(tome);
+				delay(300);
+			}
+
+			Town.goToTown(3);
+			Town.move(NPC.Alkor);
+			let alkor = getUnit(1, NPC.Alkor);
+
+			if (alkor) {
+				alkor.openMenu();
+				me.cancel();
+			}
+
+			print('SoloLeveling: LamEssen Tome');
 		}
 
 		// anya scroll of resistance
@@ -337,57 +360,100 @@ function SoloLeveling () {
 	};
 
 	this.hireMerc = function () {
-		// Variable = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-		// mercAura = ["HolyFreeze", "HolyFreeze", "Might", "HolyFreeze", "Defiance", "BlessedAim", "HolyFreeze"][me.classid];
-		let mercType = [114, 114, 98, 114, 104, 108, 114][me.classid];
+		//  classorder =   ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+		let mercAuraName = ["Holy Freeze", "Holy Freeze", "Might", "Holy Freeze", "Defiance", "Blessed Aim", "Holy Freeze"][me.classid];
+		let mercAuraWanted = [114, 114, 98, 114, 104, 108, 114][me.classid];
+		let tempMercAura = 99; //prayer only one not used -- replaciing merc will bug out if changed.
+		// mercdiff = ["Nightmare", "Nightmare", "Nightmare", "Nightmare", "Normal", "Normal", "Nightmare"][me.classid];
 		let mercDiff = [1, 1, 1, 1, 0, 0, 1][me.classid];
+		let mercAura = [[104, 99, 108], [103, 98, 114]];
 
-		if (me.getMerc() || me.mercrevivecost) {//got the right aura stop function
+		function getmercAura () {
 			merc = me.getMerc();
 
-			if (merc.getSkill(mercType, 1)) {
-				return true;
+			if (!merc) {
+				return null;
 			}
-		}
 
-		this.selectMerc = function () {
-			let greiz = getUnit(1, NPC.Greiz);
-
-			if (greiz && greiz.openMenu()) {
-				while (mercId.length > 0) {
-					Misc.useMenu(0x0D45);
-					sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
-					delay(500 + me.ping);
-					merc = me.getMerc();
-
-					if (me.diff !== mercDiff) { //temp hire with defiance aura
-						if (merc.getSkill(104, 1)) {
-
-							return true;
+			for (let range = 0; range < mercAura.length; range++) {
+				if (Array.isArray(mercAura[range])) {
+					for (let selection = 0; selection < mercAura[range].length; selection++) {
+						if (merc.getSkill(mercAura[range][selection], 1)) {
+							return mercAura[range][selection];
 						}
 					}
-
-					if (me.diff === mercDiff) {
-						if (merc.getSkill(mercType, 1)) {
-
-							return true;
-						}
-					}
+				} else if (merc.getSkill(mercAura[range], 1)) {
+					return mercAura[range];
 				}
 			}
 
-			return false;
-		};
+			return true;
+		}
 
-		me.overhead('hiring merc');
+		if (!Pather.accessToAct(2) || me.diff === 2) { // don't hire if no access to act 2 or if in hell
+			return true;
+		}
+
+		let mercSelected = getmercAura();
+
+		if (mercSelected === mercAuraWanted || me.diff === 0 && mercSelected === tempMercAura) {
+			return true;
+		}
+
+		Pather.getWP(me.area);
+		me.overhead('getting merc');
 
 		Town.goToTown(2);
+
 		Pather.moveTo(5041, 5055);
 		addEventListener("gamepacket", this.gamePacket);
 		Town.move(NPC.Greiz);
-		this.selectMerc();
+
+		if (mercSelected !== mercAuraWanted && me.diff === mercDiff || mercSelected !== tempMercAura && me.diff === 0) { // replace merc
+			me.overhead('replacing merc');
+			Item.removeItemsMerc(); // strip temp merc gear
+			delay(500 + me.ping);
+		}
+
+		let greiz = getUnit(1, NPC.Greiz);
+
+		if (greiz && greiz.openMenu()) {
+			while (mercId.length > 0) {
+				Misc.useMenu(0x0D45);
+				sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
+				delay(500);
+				merc = me.getMerc();
+
+				if (me.diff !== mercDiff && me.diff === 0) {
+					if (merc.getSkill(tempMercAura, 1)) {
+						print('SoloLeveling: prayer merc hired.');
+						removeEventListener("gamepacket", this.gamePacket);
+						this.setupMerc();
+
+						return true;
+					} else {
+						print('SoloLeveling: temp merc not available.');
+
+						return false;
+					}
+				}
+
+				if (me.diff === mercDiff && me.gold >= 50000) {
+					if (merc.getSkill(mercAuraWanted, 1)) {
+						print('SoloLeveling: ' + mercAuraName + ' merc hired.');
+						removeEventListener("gamepacket", this.equipMercgamePacket);
+
+						return true;
+					} else {
+						print('SoloLeveling: ' + mercAuraName + ' merc not available.');
+
+						return false;
+					}
+				}
+			}
+		}
+
 		removeEventListener("gamepacket", this.gamePacket);
-		this.setupMerc();
 
 		return true;
 	};
@@ -404,42 +470,56 @@ function SoloLeveling () {
 		me.overhead('setup merc');
 
 		var mercHelm = [
-			"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [Merctier] == 8", //andy's
-			"[name] == grimhelm && [quality] == unique # [lifeleech] >= 6 && [enhanceddefense] >= 100 # [Merctier] == 7", //vampgaze
-			"[Name] == wingedhelm && [quality] == set # [lifeleech] >= 9 &&[enhanceddefense] >= 12 # [merctier] == 6", //gface
-			"[Name] == casque && [quality] == unique # [lifeleech] >= 5 &&[enhanceddefense] >= 200 # [merctier] == 5", // stealskull
-			"[Name] == grandcrown && [quality] == unique # [lifeleech] >= 9 &&[enhanceddefense] >= 160 # [merctier] == 4", // crown of thieves
-			"[Name] == sallet && [quality] == unique # [enhanceddefense] >= 160 # [merctier] == 3", //rockstopper
-			"[name] == deathmask && [quality] == set # [lifeleech] >= 10 # [Merctier] == 2", //talrashas
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 8 && [ias] >= 20 # [Merctier] == 8",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 6 && [magicdamagereduction] >= 10 # [Merctier] == 7",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 120 && [fhr] >= 30 && [ItemCrushingBlow] >= 35 # [Merctier] == 6",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 200 && [lifeleech] >= 5 && [fhr] >= 10 && [ias] >= 10 # [Merctier] == 5",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lifeleech] >= 9 && [fireresist] >= 33 # [Merctier] == 4",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lightresist] >= 20 && [coldresist] >= 20 && [fireresist] >= 20 # [Merctier] == 3",
+			"([type] == circlet || [type] == helm) # [lifeleech] >= 10 && [lightresist] >= 15 && [coldresist] >= 15 && [fireresist] >= 15 # [Merctier] == 2",
 			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [Merctier] == 1",
 		];
 		NTIP.arrayLooping(mercHelm);
 
 		var mercArmor = [
-			"[Type] == armor && [flag] == runeword # [defense] >= 800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 29",
-			"[Type] == armor && [flag] == runeword # [defense] >= 775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 28",
-			"[Type] == armor && [flag] == runeword # [defense] >= 750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 27",
-			"[Type] == armor && [flag] == runeword # [defense] >= 725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 26",
-			"[Type] == armor && [flag] == runeword # [defense] >= 700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 25",
-			"[Type] == armor && [flag] == runeword # [defense] >= 675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 24",
-			"[Type] == armor && [flag] == runeword # [defense] >= 650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 23",
-			"[Type] == armor && [flag] == runeword # [defense] >= 625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 22",
-			"[Type] == armor && [flag] == runeword # [defense] >= 600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 21",
-			"[Type] == armor && [flag] == runeword # [defense] >= 575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 20",
-			"[Type] == armor && [flag] == runeword # [defense] >= 550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 19",
-			"[Type] == armor && [flag] == runeword # [defense] >= 525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 18",
-			"[Type] == armor && [flag] == runeword # [defense] >= 500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 17",
-			"[Type] == armor && [flag] == runeword # [defense] >= 475 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 16",
-			"[Type] == armor && [flag] == runeword # [defense] >= 450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 15",
-			"[Type] == armor && [flag] == runeword # [defense] >= 425 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 14",
-			"[Type] == armor && [flag] == runeword # [defense] >= 400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 13",
-			"[Type] == armor && [flag] == runeword # [defense] >= 375 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 12",
-			"[Type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [Merctier] == 11",
-			"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # # [Merctier] == 10",
+			"[Type] == armor && [flag] == runeword # [defense] >= 800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 38",
+			"[Type] == armor && [flag] == runeword # [defense] >= 775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 37",
+			"[Type] == armor && [flag] == runeword # [defense] >= 750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 36",
+			"[Type] == armor && [flag] == runeword # [defense] >= 725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 35",
+			"[Type] == armor && [flag] == runeword # [defense] >= 700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 34",
+			"[Type] == armor && [flag] == runeword # [defense] >= 675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 33",
+			"[Type] == armor && [flag] == runeword # [defense] >= 650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 32",
+			"[Type] == armor && [flag] == runeword # [defense] >= 625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 31",
+			"[Type] == armor && [flag] == runeword # [defense] >= 600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 30",
+			"[Type] == armor && [flag] == runeword # [defense] >= 575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 29",
+			"[Type] == armor && [flag] == runeword # [defense] >= 550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 28",
+			"[Type] == armor && [flag] == runeword # [defense] >= 525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 27",
+			"[Type] == armor && [flag] == runeword # [defense] >= 500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 26",
+			"[Type] == armor && [flag] == runeword # [defense] >= 475 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 25",
+			"[Type] == armor && [flag] == runeword # [defense] >= 450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 24",
+			"[Type] == armor && [flag] == runeword # [defense] >= 425 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 23",
+			"[Type] == armor && [flag] == runeword # [defense] >= 400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 22",
+			"[Type] == armor && [flag] == runeword # [defense] >= 375 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 21",
+			"[Type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [Merctier] == 20",
+			"[Name] == KrakenShell && [Quality] == Unique # [enhanceddefense] >= 170 && [strength] >= 40 # [Merctier] == 19",
+			"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # [enhanceddefense] >=160 && ([maxhp] == 60 || [coldresist] == 50) # [Merctier] == 18",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 450 && [fireresist] == 50 # [merctier] == 17",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 425 && [fireresist] == 50 # [merctier] == 16",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 400 && [fireresist] == 50 # [merctier] == 15",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 375 && [fireresist] == 50 # [merctier] == 14",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 350 && [fireresist] == 50 # [merctier] == 13",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 225 && [fireresist] == 50 # [merctier] == 12",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 138 && [fireresist] == 50 # [merctier] == 11",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 122 && [fireresist] == 50 # [merctier] == 10",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [fireresist] == 50 # [merctier] == 9",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [fireresist] == 50 # [merctier] == 8",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [fireresist] == 50 # [merctier] == 7",
+			"[type] == armor # [enhanceddefense] >= 150 && [ias] >= 15 && [fhr] >= 15 && [dexterity] >= 15 # [merctier] == 6",
 		];
 		NTIP.arrayLooping(mercArmor);
 
 		var mercWeapon = [
+			"[type] == polearm && [flag] == runeword && [flag] == ethereal # [meditationaura] >= 17 # [Merctier] == 19",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [Merctier] == 18",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [Merctier] == 17",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [Merctier] == 16",
@@ -455,15 +535,11 @@ function SoloLeveling () {
 		NTIP.arrayLooping(mercWeapon);
 
 		var mercPrep = [
-			"[type] == armor # [defense] >= 500 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 9",
-			"[type] == armor # [defense] >= 475 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 8",
-			"[type] == armor # [defense] >= 450 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 7",
-			"[type] == armor # [defense] >= 425 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 6",
-			"[type] == armor # [defense] >= 375 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 5",
-			"[type] == armor # [defense] >= 350 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 4",
-			"[type] == armor # [defense] >= 325 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 3",
-			"[type] == armor # [defense] >= 300 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 2",
-			"[type] == armor # [defense] >= 300 && [maxhp] >= 0 # [MaxQuantity] == 1 && [Merctier] == 1",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [frw] == 25 && [fcr] == 25 # [merctier] == 5",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [frw] == 25 && [fcr] == 25 # [merctier] == 4",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [frw] == 25 && [fcr] == 25 # [merctier] == 3",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 65 && [frw] == 25 && [fcr] == 25 # [merctier] == 2",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] == 25 && [fcr] == 25 # [merctier] == 1",
 			"[Type] == Polearm # [EnhancedDamage] >= 65 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 7",
 			"[Type] == Polearm # [EnhancedDamage] >= 40 && [LifeLeech] >= 7  # [MaxQuantity] == 1 && [Merctier] == 6",
 			"[Type] == Polearm # [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 5",
@@ -896,10 +972,6 @@ function SoloLeveling () {
 			return true;
 		}
 
-		if (Config.UseMerc) {
-			this.hireMerc();
-		}
-
 		this.townTasks();
 
 		me.overhead("radament");
@@ -1319,7 +1391,9 @@ function SoloLeveling () {
 		Pickit.pickItems();
 
 		if (!this.checkQuest(15, 0)) {
-			Pather.moveTo(22579, 15706);
+			Pather.moveTo(22629, 15714);
+			Pather.moveTo(22609, 15707);
+			Pather.moveTo(22579, 15704);
 			Pather.moveTo(22577, 15649, 10);
 			Pather.moveTo(22577, 15609, 10);
 
@@ -2562,7 +2636,11 @@ function SoloLeveling () {
 			delay(500);
 		}
 
-		if (me.diff === 1 && (me.getStat(39) < 150 || me.getStat(41) < 150) || me.getStat(43) < 100) { // fr, lr, cr check - fr/lr >=50 cr >= 0 for hell.
+		let FR = me.getStat(39); // 	fire resist
+		let LR = me.getStat(41); // lightning resist
+		let CR = me.getStat(43); // cold resist
+
+		if ( me.diff === 1 && (FR < 150 || LR < 150 || CR < 100)) 	 { // resist check - fr/lr >=50 cr >= 0 for hell.
 			D2Bot.printToConsole('SoloLeveling: missing resists. not attacking Baal');
 			print('SoloLeveling: missing resists for Hell difficulty.');
 
