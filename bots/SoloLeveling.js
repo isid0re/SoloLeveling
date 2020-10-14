@@ -400,6 +400,12 @@ function SoloLeveling () {
 			return true;
 		}
 
+		if (me.diff !== mercDiff && me.diff === 0 && me.gold < 25000 || me.diff === mercDiff && (me.diff === 0 && me.gold < 25000 || me.gold < 100000)) {
+			print('SoloLeveling: not enough gold to hire merc.');
+
+			return true;
+		}
+
 		Pather.getWP(me.area);
 		me.overhead('getting merc');
 
@@ -424,7 +430,7 @@ function SoloLeveling () {
 				delay(500);
 				merc = me.getMerc();
 
-				if (me.diff !== mercDiff && me.diff === 0 && me.gold >= 25000) {
+				if (me.diff !== mercDiff && me.diff === 0) {
 					if (merc.getSkill(tempMercAura, 1)) {
 						print('SoloLeveling: prayer merc hired.');
 						removeEventListener("gamepacket", this.gamePacket);
@@ -438,7 +444,7 @@ function SoloLeveling () {
 					}
 				}
 
-				if (me.diff === mercDiff && (me.diff === 0 && me.gold >= 25000 || me.gold >= 100000)) {
+				if (me.diff === mercDiff) {
 					if (merc.getSkill(mercAuraWanted, 1)) {
 						print('SoloLeveling: ' + mercAuraName + ' merc hired.');
 						removeEventListener("gamepacket", this.gamePacket);

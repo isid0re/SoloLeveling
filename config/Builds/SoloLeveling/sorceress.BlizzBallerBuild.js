@@ -8,8 +8,8 @@ const build = {
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 300], ["strength", 108], ["vitality", "all"]
 	],
 	skills: [
-		[37, 1], // warmth
 		[36, 1], // Fire Bolt
+		[37, 1], // warmth
 		[40, 1], // Frozen Armor
 		[39, 1], // ice bolt
 		[45, 1], // ice blast
@@ -22,9 +22,9 @@ const build = {
 		[47, 13], // fireball
 		[59, 1], // blizzard
 		[56, 1], // meteor
+		[61, 1, false], // Fire Mastery
+		[65, 1, false], // cold mastery
 		[47, 18], // Fireball
-		[61, 1], // Fire Mastery
-		[65, 1], // cold mastery
 		[47, 20], // Fireball
 		[59, 20], // blizzard
 		[56, 5], // meteor
