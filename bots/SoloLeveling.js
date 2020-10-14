@@ -424,7 +424,7 @@ function SoloLeveling () {
 				delay(500);
 				merc = me.getMerc();
 
-				if (me.diff !== mercDiff && me.diff === 0) {
+				if (me.diff !== mercDiff && me.diff === 0 && me.gold >= 25000) {
 					if (merc.getSkill(tempMercAura, 1)) {
 						print('SoloLeveling: prayer merc hired.');
 						removeEventListener("gamepacket", this.gamePacket);
@@ -432,20 +432,20 @@ function SoloLeveling () {
 
 						return true;
 					} else {
-						print('SoloLeveling: temp merc not available.');
+						print('SoloLeveling: temp merc not available. will try later');
 
 						return false;
 					}
 				}
 
-				if (me.diff === mercDiff && me.gold >= 50000) {
+				if (me.diff === mercDiff && (me.diff === 0 && me.gold >= 25000 || me.gold >= 100000)) {
 					if (merc.getSkill(mercAuraWanted, 1)) {
 						print('SoloLeveling: ' + mercAuraName + ' merc hired.');
-						removeEventListener("gamepacket", this.equipMercgamePacket);
+						removeEventListener("gamepacket", this.gamePacket);
 
 						return true;
 					} else {
-						print('SoloLeveling: ' + mercAuraName + ' merc not available.');
+						print('SoloLeveling: ' + mercAuraName + ' merc not available. try later.');
 
 						return false;
 					}
