@@ -1650,10 +1650,10 @@ function SoloLeveling () {
 		if (flail) {
 			if (!Item.equip(flail, 4)) {
 				Pickit.pickItems();
-				throw new Error("EquipFlail = failed to equip Khalim's Will.");
+				throw new Error("SoloLeveling: failed to equip Khalim's Will. (equipFlail)");
 			}
 		} else {
-			throw new Error("EquipFlail: Lost Khalim's Will before trying to equip it.");
+			throw new Error("SoloLeveling: Lost Khalim's Will before trying to equip it. (equipFlail)");
 		}
 
 		if (me.itemoncursor) { // Seems like Item.equip() doesn't want to keep whatever the sorc has for a weapon, so lets put it into inventory without checking it against Pickit.
@@ -1807,16 +1807,20 @@ function SoloLeveling () {
 		Pather.moveTo(17692, 8048);
 		Pather.moveTo(17563, 8072);
 
+		Config.MercWatch = false;
+
 		try {
 			Attack.kill(242);
 		} catch (err) {
 			print('Failed to kill Mephisto');
 		}
 
+		Config.MercWatch = true;
 		Pickit.pickItems();
 
 		Pather.moveTo(17581, 8070);
 		Pather.usePortal(null);
+
 		Config.OpenChests = (me.classid !== 1 && me.diff !== 2) ? false : true;
 		Config.OpenChests = (me.classid === 1 && me.diff !== 0) ? true : false;
 
@@ -2340,8 +2344,8 @@ function SoloLeveling () {
 				HealStatus: false,
 				TownHP: 0,
 				TownMP: 0,
-				MPBuffer: 10,
-				HPBuffer: 20,
+				MPBuffer: 15,
+				HPBuffer: 15,
 				UseMercRejuv: 25,
 				LifeChicken: 5,
 				ManaChicken: 0,
@@ -2354,6 +2358,7 @@ function SoloLeveling () {
 			this.buyPots(10, "Thawing"); // thawing
 			this.buyPots(10, "Antidote"); // antidote
 			this.drinkPots();
+			Town.buyPotions();
 			Pather.usePortal(120, me.name);
 
 			if (!Pather.moveToPreset(me.area, 2, 546)) {
@@ -2712,7 +2717,7 @@ function SoloLeveling () {
 
 // Start Global Variables and functions
 //Respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 30, 0, 25, 0, 0, 0][me.classid];
+const respecOne = [ 0, 28, 0, 25, 0, 0, 0][me.classid];
 const respecTwo = [ 0, 75, 0, 85, 0, 0, 0][me.classid];
 
 //NTIP INJECTOR

@@ -39,13 +39,13 @@ function LoadConfig () {
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	Config.StashGold = 1000;
-	Config.LowGold = 250000;
+	Config.LowGold = 500000;
 
 	//AutoEquip
 	Config.AutoEquip = true;
 
 	// Pickit config.
-	Config.PickRange = 20;
+	Config.PickRange = me.getSkill(54, 0) ? 40 : 20;
 	Config.FastPick = false;
 	Config.ItemInfo = true;
 	Config.CainID.Enable = false;
