@@ -531,15 +531,15 @@ function SoloLeveling () {
 
 		var mercWeapon = [
 			"[type] == polearm && [flag] == runeword && [flag] == ethereal # [meditationaura] >= 17 # [Merctier] == 22",
-			"[name] == thresher && [flag] == unique # [enhanceddamage] >= 190 && [lifeleech] >= 11 # [Merctier] == 21",
+			"[name] == thresher && [quality] == unique # [enhanceddamage] >= 190 && [lifeleech] >= 11 # [Merctier] == 21",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [Merctier] == 20",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [Merctier] == 19",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [Merctier] == 18",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 14 # [Merctier] == 17",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 13 # [Merctier] == 16",
 			"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [Merctier] == 15",
-			"[name] == yari && [flag] == unique # [enhanceddamage] >= 160 && [itemcrushingblow] >= 45 # [Merctier] == 14",
-			"[name] == fuscina && [flag] == unique # [enhanceddamage] >= 140 && [fireresist] >= 50 # [Merctier] == 13",
+			"[name] == yari && [quality] == unique # [enhanceddamage] >= 160 && [itemcrushingblow] >= 45 # [Merctier] == 14",
+			"[name] == fuscina && [quality] == unique # [enhanceddamage] >= 140 && [fireresist] >= 50 # [Merctier] == 13",
 			"[name] == halberd && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 12",
 			"[name] == poleaxe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 11",
 			"[name] == warscythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 10",
@@ -2413,7 +2413,7 @@ function SoloLeveling () {
 		let FR = me.getStat(39); // fire resist
 		let LR = me.getStat(41); // lightning resist
 		let CR = me.getStat(43); // cold resist
-		let checkFR = me.diff === 0 ? 40 : 100; // cannot start diff with negative resistances
+		let checkFR = me.diff === 0 ? 40 : 100; // cannot start next diff with negative resistances
 		let checkLR = me.diff === 0 ? 40 : 100;
 		let checkCR = me.diff === 0 ? 40 : 100;
 		let nCap = 30; // lvl requirement to attack Normal Baal.
