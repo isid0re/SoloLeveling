@@ -380,7 +380,7 @@ function LoadConfig () {
 				"[Name] == RalRune # # [MaxQuantity] == 1",
 				"[Name] == OrtRune # # [MaxQuantity] == 1",
 				"[Name] == TalRune # # [MaxQuantity] == 1",
-				"([Name] == LargeShield || [Name] == KiteShield || [Name] == BoneShield || [Name] == Scutum || [Name] == DragonShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+				"([Name] == LargeShield || [Name] == KiteShield || [Name] == BoneShield || [Name] == Scutum || [Name] == GrimShield || [Name] == DragonShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(AncientsPledge);
 
@@ -392,6 +392,7 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Bone Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Scutum"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Grim Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Dragon Shield"]);
 
 			Config.KeepRunewords.push("[type] == shield # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");

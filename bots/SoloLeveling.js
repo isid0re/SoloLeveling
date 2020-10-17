@@ -34,6 +34,7 @@ function SoloLeveling () {
 	};
 
 	this.townTasks = function () {
+		let prevTown = me.area;
 		this.unfinishedQuests();
 		Cubing.doCubing();
 		Runewords.makeRunewords();
@@ -60,6 +61,10 @@ function SoloLeveling () {
 		this.organizeStash();
 		this.organizeInventory();
 		this.characterRespec();
+
+		if (me.area !== prevTown) {
+			Pather.useWaypoint(prevTown);
+		}
 
 		if ((me.classid !== 1 || me.classid === 1 && me.charlvl < respecOne) && (me.area === 40 || me.area === 75)) {
 			this.buyPots(8, "Stamina");
@@ -525,13 +530,16 @@ function SoloLeveling () {
 		NTIP.arrayLooping(mercArmor);
 
 		var mercWeapon = [
-			"[type] == polearm && [flag] == runeword && [flag] == ethereal # [meditationaura] >= 17 # [Merctier] == 19",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [Merctier] == 18",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [Merctier] == 17",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [Merctier] == 16",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 14 # [Merctier] == 15",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 13 # [Merctier] == 14",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [Merctier] == 13",
+			"[type] == polearm && [flag] == runeword && [flag] == ethereal # [meditationaura] >= 17 # [Merctier] == 22",
+			"[name] == thresher && [flag] == unique # [enhanceddamage] >= 190 && [lifeleech] >= 11 # [Merctier] == 21",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [Merctier] == 20",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [Merctier] == 19",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [Merctier] == 18",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 14 # [Merctier] == 17",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 13 # [Merctier] == 16",
+			"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [Merctier] == 15",
+			"[name] == yari && [flag] == unique # [enhanceddamage] >= 160 && [itemcrushingblow] >= 45 # [Merctier] == 14",
+			"[name] == fuscina && [flag] == unique # [enhanceddamage] >= 140 && [fireresist] >= 50 # [Merctier] == 13",
 			"[name] == halberd && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 12",
 			"[name] == poleaxe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 11",
 			"[name] == warscythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 10",
@@ -792,7 +800,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([17, 19], true)) {
-			print("Failed to move to Mausoleum");
+			print("SoloLeveling: Failed to move to Mausoleum");
 		}
 
 		Attack.clearLevel();
@@ -814,7 +822,7 @@ function SoloLeveling () {
 				Precast.doPrecast(true);
 
 				if (!Pather.moveToPreset(me.area, 2, 30, 5, 5)) {
-					throw new Error("Failed to move to Tree of Inifuss");
+					throw new Error("SoloLeveling: Failed to move to Tree of Inifuss");
 				}
 
 				let tree = getUnit(2, 30);
@@ -861,7 +869,7 @@ function SoloLeveling () {
 
 		if (!gibbet.mode) {
 			if (!Pather.moveToPreset(me.area, 2, 26, 0, 0, true, true)) {
-				throw new Error("Failed to move to Cain's Gibbet");
+				throw new Error("SoloLeveling: Failed to move to Cain's Gibbet");
 			}
 
 			Misc.openChest(gibbet);
@@ -888,7 +896,7 @@ function SoloLeveling () {
 			Pather.moveToPreset(me.area, 2, 580);
 			Attack.clear(20, 0, getLocaleString(2875));
 		} catch (err) {
-			print('Failed to kill Countess');
+			print('SoloLeveling: Failed to kill Countess');
 		}
 
 		Pickit.pickItems();
@@ -911,13 +919,13 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([7, 12], true)) {
-			print("Failed to move to Pit level 1");
+			print("SoloLeveling: Failed to move to Pit level 1");
 		}
 
 		Attack.clearLevel();
 
 		if (!Pather.moveToExit(16, true)) {
-			print("Failed to move to Pit level 2");
+			print("SoloLeveling: Failed to move to Pit level 2");
 		}
 
 		Attack.clearLevel();
@@ -955,7 +963,7 @@ function SoloLeveling () {
 		try {
 			Attack.kill(156); // kill Andariel
 		} catch (err) {
-			print('Failed to kill Andy');
+			print('SoloLeveling: Failed to kill Andy');
 		}
 
 		delay(2000); // Wait for minions to die.
@@ -991,7 +999,7 @@ function SoloLeveling () {
 		try {
 			Attack.kill(229); // Radament
 		} catch (err) {
-			print('Failed to kill Radament');
+			print('SoloLeveling: Failed to kill Radament');
 		}
 
 		Pickit.pickItems();
@@ -1118,7 +1126,7 @@ function SoloLeveling () {
 		try {
 			Pather.moveToPreset(me.area, 2, 357, -3, -3);
 		} catch (err) {
-			print('Failed to move to summoner');
+			print('SoloLeveling: Failed to move to summoner');
 
 			return false;
 		}
@@ -1126,7 +1134,7 @@ function SoloLeveling () {
 		try {
 			Attack.clear(15, 0, 250); // The SummonerAttack.clear(15, 0, 250); // The Summoner
 		} catch (err) {
-			print('Failed to kill summoner');
+			print('SoloLeveling: Failed to kill summoner');
 
 			return false;
 		}
@@ -1217,7 +1225,7 @@ function SoloLeveling () {
 		let hstaff = me.getItem(91);
 
 		if (!hstaff) {
-			me.overhead("failed to make staff");
+			me.overhead("SoloLeveling: Failed to make staff");
 
 			return false;
 		}
@@ -1344,7 +1352,7 @@ function SoloLeveling () {
 				try {
 					this.amulet();
 				} catch (err) {
-					print('Failed attempt to get amulet');
+					print('SoloLeveling: Failed attempt to get amulet');
 				}
 			}
 		}
@@ -1354,7 +1362,7 @@ function SoloLeveling () {
 				try {
 					this.staff();
 				} catch (err) {
-					print('Failed attempt to get staff');
+					print('SoloLeveling: Failed attempt to get staff');
 				}
 			}
 		}
@@ -1391,7 +1399,7 @@ function SoloLeveling () {
 			Pather.useUnit(2, 100, 73);
 			Attack.kill(211); // kill duriel
 		} catch (err) {
-			print('Failed to kill Duriel');
+			print('SoloLeveling: Failed to kill Duriel');
 		}
 
 		Pickit.pickItems();
@@ -1429,7 +1437,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([76, 85], true)) {
-			print('Failed to get the eye');
+			print('SoloLeveling: Failed to get the eye');
 		}
 
 		Town.goToTown();
@@ -1475,7 +1483,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([80, 92, 93], true) || !Pather.moveToPreset(me.area, 2, 405)) {
-			print('Failed to get the heart');
+			print('SoloLeveling: Failed to get the heart');
 		}
 
 		Attack.clear(0x7); // clear level
@@ -1513,7 +1521,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(94, true) || !Pather.moveToPreset(me.area, 2, 193)) {
-			print('Failed to get LamEssen Tome');
+			print('SoloLeveling: Failed to get LamEssen Tome');
 		}
 
 		let stand = getUnit(2, 193);
@@ -1552,7 +1560,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([88, 89, 91], true) || !Pather.moveToPreset(me.area, 2, 406)) {
-			print('Failed to get the Brain');
+			print('SoloLeveling: Failed to get the Brain');
 		}
 
 		Attack.clear(0x7);
@@ -1769,7 +1777,7 @@ function SoloLeveling () {
 		delay(250 + me.ping);
 
 		if (!Pather.usePortal(83, me.name)) {
-			throw new Error("Travincal = failed to go back from town");
+			throw new Error("SoloLeveling: Failed to go back to Travincal from town");
 		}
 
 		delay(250 + me.ping);
@@ -1812,13 +1820,14 @@ function SoloLeveling () {
 		try {
 			Attack.kill(242);
 		} catch (err) {
-			print('Failed to kill Mephisto');
+			print('SoloLeveling: Failed to kill Mephisto');
 		}
 
 		Config.MercWatch = true;
 		Pickit.pickItems();
 
 		Pather.moveTo(17581, 8070);
+		delay(250 + me.ping * 2);
 		Pather.usePortal(null);
 
 		Config.OpenChests = (me.classid !== 1 && me.diff !== 2) ? false : true;
@@ -1844,7 +1853,7 @@ function SoloLeveling () {
 			try {
 				Attack.kill(256);
 			} catch (err) {
-				print('Failed to kill Izual');
+				print('SoloLeveling: Failed to kill Izual');
 			}
 		}
 
@@ -2083,7 +2092,7 @@ function SoloLeveling () {
 				}
 			}
 
-			throw new Error("Failed to open seal (id " + classid + ")");
+			throw new Error("SoloLeveling: Failed to open seal (id " + classid + ")");
 		};
 
 		this.townTasks();
@@ -2103,7 +2112,7 @@ function SoloLeveling () {
 		}
 
 		if (!this.getBoss(getLocaleString(2851))) {
-			throw new Error("Failed Vizier");
+			throw new Error("SoloLeveling: Failed Vizier");
 		}
 
 		this.openSeal(394);
@@ -2115,7 +2124,7 @@ function SoloLeveling () {
 		}
 
 		if (!this.getBoss(getLocaleString(2852))) {
-			throw new Error("Failed Seis");
+			throw new Error("SoloLeveling: Failed Seis");
 		}
 
 		this.openSeal(393);
@@ -2128,7 +2137,7 @@ function SoloLeveling () {
 		}
 
 		if (!this.getBoss(getLocaleString(2853))) {
-			throw new Error("Failed Infector");
+			throw new Error("SoloLeveling: Failed Infector");
 		}
 
 		Pather.moveTo(7788, 5292);
@@ -2142,7 +2151,7 @@ function SoloLeveling () {
 		try {
 			Attack.kill(243); // Diablo
 		} catch (err) {
-			print('Failed to kill Diablo');
+			print('SoloLeveling: Failed to kill Diablo');
 		}
 
 		Pickit.pickItems();
@@ -2274,7 +2283,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(114, true) || !Pather.moveToPreset(me.area, 2, 460)) {
-			throw new Error("Failed to move to Anya");
+			throw new Error("SoloLeveling: Failed to move to Anya");
 		}
 
 		delay(1000);
@@ -2362,7 +2371,7 @@ function SoloLeveling () {
 			Pather.usePortal(120, me.name);
 
 			if (!Pather.moveToPreset(me.area, 2, 546)) {
-				throw new Error("Failed to move to ancients' altar");
+				throw new Error("SoloLeveling: Failed to move to ancients' altar");
 			}
 
 			let altar = getUnit(2, 546);
@@ -2394,13 +2403,23 @@ function SoloLeveling () {
 			Pather.moveToExit([128, 129], true);
 			Pather.getWP(129);
 		} catch (err) {
-			print('Failed to WSK Waypoint');
+			print('SoloLeveling: Failed to WSK Waypoint');
 		}
 
 		return true;
 	};
 
 	this.baal = function () {
+		let FR = me.getStat(39); // fire resist
+		let LR = me.getStat(41); // lightning resist
+		let CR = me.getStat(43); // cold resist
+		let checkFR = 100; // cannot start diff with negative resistances
+		let checkLR = 100;
+		let checkCR = 100;
+		let nCap = 30; // lvl requirement to attack Normal Baal.
+		let nmCap = 65; // lvl requirement to attack NM Baal.
+		let lvlCap = me.diff === 0 ? nCap : me.diff === 1 ? nmCap : 99;
+
 		if (me.gametype === 0 || !Pather.accessToAct(5)) {
 			return true;
 		}
@@ -2561,13 +2580,15 @@ function SoloLeveling () {
 		Pather.moveTo(15095, 5029);
 
 		if (getUnit(1, 691)) {
-			say("Dolls found! NG.");
+			print("SoloLeveling: Dolls found! NG.");
+			me.overhead("Dolls found! NG.");
 
 			return true;
 		}
 
 		if (getUnit(1, 641)) {
-			say("Souls found! NG.");
+			print("SoloLeveling: Souls found! NG.");
+			me.overhead("Souls found! NG.");
 
 			return true;
 		}
@@ -2639,6 +2660,13 @@ function SoloLeveling () {
 			delay(10);
 		}
 
+		if (me.charlvl < lvlCap || me.charlvl >= lvlCap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
+			Pickit.pickItems();
+			print('SoloLeveling: missing requirements for next difficulty.');
+
+			return true;
+		}
+
 		Pather.moveTo(15090, 5008);
 		delay(5000);
 		Precast.doPrecast(true);
@@ -2647,23 +2675,12 @@ function SoloLeveling () {
 			delay(500);
 		}
 
-		let FR = me.getStat(39); // 	fire resist
-		let LR = me.getStat(41); // lightning resist
-		let CR = me.getStat(43); // cold resist
-
-		if ( me.diff === 1 && (FR < 150 || LR < 150 || CR < 100)) 	 { // resist check - fr/lr >=50 cr >= 0 for hell.
-			D2Bot.printToConsole('SoloLeveling: missing resists. not attacking Baal');
-			print('SoloLeveling: missing resists for Hell difficulty.');
-
-			return true;
-		}
-
 		let portal = getUnit(2, 563);
 
 		if (portal) {
 			Pather.usePortal(null, null, portal);
 		} else {
-			throw new Error("Couldn't find portal.");
+			throw new Error("SoloLeveling: Couldn't access portal.");
 		}
 
 		Pather.moveTo(15134, 5923);
@@ -2671,7 +2688,7 @@ function SoloLeveling () {
 		try {
 			Attack.kill(544); // Baal
 		} catch (err) {
-			print('Failed to kill Baal');
+			print('SoloLeveling: Failed to kill Baal');
 		}
 
 		Pickit.pickItems();
@@ -2694,7 +2711,7 @@ function SoloLeveling () {
 			}
 
 			if (j === 3) {
-				me.overhead("sequence " + sequence[k] + " failed.");
+				me.overhead("SoloLeveling: sequence " + sequence[k] + " failed.");
 			}
 		}
 	};

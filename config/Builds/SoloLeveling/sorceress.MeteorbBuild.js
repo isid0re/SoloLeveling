@@ -5,7 +5,7 @@
 
 const build = {
 	stats: [
-		["strength", 60], ["vitality", 200], ["strength", 95], ["vitality", "all"]
+		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 300], ["strength", 108], ["vitality", "all"]
 	],
 	skills: [
 		[36, 1], // Fire Bolt
