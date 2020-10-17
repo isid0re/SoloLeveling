@@ -2413,9 +2413,9 @@ function SoloLeveling () {
 		let FR = me.getStat(39); // fire resist
 		let LR = me.getStat(41); // lightning resist
 		let CR = me.getStat(43); // cold resist
-		let checkFR = 100; // cannot start diff with negative resistances
-		let checkLR = 100;
-		let checkCR = 100;
+		let checkFR = me.diff === 0 ? 40 : 100; // cannot start diff with negative resistances
+		let checkLR = me.diff === 0 ? 40 : 100;
+		let checkCR = me.diff === 0 ? 40 : 100;
 		let nCap = 30; // lvl requirement to attack Normal Baal.
 		let nmCap = 65; // lvl requirement to attack NM Baal.
 		let lvlCap = me.diff === 0 ? nCap : me.diff === 1 ? nmCap : 99;
