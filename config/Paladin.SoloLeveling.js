@@ -260,22 +260,23 @@ function LoadConfig () {
 		}
 
 		//weapon switch (prebuff)
-		if (me.getItem(636)) { // CTA
-			if (!haveItem("sword", "runeword", "Call To Arms")) {
-				var CTA = [
-					"[Name] == AmnRune # # [MaxQuantity] == 1",
-					"[Name] == RalRune # # [MaxQuantity] == 1",
-					"[Name] == MalRune",
-					"[Name] == IstRune",
-					"[Name] == OhmRune",
-					"([Name] == CrystalSword || [Name] == Flail) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(CTA);
+		if (!haveItem("sword", "runeword", "Call To Arms")) {
+			var CTA = [
+				"[Name] == AmnRune # # [MaxQuantity] == 1",
+				"[Name] == RalRune # # [MaxQuantity] == 1",
+				"[Name] == MalRune",
+				"[Name] == IstRune",
+				"[Name] == OhmRune",
+			];
+			NTIP.arrayLooping(CTA);
 
-				Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
-				Config.Runewords.push([Runeword.CallToArms, "flail"]);
-				Config.KeepRunewords.push("[type] == sword || [type] == mace # [plusskillbattleorders] >= 1");
+			if (me.getItem(636)) {
+				NTIP.addLine("([Name] == CrystalSword || [Name] == Flail) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");
 			}
+
+			Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
+			Config.Runewords.push([Runeword.CallToArms, "flail"]);
+			Config.KeepRunewords.push("[type] == sword || [type] == mace # [plusskillbattleorders] >= 1");
 		}
 
 		//helm
@@ -309,7 +310,7 @@ function LoadConfig () {
 		}
 
 		//armor
-		if (Item.getEquippedItem(3).tier < 15) { // Stealth
+		if (Item.getEquippedItem(3).tier < 15 && me.diff !== 2) { // Stealth
 			var stealth = [
 				"[Name] == TalRune # # [MaxQuantity] == 1",
 				"[Name] == EthRune # # [MaxQuantity] == 1",
@@ -330,9 +331,13 @@ function LoadConfig () {
 			var Smoke = [
 				"[Name] == NefRune # # [MaxQuantity] == 1",
 				"[Name] == LumRune # # [MaxQuantity] == 1",
-				"([Name] == LightPlate || [Name] == GhostArmor || [Name] == SerpentskinArmor || [Name] == demonhidearmor ||[Name] == trellisedarmor ||[Name] == MagePlate || [Name] == DuskShroud || [Name] == WyrmHide) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
+				"([Name] == MagePlate || [Name] == DuskShroud || [Name] == WyrmHide) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Smoke);
+
+			if (me.diff !== 2) {
+				NTIP.addLine("([Name] == LightPlate || [Name] == GhostArmor || [Name] == SerpentskinArmor || [Name] == demonhidearmor || [Name] == trellisedarmor) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1");
+			}
 
 			if (!me.getItem(626)) { // Cube to Lum Rune
 				Config.Recipes.push([Recipe.Rune, "Dol Rune"]); // cube Hel to Io
@@ -352,7 +357,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == armor # [fireresist] == 50");
 		}
 
-		if (Item.getEquippedItem(3).tier < 100) { // Enigma
+		if (!haveItem("armor", "runeword", "Enigma")) { // Enigma
 			var Enigma = [
 				"[Name] == JahRune",
 				"[Name] == IthRune # # [MaxQuantity] == 1",
@@ -371,12 +376,12 @@ function LoadConfig () {
 		}
 
 		//shield
-		if (Item.getEquippedItem(5).tier < 13) { // Ancients' Pledge
+		if (Item.getEquippedItem(5).tier < 37) { // Ancients' Pledge
 			var AncientsPledge = [
 				"[Name] == RalRune # # [MaxQuantity] == 1",
 				"[Name] == OrtRune # # [MaxQuantity] == 1",
 				"[Name] == TalRune # # [MaxQuantity] == 1",
-				"([Name] == LargeShield || [Name] == KiteShield || [Name] == BoneShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+				"([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge || [Name] == GrimShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(AncientsPledge);
 
@@ -384,44 +389,26 @@ function LoadConfig () {
 				Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 			}
 
+			if (me.diff !== 2) {
+				NTIP.addLine("([Name] == Targe || [Name] == Rondache || [Name] == HeraldicShield ||[Name] == AerinShield || [Name] == LargeShield || [Name] == KiteShield || [Name] == BoneShield || [Name] == Scutum || [Name] == DragonShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1");
+			}
+
+			Config.Runewords.push([Runeword.AncientsPledge, "Targe"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Rondache"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Heraldic Shield"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Aerin Shield"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Akaran Targe"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Akaran Rondache"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Protector Shield"]);
+			Config.Runewords.push([Runeword.AncientsPledge,"Gilded Shield"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Sacred Targe"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Bone Shield"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Scutum"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Dragon Shield"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Grim Shield"]);
 			Config.KeepRunewords.push("[type] == shield # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
-		}
-
-		if (Item.getEquippedItem(5).tier < 18) { // Sanctuary
-			if (!haveItem("shield", "runeword", "Sanctuary")) {
-				var Sanctuary = [
-					"[Name] == KoRune # # [MaxQuantity] == 2",
-					"[Name] == MalRune",
-					"([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] > 0 && [Sockets] == 3 # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(Sanctuary);
-
-				if (me.diff === 2) {
-					NTIP.addLine("([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge) && [Quality] == Normal # [fireresist] > 20 && [Sockets] == 0 # [MaxQuantity] == 1");
-
-					Config.Recipes.push([Recipe.Socket.Shield, "Akaran Targe"]);
-					Config.Recipes.push([Recipe.Socket.Shield, "Akaran Rondache"]);
-					Config.Recipes.push([Recipe.Socket.Shield, "Gilded Shield"]);
-					Config.Recipes.push([Recipe.Socket.Shield, "Protector Shield"]);
-					Config.Recipes.push([Recipe.Socket.Shield, "Sacred Targe"]);
-				}
-
-				if (!me.getItem(632)) { // Cube to Mal Rune
-					Config.Recipes.push([Recipe.Rune, "Pul Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
-				}
-
-				Config.Recipes.push([Runeword.Sanctuary, "Akaran Targe"]);
-				Config.Recipes.push([Runeword.Sanctuary, "Akaran Rondache"]);
-				Config.Recipes.push([Runeword.Sanctuary, "Gilded Shield"]);
-				Config.Recipes.push([Runeword.Sanctuary, "Protector Shield"]);
-				Config.Recipes.push([Runeword.Sanctuary, "Sacred Targe"]);
-
-				Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist] >= 50");
-			}
 		}
 
 		switch (playStyle) {
@@ -457,7 +444,7 @@ function LoadConfig () {
 				"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 100", //highlords
 				//rings
 				"[type] == ring && [quality] == unique # [tohit] >= 180 && [dexterity] >= 15 # [tier] == 99", // ravenfrost
-				'[type] == ring && [quality] == unique # [lifeleech] >= 3 && [maxstamina] == 50 # [tier] == 100', // bul-kathos' wedding band
+				"[type] == ring && [quality] == unique # [lifeleech] >= 3 && [maxstamina] == 50 # [tier] == 100", // bul-kathos' wedding band
 			];
 			NTIP.arrayLooping(finalMELEE);
 
@@ -604,7 +591,7 @@ function LoadConfig () {
 				}
 			}
 
-			if (Item.getEquippedItem(5).tier < 26) { // Spirit shield
+			if (Item.getEquippedItem(5).tier < 49) { // Spirit shield
 				var SpiritShield = [
 					"[Name] == TalRune # # [MaxQuantity] == 1",
 					"[Name] == ThulRune # # [MaxQuantity] == 1",
@@ -829,25 +816,46 @@ function LoadConfig () {
 		"[type] == shield && [flag] != ethereal # ([fireresist]+[lightresist]+[coldresist]) >= 30 # [tier] == 6",
 		"[type] == shield && [flag] != ethereal # ([fireresist]+[lightresist]+[coldresist]) >= 35 # [tier] == 7",
 		"[type] == shield && [flag] != ethereal # ([fireresist]+[lightresist]+[coldresist]) >= 40 # [tier] == 8",
-		"[type] == shield && [flag] != ethereal # ([fireresist]+[lightresist]+[coldresist]) >= 45 # [tier] == 9",
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 45 # [tier] == 9",
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 45 # [tier] == 10",
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 1 || ([fireresist]+[lightresist]+[coldresist]) >= 45 # [tier] == 9",
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 120 # [tier] == 10",
 		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 # [tier] == 11", //ap
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 24 # [tier] == 12", //ap
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 29 # [tier] == 13", //ap
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 45 # [tier] == 14",
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 50 # [tier] == 15",
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 55 # [tier] == 16",
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 60 # [tier] == 17",
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 200 # [tier] == 18", // sanctuary
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 # [tier] == 19", // spirit
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 10 # [tier] == 20", // spirit
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 15 # [tier] == 21", // spirit
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 20 # [tier] == 22", // spirit
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 25 # [tier] == 23", // spirit
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 30 # [tier] == 24", // spirit
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 35 # [tier] == 25", // spirit
-		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 40 # [tier] == 26", // spirit
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] > 22 # [tier] == 12", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] > 28 # [tier] == 13", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] > 78 # [tier] == 14", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] > 87 # [tier] == 15", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] > 100 # [tier] == 16", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 117 # [tier] == 17", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 150 # [tier] == 19", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 165 # [tier] == 20", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 180 # [tier] == 21", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 195 # [tier] == 22", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 206 # [tier] == 23", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 210 # [tier] == 24", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 217 # [tier] == 25", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 225 # [tier] == 26", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 230 # [tier] == 27", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 235 # [tier] == 28", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 240 # [tier] == 29", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187 && [defense] >= 245 # [tier] == 30", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 227 && [defense] >= 200 # [tier] == 31", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 247 && [defense] >= 200 # [tier] == 32", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 267 && [defense] >= 200 # [tier] == 33", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 287 && [defense] >= 200 # [tier] == 34", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 307 && [defense] >= 200 # [tier] == 35", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 327 && [defense] >= 200 # [tier] == 36", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 347 && [defense] >= 200 # [tier] == 37", //ap
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 45 # [tier] == 38",
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 50 # [tier] == 39",
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 55 # [tier] == 40",
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal # [ItemAllSkills]+[PaladinSkills]+[PaliCombatSkillTab] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 60 # [tier] == 41",
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 # [tier] == 42", // spirit
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 10 # [tier] == 43", // spirit
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 15 # [tier] == 44", // spirit
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 20 # [tier] == 45", // spirit
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 25 # [tier] == 46", // spirit
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 30 # [tier] == 47", // spirit
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 35 # [tier] == 48", // spirit
+		"([type] == shield || [type] == auricshields) && [flag] != ethereal && [flag] == runeword  # [fcr] >= 25 && [maxmana] >= 89 && [fireresist] >= 40 # [tier] == 49", // spirit
 		//gloves
 		"[Type] == Gloves && [flag] != ethereal # ([FireResist]+[ColdResist]+[LightResist]) >= 10 # [Tier] == 1",
 		"[Type] == Gloves && [flag] != ethereal # ([FireResist]+[ColdResist]+[LightResist]) >= 15 # [Tier] == 2",
@@ -904,14 +912,14 @@ function LoadConfig () {
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 45 # [Tier] == 8",
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 50 # [Tier] == 9",
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 55 # [Tier] == 10",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 20 # tier == 11",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 25 # tier == 12",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 30 # tier == 13",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 35 # tier == 14",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 40 # tier == 15",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 45 # tier == 16",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 50 # tier == 17",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 55 # tier == 18",
+		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 5 # tier == 11",
+		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 10 # tier == 12",
+		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 15 # tier == 13",
+		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 20 # tier == 14",
+		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 25 # tier == 15",
+		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 30 # tier == 16",
+		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 35 # tier == 17",
+		"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 40 # tier == 18",
 	];
 	NTIP.arrayLooping(autoequipTiers);
 }

@@ -1,11 +1,11 @@
 /**
  *    @filename   Sorceress.BlizzardBuild.js
- *    @desc      Sorceress blizzard build for after level 30
+ *    @desc      Sorceress blizzard build for after respecOne
  */
 
 const build = {
 	stats: [
-		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 300], ["strength", 108], ["vitality", "all"]
+		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
 	],
 	skills: [
 		[36, 1], // Fire Bolt
@@ -15,22 +15,24 @@ const build = {
 		[45, 1], // ice blast
 		[42, 1], // Static
 		[43, 1], // telekensis
+		[41, 1], // Inferno
+		[46, 1], // Blaze
 		[44, 1], // Frost nova
-		[47, 7], // Fireball
+		[47, 7], // Fireball 7
 		[54, 1], //Teleport
 		[55, 1], // gspike
-		[47, 13], // fireball
+		[51, 1], // Firewall
+		[47, 15], // fireball 15
 		[59, 1], // blizzard
 		[56, 1], // meteor
 		[61, 1, false], // Fire Mastery
 		[65, 1, false], // cold mastery
-		[47, 18], // Fireball
-		[47, 20], // Fireball
-		[59, 20], // blizzard
+		[47, 20], // fireball 20
+		[59, 20], // blizzard 20
 		[56, 5], // meteor
 		[36, 20], // Fire Bolt
+		[65, 12], // cold mastery
 		[55, 20], // gspike
-		[65, 10], // cold mastery
 		[61, 10], // Fire Mastery
 	]
 };

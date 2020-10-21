@@ -1,9 +1,9 @@
 /*
 *	@filename	SoloLeveling.js
 *	@author		isid0re
-*	@desc		Power leveling for any class type. Just make a character and name it. Uses a predefine buildtemplates.
+*	@desc		AutoPlay leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
 *				Make sure kolbot difficulty is set to "highest"
-*	@TODO		1 add dynamic tiers for autoequip
+*	@TODO		- add dynamic tiers for autoequip
 */
 
 if (!isIncluded("common/Misc.js")) {
@@ -20,7 +20,7 @@ function SoloLeveling () {
 	var mercId = [], merc;
 	var sequence = [
 		"den", "mausoleum", "tristam", "countess", "pits", "andariel", // Act 1
-		"radament", "cube", "amulet", "summoner", "staff", "duriel", // Act 2
+		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "duriel", // Act 2
 		"eye", "heart", "tome", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
 		"izual", "diablo", //Act 4
 		"shenk", "saveBarby", "anya", "ancients", "baal" // Act 5
@@ -38,8 +38,8 @@ function SoloLeveling () {
 		this.unfinishedQuests();
 		Cubing.doCubing();
 		Runewords.makeRunewords();
-		this.equipSWAP();
 		Item.autoEquip();
+		this.equipSWAP();
 		this.equipMerc();
 		Town.stash(true);
 		Town.heal();
@@ -89,7 +89,7 @@ function SoloLeveling () {
 				clickItem(1, book);
 			}
 
-			print('SoloLeveling: used Radament skill book');
+			print('ÿc9SoloLevelingÿc0: used Radament skill book');
 		}
 
 		// golden bird
@@ -127,7 +127,7 @@ function SoloLeveling () {
 			}
 
 			item.interact();
-			print('SoloLeveling: used potion of life');
+			print('ÿc9SoloLevelingÿc0: used potion of life');
 		}
 
 		//LamEssen's Tome
@@ -149,7 +149,37 @@ function SoloLeveling () {
 				me.cancel();
 			}
 
-			print('SoloLeveling: LamEssen Tome');
+			print('ÿc9SoloLevelingÿc0: LamEssen Tome');
+		}
+
+		//remove Khalim's Will if quest not completed and restarting run.
+		let kw = me.getItem(174);
+
+		if (kw) {
+			if (Item.getEquippedItem(4).classid === 174) {
+
+				Town.clearInventory();
+				delay(me.ping * 2 + 500);
+
+				clickItem(4, 4); //remove khalim's will
+				delay(me.ping * 2 + 500);
+
+				let cursorItem = getUnit(100);
+
+				if (cursorItem) { // place in inventory
+					Storage.Inventory.MoveTo(cursorItem);
+				}
+
+				Town.move('stash');
+
+				if (Storage.Stash.CanFit(kw)) { // place in stash
+					Storage.Stash.MoveTo(kw);
+				} else {
+					me.cancel();
+				}
+
+				print('ÿc9SoloLevelingÿc0: removed khalims will');
+			}
 		}
 
 		// anya scroll of resistance
@@ -166,7 +196,7 @@ function SoloLeveling () {
 				clickItem(1, scroll);
 			}
 
-			print('SoloLeveling: used scroll of resistance');
+			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
 		}
 
 		return true;
@@ -220,7 +250,7 @@ function SoloLeveling () {
 			break;
 		}
 
-		print('SoloLeveling: buying ' + quantity + ' ' + type + ' Potions');
+		print('ÿc9SoloLevelingÿc0: buying ' + quantity + ' ' + type + ' Potions');
 
 		for (let totalspecialpotions = 0; totalspecialpotions < quantity; totalspecialpotions++) {
 
@@ -248,13 +278,13 @@ function SoloLeveling () {
 			}
 		}
 
-		print('SoloLeveling: drank Special Potions');
+		print('ÿc9SoloLevelingÿc0: drank Special Potions');
 
 		return true;
 	};
 
 	this.organizeStash = function () {
-		if (Storage.Stash.UsedSpacePercent() < 75) {
+		if (Storage.Stash.UsedSpacePercent() < 85) {
 			return true;
 		}
 
@@ -406,7 +436,7 @@ function SoloLeveling () {
 		}
 
 		if (me.diff !== mercDiff && me.diff === 0 && me.gold < 25000 || me.diff === mercDiff && (me.diff === 0 && me.gold < 25000 || me.gold < 100000)) {
-			print('SoloLeveling: not enough gold to hire merc.');
+			print('ÿc9SoloLevelingÿc0: not enough gold to hire merc.');
 
 			return true;
 		}
@@ -437,13 +467,13 @@ function SoloLeveling () {
 
 				if (me.diff !== mercDiff && me.diff === 0) {
 					if (merc.getSkill(tempMercAura, 1)) {
-						print('SoloLeveling: prayer merc hired.');
+						print('ÿc9SoloLevelingÿc0: prayer merc hired.');
 						removeEventListener("gamepacket", this.gamePacket);
 						this.setupMerc();
 
 						return true;
 					} else {
-						print('SoloLeveling: temp merc not available. will try later');
+						print('ÿc9SoloLevelingÿc0: temp merc not available. will try later');
 
 						return false;
 					}
@@ -451,12 +481,12 @@ function SoloLeveling () {
 
 				if (me.diff === mercDiff) {
 					if (merc.getSkill(mercAuraWanted, 1)) {
-						print('SoloLeveling: ' + mercAuraName + ' merc hired.');
+						print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc hired.');
 						removeEventListener("gamepacket", this.gamePacket);
 
 						return true;
 					} else {
-						print('SoloLeveling: ' + mercAuraName + ' merc not available. try later.');
+						print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
 
 						return false;
 					}
@@ -800,7 +830,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([17, 19], true)) {
-			print("SoloLeveling: Failed to move to Mausoleum");
+			print("ÿc9SoloLevelingÿc0: Failed to move to Mausoleum");
 		}
 
 		Attack.clearLevel();
@@ -822,7 +852,7 @@ function SoloLeveling () {
 				Precast.doPrecast(true);
 
 				if (!Pather.moveToPreset(me.area, 2, 30, 5, 5)) {
-					throw new Error("SoloLeveling: Failed to move to Tree of Inifuss");
+					throw new Error("ÿc9SoloLevelingÿc0: Failed to move to Tree of Inifuss");
 				}
 
 				let tree = getUnit(2, 30);
@@ -869,7 +899,7 @@ function SoloLeveling () {
 
 		if (!gibbet.mode) {
 			if (!Pather.moveToPreset(me.area, 2, 26, 0, 0, true, true)) {
-				throw new Error("SoloLeveling: Failed to move to Cain's Gibbet");
+				throw new Error("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
 			}
 
 			Misc.openChest(gibbet);
@@ -896,7 +926,7 @@ function SoloLeveling () {
 			Pather.moveToPreset(me.area, 2, 580);
 			Attack.clear(20, 0, getLocaleString(2875));
 		} catch (err) {
-			print('SoloLeveling: Failed to kill Countess');
+			print('ÿc9SoloLevelingÿc0: Failed to kill Countess');
 		}
 
 		Pickit.pickItems();
@@ -919,13 +949,13 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([7, 12], true)) {
-			print("SoloLeveling: Failed to move to Pit level 1");
+			print("ÿc9SoloLevelingÿc0: Failed to move to Pit level 1");
 		}
 
 		Attack.clearLevel();
 
 		if (!Pather.moveToExit(16, true)) {
-			print("SoloLeveling: Failed to move to Pit level 2");
+			print("ÿc9SoloLevelingÿc0: Failed to move to Pit level 2");
 		}
 
 		Attack.clearLevel();
@@ -963,7 +993,7 @@ function SoloLeveling () {
 		try {
 			Attack.kill(156); // kill Andariel
 		} catch (err) {
-			print('SoloLeveling: Failed to kill Andy');
+			print('ÿc9SoloLevelingÿc0: Failed to kill Andy');
 		}
 
 		delay(2000); // Wait for minions to die.
@@ -999,7 +1029,7 @@ function SoloLeveling () {
 		try {
 			Attack.kill(229); // Radament
 		} catch (err) {
-			print('SoloLeveling: Failed to kill Radament');
+			print('ÿc9SoloLevelingÿc0: Failed to kill Radament');
 		}
 
 		Pickit.pickItems();
@@ -1126,7 +1156,7 @@ function SoloLeveling () {
 		try {
 			Pather.moveToPreset(me.area, 2, 357, -3, -3);
 		} catch (err) {
-			print('SoloLeveling: Failed to move to summoner');
+			print('ÿc9SoloLevelingÿc0: Failed to move to summoner');
 
 			return false;
 		}
@@ -1134,7 +1164,7 @@ function SoloLeveling () {
 		try {
 			Attack.clear(15, 0, 250); // The SummonerAttack.clear(15, 0, 250); // The Summoner
 		} catch (err) {
-			print('SoloLeveling: Failed to kill summoner');
+			print('ÿc9SoloLevelingÿc0: Failed to kill summoner');
 
 			return false;
 		}
@@ -1159,6 +1189,34 @@ function SoloLeveling () {
 
 		return true;
 
+	};
+
+	this.ancienttunnels = function () {
+		if (!Pather.accessToAct(2) || me.charlvl < respecTwo) {
+			return true;
+		}
+
+		this.townTasks();
+		me.overhead("ancient tunnels");
+
+		Pather.useWaypoint(44);
+		Precast.doPrecast(true);
+
+		if (Pather.moveToPreset(me.area, 2, 580) && Misc.openChests(5)) {
+			Pickit.pickItems();
+		}
+
+		if (getPresetUnit(me.area, 1, 751) && Pather.moveToPreset(me.area, 1, 751)) {
+			Attack.clear(15, 0, getLocaleString(2886));
+		}
+
+		if (!Pather.moveToExit(65, true)) {
+			throw new Error("ÿc9SoloLevelingÿc0: Failed to move to Ancient Tunnels");
+		}
+
+		Attack.clearLevel();
+
+		return true;
 	};
 
 	this.staff = function () {
@@ -1225,7 +1283,7 @@ function SoloLeveling () {
 		let hstaff = me.getItem(91);
 
 		if (!hstaff) {
-			me.overhead("SoloLeveling: Failed to make staff");
+			me.overhead("ÿc9SoloLevelingÿc0: Failed to make staff");
 
 			return false;
 		}
@@ -1352,7 +1410,7 @@ function SoloLeveling () {
 				try {
 					this.amulet();
 				} catch (err) {
-					print('SoloLeveling: Failed attempt to get amulet');
+					print('ÿc9SoloLevelingÿc0: Failed attempt to get amulet');
 				}
 			}
 		}
@@ -1362,7 +1420,7 @@ function SoloLeveling () {
 				try {
 					this.staff();
 				} catch (err) {
-					print('SoloLeveling: Failed attempt to get staff');
+					print('ÿc9SoloLevelingÿc0: Failed attempt to get staff');
 				}
 			}
 		}
@@ -1399,7 +1457,7 @@ function SoloLeveling () {
 			Pather.useUnit(2, 100, 73);
 			Attack.kill(211); // kill duriel
 		} catch (err) {
-			print('SoloLeveling: Failed to kill Duriel');
+			print('ÿc9SoloLevelingÿc0: Failed to kill Duriel');
 		}
 
 		Pickit.pickItems();
@@ -1437,7 +1495,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([76, 85], true)) {
-			print('SoloLeveling: Failed to get the eye');
+			print('ÿc9SoloLevelingÿc0: Failed to get the eye');
 		}
 
 		Town.goToTown();
@@ -1483,7 +1541,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([80, 92, 93], true) || !Pather.moveToPreset(me.area, 2, 405)) {
-			print('SoloLeveling: Failed to get the heart');
+			print('ÿc9SoloLevelingÿc0: Failed to get the heart');
 		}
 
 		Attack.clear(0x7); // clear level
@@ -1521,7 +1579,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(94, true) || !Pather.moveToPreset(me.area, 2, 193)) {
-			print('SoloLeveling: Failed to get LamEssen Tome');
+			print('ÿc9SoloLevelingÿc0: Failed to get LamEssen Tome');
 		}
 
 		let stand = getUnit(2, 193);
@@ -1560,7 +1618,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([88, 89, 91], true) || !Pather.moveToPreset(me.area, 2, 406)) {
-			print('SoloLeveling: Failed to get the Brain');
+			print('ÿc9SoloLevelingÿc0: Failed to get the Brain');
 		}
 
 		Attack.clear(0x7);
@@ -1658,10 +1716,10 @@ function SoloLeveling () {
 		if (flail) {
 			if (!Item.equip(flail, 4)) {
 				Pickit.pickItems();
-				throw new Error("SoloLeveling: failed to equip Khalim's Will. (equipFlail)");
+				throw new Error("ÿc9SoloLevelingÿc0: failed to equip Khalim's Will. (equipFlail)");
 			}
 		} else {
-			throw new Error("SoloLeveling: Lost Khalim's Will before trying to equip it. (equipFlail)");
+			throw new Error("ÿc9SoloLevelingÿc0: Lost Khalim's Will before trying to equip it. (equipFlail)");
 		}
 
 		if (me.itemoncursor) { // Seems like Item.equip() doesn't want to keep whatever the sorc has for a weapon, so lets put it into inventory without checking it against Pickit.
@@ -1777,7 +1835,7 @@ function SoloLeveling () {
 		delay(250 + me.ping);
 
 		if (!Pather.usePortal(83, me.name)) {
-			throw new Error("SoloLeveling: Failed to go back to Travincal from town");
+			throw new Error("ÿc9SoloLevelingÿc0: Failed to go back to Travincal from town");
 		}
 
 		delay(250 + me.ping);
@@ -1820,7 +1878,7 @@ function SoloLeveling () {
 		try {
 			Attack.kill(242);
 		} catch (err) {
-			print('SoloLeveling: Failed to kill Mephisto');
+			print('ÿc9SoloLevelingÿc0: Failed to kill Mephisto');
 		}
 
 		Config.MercWatch = true;
@@ -1853,7 +1911,7 @@ function SoloLeveling () {
 			try {
 				Attack.kill(256);
 			} catch (err) {
-				print('SoloLeveling: Failed to kill Izual');
+				print('ÿc9SoloLevelingÿc0: Failed to kill Izual');
 			}
 		}
 
@@ -2092,7 +2150,51 @@ function SoloLeveling () {
 				}
 			}
 
-			throw new Error("SoloLeveling: Failed to open seal (id " + classid + ")");
+			throw new Error("ÿc9SoloLevelingÿc0: Failed to open seal (id " + classid + ")");
+		};
+
+		this.vizier = function () {
+			this.openSeal(395);
+			this.openSeal(396);
+
+			if (this.vizLayout === 1) {
+				Pather.moveTo(7691, 5292, 3, 30);
+			} else {
+				Pather.moveTo(7695, 5316, 3, 30);
+			}
+
+			if (!this.getBoss(getLocaleString(2851))) {
+				throw new Error("ÿc9SoloLevelingÿc0: Failed Vizier");
+			}
+		};
+
+		this.seis = function () {
+			this.openSeal(394);
+
+			if (this.seisLayout === 1) {
+				Pather.moveTo(7771, 5196, 3, 30);
+			} else {
+				Pather.moveTo(7798, 5186, 3, 30);
+			}
+
+			if (!this.getBoss(getLocaleString(2852))) {
+				throw new Error("ÿc9SoloLevelingÿc0: Failed Seis");
+			}
+		};
+
+		this.infector = function () {
+			this.openSeal(393);
+			this.openSeal(392);
+
+			if (this.infLayout === 1) {
+				delay(1);
+			} else {
+				Pather.moveTo(7928, 5295, 3, 30); // temp
+			}
+
+			if (!this.getBoss(getLocaleString(2853))) {
+				throw new Error("ÿc9SoloLevelingÿc0: Failed Infector");
+			}
 		};
 
 		this.townTasks();
@@ -2100,58 +2202,43 @@ function SoloLeveling () {
 		Pather.useWaypoint(107);
 		Precast.doPrecast(true);
 		Pather.moveToExit(108, true);
+		Attack.clearLevel();
 
 		this.initLayout();
-		this.openSeal(395);
-		this.openSeal(396);
-
-		if (this.vizLayout === 1) {
-			Pather.moveTo(7691, 5292);
-		} else {
-			Pather.moveTo(7695, 5316);
-		}
-
-		if (!this.getBoss(getLocaleString(2851))) {
-			throw new Error("SoloLeveling: Failed Vizier");
-		}
-
-		this.openSeal(394);
-
-		if (this.seisLayout === 1) {
-			Pather.moveTo(7771, 5196);
-		} else {
-			Pather.moveTo(7798, 5186);
-		}
-
-		if (!this.getBoss(getLocaleString(2852))) {
-			throw new Error("SoloLeveling: Failed Seis");
-		}
-
-		this.openSeal(393);
-		this.openSeal(392);
-
-		if (this.infLayout === 1) {
-			delay(1);
-		} else {
-			Pather.moveTo(7928, 5295); // temp
-		}
-
-		if (!this.getBoss(getLocaleString(2853))) {
-			throw new Error("SoloLeveling: Failed Infector");
-		}
-
-		Pather.moveTo(7788, 5292);
+		this.vizier();
+		this.seis();
+		this.infector();
 
 		try {
+			Pather.moveTo(7788, 5292, 3, 30);
+			me.overhead("attempting Diablo");
 			this.diabloPrep();
-		} catch (err) {
-			print('Diablo not found');
-		}
-
-		try {
 			Attack.kill(243); // Diablo
-		} catch (err) {
-			print('SoloLeveling: Failed to kill Diablo');
+		} catch (error) {
+			print("ÿc9SoloLevelingÿc0: Diablo not found. Checking seal bosses.");
+			this.infector();
+			this.seis();
+			this.vizier();
+			me.overhead("second attempt");
+			Pather.moveTo(7788, 5292, 3, 30);
+
+			try {
+				this.diabloPrep();
+				Attack.kill(243); // Diablo
+			} catch (err) {
+				try {
+					print("ÿc9SoloLevelingÿc0: Diablo not found. Attempting level clear.");
+					Attack.clearLevel();
+					me.overhead("third attempt");
+					Pather.moveTo(7788, 5292, 3, 30);
+					this.diabloPrep();
+					Attack.kill(243); // Diablo
+				} catch (e) {
+					print("ÿc9SoloLevelingÿc0: Diablo not found.");
+
+					return true;
+				}
+			}
 		}
 
 		Pickit.pickItems();
@@ -2283,7 +2370,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(114, true) || !Pather.moveToPreset(me.area, 2, 460)) {
-			throw new Error("SoloLeveling: Failed to move to Anya");
+			throw new Error("ÿc9SoloLevelingÿc0: Failed to move to Anya");
 		}
 
 		delay(1000);
@@ -2318,7 +2405,7 @@ function SoloLeveling () {
 			clickItem(1, scroll);
 		}
 
-		print('SoloLeveling: used scroll of resistance');
+		print('ÿc9SoloLevelingÿc0: used scroll of resistance');
 
 		return true;
 	};
@@ -2371,7 +2458,7 @@ function SoloLeveling () {
 			Pather.usePortal(120, me.name);
 
 			if (!Pather.moveToPreset(me.area, 2, 546)) {
-				throw new Error("SoloLeveling: Failed to move to ancients' altar");
+				throw new Error("ÿc9SoloLevelingÿc0: Failed to move to ancients' altar");
 			}
 
 			let altar = getUnit(2, 546);
@@ -2403,7 +2490,7 @@ function SoloLeveling () {
 			Pather.moveToExit([128, 129], true);
 			Pather.getWP(129);
 		} catch (err) {
-			print('SoloLeveling: Failed to WSK Waypoint');
+			print('ÿc9SoloLevelingÿc0: Failed to WSK Waypoint');
 		}
 
 		return true;
@@ -2580,14 +2667,14 @@ function SoloLeveling () {
 		Pather.moveTo(15095, 5029);
 
 		if (getUnit(1, 691)) {
-			print("SoloLeveling: Dolls found! NG.");
+			print("ÿc9SoloLevelingÿc0: Dolls found! NG.");
 			me.overhead("Dolls found! NG.");
 
 			return true;
 		}
 
 		if (getUnit(1, 641)) {
-			print("SoloLeveling: Souls found! NG.");
+			print("ÿc9SoloLevelingÿc0: Souls found! NG.");
 			me.overhead("Souls found! NG.");
 
 			return true;
@@ -2662,7 +2749,7 @@ function SoloLeveling () {
 
 		if (me.charlvl < lvlCap || me.charlvl >= lvlCap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
 			Pickit.pickItems();
-			print('SoloLeveling: missing requirements for next difficulty.');
+			print('ÿc9SoloLevelingÿc0: missing requirements for next difficulty.');
 
 			return true;
 		}
@@ -2680,7 +2767,7 @@ function SoloLeveling () {
 		if (portal) {
 			Pather.usePortal(null, null, portal);
 		} else {
-			throw new Error("SoloLeveling: Couldn't access portal.");
+			throw new Error("ÿc9SoloLevelingÿc0: Couldn't access portal.");
 		}
 
 		Pather.moveTo(15134, 5923);
@@ -2688,7 +2775,7 @@ function SoloLeveling () {
 		try {
 			Attack.kill(544); // Baal
 		} catch (err) {
-			print('SoloLeveling: Failed to kill Baal');
+			print('ÿc9SoloLevelingÿc0: Failed to kill Baal');
 		}
 
 		Pickit.pickItems();
@@ -2711,7 +2798,7 @@ function SoloLeveling () {
 			}
 
 			if (j === 3) {
-				me.overhead("SoloLeveling: sequence " + sequence[k] + " failed.");
+				me.overhead("sequence " + sequence[k] + " failed.");
 			}
 		}
 	};
@@ -2722,9 +2809,9 @@ function SoloLeveling () {
 	let level = ['Normal', 'Nightmare', 'Hell'][me.diff];
 
 	if (this.checkQuest(40, 0) || me.gametype === 0 && this.checkQuest(26, 0)) {
-		D2Bot.printToConsole('SoloLeving: ' + level + ' difficulty completed. Character Level: ' + me.charlvl + '. Running script again!');
+		D2Bot.printToConsole('SoloLeveling: ' + level + ' difficulty completed. Character Level: ' + me.charlvl + '. Running script again!');
 	} else {
-		D2Bot.printToConsole('SoloLeveling run completed. Running script again!');
+		D2Bot.printToConsole('SoloLeveling: run completed. Running script again!');
 	}
 
 	scriptBroadcast('quit');
@@ -3003,7 +3090,7 @@ Item.autoEquipMerc = function () {
 					classid = items[0].classid;
 
 					if (Item.equipMerc(items[0], bodyLoc[j])) {
-						print("SoloLeveling: equipped merc item.");
+						print("ÿc9SoloLevelingÿc0: equipped merc item.");
 
 					}
 

@@ -1,11 +1,11 @@
 /**
  *    @filename   Sorceress.BlizzardBuild.js
- *    @desc      Sorceress blizzard build for after level 25
+ *    @desc      Sorceress blizzard build for after respecOne
  */
 
 const build = {
 	stats: [
-		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 300], ["strength", 108], ["vitality", "all"]
+		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
 	],
 	skills: [
 		[37, 1], // warmth
