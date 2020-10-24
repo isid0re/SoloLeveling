@@ -34,7 +34,35 @@ function SoloLeveling () {
 	};
 
 	this.townTasks = function () {
-		let prevTown = me.area;
+		if ( !me.inTown) {
+			Town.goToTown();
+		}
+
+		let prevTown;
+
+		switch (me.area) {
+		case 1:
+			prevTown = 1;
+
+			break;
+		case 40:
+			prevTown = 40;
+
+			break;
+		case 75:
+			prevTown = 75;
+
+			break;
+		case 103:
+			prevTown = 103;
+
+			break;
+		case 109:
+			prevTown = 109;
+
+			break;
+		}
+
 		this.unfinishedQuests();
 		Cubing.doCubing();
 		Runewords.makeRunewords();
@@ -62,7 +90,7 @@ function SoloLeveling () {
 		this.organizeInventory();
 		this.characterRespec();
 
-		if (me.area !== prevTown) {
+		if (me.inTown && me.area !== prevTown) {
 			Pather.useWaypoint(prevTown);
 		}
 
@@ -1771,80 +1799,72 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("travincal");
 
-		this.buildList = function (checkColl) {
-			let monsterList = [];
-			let monster = getUnit(1);
-
-			if (monster) {
-				do {
-					if ([345, 346, 347].indexOf(monster.classid) > -1 && Attack.checkMonster(monster) && (!checkColl || !checkCollision(me, monster, 0x1))) {
-						monsterList.push(copyUnit(monster));
-					}
-				} while (monster.getNext());
-			}
-
-			return monsterList;
-		};
-
-		Pather.useWaypoint(83);
+		Pather.useWaypoint(83); // go to trav
 		Precast.doPrecast(true);
 
-		let orgX = me.x;
-		let orgY = me.y;
-
-		if (me.getSkill(143, 0) && !me.getSkill(54, 0) && !me.getStat(97, 54)) {
-			let coords = [60, -53, 64, -72, 78, -72, 74, -88];
-
-			for (let movement = 0; movement < coords.length; movement += 2) {
-				if (movement % 4 === 0) {
-					Pather.moveTo(orgX + coords[movement], orgY + coords[movement + 1]);
-				} else {
-					Skill.cast(143, 0, orgX + coords[movement], orgY + coords[movement + 1]);
-					Attack.clearList(this.buildList(1));
-				}
-			}
-
-			Attack.clearList(this.buildList(0));
-		} else {
-			Pather.moveTo(orgX + 101, orgY - 56);
-
-			// Stack Merc
-			if (me.classid === 4 && !me.getSkill(54, 1) && me.gametype === 1) {
-				Pather.moveToExit([100, 83], true);
-			}
-
-			Attack.clearList(this.buildList(0));
-		}
-
-		Pickit.pickItems();
-
 		let Ismail = getUnit(1, "Ismail Vilehand");
-		let Toorc = getUnit(1, "Toorc Icefist");
 
-		if (this.checkQuest(21, 0) || Ismail && !Attack.canAttack(Ismail) || Toorc && !Attack.canAttack(Toorc)) {
+		if (Ismail && !Attack.canAttack(Ismail)) { // exit if ismail immune
+			print("ÿc9SoloLevelingÿc0: Failed Travincal. Ismail is immune.");
+
 			return true;
 		}
 
-		if (!me.inTown) {
-			Town.goToTown();
+		let council = {
+			x: me.x + 76,
+			y: me.y - 67
+		};
+
+		Pather.moveToUnit(council);
+
+		try { // kill ismail
+			Attack.kill(Ismail);
+		} catch (error) {
+			try {
+				Attack.clear(30);
+			} catch (err) {
+				print('ÿc9SoloLevelingÿc0: Failed to kill ismail');
+
+				return false;
+			}
 		}
 
-		Town.doChores();
-		this.cubeFlail();
-		this.equipFlail();
-		delay(250 + me.ping);
-
-		if (!Pather.usePortal(83, me.name)) {
-			throw new Error("ÿc9SoloLevelingÿc0: Failed to go back to Travincal from town");
-		}
-
-		delay(250 + me.ping);
-		Config.PacketCasting = 1;
-		this.smashOrb();
 		Pickit.pickItems();
-		Item.autoEquip();
-		Pather.moveToExit(100, true);
-		Pather.getWP(101);
+
+		if (!this.checkQuest(21, 0)) { //quest not complete
+			if (!me.getItem(173) || !me.getItem(174)) { // pickup khalims flail
+				let khalimsflail = getUnit(4, 173);
+				Pickit.pickItem(khalimsflail);
+			}
+
+			if (!Pather.moveToPreset(83, 2, 404)) { // go to orb
+				print('ÿc9SoloLevelingÿc0: Failed to move to compelling orb');
+			}
+
+			Attack.clear(5); // clear area around orb
+
+			if (!me.inTown) { // go to town
+				Town.goToTown();
+			}
+
+			if (!me.getItem(174)) { // cube flail to will
+				this.cubeFlail();
+				delay(250 + me.ping);
+			}
+
+			this.equipFlail();
+			delay(250 + me.ping);
+
+			if (!Pather.usePortal(83, me.name)) { // return to Trav
+				throw new Error("ÿc9SoloLevelingÿc0: Failed to go back to Travincal from town");
+			}
+
+			this.smashOrb(); // smash orb
+
+			Pather.moveToExit(100, true); // take entrance
+			Item.autoEquip(); // equip previous weapon
+			Pather.getWP(101); // get wp
+		}
 
 		return true;
 	};
