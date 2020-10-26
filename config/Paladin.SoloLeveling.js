@@ -406,7 +406,7 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.AncientsPledge, "Akaran Targe"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Akaran Rondache"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Protector Shield"]);
-			Config.Runewords.push([Runeword.AncientsPledge,"Gilded Shield"]);
+			Config.Runewords.push([Runeword.AncientsPledge, "Gilded Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Sacred Targe"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
