@@ -333,7 +333,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == armor # [frw] == 25");
 		}
 
-		if (Item.getEquippedItem(3).tier < 33) { // Smoke
+		if (Item.getEquippedItem(3).tier < 38) { // Smoke
 			var Smoke = [
 				"[Name] == NefRune # # [MaxQuantity] == 1",
 				"[Name] == LumRune # # [MaxQuantity] == 1",
