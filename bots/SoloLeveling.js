@@ -6,13 +6,10 @@
 *	@TODO		- add dynamic tiers for autoequip
 */
 
-if (!isIncluded("common/Misc.js")) {
-	include("common/Misc.js");
-}
-
-if (!isIncluded("NTItemParser.dbl")) {
-	include("NTItemParser.dbl");
-}
+// Character Respecialization Variables
+// ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+const respecOne = [ 0, 28, 0, 25, 0, 0, 0][me.classid];
+const respecTwo = [ 0, 75, 0, 85, 0, 0, 0][me.classid];
 
 //Start SoloLeveling Script
 function SoloLeveling () {
@@ -34,7 +31,7 @@ function SoloLeveling () {
 	};
 
 	this.townTasks = function () {
-		if ( !me.inTown) {
+		if (!me.inTown) {
 			Town.goToTown();
 		}
 
@@ -90,13 +87,13 @@ function SoloLeveling () {
 		this.organizeInventory();
 		this.characterRespec();
 
-		if (me.inTown && me.area !== prevTown) {
-			Pather.useWaypoint(prevTown);
-		}
-
 		if ((me.classid !== 1 || me.classid === 1 && me.charlvl < respecOne) && (me.area === 40 || me.area === 75)) {
 			this.buyPots(8, "Stamina");
 			this.drinkPots();
+		}
+
+		if (me.inTown && me.area !== prevTown) {
+			Pather.useWaypoint(prevTown);
 		}
 
 		return true;
@@ -536,7 +533,8 @@ function SoloLeveling () {
 			return true;
 		}
 
-		me.overhead('setup merc');
+		me.overhead('Pickit: added merc items');
+		print("ÿc9SoloLevelingÿc0: merc items loaded to Pickit");
 
 		var mercHelm = [
 			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 8 && [ias] >= 20 # [Merctier] == 8",
@@ -551,38 +549,61 @@ function SoloLeveling () {
 		NTIP.arrayLooping(mercHelm);
 
 		var mercArmor = [
-			"[Type] == armor && [flag] == runeword # [defense] >= 800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 38",
-			"[Type] == armor && [flag] == runeword # [defense] >= 775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 37",
-			"[Type] == armor && [flag] == runeword # [defense] >= 750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 36",
-			"[Type] == armor && [flag] == runeword # [defense] >= 725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 35",
-			"[Type] == armor && [flag] == runeword # [defense] >= 700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 34",
-			"[Type] == armor && [flag] == runeword # [defense] >= 675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 33",
-			"[Type] == armor && [flag] == runeword # [defense] >= 650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 32",
-			"[Type] == armor && [flag] == runeword # [defense] >= 625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 31",
-			"[Type] == armor && [flag] == runeword # [defense] >= 600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 30",
-			"[Type] == armor && [flag] == runeword # [defense] >= 575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 29",
-			"[Type] == armor && [flag] == runeword # [defense] >= 550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 28",
-			"[Type] == armor && [flag] == runeword # [defense] >= 525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 27",
-			"[Type] == armor && [flag] == runeword # [defense] >= 500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 26",
-			"[Type] == armor && [flag] == runeword # [defense] >= 475 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 25",
-			"[Type] == armor && [flag] == runeword # [defense] >= 450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 24",
-			"[Type] == armor && [flag] == runeword # [defense] >= 425 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 23",
-			"[Type] == armor && [flag] == runeword # [defense] >= 400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 22",
-			"[Type] == armor && [flag] == runeword # [defense] >= 375 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 21",
-			"[Type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [Merctier] == 20",
-			"[Name] == KrakenShell && [Quality] == Unique # [enhanceddefense] >= 170 && [strength] >= 40 # [Merctier] == 19",
-			"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # [enhanceddefense] >=160 && ([maxhp] == 60 || [coldresist] == 50) # [Merctier] == 18",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 450 && [fireresist] == 50 # [merctier] == 17",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 425 && [fireresist] == 50 # [merctier] == 16",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 400 && [fireresist] == 50 # [merctier] == 15",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 375 && [fireresist] == 50 # [merctier] == 14",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 350 && [fireresist] == 50 # [merctier] == 13",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 225 && [fireresist] == 50 # [merctier] == 12",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 138 && [fireresist] == 50 # [merctier] == 11",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 122 && [fireresist] == 50 # [merctier] == 10",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [fireresist] == 50 # [merctier] == 9",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [fireresist] == 50 # [merctier] == 8",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [fireresist] == 50 # [merctier] == 7",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 62",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 61",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 60",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 59",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 58",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 56",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 55",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 54",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 53",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 52",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 51",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 50",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 49",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 48",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 47",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1300 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 46",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1200 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 45",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1100 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 44",
+			"[Type] == armor && [flag] == runeword # [defense] >= 1000 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 43",
+			"[Type] == armor && [flag] == runeword # [defense] >= 800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 42",
+			"[Type] == armor && [flag] == runeword # [defense] >= 775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 41",
+			"[Type] == armor && [flag] == runeword # [defense] >= 750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 40",
+			"[Type] == armor && [flag] == runeword # [defense] >= 725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 39",
+			"[Type] == armor && [flag] == runeword # [defense] >= 700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 38",
+			"[Type] == armor && [flag] == runeword # [defense] >= 675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 37",
+			"[Type] == armor && [flag] == runeword # [defense] >= 650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 36",
+			"[Type] == armor && [flag] == runeword # [defense] >= 625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 35",
+			"[Type] == armor && [flag] == runeword # [defense] >= 600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 34",
+			"[Type] == armor && [flag] == runeword # [defense] >= 575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 33",
+			"[Type] == armor && [flag] == runeword # [defense] >= 550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 32",
+			"[Type] == armor && [flag] == runeword # [defense] >= 525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 31",
+			"[Type] == armor && [flag] == runeword # [defense] >= 500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 30",
+			"[Type] == armor && [flag] == runeword # [defense] >= 475 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 29",
+			"[Type] == armor && [flag] == runeword # [defense] >= 450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 28",
+			"[Type] == armor && [flag] == runeword # [defense] >= 425 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 27",
+			"[Type] == armor && [flag] == runeword # [defense] >= 400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 26",
+			"[Type] == armor && [flag] == runeword # [defense] >= 375 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 25",
+			"[Type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [Merctier] == 24",
+			"[Name] == KrakenShell && [Quality] == Unique # [enhanceddefense] >= 170 && [strength] >= 40 # [Merctier] == 23",
+			"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # [enhanceddefense] >=160 && ([maxhp] == 60 || [coldresist] == 50) # [Merctier] == 22",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 900 && [fireresist] == 50 # [merctier] == 21",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 875 && [fireresist] == 50 # [merctier] == 20",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 850 && [fireresist] == 50 # [merctier] == 19",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 825 && [fireresist] == 50 # [merctier] == 18",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 800 && [fireresist] == 50 # [merctier] == 17",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 780 && [fireresist] == 50 # [merctier] == 16",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 740 && [fireresist] == 50 # [merctier] == 15",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 700 && [fireresist] == 50 # [merctier] == 14",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 650 && [fireresist] == 50 # [merctier] == 13",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 610 && [fireresist] == 50 # [merctier] == 12",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 390 && [fireresist] == 50 # [merctier] == 11",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 240 && [fireresist] == 50 # [merctier] == 10",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 213 && [fireresist] == 50 # [merctier] == 9",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 194 && [fireresist] == 50 # [merctier] == 8",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 178 && [fireresist] == 50 # [merctier] == 7",
 			"[type] == armor # [enhanceddefense] >= 150 && [ias] >= 15 && [fhr] >= 15 && [dexterity] >= 15 # [merctier] == 6",
 		];
 		NTIP.arrayLooping(mercArmor);
@@ -727,7 +748,9 @@ function SoloLeveling () {
 		Town.heal();
 		Town.buyPotions();
 
-		me.overhead('quest items added');
+		me.overhead('Pickit: added quest items');
+		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
+
 		var questItems = [
 			"[Name] == ScrollOfInifuss",
 			"[Name] == KeyToTheCairnStones",
@@ -749,7 +772,9 @@ function SoloLeveling () {
 		NTIP.arrayLooping(questItems);
 		delay(500);
 
-		me.overhead('general items added');
+		me.overhead('Pickit: added general items');
+		print("ÿc9SoloLevelingÿc0: general items loaded to Pickit");
+
 		var generalItems = [
 			"[name] == tomeoftownportal",
 			"[name] == gold # [gold] >= 500",
@@ -1336,6 +1361,15 @@ function SoloLeveling () {
 			if (hstaff.location === 7) {
 				Town.goToTown();
 				Storage.Inventory.MoveTo(hstaff);
+				me.cancel();
+				Pather.usePortal(null, me.name);
+			}
+
+			if (hstaff.location === 6) {
+				Town.goToTown();
+				Cubing.openCube();
+				Storage.Inventory.MoveTo(hstaff);
+				me.cancel();
 				Pather.usePortal(null, me.name);
 			}
 		}
@@ -2379,7 +2413,7 @@ function SoloLeveling () {
 	};
 
 	this.anya = function () {
-		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(37, 1)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(37, 0)) {
 			return true;
 		}
 
@@ -2399,7 +2433,7 @@ function SoloLeveling () {
 
 		Pather.moveToUnit(anya);
 		sendPacket(1, 0x13, 4, 0x2, 4, anya.gid);
-		delay(300);
+		delay(300 + me.ping);
 		me.cancel();
 		Town.goToTown();
 		Town.move(NPC.Malah);
@@ -2410,14 +2444,14 @@ function SoloLeveling () {
 
 		Pather.usePortal(114, me.name);
 		anya.interact();
-		delay(300);
+		delay(300 + me.ping);
 		me.cancel();
 
 		Town.goToTown();
 		Town.move(NPC.Malah);
 		malah.openMenu();
 		me.cancel();
-		delay(500);
+		delay(500 + me.ping);
 
 		let scroll = me.getItem(646);
 
@@ -2427,90 +2461,138 @@ function SoloLeveling () {
 
 		print('ÿc9SoloLevelingÿc0: used scroll of resistance');
 
+		Town.move(NPC.Anya);
+		let townAnya = getUnit(1, NPC.Anya);
+		townAnya.openMenu();
+		me.cancel();
+
 		return true;
 	};
 
 	this.ancients = function () {
-		if (me.gametype === 0 || !Pather.accessToAct(5) || me.charlvl < 20 && me.diff === 0 || me.charlvl < 40 && me.diff === 1 || me.charlvl < 60 && me.diff === 2 ) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(39, 0)) {
 			return true;
 		}
 
-		for (let attempt = 0; attempt < 5; attempt += 1) {
+		let canAncients = function () { // ancients resists
+			let ancient = getUnit(1);
 
-			if (this.checkQuest(39, 0)) {
-				return true;
+			if (ancient) {
+				do {
+					if (!ancient.getParent() && !Attack.canAttack(ancient)) {
+						return false;
+					}
+				} while (ancient.getNext());
 			}
 
-			this.townTasks();
-			me.overhead("ancients");
+			return true;
+		};
 
-			Pather.useWaypoint(118, true);
-			Precast.doPrecast(true);
+		let touchAltar = function () { // touch altar
+			let tick = getTickCount();
 
-			Pather.moveToExit(120, true);
+			while (getTickCount() - tick < 5000) {
+				if (getUnit(2, 546)) {
+					break;
+				}
 
-			Town.goToTown();
-			this.townTasks();
-
-			let tempConfig = Misc.copy(Config);
-			me.overhead('saved settings');
-			let updateConfig = {
-				TownCheck: false,
-				MercWatch: false,
-				HealStatus: false,
-				TownHP: 0,
-				TownMP: 0,
-				MPBuffer: 15,
-				HPBuffer: 15,
-				UseMercRejuv: 25,
-				LifeChicken: 5,
-				ManaChicken: 0,
-				MercChicken: 0
-			};
-
-			me.overhead('updated settings');
-			Object.assign(Config, updateConfig);
-
-			this.buyPots(10, "Thawing"); // thawing
-			this.buyPots(10, "Antidote"); // antidote
-			this.drinkPots();
-			Town.buyPotions();
-			Pather.usePortal(120, me.name);
-
-			if (!Pather.moveToPreset(me.area, 2, 546)) {
-				throw new Error("ÿc9SoloLevelingÿc0: Failed to move to ancients' altar");
+				delay(20);
 			}
 
 			let altar = getUnit(2, 546);
-			Pather.moveToUnit(altar);
-			Misc.openChest(altar);
 
 			if (altar) {
 				while (altar.mode !== 2) {
 					Pather.moveToUnit(altar);
-					Misc.openChest(altar);
-					delay(2000 + me.ping);
+					altar.interact();
+					delay(200 + me.ping);
 					me.cancel();
 				}
+
+				return true;
 			}
 
-			while (!getUnit(1, 541)) {
-				delay(250);
-			}
+			return false;
+		};
 
-			Attack.clear(50);
-			Pather.moveTo(10048, 12628);
-			me.cancel();
+		let ancientsPrep = function () { // ancients prep
+			Town.goToTown(); // prep to revised settings
+			Town.fillTome(518);
+			this.buyPots(10, "Thawing");
+			this.drinkPots();
+			this.buyPots(10, "Antidote");
+			this.drinkPots();
+			Town.buyPotions();
+			Pather.usePortal(120, me.name);
+		};
 
-			me.overhead('restored settings');
-			Object.assign(Config, tempConfig);
+		this.townTasks();
+		me.overhead("ancients");
+
+		Pather.useWaypoint(118, true);
+		Precast.doPrecast(true);
+		Pather.moveToExit(120, true); // enter at ancients plateau
+
+		let tempConfig = Misc.copy(Config); // save and update config settings
+		let updateConfig = {
+			TownCheck: false,
+			MercWatch: false,
+			HealStatus: false,
+			TownHP: 0,
+			TownMP: 0,
+			MPBuffer: 15,
+			HPBuffer: 15,
+			UseMercRejuv: 25,
+			LifeChicken: 5,
+			ManaChicken: 0,
+			MercChicken: 0
+		};
+
+		Town.goToTown();
+		this.townTasks();
+
+		me.overhead('updated settings');
+		Object.assign(Config, updateConfig);
+
+		this.buyPots(10, "Thawing"); // prep to revised settings
+		this.buyPots(10, "Antidote");
+		this.drinkPots();
+		Town.buyPotions();
+		Pather.usePortal(120, me.name);
+
+		if (!Pather.moveToPreset(me.area, 2, 546)) { // move to altar
+			throw new Error("ÿc9SoloLevelingÿc0: Failed to move to ancients' altar");
 		}
 
-		try {
+		touchAltar(); //activate altar
+
+		while (!getUnit(1, 541)) { //wait for ancients to spawn
+			delay(250);
+		}
+
+		while (!canAncients()) {// reroll ancients if unable to attack
+			Pather.makePortal(true);
+			ancientsPrep();
+			Pather.usePortal(120, me.name);
+			touchAltar();
+
+			while (!getUnit(1, 542)) {
+				delay(10);
+			}
+		}
+
+		Attack.clear(50);
+		Pather.moveTo(10048, 12628);
+		me.cancel();
+
+		me.overhead('restored settings');
+		Object.assign(Config, tempConfig);
+
+		try { //get WSK waypoint
 			Pather.moveToExit([128, 129], true);
 			Pather.getWP(129);
 		} catch (err) {
-			print('ÿc9SoloLevelingÿc0: Failed to WSK Waypoint');
+			print('ÿc9SoloLevelingÿc0: Cleared Ancients. Failed to get WSK Waypoint');
 		}
 
 		return true;
@@ -2831,7 +2913,7 @@ function SoloLeveling () {
 	if (this.checkQuest(40, 0) || me.gametype === 0 && this.checkQuest(26, 0)) {
 		D2Bot.printToConsole('SoloLeveling: ' + level + ' difficulty completed. Character Level: ' + me.charlvl + '. Running script again!');
 	} else {
-		D2Bot.printToConsole('SoloLeveling: run completed. Running script again!');
+		D2Bot.printToConsole('SoloLeveling: run completed. Character Level: ' + me.charlvl + '. Running script again!');
 	}
 
 	scriptBroadcast('quit');
@@ -2839,14 +2921,17 @@ function SoloLeveling () {
 	return true;
 }
 
-// Start Global Variables and functions
-//Respeclevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 28, 0, 25, 0, 0, 0][me.classid];
-const respecTwo = [ 0, 75, 0, 85, 0, 0, 0][me.classid];
+// Start Global Functions
 
-//NTIP INJECTOR
-NTIP.addLine = function (itemString) {
+if (!isIncluded("common/Misc.js")) {
+	include("common/Misc.js");
+}
 
+if (!isIncluded("NTItemParser.dbl")) {
+	include("NTItemParser.dbl");
+}
+
+NTIP.addLine = function (itemString) { //NTIP INJECTOR
 	let info = {
 		line: 1,
 		file: "SoloLeveling",
@@ -2905,8 +2990,7 @@ Item.equipMerc = function (item, bodyLoc) {
 		return false;
 	}
 
-	// Already equipped in the right slot
-	if (item.mode === 1 && item.bodylocation === bodyLoc) {
+	if (item.mode === 1 && item.bodylocation === bodyLoc) { // Already equipped in the right slot
 		return true;
 	}
 
@@ -2925,8 +3009,6 @@ Item.equipMerc = function (item, bodyLoc) {
 
 			if (item.bodylocation === bodyLoc) {
 				if (getCursorType() === 3) {
-					//Misc.click(0, 0, me);
-
 					cursorItem = getUnit(100);
 
 					if (cursorItem) {
@@ -2959,7 +3041,6 @@ Item.getEquippedItemMerc = function (bodyLoc) {
 	if (item) {
 		do {
 			if (item.bodylocation === bodyLoc && item.location === 1) {
-				//print("Current Merc item tier: " + NTIP.GetMercTier(item) + " (" + item.name + ")");
 				return {
 					classid: item.classid,
 					tier: NTIP.GetMercTier(item),
@@ -2971,8 +3052,7 @@ Item.getEquippedItemMerc = function (bodyLoc) {
 		} while (item.getNext());
 	}
 
-	// Don't have anything equipped in there
-	return {
+	return { // Don't have anything equipped in there
 		classid: -1,
 		tier: -1,
 		name: "none",
@@ -3033,8 +3113,7 @@ Item.autoEquipCheckMerc = function (item) {
 
 	if (tier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
-			// Low tier items shouldn't be kept if they can't be equipped
-			var oldTier = Item.getEquippedItemMerc(bodyLoc[i]).tier;
+			var oldTier = Item.getEquippedItemMerc(bodyLoc[i]).tier; // Low tier items shouldn't be kept if they can't be equipped
 
 			if (tier > oldTier && (Item.canEquipMerc(item) || !item.getFlag(0x10))) {
 				return true;
@@ -3075,8 +3154,7 @@ Item.autoEquipMerc = function () {
 
 	me.cancel();
 
-	// Remove items without tier
-	for (i = 0; i < items.length; i += 1) {
+	for (i = 0; i < items.length; i += 1) { // Remove items without tier
 		if (NTIP.GetMercTier(items[i]) === 0) {
 			items.splice(i, 1);
 
@@ -3142,10 +3220,8 @@ Item.removeItemsMerc = function () {
 	let items = mercenary.getItems();
 
 	if (items) {
-		//items.forEach(function(i) {
 		for (var i = 0; i < items.length; i++) {
 			clickItem(4, items[i].bodylocation);
-			//clickItem(4, i.bodylocation);
 			delay(me.ping * 2 + 500);
 
 			cursorItem = getUnit(100);

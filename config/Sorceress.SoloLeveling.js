@@ -124,7 +124,7 @@ function LoadConfig () {
 	Config.DodgeHP = 100; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
 	Config.CastStatic = 50;
-	Config.StaticList = ["Izual", "Diablo", "Colenzo the Annihilator", "Achmel the Cursed", "Bartuc the Bloody", "Ventar the Unholy", "Lister the Tormentor", "Baal"];
+	Config.StaticList = ["Mephisto", "Izual", "Lord De Seis", "Diablo", "Colenzo the Annihilator", "Achmel the Cursed", "Bartuc the Bloody", "Ventar the Unholy", "Lister the Tormentor", "Baal"];
 
 	/*-----------------------------------------*/
 	//			DO NOT TOUCH BELOW 			   //
@@ -270,11 +270,11 @@ function LoadConfig () {
 		}
 
 		//helm
-		if (Item.getEquippedItem(1).tier < 20) { // Lore
+		if (Item.getEquippedItem(1).tier < 26) { // Lore
 			var Lore = [
 				"[Name] == OrtRune # # [MaxQuantity] == 1",
 				"[Name] == SolRune # # [MaxQuantity] == 1",
-				"([Name] == Circlet || [Name] == Coronet || [Name] == FullHelm || [Name] == BoneHelm || [Name] == Sallet || [Name] == Casque) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
+				"([Name] == Sallet || [Name] == Casque || [Name] == DeathMask || [Name] == GrimHelm) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
 			];
 			NTIP.arrayLooping(Lore);
 
@@ -289,12 +289,18 @@ function LoadConfig () {
 				Config.Recipes.push([Recipe.Rune, "Amn Rune"]);
 			}
 
-			Config.Runewords.push([Runeword.Lore, "Circlet"]);
-			Config.Runewords.push([Runeword.Lore, "Coronet"]);
-			Config.Runewords.push([Runeword.Lore, "Full Helm"]);
-			Config.Runewords.push([Runeword.Lore, "Bone Helm"]);
+			if (me.diff !== 2) {
+				NTIP.addLine("([Name] == Circlet || [Name] == Coronet || [Name] == FullHelm || [Name] == BoneHelm) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1");
+				Config.Runewords.push([Runeword.Lore, "Circlet"]);
+				Config.Runewords.push([Runeword.Lore, "Coronet"]);
+				Config.Runewords.push([Runeword.Lore, "Full Helm"]);
+				Config.Runewords.push([Runeword.Lore, "Bone Helm"]);
+			}
+
 			Config.Runewords.push([Runeword.Lore, "Sallet"]);
 			Config.Runewords.push([Runeword.Lore, "Casque"]);
+			Config.Runewords.push([Runeword.Lore, "Death Mask"]);
+			Config.Runewords.push([Runeword.Lore, "Grim Helm"]);
 
 			Config.KeepRunewords.push("([type] == circlet || [type] == helm) # [LightResist] >= 25");
 		}
@@ -609,26 +615,32 @@ function LoadConfig () {
 			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 30 && [LightResist] >= 25 # [tier] == 18", // lore
 			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 50 && [LightResist] >= 25 # [tier] == 19", // lore
 			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 60 && [LightResist] >= 25 # [tier] == 20", // lore
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 0 # [tier] == 21",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 5 # [tier] == 22",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 10 # [tier] == 23",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 15 # [tier] == 24",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 20 # [tier] == 25",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 25 # [tier] == 26",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 30 # [tier] == 27",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 35 # [tier] == 28",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 40 # [tier] == 29",
-			"[Name] == sallet && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 30", // rockstopper
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 0 # [tier] == 31",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 5 # [tier] == 32",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 10 # [tier] == 33",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 15 # [tier] == 34",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 20 # [tier] == 35",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 25 # [tier] == 36",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 30 # [tier] == 37",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 35 # [tier] == 38",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 40 # [tier] == 39",
-			"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 40", // harlequin's crest
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 70 && [LightResist] >= 25 # [tier] == 21", // lore
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 80 && [LightResist] >= 25 # [tier] == 22", // lore
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [LightResist] >= 25 # [tier] == 23", // lore
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 100 && [LightResist] >= 25 # [tier] == 24", // lore
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 110 && [LightResist] >= 25 # [tier] == 25", // lore
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 120 && [LightResist] >= 25 # [tier] == 26", // lore
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 0 # [tier] == 27",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 5 # [tier] == 28",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 10 # [tier] == 29",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 15 # [tier] == 30",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 20 # [tier] == 31",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 25 # [tier] == 32",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 30 # [tier] == 33",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 35 # [tier] == 34",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 40 # [tier] == 35",
+			"[Name] == sallet && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 36", // rockstopper
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 0 # [tier] == 37",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 5 # [tier] == 38",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 10 # [tier] == 39",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 15 # [tier] == 40",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 20 # [tier] == 41",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 25 # [tier] == 42",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 30 # [tier] == 43",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 35 # [tier] == 44",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && ([fireresist]+[lightresist]+[coldresist]) >= 40 && [maxhp] >= 40 # [tier] == 45",
+			"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100", // harlequin's crest
 			//belt
 			"[type] == belt && [flag] != ethereal # ([fireresist]+[lightresist]+[coldresist]) >= 10 # [tier] == 1",
 			"[type] == belt && [flag] != ethereal # ([fireresist]+[lightresist]+[coldresist]) >= 15 # [tier] == 2",
@@ -701,24 +713,29 @@ function LoadConfig () {
 			"[type] == armor && [Flag] != Ethereal # ([coldresist] >= 20) + ([fireresist] >= 20) + ([lightresist] >= 20) >= 2 && [maxhp] >= 55 # [Tier] == 21",
 			"[type] == armor && [quality] == unique && [flag] != ethereal # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 # [tier] == 22",
 			"[type] == armor && [flag] != ethereal && [flag] == runeword # [fireresist] == 50 # [tier] == 23", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [fireresist] == 50  # [tier] == 24", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [fireresist] == 50 # [tier] == 25", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 122 && [fireresist] == 50 # [tier] == 26", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 138 && [fireresist] == 50 # [tier] == 27", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 225 && [fireresist] == 50 # [tier] == 28", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 350 && [fireresist] == 50 # [tier] == 29", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 375 && [fireresist] == 50 # [tier] == 30", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 400 && [fireresist] == 50 # [tier] == 31", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 425 && [fireresist] == 50 # [tier] == 32", //smoke
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 450 && [fireresist] == 50 # [tier] == 33", //smoke
-			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 30 # [tier] == 34", //vipermagi
-			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 31 # [tier] == 35", //vipermagi
-			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 32 # [tier] == 36", //vipermagi
-			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 33 # [tier] == 37", //vipermagi
-			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 34 # [tier] == 38", //vipermagi
-			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 35 # [tier] == 39", //vipermagi
-			"[name] == lacqueredplate && [quality] == set && [flag] != ethereal # # [tier] == 40", //talrasha's
-			"[type] == armor && [flag] == runeword && [flag] != ethereal # [defense] >= 450 && [strength] == 20 && [fireresist] == 65 # [tier] == 41", //ChainsofHonor
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 178 && [fireresist] == 50 # [tier] == 24", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 194 && [fireresist] == 50 # [tier] == 25", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 213 && [fireresist] == 50 # [tier] == 26", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 240 && [fireresist] == 50 # [tier] == 27", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 390 && [fireresist] == 50 # [tier] == 28", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 610 && [fireresist] == 50 # [tier] == 29", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 650 && [fireresist] == 50 # [tier] == 30", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 700 && [fireresist] == 50 # [tier] == 31", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 740 && [fireresist] == 50 # [tier] == 32", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 780 && [fireresist] == 50 # [tier] == 33", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 800 && [fireresist] == 50 # [tier] == 34", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 825 && [fireresist] == 50 # [tier] == 35", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 850 && [fireresist] == 50 # [tier] == 36", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 875 && [fireresist] == 50 # [tier] == 37", //smoke
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 900 && [fireresist] == 50 # [tier] == 38", //smoke
+			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 30 # [tier] == 39", //vipermagi
+			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 31 # [tier] == 40", //vipermagi
+			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 32 # [tier] == 41", //vipermagi
+			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 33 # [tier] == 42", //vipermagi
+			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 34 # [tier] == 43", //vipermagi
+			"[name] == serpentskinarmor && [quality] == unique && [flag] != ethereal # [fireresist] >= 35 # [tier] == 44", //vipermagi
+			"[name] == lacqueredplate && [quality] == set && [flag] != ethereal # # [tier] == 45", //talrasha's
+			"[type] == armor && [flag] == runeword && [flag] != ethereal # [defense] >= 450 && [strength] == 20 && [fireresist] == 65 # [tier] == 100", //ChainsofHonor
 			//shield
 			"[type] == shield && [flag] != ethereal # ([fireresist]+[lightresist]+[coldresist]) >= 5 # [tier] == 1",
 			"[type] == shield && [flag] != ethereal # ([fireresist]+[lightresist]+[coldresist]) >= 10 # [tier] == 2",
@@ -793,16 +810,16 @@ function LoadConfig () {
 			"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 45 # [Tier] == 9",
 			"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 50 # [Tier] == 10",
 			"[Type] == Amulet && [Quality] >= Magic # [FireResist]+[ColdResist]+[LightResist] >= 55 # [Tier] == 11",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 20 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] == 1 # [Tier] == 12",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 25 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] == 1 # [Tier] == 13",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 0 # [Tier] == 14",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 5 # [Tier] == 15",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 10 # [Tier] == 16",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 15 # [Tier] == 17",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 20 && [fcr] >= 0 # [Tier] == 18",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 20 && [fcr] >= 10 # [Tier] == 19",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && [maxhp] >= 20 && [fcr] >= 10 # [Tier] == 20",
-			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 3 && [maxhp] >= 20 && [fcr] >= 10 # [Tier] == 21",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 20 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] == 1 # [Tier] == 12",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 25 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] == 1 # [Tier] == 13",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 0 # [Tier] == 14",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 5 # [Tier] == 15",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 10 # [Tier] == 16",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 15 # [Tier] == 17",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] > 0 && [fcr] >= 0 # [Tier] == 18",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 1 && [maxhp] >= 20 && [fcr] >= 10 # [Tier] == 19",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 2 && [maxhp] > 0 && [fcr] >= 10 # [Tier] == 20",
+			"[Type] == Amulet && [Quality] == Rare # [FireResist]+[ColdResist]+[LightResist] >= 30 && [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab]+[SkillBlizzard]+[SkillGlacialSpike] >= 3 && [maxhp] >= 20 && [fcr] >= 10 # [Tier] == 21",
 			"[Type] == Amulet && [Quality] >= Set # [ItemAllSkills]+[SorceressSkills]+[ColdSkillTab] == 2 # [Tier] == 22",
 			"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 25 # [tier] == 23",
 			"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 26 # [tier] == 24",
@@ -822,14 +839,14 @@ function LoadConfig () {
 			"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 50 # [Tier] == 9",
 			"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 55 # [Tier] == 10",
 			"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 55 # [Tier] == 10",
-			"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 5 # tier == 11",
-			"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 10 # tier == 12",
-			"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 15 # tier == 13",
-			"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 20 # tier == 14",
-			"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 25 # tier == 15",
-			"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 30 # tier == 16",
-			"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 35 # tier == 17",
-			"[type] == ring && [quality] == rare # [fcr] == 10 && [fireresist]+[lightresist] >= 40 # tier == 18",
+			"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 5 # tier == 11",
+			"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 10 # tier == 12",
+			"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 15 # tier == 13",
+			"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 20 # tier == 14",
+			"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 25 # tier == 15",
+			"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 30 # tier == 16",
+			"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 35 # tier == 17",
+			"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 40 # tier == 18",
 			"[name] == ring && [quality] == unique # [maxhp] >= 40 && [magicdamagereduction] >= 12 # [tier] == 99",
 			"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100",
 		];
