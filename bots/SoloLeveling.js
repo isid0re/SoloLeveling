@@ -2937,6 +2937,9 @@ function SoloLeveling () {
 }
 
 // Start Global Functions
+if (!isIncluded("common/Pather.js")) {
+	include("common/Pather.js");
+}
 
 if (!isIncluded("common/Misc.js")) {
 	include("common/Misc.js");
