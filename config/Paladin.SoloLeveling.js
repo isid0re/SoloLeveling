@@ -462,9 +462,12 @@ function LoadConfig () {
 					"[Name] == PulRune",
 					"[Name] == KoRune # # [MaxQuantity] == 1",
 					"[Name] == VexRune",
-					"([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(HotO);
+
+				if (me.getItem(635)) {
+					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+				}
 
 				if (!me.getItem(635)) {
 					Config.Recipes.push([Recipe.Rune, "Um Rune"]);

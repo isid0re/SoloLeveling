@@ -1317,6 +1317,14 @@ function SoloLeveling () {
 	};
 
 	this.cubeStaff = function () {
+		if (this.checkQuest(10, 0)) {
+			return true;
+		}
+
+		if (!me.inTown) {
+			Town.goToTown();
+		}
+
 		let shaft = me.getItem("msf");
 		let ammy = me.getItem("vip");
 
@@ -1495,6 +1503,7 @@ function SoloLeveling () {
 		}
 
 		Pather.useWaypoint(46, true);
+		Pather.moveTo(me.x + 5, me.y - 5); //prevent misc.click error
 		Precast.doPrecast(true);
 
 		Pather.moveToExit(getRoom().correcttomb, true);
@@ -1784,17 +1793,17 @@ function SoloLeveling () {
 			throw new Error("ÿc9SoloLevelingÿc0: Lost Khalim's Will before trying to equip it. (equipFlail)");
 		}
 
-		if (me.itemoncursor) { // Seems like Item.equip() doesn't want to keep whatever the sorc has for a weapon, so lets put it into inventory without checking it against Pickit.
+		if (me.itemoncursor) {
 			let item = getUnit(100);
 
 			if (item) {
 				if (Storage.Inventory.CanFit(item)) {
-					me.overhead("Keeping weapon by force.");
+					me.overhead("Keeping weapon");
 
 					Storage.Inventory.MoveTo(item);
 				} else {
 					me.cancel();
-					me.overhead("No room to keep weapon by force.");
+					me.overhead("No room to keep weapon");
 
 					item.drop();
 				}
@@ -1803,7 +1812,7 @@ function SoloLeveling () {
 
 		delay(750 + me.ping);
 
-		Pickit.pickItems(); // Will hopefully pick up the character's weapon if it was dropped.
+		Pickit.pickItems();
 
 		return true;
 	};
@@ -1865,10 +1874,13 @@ function SoloLeveling () {
 
 		Pickit.pickItems();
 
-		if (!this.checkQuest(21, 0)) { //quest not complete
-			if (!me.getItem(173) || !me.getItem(174)) { // pickup khalims flail
+		if (!this.checkQuest(18, 0)) { // khalim's will quest not complete
+			if (!me.getItem(174) || !me.getItem(173)) { // pickup khalims flail
 				let khalimsflail = getUnit(4, 173);
-				Pickit.pickItem(khalimsflail);
+
+				if (!Pickit.pickItem(khalimsflail)) {
+					Pickit.pickItems();
+				}
 			}
 
 			if (!Pather.moveToPreset(83, 2, 404)) { // go to orb
@@ -1895,8 +1907,8 @@ function SoloLeveling () {
 
 			this.smashOrb(); // smash orb
 
-			Pather.moveToExit(100, true); // take entrance
 			Item.autoEquip(); // equip previous weapon
+			Pather.moveToExit(100, true); // take entrance
 			Pather.getWP(101); // get wp
 		}
 
@@ -1920,6 +1932,7 @@ function SoloLeveling () {
 		Town.goToTown();
 		this.townTasks();
 		this.buyPots(10, "Thawing"); // thawing
+		this.drinkPots();
 		this.buyPots(10, "Antidote"); // antidote
 		this.drinkPots();
 		Pather.usePortal(102, me.name);
@@ -2340,6 +2353,8 @@ function SoloLeveling () {
 			Pather.moveTo(3883, 5113);
 			Attack.kill(getLocaleString(22435));
 		}
+
+		Pickit.pickItems();
 
 		return true;
 	};
@@ -2956,6 +2971,100 @@ NTIP.arrayLooping = function (arraytoloop) {
 	return true;
 };
 
+Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
+	if (me.inTown) {
+		return false;
+	}
+
+	// Regular doors
+	var i, tick,
+		door = getUnit(2, "door", 0);
+
+	if (door) {
+		do {
+			if ((getDistance(door, x, y) < 4 && getDistance(me, door) < 9) || getDistance(me, door) < 4) {
+				for (i = 0; i < 3; i += 1) {
+					Misc.click(0, 0, door);
+					//door.interact();
+
+					tick = getTickCount();
+
+					while (getTickCount() - tick < 1000) {
+						if (door.mode === 2) {
+							me.overhead("Opened a door!");
+
+							return true;
+						}
+
+						delay(10);
+					}
+				}
+			}
+		} while (door.getNext());
+	}
+
+	// Monsta doors (Barricaded)
+	var p,
+		monstadoor1 = getUnit(1, 432), //barricaded door 1
+		monstadoor2 = getUnit(1, 433), //barricaded door 2
+		monstawall1 = getUnit(1, 524), //barricaded wall 1
+		monstawall2 = getUnit(1, 525); //barricaded wall 2
+
+	if (monstadoor1) {
+		do {
+			if ((getDistance(monstadoor1, x, y) < 4 && getDistance(me, monstadoor1) < 9) || getDistance(me, monstadoor1) < 4) {
+
+				for (p = 0; p < 20 && monstadoor1.hp; p += 1) {
+					ClassAttack.doAttack(monstadoor1);
+				}
+
+				me.overhead("Broke a barricaded door!");
+			}
+		} while (monstadoor1.getNext());
+	}
+
+	if (monstadoor2) {
+		do {
+			if ((getDistance(monstadoor2, x, y) < 4 && getDistance(me, monstadoor2) < 9) || getDistance(me, monstadoor2) < 4) {
+
+				for (p = 0; p < 20 && monstadoor2.hp; p += 1) {
+					ClassAttack.doAttack(monstadoor2);
+				}
+
+				me.overhead("Broke a barricaded door!");
+			}
+		} while (monstadoor2.getNext());
+	}
+
+	if (monstawall1) {
+		do {
+			if ((getDistance(monstawall1, x, y) < 4 && getDistance(me, monstawall1) < 9) || getDistance(me, monstawall1) < 4) {
+
+				for (p = 0; p < 20 && monstawall1.hp; p += 1) {
+					ClassAttack.doAttack(monstawall1);
+				}
+
+				me.overhead("Broke a barricaded wall!");
+			}
+		} while (monstawall1.getNext());
+	}
+
+	if (monstawall2) {
+		do {
+			if ((getDistance(monstawall2, x, y) < 4 && getDistance(me, monstawall2) < 9) || getDistance(me, monstawall2) < 4) {
+
+				for (p = 0; p < 20 && monstawall2.hp; p += 1) {
+					ClassAttack.doAttack(monstawall2);
+				}
+
+				me.overhead("Broke a barricaded wall!");
+			}
+		} while (monstawall2.getNext());
+	}
+
+	return false;
+};
+
 //	MERC AUTO EQUIP - modified from dzik's
 Item.hasMercTier = function (item) {
 	return Config.AutoEquip && NTIP.GetMercTier(item) > 0 && !me.classic;
@@ -3129,7 +3238,7 @@ Item.autoEquipMerc = function () {
 		return true;
 	}
 
-	var i, j, tier, bodyLoc, tome, gid, classid, scroll,
+	var i, j, tier, bodyLoc, tome, scroll,
 		items = me.findItems(-1, 0);
 
 	if (!items) {
@@ -3183,9 +3292,6 @@ Item.autoEquipMerc = function () {
 							Town.identifyItem(items[0], scroll ? scroll : tome);
 						}
 					}
-
-					gid = items[0].gid;
-					classid = items[0].classid;
 
 					if (Item.equipMerc(items[0], bodyLoc[j])) {
 						print("ÿc9SoloLevelingÿc0: equipped merc item.");
