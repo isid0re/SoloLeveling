@@ -44,7 +44,7 @@ function LoadConfig () {
 	Config.AutoEquip = true;
 
 	// Pickit config.
-	Config.PickRange = 15;
+	Config.PickRange = 20;
 	Config.FastPick = false;
 	Config.ItemInfo = true;
 	Config.CainID.Enable = false;
@@ -231,8 +231,8 @@ function LoadConfig () {
 
 	// Character Build Setup
 
-	const startBuild = "Start"; // build ends when reaching lvl 25
-	const middleBuild = "Hammerdin"; // starts at 25 ends when reaching lvl 85
+	const startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
+	const middleBuild = "Hammerdin"; // starts at respecOne ends when reaching respecTwo
 	const playStyle = finalBuild !== 'Hammerdin' ? 'Melee' : 'Caster';
 	const startBelt = ["hp", "hp", "hp", "mp"];
 	const middleBelt = ["hp", "hp", "mp", "mp"];

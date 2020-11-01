@@ -403,11 +403,11 @@ function SoloLeveling () {
 		return true;
 	};
 
-	this.gamePacket = function (bytes) {// Merc hiring and gear management
+	this.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
 		let id;
 
 		switch (bytes[0]) {
-		case 0x4e:
+		case 0x4e: // merc list packet
 			id = (bytes[2] << 8) + bytes[1];
 
 			if (mercId.indexOf(id) !== -1) {
@@ -415,6 +415,24 @@ function SoloLeveling () {
 			}
 
 			mercId.push(id);
+			break;
+		case 0x5d: // golden bird quest
+			Pickit.pickItems();
+
+			if (me.getItem(546)) {
+				print("ÿc9SoloLevelingÿc0: activated golden bird quest");
+				me.overhead('golden bird');
+
+				if (!me.inTown) {
+					Town.goToTown();
+				}
+
+				this.unfinishedQuests();
+				Town.heal();
+				Town.move("portalspot");
+				Pather.usePortal(null, me.name);
+			}
+
 			break;
 		}
 	};
@@ -499,6 +517,8 @@ function SoloLeveling () {
 						return true;
 					} else {
 						print('ÿc9SoloLevelingÿc0: temp merc not available. will try later');
+						removeEventListener("gamepacket", this.gamePacket);
+						this.setupMerc();
 
 						return false;
 					}
@@ -508,10 +528,12 @@ function SoloLeveling () {
 					if (merc.getSkill(mercAuraWanted, 1)) {
 						print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc hired.');
 						removeEventListener("gamepacket", this.gamePacket);
+						this.setupMerc();
 
 						return true;
 					} else {
 						print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
+						removeEventListener("gamepacket", this.gamePacket);
 
 						return false;
 					}
@@ -519,6 +541,7 @@ function SoloLeveling () {
 			}
 		}
 
+		this.equipMerc();
 		removeEventListener("gamepacket", this.gamePacket);
 
 		return true;
@@ -651,6 +674,8 @@ function SoloLeveling () {
 
 	this.equipMerc = function () {
 		if (me.gametype === 1) {
+			Item.autoEquipMerc();
+			Pickit.pickItems(); // safetycheck for merc items on ground
 			Item.autoEquipMerc();
 		}
 
@@ -836,6 +861,10 @@ function SoloLeveling () {
 			}
 		} else {
 			Pather.makePortal();
+		}
+
+		if (me.charlvl < 3) {
+			Attack.clearLevel();
 		}
 
 		Pather.getWP(3);
@@ -1073,7 +1102,7 @@ function SoloLeveling () {
 
 		me.overhead("radament");
 
-		Pather.useWaypoint(48, true);
+		Pather.useWaypoint(48);
 		Precast.doPrecast(true);
 
 		Pather.moveToExit(49, true);
@@ -1119,7 +1148,7 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("cube");
 
-		Pather.useWaypoint(57, true);
+		Pather.useWaypoint(57);
 		Precast.doPrecast(true);
 
 		Pather.moveToExit(60, true);
@@ -1151,7 +1180,7 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("amulet");
 
-		Pather.useWaypoint(44, true);
+		Pather.useWaypoint(44);
 		Precast.doPrecast(true);
 
 		Pather.moveToExit([45, 58, 61], true);
@@ -1215,7 +1244,7 @@ function SoloLeveling () {
 		}
 
 		try {
-			Attack.clear(15, 0, 250); // The SummonerAttack.clear(15, 0, 250); // The Summoner
+			Attack.clear(15, 0, 250); // The Summoner
 		} catch (err) {
 			print('ÿc9SoloLevelingÿc0: Failed to kill summoner');
 
@@ -1238,7 +1267,7 @@ function SoloLeveling () {
 
 		Pather.usePortal(46);
 		Pather.getWP(46);
-		Pather.useWaypoint(40, true);
+		Pather.useWaypoint(40);
 
 		return true;
 
@@ -1284,7 +1313,7 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("staff");
 
-		Pather.useWaypoint(43, true);
+		Pather.useWaypoint(43);
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([62, 63, 64], true) || !Pather.moveToPreset(me.area, 2, 356)) {
@@ -1502,7 +1531,7 @@ function SoloLeveling () {
 			this.cubeStaff();
 		}
 
-		Pather.useWaypoint(46, true);
+		Pather.useWaypoint(46);
 		Pather.moveTo(me.x + 5, me.y - 5); //prevent misc.click error
 		Precast.doPrecast(true);
 
@@ -1561,8 +1590,9 @@ function SoloLeveling () {
 
 		this.townTasks();
 		me.overhead("eye");
+		addEventListener("gamepacket", this.gamePacket);
 
-		Pather.useWaypoint(76, true);
+		Pather.useWaypoint(76);
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([76, 85], true)) {
@@ -1597,6 +1627,8 @@ function SoloLeveling () {
 			Storage.Stash.MoveTo(me.getItem(553));
 		}
 
+		removeEventListener("gamepacket", this.gamePacket);
+
 		return true;
 	};
 
@@ -1607,8 +1639,9 @@ function SoloLeveling () {
 
 		this.townTasks();
 		me.overhead("heart");
+		addEventListener("gamepacket", this.gamePacket);
 
-		Pather.useWaypoint(80, true);
+		Pather.useWaypoint(80);
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([80, 92, 93], true) || !Pather.moveToPreset(me.area, 2, 405)) {
@@ -1635,6 +1668,8 @@ function SoloLeveling () {
 			Storage.Stash.MoveTo(me.getItem(554));
 		}
 
+		removeEventListener("gamepacket", this.gamePacket);
+
 		return true;
 	};
 
@@ -1645,8 +1680,9 @@ function SoloLeveling () {
 
 		this.townTasks();
 		me.overhead("tome");
+		addEventListener("gamepacket", this.gamePacket);
 
-		Pather.useWaypoint(80, true);
+		Pather.useWaypoint(80);
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(94, true) || !Pather.moveToPreset(me.area, 2, 193)) {
@@ -1673,6 +1709,7 @@ function SoloLeveling () {
 		}
 
 		me.cancel();
+		removeEventListener("gamepacket", this.gamePacket);
 
 		return true;
 	};
@@ -1684,6 +1721,7 @@ function SoloLeveling () {
 
 		this.townTasks();
 		me.overhead("brain");
+		addEventListener("gamepacket", this.gamePacket);
 
 		Pather.useWaypoint(78);
 		Precast.doPrecast(true);
@@ -1712,6 +1750,8 @@ function SoloLeveling () {
 			Storage.Stash.MoveTo(me.getItem(555));
 		}
 
+		removeEventListener("gamepacket", this.gamePacket);
+
 		return true;
 	};
 
@@ -1722,10 +1762,12 @@ function SoloLeveling () {
 
 		this.townTasks();
 		me.overhead("lower kurast");
+		addEventListener("gamepacket", this.gamePacket);
 
 		Pather.useWaypoint(79);
 		Precast.doPrecast(true);
 		Misc.openChestsInArea(79);
+		removeEventListener("gamepacket", this.gamePacket);
 
 		return true;
 	};
@@ -1841,6 +1883,7 @@ function SoloLeveling () {
 
 		this.townTasks();
 		me.overhead("travincal");
+		addEventListener("gamepacket", this.gamePacket);
 
 		Pather.useWaypoint(83); // go to trav
 		Precast.doPrecast(true);
@@ -1912,6 +1955,8 @@ function SoloLeveling () {
 			Pather.getWP(101); // get wp
 		}
 
+		removeEventListener("gamepacket", this.gamePacket);
+
 		return true;
 	};
 
@@ -1923,7 +1968,7 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("mephisto");
 
-		Pather.useWaypoint(101, true);
+		Pather.useWaypoint(101);
 		Precast.doPrecast(true);
 
 		Pather.moveToExit(102, true);
@@ -1969,7 +2014,7 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("izual");
 
-		Pather.useWaypoint(106, true);
+		Pather.useWaypoint(106);
 		Precast.doPrecast(true);
 
 		if (!this.checkQuest(25, 1)) {
@@ -2343,7 +2388,7 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("shenk");
 
-		if (!Pather.useWaypoint(111, true)) {
+		if (!Pather.useWaypoint(111)) {
 			return true;
 		}
 
@@ -2370,7 +2415,7 @@ function SoloLeveling () {
 		let coords = [];
 		let barbies = [];
 
-		Pather.useWaypoint(111, true);
+		Pather.useWaypoint(111);
 		Precast.doPrecast(true);
 		barbies = getPresetUnits (me.area, 2, 473);
 
@@ -2435,7 +2480,7 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("anya");
 
-		Pather.useWaypoint(113, true);
+		Pather.useWaypoint(113);
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(114, true) || !Pather.moveToPreset(me.area, 2, 460)) {
@@ -2544,7 +2589,7 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("ancients");
 
-		Pather.useWaypoint(118, true);
+		Pather.useWaypoint(118);
 		Precast.doPrecast(true);
 		Pather.moveToExit(120, true); // enter at ancients plateau
 
@@ -2570,6 +2615,7 @@ function SoloLeveling () {
 		Object.assign(Config, updateConfig);
 
 		this.buyPots(10, "Thawing"); // prep to revised settings
+		this.drinkPots();
 		this.buyPots(10, "Antidote");
 		this.drinkPots();
 		Town.buyPotions();
@@ -2620,7 +2666,7 @@ function SoloLeveling () {
 		let checkFR = me.diff === 0 ? 40 : 100; // cannot start next diff with negative resistances
 		let checkLR = me.diff === 0 ? 40 : 100;
 		let checkCR = me.diff === 0 ? 40 : 100;
-		let nCap = 30; // lvl requirement to attack Normal Baal.
+		let nCap = 35; // lvl requirement to attack Normal Baal.
 		let nmCap = 65; // lvl requirement to attack NM Baal.
 		let lvlCap = me.diff === 0 ? nCap : me.diff === 1 ? nmCap : 99;
 
@@ -2778,7 +2824,7 @@ function SoloLeveling () {
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 129);
 		Precast.doPrecast(true);
 
-		Pather.useWaypoint(129, true);
+		Pather.useWaypoint(129);
 
 		Pather.moveToExit([130, 131], true);
 		Pather.moveTo(15095, 5029);
@@ -2864,8 +2910,10 @@ function SoloLeveling () {
 			delay(10);
 		}
 
+		Pather.moveTo(15094, me.classid === 3 ? 5029 : 5038);
+		Pickit.pickItems();
+
 		if (me.charlvl < lvlCap || me.charlvl >= lvlCap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
-			Pickit.pickItems();
 			print('ÿc9SoloLevelingÿc0: missing requirements for next difficulty.');
 
 			return true;

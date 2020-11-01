@@ -233,9 +233,9 @@ function LoadConfig () {
 	};
 
 	// Character Build Setup
-	const startBuild = "Start"; // build ends when reaching lvl 30
-	const middleBuild = "BlizzBaller"; // starts at 30 ends when reaching lvl 75
-	const startBelt = ["hp", "hp", "hp", "mp"];
+	const startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
+	const middleBuild = "BlizzBaller"; // starts at respecOne ends when reaching respecTwo
+	const startBelt = ["hp", "hp", "mp", "mp"];
 	const middleBelt = ["hp", "hp", "mp", "mp"];
 	const finalBelt = ["hp", "hp", "mp", "rv"];
 	Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
