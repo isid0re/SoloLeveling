@@ -3,7 +3,8 @@
  *    @desc       paladin build for before respecOne
  */
 
-const build = {
+var build = {
+	caster: false,
 	stats: [
 		["vitality", 80], // base 25
 		["dexterity", 27], // base 20

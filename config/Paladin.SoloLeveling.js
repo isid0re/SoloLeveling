@@ -1,11 +1,12 @@
 // Paladin.SoloLeveling.js config file
+// select your build
+var finalBuild = "Hammerdin";
+//var finalBuild = "Smiter";
+//var finalBuild = "Zealot";
+
 function LoadConfig () {
 	Scripts.UserAddon = false; // !!!YOU MUST SET THIS TO FALSE IF YOU WANT TO RUN BOSS/AREA SCRIPTS!!!
-
 	Scripts.SoloLeveling = true; // *** Leveling Script turn off when ready ***
-	const finalBuild = "Hammerdin";
-	//const finalBuild = "Smiter";
-	//const finalBuild = "Zealot";
 
 	// Town settings
 	Config.HealHP = 99;
@@ -172,7 +173,7 @@ function LoadConfig () {
 			}
 
 			let build = buildType + "Build" ;
-			const classname = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+			let classname = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 			let template = "config/Builds/SoloLeveling/" + classname + "." + build + ".js";
 
 			return template.toLowerCase();
@@ -231,12 +232,12 @@ function LoadConfig () {
 
 	// Character Build Setup
 
-	const startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
-	const middleBuild = "Hammerdin"; // starts at respecOne ends when reaching respecTwo
-	const playStyle = finalBuild !== 'Hammerdin' ? 'Melee' : 'Caster';
-	const startBelt = ["hp", "hp", "hp", "mp"];
-	const middleBelt = ["hp", "hp", "mp", "mp"];
-	const finalBelt = ["hp", "hp", "mp", "rv"];
+	var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
+	var middleBuild = "Hammerdin"; // starts at respecOne ends when reaching respecTwo
+	var playStyle = isCaster ? 'Caster' : 'Melee'; //based on final build
+	var startBelt = ["hp", "hp", "hp", "mp"];
+	var middleBelt = ["hp", "hp", "mp", "mp"];
+	var finalBelt = ["hp", "hp", "mp", "rv"];
 	Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
 	this.configBelt();
 
@@ -414,7 +415,7 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.AncientsPledge, "Scutum"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Dragon Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Grim Shield"]);
-			Config.KeepRunewords.push("[type] == shield # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
+			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
 		}
 
 		switch (playStyle) {

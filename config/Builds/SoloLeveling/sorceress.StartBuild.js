@@ -3,7 +3,8 @@
  *    @desc       sorceress build for before respecOne
  */
 
-const build = {
+var build = {
+	caster: true,
 	stats: [
 		["vitality", 70],
 		["strength", 35],

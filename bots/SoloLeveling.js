@@ -3,7 +3,7 @@
 *	@author		isid0re
 *	@desc		AutoPlay leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
 *				Make sure kolbot difficulty is set to "highest"
-*	@TODO		- add dynamic tiers for autoequip
+*	@TODO		- dynamic tiers link tierCalculator to pickit and NTIP
 */
 
 // Character Respecialization Variables
@@ -315,15 +315,20 @@ function SoloLeveling () {
 
 		me.overhead('organize stash');
 		Town.move('stash');
+		let stashFit = { sizex: 6, sizey: 4 };
 
-		let fit = { sizex: 6, sizey: 4 };
-
-		if (!Storage.Stash.CanFit(fit)) {
+		if (!Storage.Stash.CanFit(stashFit)) {
 			me.cancel();
 
-			return me.findItems(-1, -1, 7)
-				.sort((a, b) => b.sizex * b.sizey - a.sizex * a.sizey)
-				.forEach(c => Storage.Stash.MoveTo(me.itemoncursor ? getUnit(101) : c, true));
+			let sorted, items = me.findItems(-1, 0, 7);
+
+			items.sort(function (a, b) {
+				return (b.sizex * b.sizey - a.sizex * a.sizey);
+			});
+
+			for (sorted = 0; sorted < items.length; sorted += 1) {
+				Storage.Stash.MoveTo(items[sorted]);
+			}
 		}
 
 		return true;
@@ -331,15 +336,20 @@ function SoloLeveling () {
 
 	this.organizeInventory = function () {
 		me.overhead('organize inventory');
-		let fit = { sizex: 4, sizey: 4 };
+		let invfit = { sizex: 4, sizey: 4 };
 
-		if (!Storage.Inventory.CanFit(fit)) {
+		if (!Storage.Inventory.CanFit(invfit)) {
 			me.cancel();
-			//let c;
 
-			return me.findItems(-1, -1, 3)
-				.sort((a, b) => b.sizex * b.sizey - a.sizex * a.sizey)
-				.forEach(c => Storage.Inventory.MoveTo(me.itemoncursor ? getUnit(101) : c, true));
+			let inv, items = me.findItems(-1, 0, 3);
+
+			items.sort(function (a, b) {
+				return (b.sizex * b.sizey - a.sizex * a.sizey);
+			});
+
+			for (inv = 0; inv < items.length; inv += 1) {
+				Storage.Inventory.MoveTo(items[inv]);
+			}
 		}
 
 		return true;
@@ -358,6 +368,7 @@ function SoloLeveling () {
 			) {
 				if (junk[count].drop()) {
 					me.overhead('cleared junk');
+					delay(250);
 				}
 			}
 
@@ -373,7 +384,8 @@ function SoloLeveling () {
 						stashtier <= equippedTier // drop same tier or less items
 					) {
 						if (junk[count].drop()) {
-							me.overhead('cleared junk');
+							me.overhead('cleared autoequip junk');
+							delay(250);
 						}
 					}
 				}
@@ -393,6 +405,7 @@ function SoloLeveling () {
 						) {
 							if (junk[count].drop()) {
 								me.overhead('cleared merc junk');
+								delay(250);
 							}
 						}
 					}
@@ -417,20 +430,26 @@ function SoloLeveling () {
 			mercId.push(id);
 			break;
 		case 0x5d: // golden bird quest
-			Pickit.pickItems();
+			if (!this.checkQuest(20, 0)) {
+				let bird = getUnit(4, 546);
 
-			if (me.getItem(546)) {
-				print("ÿc9SoloLevelingÿc0: activated golden bird quest");
-				me.overhead('golden bird');
-
-				if (!me.inTown) {
-					Town.goToTown();
+				if (bird) {
+					Pickit.pickItem(bird);
 				}
 
-				this.unfinishedQuests();
-				Town.heal();
-				Town.move("portalspot");
-				Pather.usePortal(null, me.name);
+				if (me.getItem(546)) {
+					print("ÿc9SoloLevelingÿc0: activated golden bird quest");
+					me.overhead('golden bird');
+
+					if (!me.inTown) {
+						Town.goToTown();
+					}
+
+					this.unfinishedQuests();
+					Town.heal();
+					Town.move("portalspot");
+					Pather.usePortal(null, me.name);
+				}
 			}
 
 			break;
@@ -831,7 +850,6 @@ function SoloLeveling () {
 
 		Town.reviveMerc();
 		this.setupMerc();
-		delay(500);
 		me.overhead('starting SoloLeveling');
 		delay(500);
 
@@ -953,7 +971,7 @@ function SoloLeveling () {
 		Pather.useWaypoint(4);
 		Precast.doPrecast(true);
 
-		Pather.moveToPreset(me.area, 1, 737, 0, 0, false, true);
+		Pather.moveToPreset(me.area, 2, 17, 0, 0, false, true);
 
 		Attack.clear(15, 0x7);
 
@@ -1289,7 +1307,11 @@ function SoloLeveling () {
 		}
 
 		if (getPresetUnit(me.area, 1, 751) && Pather.moveToPreset(me.area, 1, 751)) {
-			Attack.clear(15, 0, getLocaleString(2886));
+			try {
+				Attack.clear(15, 0, getLocaleString(2886));
+			} catch (err) {
+				print('ÿc9SoloLevelingÿc0: Failed to kill Dark Elder');
+			}
 		}
 
 		if (!Pather.moveToExit(65, true)) {
@@ -1532,7 +1554,6 @@ function SoloLeveling () {
 		}
 
 		Pather.useWaypoint(46);
-		Pather.moveTo(me.x + 5, me.y - 5); //prevent misc.click error
 		Precast.doPrecast(true);
 
 		Pather.moveToExit(getRoom().correcttomb, true);
@@ -3115,6 +3136,30 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 
 	return false;
 };
+
+// DYNAMIC TIERS prep
+var casterCheck = function () {
+	function getBuildTemplate () {
+		let buildType = finalBuild;
+		let build = buildType + "Build" ;
+		let classname = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+		let template = "config/Builds/SoloLeveling/" + classname + "." + build + ".js";
+
+		return template.toLowerCase();
+	}
+
+	var template = getBuildTemplate();
+
+	if (!include(template)) {
+		throw new Error("getskills Failed to include template: " + template);
+	}
+
+	let castercheck = build.caster;
+
+	return castercheck;
+};
+
+var isCaster = casterCheck();
 
 //	MERC AUTO EQUIP - modified from dzik's
 Item.hasMercTier = function (item) {

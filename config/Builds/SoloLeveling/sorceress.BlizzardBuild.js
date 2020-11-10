@@ -3,7 +3,8 @@
  *    @desc      Sorceress blizzard build for after respecOne
  */
 
-const build = {
+var build = {
+	caster: true,
 	stats: [
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
 	],

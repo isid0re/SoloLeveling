@@ -3,7 +3,8 @@
  *    @desc       paladin build for after level 65  a Smiter Build
  */
 
-const build = {
+var build = {
+	caster: false,
 	stats: [
 		["strength", 115], ["vitality", "300"], ["dexterity", "block"], ["vitality", "all"]
 	],
