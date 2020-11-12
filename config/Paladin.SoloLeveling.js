@@ -576,12 +576,12 @@ function LoadConfig () {
 						"[Name] == ThulRune # # [MaxQuantity] == 1",
 						"[Name] == OrtRune # # [MaxQuantity] == 1",
 						"[Name] == AmnRune # # [MaxQuantity] == 1",
-						"([Name] == BroadSword || [Name] == CrystalSword || [Name] == LongSword) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
+						"([Name] == BroadSword || [Name] == CrystalSword || [Name] == LongSword) && [flag] != ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
 					];
 					NTIP.arrayLooping(SpiritSword);
 
 					if (me.diff !== 0) {
-						NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword || [Name] == LongSword) && [Quality] == Normal # [Sockets] == 0 # [MaxQuantity] == 1");
+						NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword || [Name] == LongSword) && [flag] != ethereal && [Quality] == Normal # [Sockets] == 0 # [MaxQuantity] == 1");
 
 						Config.Recipes.push([Recipe.Socket.Weapon, "Long Sword"]);
 						Config.Recipes.push([Recipe.Socket.Weapon, "Crystal Sword"]);
