@@ -1285,8 +1285,9 @@ function SoloLeveling () {
 
 				for (let i = 0; i < tppPath.length; i += 1) {
 					for (let h = 0; h < 3; h += 1) {
+						Pather.moveTo(wpX - tppPath[i][0], wpY - tppPath[i][1]);
+
 						for (let activate = 0; activate < tppID.length; activate += 1) {
-							Pather.moveTo(wpX - tppPath[i][0], wpY - tppPath[i][1]);
 							let telepad = getUnit(2, tppID[activate]);
 
 							if (telepad) {
