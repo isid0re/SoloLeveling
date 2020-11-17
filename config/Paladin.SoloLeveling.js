@@ -67,7 +67,7 @@ function LoadConfig () {
 	Config.LogExperience = false; // Print experience statistics in the manager.
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
-	Config.OpenChests = me.diff !== 2 ? false : true;
+	Config.OpenChests = me.diff !== 0 ? 2 : true;
 
 	// Shrine Scanner - scan for shrines while moving.
 	Config.ScanShrines = [15, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14];
@@ -199,37 +199,6 @@ function LoadConfig () {
 		return specCheck;
 	};
 
-	var haveItem = function (type, flag, iName) {
-		if (type && !NTIPAliasType[type]) {
-			throw new Error("No alias for type '" + type + "'");
-		}
-
-		if (iName !== undefined) {
-			iName = iName.toLowerCase();
-		}
-
-		let items = me.getItems();
-		let itemCHECK = false;
-
-		for (let i = 0; i < items.length && !itemCHECK; i++) {
-
-			switch (flag) {
-			case 'crafted':
-				itemCHECK = !!(items[i].getFlag(NTIPAliasQuality["crafted"]));
-				break;
-			case 'runeword':
-				itemCHECK = !!(items[i].getFlag(NTIPAliasFlag["runeword"])) && items[i].fname.toLowerCase().includes(iName);
-				break;
-			}
-
-			if (type) {
-				itemCHECK = itemCHECK && (items[i].itemType === NTIPAliasType[type]);
-			}
-		}
-
-		return itemCHECK;
-	};
-
 	// Character Build Setup
 
 	var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
@@ -248,16 +217,19 @@ function LoadConfig () {
 	if (me.gametype === 1) { //LOD game gear
 		//weapon
 		if (me.charlvl < respecOne) { //Steel
-			var steel = [
-				"[type] == mace && [flag] == runeword # [ias] >= 25 # [tier] == 30",
-				"[Name] == TirRune # # [MaxQuantity] == 1",
-				"[Name] == ElRune # # [MaxQuantity] == 1",
-				"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
-			];
-			NTIP.arrayLooping(steel);
+			if (!haveItem("mace", "runeword", "Steel")) {
+				var steel = [
+					"[Name] == TirRune # # [MaxQuantity] == 1",
+					"[Name] == ElRune # # [MaxQuantity] == 1",
+					"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
+				];
+				NTIP.arrayLooping(steel);
 
-			Config.Runewords.push([Runeword.Steel, "Mace"]);
-			Config.KeepRunewords.push("[type] == mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
+				Config.Runewords.push([Runeword.Steel, "Mace"]);
+				Config.KeepRunewords.push("[type] == mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
+			}
+
+			NTIP.addLine("[type] == mace && [flag] == runeword # [ias] >= 25 # [tier] == 30");
 		}
 
 		//weapon switch (prebuff)
@@ -282,12 +254,13 @@ function LoadConfig () {
 
 		//helm
 		if (Item.getEquippedItem(1).tier < 26) { // Lore
-			var Lore = [
-				"[Name] == OrtRune # # [MaxQuantity] == 1",
-				"[Name] == SolRune # # [MaxQuantity] == 1",
-				"([Name] == Sallet || [Name] == Casque || [Name] == DeathMask || [Name] == GrimHelm) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
-			];
-			NTIP.arrayLooping(Lore);
+			if (!haveItem("helm", "runeword", "Lore")) {
+				var Lore = [
+					"[Name] == OrtRune # # [MaxQuantity] == 1",
+					"[Name] == SolRune # # [MaxQuantity] == 1"
+				];
+				NTIP.arrayLooping(Lore);
+			}
 
 			if (!me.getItem(618) && me.diff !== 2) { // Cube Ort Rune
 				Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
@@ -308,6 +281,7 @@ function LoadConfig () {
 				Config.Runewords.push([Runeword.Lore, "Bone Helm"]);
 			}
 
+			NTIP.addLine("([Name] == Sallet || [Name] == Casque || [Name] == DeathMask || [Name] == GrimHelm) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1");
 			Config.Runewords.push([Runeword.Lore, "Sallet"]);
 			Config.Runewords.push([Runeword.Lore, "Casque"]);
 			Config.Runewords.push([Runeword.Lore, "Death Mask"]);
@@ -318,19 +292,33 @@ function LoadConfig () {
 
 		//armor
 		if (Item.getEquippedItem(3).tier < 15 && me.diff !== 2) { // Stealth
-			var stealth = [
-				"[Name] == TalRune # # [MaxQuantity] == 1",
-				"[Name] == EthRune # # [MaxQuantity] == 1",
-				"([Name] == StuddedLeather || [Name] == BreastPlate || [Name] == LightPlate || [Name] == GhostArmor || [Name] == SerpentskinArmor) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
-			];
-			NTIP.arrayLooping(stealth);
+			if (!haveItem("armor", "runeword", "Stealth")) {
+				var stealth = [
+					"[Name] == TalRune # # [MaxQuantity] == 1",
+					"[Name] == EthRune # # [MaxQuantity] == 1",
+					"[Name] == StuddedLeather && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(stealth);
+				Config.Runewords.push([Runeword.Stealth, "Studded Leather"]);
+			}
 
-			Config.Runewords.push([Runeword.Stealth, "Studded Leather"]);
-			Config.Runewords.push([Runeword.Stealth, "Breast Plate"]);
-			Config.Runewords.push([Runeword.Stealth, "Light Plate"]);
-			Config.Runewords.push([Runeword.Stealth, "Ghost Armor"]);
+			if (Item.getEquippedItem(3).tier < 12) {
+				NTIP.addLine("[Name] == BreastPlate && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1");
+				Config.Runewords.push([Runeword.Stealth, "Breast Plate"]);
+			}
+
+			if (Item.getEquippedItem(3).tier < 13) {
+				NTIP.addLine("[Name] == LightPlate && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1");
+				Config.Runewords.push([Runeword.Stealth, "Light Plate"]);
+			}
+
+			if (Item.getEquippedItem(3).tier < 14) {
+				NTIP.addLine("[Name] == GhostArmor && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1");
+				Config.Runewords.push([Runeword.Stealth, "Ghost Armor"]);
+			}
+
+			NTIP.addLine("[Name] == SerpentskinArmor && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1");
 			Config.Runewords.push([Runeword.Stealth, "Serpentskin Armor"]);
-
 			Config.KeepRunewords.push("[type] == armor # [frw] == 25");
 		}
 
@@ -384,22 +372,24 @@ function LoadConfig () {
 
 		//shield
 		if (Item.getEquippedItem(5).tier < 37) { // Ancients' Pledge
-			var AncientsPledge = [
-				"[Name] == RalRune # # [MaxQuantity] == 1",
-				"[Name] == OrtRune # # [MaxQuantity] == 1",
-				"[Name] == TalRune # # [MaxQuantity] == 1",
-				"([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge || [Name] == GrimShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-			];
-			NTIP.arrayLooping(AncientsPledge);
+			if (!haveItem("shield", "runeword", "Ancients' Pledge")) {
+				var AncientsPledge = [
+					"[Name] == RalRune # # [MaxQuantity] == 1",
+					"[Name] == OrtRune # # [MaxQuantity] == 1",
+					"[Name] == TalRune # # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(AncientsPledge);
 
-			if (!me.getItem(618)) {
-				Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+				if (!me.getItem(618)) {
+					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+				}
 			}
 
 			if (me.diff !== 2) {
 				NTIP.addLine("([Name] == Targe || [Name] == Rondache || [Name] == HeraldicShield ||[Name] == AerinShield || [Name] == LargeShield || [Name] == KiteShield || [Name] == BoneShield || [Name] == Scutum || [Name] == DragonShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1");
 			}
 
+			NTIP.addLine("([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge || [Name] == GrimShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1");
 			Config.Runewords.push([Runeword.AncientsPledge, "Targe"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Rondache"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Heraldic Shield"]);
@@ -602,14 +592,21 @@ function LoadConfig () {
 			}
 
 			if (Item.getEquippedItem(5).tier < 49) { // Spirit shield
-				var SpiritShield = [
-					"[Name] == TalRune # # [MaxQuantity] == 1",
-					"[Name] == ThulRune # # [MaxQuantity] == 1",
-					"[Name] == OrtRune # # [MaxQuantity] == 1",
-					"[Name] == AmnRune # # [MaxQuantity] == 1",
-					"([Name] == Targe || [Name] == Rondache || [Name] == HeraldicShield ||[Name] == AerinShield || [Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] > 0 && [Sockets] == 4 # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(SpiritShield);
+				if (!haveItem("shield", "runeword", "Spirit")) {
+					var SpiritShield = [
+						"[Name] == TalRune # # [MaxQuantity] == 1",
+						"[Name] == ThulRune # # [MaxQuantity] == 1",
+						"[Name] == OrtRune # # [MaxQuantity] == 1",
+						"[Name] == AmnRune # # [MaxQuantity] == 1",
+					];
+					NTIP.arrayLooping(SpiritShield);
+
+					if (!me.getItem(620) && me.diff !== 2) { //Amn Rune
+						Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+						Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
+						Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
+					}
+				}
 
 				if (me.diff === 2) {
 					NTIP.addLine("([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] == Normal # [fireresist] > 20 && [Sockets] == 0 # [MaxQuantity] == 1");
@@ -621,12 +618,7 @@ function LoadConfig () {
 					Config.Recipes.push([Recipe.Socket.Shield, "Sacred Targe"]);
 				}
 
-				if (!me.getItem(620) && me.diff !== 2) { //Amn Rune
-					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
-				}
-
+				NTIP.addLine("([Name] == Targe || [Name] == Rondache || [Name] == HeraldicShield ||[Name] == AerinShield || [Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] > 0 && [Sockets] == 4 # [MaxQuantity] == 1");
 				Config.Runewords.push([Runeword.Spirit, "Targe"]);
 				Config.Runewords.push([Runeword.Spirit, "Rondache"]);
 				Config.Runewords.push([Runeword.Spirit, "Heraldic Shield"]);

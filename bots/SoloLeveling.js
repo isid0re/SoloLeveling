@@ -19,7 +19,7 @@ function SoloLeveling () {
 		"den", "mausoleum", "tristam", "countess", "pits", "andariel", // Act 1
 		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "duriel", // Act 2
 		"eye", "heart", "tome", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
-		"izual", "diablo", //Act 4
+		"izual", "hellforge", "diablo", //Act 4
 		"shenk", "saveBarby", "anya", "ancients", "baal" // Act 5
 	];
 
@@ -82,8 +82,8 @@ function SoloLeveling () {
 		this.equipMerc();
 		Item.autoEquip();
 		this.clearJunk();
-		Town.stash(true);
 		this.organizeStash();
+		Town.stash(true);
 		this.organizeInventory();
 		this.characterRespec();
 
@@ -811,7 +811,8 @@ function SoloLeveling () {
 			"[Name] == Khalim'sHeart",
 			"[Name] == Khalim'sBrain",
 			"[Name] == Khalim'sFlail",
-			"[Name] == Khalim'sWill"
+			"[Name] == Khalim'sWill",
+			"[Name] == hellforgehammer"
 		];
 		NTIP.arrayLooping(questItems);
 		delay(500);
@@ -865,10 +866,6 @@ function SoloLeveling () {
 		this.townTasks();
 		me.overhead("den");
 
-		if (me.diff <= 0) {
-			Config.OpenChests = 2;
-		}
-
 		Pather.moveToExit([2, 8], false);
 
 		if (!me.getItem(518)) {
@@ -902,10 +899,6 @@ function SoloLeveling () {
 			Pather.useWaypoint(1);
 		} else {
 			Town.goToTown();
-		}
-
-		if (me.diff <= 0) {
-			Config.OpenChests = false;
 		}
 
 		Town.move(NPC.Akara);
@@ -1009,14 +1002,12 @@ function SoloLeveling () {
 	};
 
 	this.countess = function () {
-		if (me.diff === 2 && me.charlvl < respecTwo || me.diff === 2 && me.classid === 1) {
+		if (me.diff === 0 && haveItem("shield", "runeword", "Ancients' Pledge") && haveItem("armor", "runeword", "Stealth") || me.diff === 2 && me.charlvl < respecTwo || me.diff === 2 && me.classid === 1) {
 			return true;
 		}
 
 		this.townTasks();
 		me.overhead("countess");
-
-		Config.OpenChests = 2;
 
 		Pather.useWaypoint(6);
 		Precast.doPrecast(true);
@@ -1030,9 +1021,6 @@ function SoloLeveling () {
 		}
 
 		Pickit.pickItems();
-
-		Config.OpenChests = (me.classid !== 1 && me.diff !== 2) ? false : true;
-		Config.OpenChests = (me.classid === 1 && me.diff !== 0) ? true : false;
 
 		return true;
 	};
@@ -1907,33 +1895,33 @@ function SoloLeveling () {
 		return true;
 	};
 
-	this.equipFlail = function () {
+	this.equipQuestItem = function (item, loc) {
 		Town.doChores();
 
-		let flail = me.getItem(174);
+		let newitem = me.getItem(item);
 
-		if (flail) {
-			if (!Item.equip(flail, 4)) {
+		if (newitem) {
+			if (!Item.equip(newitem, loc)) {
 				Pickit.pickItems();
-				throw new Error("ÿc9SoloLevelingÿc0: failed to equip Khalim's Will. (equipFlail)");
+				throw new Error("ÿc9SoloLevelingÿc0: failed to equip item.(equipQuestItem)");
 			}
 		} else {
-			throw new Error("ÿc9SoloLevelingÿc0: Lost Khalim's Will before trying to equip it. (equipFlail)");
+			throw new Error("ÿc9SoloLevelingÿc0: Lost item before trying to equip it. (equipQuestItem)");
 		}
 
 		if (me.itemoncursor) {
-			let item = getUnit(100);
+			let olditem = getUnit(100);
 
-			if (item) {
-				if (Storage.Inventory.CanFit(item)) {
+			if (olditem) {
+				if (Storage.Inventory.CanFit(olditem)) {
 					me.overhead("Keeping weapon");
 
-					Storage.Inventory.MoveTo(item);
+					Storage.Inventory.MoveTo(olditem);
 				} else {
 					me.cancel();
 					me.overhead("No room to keep weapon");
 
-					item.drop();
+					olditem.drop();
 				}
 			}
 		}
@@ -1945,14 +1933,23 @@ function SoloLeveling () {
 		return true;
 	};
 
-	this.smashOrb = function () {
-		let orb = getUnit(2, 404);
+	this.smashSomething = function (smashable) {
+		let something;
 
-		Pather.moveToUnit(orb, 0, 0, Config.ClearType, false);
+		switch (smashable) {
+		case 404:
+			something = getUnit(2, 404);
+			break;
+		case 376:
+			something = getUnit(2, 376);
+			break;
+		}
+
+		Pather.moveToUnit(something, 0, 0, Config.ClearType, false);
 
 		for (let smash = 0; smash < 5; smash += 1) {
-			if (orb) {
-				Skill.cast(0, 0, orb);
+			if (something) {
+				Skill.cast(0, 0, something);
 
 				delay(750 + me.ping);
 
@@ -2027,17 +2024,24 @@ function SoloLeveling () {
 				delay(250 + me.ping);
 			}
 
-			this.equipFlail();
+			this.equipQuestItem(174, 4);
 			delay(250 + me.ping);
 
 			if (!Pather.usePortal(83, me.name)) { // return to Trav
 				throw new Error("ÿc9SoloLevelingÿc0: Failed to go back to Travincal from town");
 			}
 
-			this.smashOrb(); // smash orb
-
+			this.smashSomething(404); // smash orb
 			Item.autoEquip(); // equip previous weapon
-			Pather.moveToExit(100, true); // take entrance
+			delay(250);
+
+			try {
+				Pather.moveToExit(100, true); // take entrance
+			} catch (e) {
+				delay(250 + me.ping * 2);
+				Pather.moveToExit(100, true);
+			}
+
 			Pather.getWP(101); // get wp
 		}
 
@@ -2056,10 +2060,7 @@ function SoloLeveling () {
 
 		Pather.useWaypoint(101);
 		Precast.doPrecast(true);
-
 		Pather.moveToExit(102, true);
-		Config.OpenChests = 2;
-
 		Town.goToTown();
 		this.townTasks();
 		this.buyPots(10, "Thawing"); // thawing
@@ -2085,9 +2086,6 @@ function SoloLeveling () {
 		Pather.moveTo(17581, 8070);
 		delay(250 + me.ping * 2);
 		Pather.usePortal(null);
-
-		Config.OpenChests = (me.classid !== 1 && me.diff !== 2) ? false : true;
-		Config.OpenChests = (me.classid === 1 && me.diff !== 0) ? true : false;
 
 		return true;
 	};
@@ -2124,6 +2122,70 @@ function SoloLeveling () {
 		if (getUnit(2, 566)) {
 			Pather.useUnit(2, 566, 109);
 		}
+
+		return true;
+	};
+
+	this.hellforge = function () {
+		if (this.checkQuest(27, 0)) {
+			return true;
+		}
+
+		this.townTasks();
+		me.overhead("forge");
+		Pather.useWaypoint(107);
+		Precast.doPrecast(true);
+
+		if (!Pather.moveToPreset(me.area, 2, 376)) {
+			print("ÿc9SoloLevelingÿc0: Failed to move to forge");
+		}
+
+		try {
+			Attack.clear(20, 0, getLocaleString(1067)); // Hephasto The Armorer
+		} catch (err) {
+			print('ÿc9SoloLevelingÿc0: Failed to kill Hephasto');
+		}
+
+		Pickit.pickItems();
+
+		if (!me.getItem(90)) { // pickup hammer
+			let hammer = getUnit(4, 90);
+
+			if (!Pickit.pickItem(hammer)) {
+				Pickit.pickItems();
+			}
+		}
+
+		if (me.getItem(90)) {
+			if (!Pather.moveToPreset(me.area, 2, 376)) {
+				print('ÿc9SoloLevelingÿc0: Failed to move to forge');
+			}
+
+			Attack.clear(15); // clear area around forge
+
+			if (!me.inTown) { // go to town
+				Town.goToTown();
+				this.equipQuestItem(90, 4);
+				Town.move(NPC.Cain);
+				let cain = getUnit(1, NPC.Cain);
+
+				if (!me.getItem(551)) { // get soulstone
+					cain.openMenu();
+					me.cancel();
+				}
+
+				Pather.usePortal(null, me.name);
+			}
+
+			let forge = getUnit(2, 376);
+			Misc.openChest(forge);
+
+			delay(250 + me.ping * 2);
+			this.smashSomething(376);
+			Item.autoEquip();
+		}
+
+		Pickit.pickItems();
 
 		return true;
 	};
@@ -3108,6 +3170,49 @@ NTIP.arrayLooping = function (arraytoloop) {
 	return true;
 };
 
+Misc.openChests = function (range) {
+	var unit,
+		unitList = [],
+		containers = ["barrel", "loose rock", "hidden stash", "loose boulder", "chest", "chest3", "largeurn", "jar3", "jar2", "jar1", "urn", "armorstand", "weaponrack"];
+
+	if (!range) {
+		range = 15;
+	}
+
+	// Testing all container code
+	if (Config.OpenChests === 2) {
+		containers = [
+			"chest", "loose rock", "hidden stash", "loose boulder", "corpseonstick", "casket", "armorstand", "weaponrack", "barrel", "holeanim", "tomb2",
+			"tomb3", "roguecorpse", "ratnest", "corpse", "goo pile", "largeurn", "urn", "chest3", "jug", "skeleton", "guardcorpse", "sarcophagus", "object2",
+			"cocoon", "basket", "stash", "hollow log", "hungskeleton", "pillar", "skullpile", "skull pile", "jar3", "jar2", "jar1", "bonechest", "woodchestl",
+			"woodchestr", "barrel wilderness", "burialchestr", "burialchestl", "explodingchest", "chestl", "chestr", "groundtomb", "icecavejar1", "icecavejar2",
+			"icecavejar3", "icecavejar4", "deadperson", "deadperson2", "evilurn", "tomb1l", "tomb3l", "groundtombl"
+		];
+	}
+
+	unit = getUnit(2);
+
+	if (unit) {
+		do {
+			if (unit.name && unit.mode === 0 && getDistance(me.x, me.y, unit.x, unit.y) <= range && containers.indexOf(unit.name.toLowerCase()) > -1) {
+				unitList.push(copyUnit(unit));
+			}
+		} while (unit.getNext());
+	}
+
+	while (unitList.length > 0) {
+		unitList.sort(Sort.units);
+
+		unit = unitList.shift();
+
+		if (unit && (Pather.useTeleport() || !checkCollision(me, unit, 0x4)) && this.openChest(unit)) {
+			Pickit.pickItems();
+		}
+	}
+
+	return true;
+};
+
 Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 	if (me.inTown) {
 		return false;
@@ -3202,7 +3307,39 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 	return false;
 };
 
+var haveItem = function (type, flag, iName) {
+	if (type && !NTIPAliasType[type]) {
+		throw new Error("No alias for type '" + type + "'");
+	}
+
+	if (iName !== undefined) {
+		iName = iName.toLowerCase();
+	}
+
+	let items = me.getItems();
+	let itemCHECK = false;
+
+	for (let i = 0; i < items.length && !itemCHECK; i++) {
+
+		switch (flag) {
+		case 'crafted':
+			itemCHECK = !!(items[i].getFlag(NTIPAliasQuality["crafted"]));
+			break;
+		case 'runeword':
+			itemCHECK = !!(items[i].getFlag(NTIPAliasFlag["runeword"])) && items[i].fname.toLowerCase().includes(iName);
+			break;
+		}
+
+		if (type) {
+			itemCHECK = itemCHECK && (items[i].itemType === NTIPAliasType[type]);
+		}
+	}
+
+	return itemCHECK;
+};
+
 // DYNAMIC TIERS prep
+
 var casterCheck = function () {
 	function getBuildTemplate () {
 		let buildType = finalBuild;
