@@ -51,6 +51,7 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
 			Config.LowManaSkill = [0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -59,6 +60,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -67,6 +69,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -75,6 +78,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -83,6 +87,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -99,6 +104,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -107,6 +113,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -115,6 +122,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -123,6 +131,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -131,6 +140,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -139,7 +149,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
-			Config.LowManaSkill = [0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -148,6 +158,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -156,6 +167,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -164,6 +176,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -172,6 +185,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -180,6 +194,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -188,6 +203,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -196,6 +212,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -204,6 +221,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -212,6 +230,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -220,6 +239,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -228,6 +248,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 
@@ -236,6 +257,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 	26:	{
@@ -243,6 +265,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 	27:	{
@@ -250,6 +273,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 	28:	{
@@ -257,6 +281,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 	29:	{
@@ -264,6 +289,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 	30:	{
@@ -271,6 +297,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 	31:	{
@@ -278,6 +305,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 38, -1, 38, -1, 0, 0];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 };

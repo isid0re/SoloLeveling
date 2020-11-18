@@ -39,12 +39,12 @@ var AutoBuildTemplate = {
 		//StatPoints: [-1,-1,-1,-1,-1],						// This doesn't matter. We don't have stat points to spend at lvl 1
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 0, 0, 0, -1, -1];
-			Config.LowManaSkill = [0, 0];
 			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
 			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
 
 			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
 			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
+			Config.LowManaSkill = [0, 0];
 		}
 	},
 
@@ -53,6 +53,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 0, 0, 0, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -61,6 +66,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -69,6 +79,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -77,6 +92,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -85,6 +105,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -93,6 +118,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -101,6 +131,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -109,6 +144,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -117,6 +157,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -125,6 +170,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -133,6 +183,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -141,6 +196,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -149,6 +209,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -157,6 +222,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -165,6 +235,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -173,6 +248,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -181,6 +261,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -189,6 +274,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -197,6 +287,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -205,6 +300,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -213,6 +313,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -221,6 +326,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -229,6 +339,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -237,6 +352,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -245,6 +365,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -253,6 +378,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -261,6 +391,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -269,6 +404,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -277,6 +417,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -285,6 +430,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 
@@ -293,6 +443,11 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
+			Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+
+			Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses.
+			Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem.
 		}
 	},
 };
