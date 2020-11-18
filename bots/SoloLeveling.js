@@ -9,7 +9,7 @@
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 const respecOne = [ 0, 28, 0, 25, 0, 0, 0][me.classid];
-const respecTwo = [ 0, 75, 0, 85, 0, 0, 0][me.classid];
+const respecTwo = [ 0, 85, 0, 85, 0, 0, 0][me.classid];
 
 //Start SoloLeveling Script
 function SoloLeveling () {
@@ -17,7 +17,7 @@ function SoloLeveling () {
 	var mercId = [], merc;
 	var sequence = [
 		"den", "mausoleum", "tristam", "countess", "pits", "andariel", // Act 1
-		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "duriel", // Act 2
+		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
 		"eye", "heart", "tome", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
 		"shenk", "saveBarby", "anya", "ancients", "baal" // Act 5
@@ -1368,7 +1368,9 @@ function SoloLeveling () {
 		}
 
 		if (!Pather.moveToExit(65, true)) {
-			throw new Error("ÿc9SoloLevelingÿc0: Failed to move to Ancient Tunnels");
+			print("ÿc9SoloLevelingÿc0: Failed to move to Ancient Tunnels");
+
+			return false;
 		}
 
 		Attack.clearLevel();
@@ -1415,6 +1417,49 @@ function SoloLeveling () {
 
 		if (me.getItem(92) && me.getItem(521)) {
 			this.cubeStaff();
+		}
+
+		return true;
+	};
+
+	this.tombs = function () {
+		if (me.charlvl > 23) {
+			return true;
+		}
+
+		me.overhead("tombs");
+		let tombID = [66, 67, 68, 69, 70, 71, 72];
+
+		for (let number = 0; number < tombID.length; number += 1) {
+			this.townTasks();
+			Pather.useWaypoint(46);
+			Pather.moveToExit(tombID[number], true, true);
+
+			if (me.area === tombID[number]) {
+				for (let i = 0; i < 6; i += 1) {
+					try {
+						let gbox = getPresetUnit(me.area, 2, 397);
+						let orifice = getPresetUnit(me.area, 2, 152);
+
+						if (gbox) {
+							if (Pather.moveToPreset(me.area, 2, 397, 0, 0, true)) {
+								break;
+							}
+						} else if (orifice) {
+							if (Pather.moveToPreset(me.area, 2, 152, 0, 0, true)) {
+								break;
+							}
+						}
+					} catch (e) {
+						print('ÿc9SoloLevelingÿc0: Failed to move to ' + Pather.getAreaName(tombID[number]));
+					}
+				}
+
+				Attack.clear(50);
+				Pickit.pickItems();
+				Town.goToTown();
+			}
+
 		}
 
 		return true;
@@ -2127,7 +2172,7 @@ function SoloLeveling () {
 	};
 
 	this.hellforge = function () {
-		if (this.checkQuest(27, 0)) {
+		if (this.checkQuest(27, 1)) {
 			return true;
 		}
 

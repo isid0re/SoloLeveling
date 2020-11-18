@@ -210,6 +210,8 @@ function LoadConfig () {
 	Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
 	this.configBelt();
 
+	Config.MinGold 	= me.charlvl + 3;
+
 	Config.AutoSkill.Build = specPush("skills");
 	Config.AutoStat.Build = specPush("stats");
 	Config.AutoBuild.Template = me.charlvl < respecOne ? startBuild : me.charlvl < respecTwo ? middleBuild : finalBuild;
@@ -221,15 +223,15 @@ function LoadConfig () {
 				var steel = [
 					"[Name] == TirRune # # [MaxQuantity] == 1",
 					"[Name] == ElRune # # [MaxQuantity] == 1",
-					"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
+					"[name] == Mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
 				];
 				NTIP.arrayLooping(steel);
 
 				Config.Runewords.push([Runeword.Steel, "Mace"]);
-				Config.KeepRunewords.push("[type] == mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
+				Config.KeepRunewords.push("[type] == Mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
 			}
 
-			NTIP.addLine("[type] == mace && [flag] == runeword # [ias] >= 25 # [tier] == 30");
+			NTIP.addLine("[type] == Mace && [flag] == runeword # [ias] >= 25 # [tier] == 30");
 		}
 
 		//weapon switch (prebuff)
@@ -925,14 +927,14 @@ function LoadConfig () {
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 45 # [Tier] == 8",
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 50 # [Tier] == 9",
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 55 # [Tier] == 10",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 5 # tier == 11",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 10 # tier == 12",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 15 # tier == 13",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 20 # tier == 14",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 25 # tier == 15",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 30 # tier == 16",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 35 # tier == 17",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 40 # tier == 18",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 5 # tier == 11",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 10 # tier == 12",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 15 # tier == 13",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 20 # tier == 14",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 25 # tier == 15",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 30 # tier == 16",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 35 # tier == 17",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 40 # tier == 18",
 	];
 	NTIP.arrayLooping(autoequipTiers);
 }

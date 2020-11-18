@@ -41,6 +41,7 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [-1, 56, 47, 56, 47, 64, 55];
 			Config.LowManaSkill = [0, 0];
 			Config.SkipImmune = ["fire and cold"];
+			Config.NoTele = me.charlvl < respecOne ? true : me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
 		}
 	},
 

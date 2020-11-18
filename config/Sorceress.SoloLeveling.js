@@ -212,7 +212,7 @@ function LoadConfig () {
 	Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
 	this.configBelt();
 
-	Config.NoTele = me.charlvl < respecOne ? true : false;
+	Config.MinGold 	= me.charlvl + 3;
 
 	Config.AutoSkill.Build = specPush("skills");
 	Config.AutoStat.Build = specPush("stats");
@@ -827,15 +827,14 @@ function LoadConfig () {
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 45 # [Tier] == 8",
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 50 # [Tier] == 9",
 		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 55 # [Tier] == 10",
-		"[Type] == Ring && [Quality] >= Magic # [FireResist]+[LightResist] >= 55 # [Tier] == 10",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 5 # tier == 11",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 10 # tier == 12",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 15 # tier == 13",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 20 # tier == 14",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 25 # tier == 15",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 30 # tier == 16",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 35 # tier == 17",
-		"[type] == ring && [quality] == rare # [fcr] == 10 && [FireResist]+[ColdResist]+[LightResist] >= 40 # tier == 18",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 5 # tier == 11",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 10 # tier == 12",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 15 # tier == 13",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 20 # tier == 14",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 25 # tier == 15",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 30 # tier == 16",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 35 # tier == 17",
+		"[type] == ring && [quality] == rare # [fcr] > 0 && [FireResist]+[ColdResist]+[LightResist] >= 40 # tier == 18",
 		"[name] == ring && [quality] == unique # [maxhp] >= 40 && [magicdamagereduction] >= 12 # [tier] == 99",
 		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100",
 	];
