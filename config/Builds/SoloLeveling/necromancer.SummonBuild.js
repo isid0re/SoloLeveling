@@ -1,6 +1,6 @@
 /**
- *    @filename   necromancer.FishyMancerBuild.js
- *    @desc       summon necro build for after respecOne
+ *    @filename   necromancer.SummonBuild.js
+ *    @desc       FishyMancer build for after respecOne
  */
 
 var build = {
@@ -10,19 +10,21 @@ var build = {
 	],
 	skills: [
 		[66, 1, false], //Amplify damage
-		[70, 2, false], //Raise Skeleton
+		[70, 1, false], //Raise Skeleton
 		[69, 1, false], //Skeleton Mastery
+		[75, 1, false], //Clay Golem
+		[79, 1, false], //Golem Mastery
+		[89, 1, false], //Summon Resist
+		[72, 1, false], //Weaken
+		[77, 1, false], //Terror
+		[87, 1, false], //Decrepify
 		[67, 1, false], //Teeth
 		[74, 1, false], //Corpse Explosion
-		[75, 1, false], //Clay Golem
-		[87, 1, false], //Decrepify
-		[89, 1, false], //Summon Resist
+		[68, 1, false], //Bone Armor
 		[70, 20, false], //Max Raise Skeleton
 		[69, 20, false], //Max Skeleton Mastery
-		[95, 1, false], //Revive
-		[74, 10, false], //level Corpse Explosion
-		[80, 20, false], //Max Skeletal mage
-		[74, 20, false], //Max Corpse Explosion
-		[95, 20, false] //Max Revive
+		[74, 20, false], //Corpse Explosion
+		[66, 20, false], //Amplify damage
+		[95, 20, false], //Max Revive
 	]
 };
