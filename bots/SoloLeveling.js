@@ -362,6 +362,7 @@ function SoloLeveling () {
 			// unwanted items runes / bad bases
 			if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
 				(Pickit.checkItem(junk[count]).result === 0 || Pickit.checkItem(junk[count]).result === 4) && // drop unwanted
+				!Pickit.checkItem(junk[count]).result === 1 && // Don't throw NTIP wanted
 				!Cubing.keepItem(junk[count]) && // Don't throw cubing ingredients
 				!Runewords.keepItem(junk[count]) && // Don't throw runeword ingredients
 				!CraftingSystem.keepItem(junk[count]) // Don't throw crafting system ingredients
@@ -392,7 +393,7 @@ function SoloLeveling () {
 			}
 
 			// unwanted tier'ed merc autoequip
-			if (me.getMerc()) {
+			if (getMercFix()) {
 				let merctier = NTIP.GetMercTier(junk[count]);
 				let mercbodyLoc = Item.getBodyLocMerc(junk[count]);
 
@@ -466,7 +467,7 @@ function SoloLeveling () {
 		let mercAura = [[104, 99, 108], [103, 98, 114]];
 
 		function getmercAura () {
-			merc = me.getMerc();
+			merc = getMercFix();
 
 			if (!merc) {
 				return null;
@@ -525,7 +526,7 @@ function SoloLeveling () {
 				Misc.useMenu(0x0D45);
 				sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
 				delay(500);
-				merc = me.getMerc();
+				merc = getMercFix();
 
 				if (me.diff !== mercDiff && me.diff === 0) {
 					if (merc.getSkill(tempMercAura, 1)) {
@@ -571,7 +572,7 @@ function SoloLeveling () {
 			return true;
 		}
 
-		if (!me.getMerc()) {
+		if (!getMercFix()) {
 			return true;
 		}
 
@@ -579,14 +580,24 @@ function SoloLeveling () {
 		print("ÿc9SoloLevelingÿc0: merc items loaded to Pickit");
 
 		var mercHelm = [
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 8 && [ias] >= 20 # [Merctier] == 8",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 6 && [magicdamagereduction] >= 10 # [Merctier] == 7",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 120 && [fhr] >= 30 && [ItemCrushingBlow] >= 35 # [Merctier] == 6",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 200 && [lifeleech] >= 5 && [fhr] >= 10 && [ias] >= 10 # [Merctier] == 5",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lifeleech] >= 9 && [fireresist] >= 33 # [Merctier] == 4",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lightresist] >= 20 && [coldresist] >= 20 && [fireresist] >= 20 # [Merctier] == 3",
-			"([type] == circlet || [type] == helm) # [lifeleech] >= 10 && [lightresist] >= 15 && [coldresist] >= 15 && [fireresist] >= 15 # [Merctier] == 2",
-			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [Merctier] == 1",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 8 && [ias] >= 20 # [Merctier] == 18",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 6 && [magicdamagereduction] >= 10 # [Merctier] == 17",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 120 && [fhr] >= 30 && [ItemCrushingBlow] >= 35 # [Merctier] == 16",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 200 && [lifeleech] >= 5 && [fhr] >= 10 && [ias] >= 10 # [Merctier] == 15",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lifeleech] >= 9 && [fireresist] >= 33 # [Merctier] == 14",
+			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lightresist] >= 20 && [coldresist] >= 20 && [fireresist] >= 20 # [Merctier] == 13",
+			"([type] == circlet || [type] == helm) # [lifeleech] >= 10 && [lightresist] >= 15 && [coldresist] >= 15 && [fireresist] >= 15 # [Merctier] == 12",
+			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [Merctier] == 11",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 120 && [LightResist] >= 25 # [tier] == 10",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 110 && [LightResist] >= 25 # [tier] == 9",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 100 && [LightResist] >= 25 # [tier] == 8",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [LightResist] >= 25 # [tier] == 7",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 80 && [LightResist] >= 25 # [tier] == 6",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 70 && [LightResist] >= 25 # [tier] == 5",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 60 && [LightResist] >= 25 # [tier] == 4",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 50 && [LightResist] >= 25 # [tier] == 3",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 30 && [LightResist] >= 25 # [tier] == 2",
+			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 20 && [LightResist] >= 25 # [tier] == 1",
 		];
 		NTIP.arrayLooping(mercHelm);
 
@@ -647,6 +658,11 @@ function SoloLeveling () {
 			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 194 && [fireresist] == 50 # [merctier] == 8",
 			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 178 && [fireresist] == 50 # [merctier] == 7",
 			"[type] == armor # [enhanceddefense] >= 150 && [ias] >= 15 && [fhr] >= 15 && [dexterity] >= 15 # [merctier] == 6",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [frw] == 25 && [fcr] == 25 # [merctier] == 5",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [frw] == 25 && [fcr] == 25 # [merctier] == 4",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [frw] == 25 && [fcr] == 25 # [merctier] == 3",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 65 && [frw] == 25 && [fcr] == 25 # [merctier] == 2",
+			"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] == 25 && [fcr] == 25 # [merctier] == 1",
 		];
 		NTIP.arrayLooping(mercArmor);
 
@@ -670,13 +686,8 @@ function SoloLeveling () {
 		NTIP.arrayLooping(mercWeapon);
 
 		var mercPrep = [
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [frw] == 25 && [fcr] == 25 # [merctier] == 5",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [frw] == 25 && [fcr] == 25 # [merctier] == 4",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [frw] == 25 && [fcr] == 25 # [merctier] == 3",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 65 && [frw] == 25 && [fcr] == 25 # [merctier] == 2",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] == 25 && [fcr] == 25 # [merctier] == 1",
 			"[Type] == Polearm # [EnhancedDamage] >= 65 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 7",
-			"[Type] == Polearm # [EnhancedDamage] >= 40 && [LifeLeech] >= 7  # [MaxQuantity] == 1 && [Merctier] == 6",
+			"[Type] == Polearm # [EnhancedDamage] >= 40 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 6",
 			"[Type] == Polearm # [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 5",
 			"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 4",
 			"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 3",
@@ -684,7 +695,7 @@ function SoloLeveling () {
 			"[Type] == Polearm # [lifeleech] >= 3 # [MaxQuantity] == 1 && [Merctier] == 1",
 		];
 
-		if (me.diff !== 2) {
+		if (me.diff === 0) {
 			NTIP.arrayLooping(mercPrep);
 		}
 
@@ -844,7 +855,7 @@ function SoloLeveling () {
 			"[name] == perfectdiamond # # [MaxQuantity] == 2",
 			"[name] == perfectruby # # [MaxQuantity] == 2",
 			"[name] == perfectsapphire # # [MaxQuantity] == 2",
-			"[name] >= pulrune && [name] <= zodrune"
+			"[name] >= pulrune && [name] <= zodrune",
 		];
 		NTIP.arrayLooping(generalItems);
 		delay(500);
@@ -912,15 +923,43 @@ function SoloLeveling () {
 	};
 
 	this.mausoleum = function () {
-		if (me.charlvl < respecTwo) {
+		if (me.diff === 0 && this.checkQuest(2, 0) || me.diff !== 0 && me.charlvl < respecTwo) {
 			return true;
 		}
 
 		this.townTasks();
-		me.overhead("mausoleum");
+		me.overhead("blood raven");
 
 		Pather.useWaypoint(3);
 		Precast.doPrecast(true);
+
+		Pather.moveToExit(17, true);
+		Pather.moveToPreset(17, 1, 805);
+
+		try {
+			let raven = getUnit(1, "Blood Raven");
+
+			if (raven && raven.hp > 0) {
+				Attack.kill(267);
+			}
+		} catch (e) {
+			print("ÿc9SoloLevelingÿc0: Failed to kill Blood Raven");
+		}
+
+		Pickit.pickItems();
+
+		Pickit.pickItems();
+
+		if (me.diff === 0) {
+			Town.move(NPC.Kashya);
+			let kashya = getUnit(1, NPC.Kashya);
+			kashya.openMenu();
+			me.cancel();
+
+			return true;
+		}
+
+		me.overhead("mausoleum");
 
 		if (!Pather.moveToExit([17, 19], true)) {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Mausoleum");
@@ -945,7 +984,7 @@ function SoloLeveling () {
 				Precast.doPrecast(true);
 
 				if (!Pather.moveToPreset(me.area, 2, 30, 5, 5)) {
-					throw new Error("ÿc9SoloLevelingÿc0: Failed to move to Tree of Inifuss");
+					print("ÿc9SoloLevelingÿc0: Failed to move to Tree of Inifuss");
 				}
 
 				let tree = getUnit(2, 30);
@@ -992,7 +1031,7 @@ function SoloLeveling () {
 
 		if (!gibbet.mode) {
 			if (!Pather.moveToPreset(me.area, 2, 26, 0, 0, true, true)) {
-				throw new Error("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
+				print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
 			}
 
 			Misc.openChest(gibbet);
@@ -1948,10 +1987,10 @@ function SoloLeveling () {
 		if (newitem) {
 			if (!Item.equip(newitem, loc)) {
 				Pickit.pickItems();
-				throw new Error("ÿc9SoloLevelingÿc0: failed to equip item.(equipQuestItem)");
+				print("ÿc9SoloLevelingÿc0: failed to equip item.(equipQuestItem)");
 			}
 		} else {
-			throw new Error("ÿc9SoloLevelingÿc0: Lost item before trying to equip it. (equipQuestItem)");
+			print("ÿc9SoloLevelingÿc0: Lost item before trying to equip it. (equipQuestItem)");
 		}
 
 		if (me.itemoncursor) {
@@ -2073,7 +2112,7 @@ function SoloLeveling () {
 			delay(250 + me.ping);
 
 			if (!Pather.usePortal(83, me.name)) { // return to Trav
-				throw new Error("ÿc9SoloLevelingÿc0: Failed to go back to Travincal from town");
+				print("ÿc9SoloLevelingÿc0: Failed to go back to Travincal from town");
 			}
 
 			this.smashSomething(404); // smash orb
@@ -2120,7 +2159,11 @@ function SoloLeveling () {
 		Config.MercWatch = false;
 
 		try {
-			Attack.kill(242);
+			let mephisto = getUnit(1, "Mephisto");
+
+			if (mephisto && mephisto.hp > 0) {
+				Attack.kill(242);
+			}
 		} catch (err) {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Mephisto');
 		}
@@ -2150,7 +2193,11 @@ function SoloLeveling () {
 			Pather.moveToPreset(105, 1, 256);
 
 			try {
-				Attack.kill(256);
+				let izual = getUnit(1, "Izual");
+
+				if (izual && izual.hp > 0) {
+					Attack.kill(256);
+				}
 			} catch (err) {
 				print('ÿc9SoloLevelingÿc0: Failed to kill Izual');
 			}
@@ -2257,7 +2304,7 @@ function SoloLeveling () {
 			let sealPreset = getPresetUnit(108, 2, seal);
 
 			if (!seal) {
-				throw new Error("Seal preset not found");
+				print("ÿc9SoloLevelingÿc0: Seal preset not found");
 			}
 
 			if (sealPreset.roomy * 5 + sealPreset.y === value || sealPreset.roomx * 5 + sealPreset.x === value) {
@@ -2284,7 +2331,9 @@ function SoloLeveling () {
 					this.chaosPreattack(name, 8);
 
 					try {
-						Attack.kill(name);
+						if (boss && boss.hp > 0) {
+							Attack.kill(name);
+						}
 					} catch (e) {
 						Attack.clear(10, 0, name);
 					}
@@ -2407,7 +2456,6 @@ function SoloLeveling () {
 		};
 
 		this.openSeal = function (classid) {
-
 			for (let sealspot = 0; sealspot < 5; sealspot += 1) {
 				Pather.moveToPreset(108, 2, classid, classid === 394 ? 5 : 2, classid === 394 ? 5 : 0);
 
@@ -2427,7 +2475,7 @@ function SoloLeveling () {
 				}
 
 				if (!seal) {
-					throw new Error("Seal not found (id " + classid + ")");
+					print("ÿc9SoloLevelingÿc0: Seal not found (id " + classid + ")");
 				}
 
 				if (seal.mode) {
@@ -2455,7 +2503,9 @@ function SoloLeveling () {
 				}
 			}
 
-			throw new Error("ÿc9SoloLevelingÿc0: Failed to open seal (id " + classid + ")");
+			print("ÿc9SoloLevelingÿc0: Failed to open seal (id " + classid + ")");
+
+			return true;
 		};
 
 		this.vizier = function () {
@@ -2469,7 +2519,7 @@ function SoloLeveling () {
 			}
 
 			if (!this.getBoss(getLocaleString(2851))) {
-				throw new Error("ÿc9SoloLevelingÿc0: Failed Vizier");
+				print("ÿc9SoloLevelingÿc0: Failed Vizier");
 			}
 		};
 
@@ -2483,7 +2533,7 @@ function SoloLeveling () {
 			}
 
 			if (!this.getBoss(getLocaleString(2852))) {
-				throw new Error("ÿc9SoloLevelingÿc0: Failed Seis");
+				print("ÿc9SoloLevelingÿc0: Failed Seis");
 			}
 		};
 
@@ -2498,7 +2548,7 @@ function SoloLeveling () {
 			}
 
 			if (!this.getBoss(getLocaleString(2853))) {
-				throw new Error("ÿc9SoloLevelingÿc0: Failed Infector");
+				print("ÿc9SoloLevelingÿc0: Failed Infector");
 			}
 		};
 
@@ -2518,7 +2568,11 @@ function SoloLeveling () {
 			Pather.moveTo(7788, 5292, 3, 30);
 			me.overhead("attempting Diablo");
 			this.diabloPrep();
-			Attack.kill(243); // Diablo
+			let diablo = getUnit(1, 243);
+
+			if (diablo && diablo.hp > 0 ) {
+				Attack.kill(243); // Diablo
+			}
 		} catch (error) {
 			print("ÿc9SoloLevelingÿc0: Diablo not found. Checking seal bosses.");
 			this.infector();
@@ -2529,20 +2583,15 @@ function SoloLeveling () {
 
 			try {
 				this.diabloPrep();
-				Attack.kill(243); // Diablo
-			} catch (err) {
-				try {
-					print("ÿc9SoloLevelingÿc0: Diablo not found. Attempting level clear.");
-					Attack.clearLevel();
-					me.overhead("third attempt");
-					Pather.moveTo(7788, 5292, 3, 30);
-					this.diabloPrep();
-					Attack.kill(243); // Diablo
-				} catch (e) {
-					print("ÿc9SoloLevelingÿc0: Diablo not found.");
+				let diablo = getUnit(1, 243);
 
-					return true;
+				if (diablo && diablo.hp > 0 ) {
+					Attack.kill(243); // Diablo
 				}
+			} catch (err) {
+				print("ÿc9SoloLevelingÿc0: Diablo not found.");
+
+				return true;
 			}
 		}
 
@@ -2677,7 +2726,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(114, true) || !Pather.moveToPreset(me.area, 2, 460)) {
-			throw new Error("ÿc9SoloLevelingÿc0: Failed to move to Anya");
+			print("ÿc9SoloLevelingÿc0: Failed to move to Anya");
 		}
 
 		delay(1000);
@@ -2815,7 +2864,7 @@ function SoloLeveling () {
 		Pather.usePortal(120, me.name);
 
 		if (!Pather.moveToPreset(me.area, 2, 546)) { // move to altar
-			throw new Error("ÿc9SoloLevelingÿc0: Failed to move to ancients' altar");
+			print("ÿc9SoloLevelingÿc0: Failed to move to ancients' altar");
 		}
 
 		touchAltar(); //activate altar
@@ -2859,8 +2908,8 @@ function SoloLeveling () {
 		let checkFR = me.diff === 0 ? 40 : 100; // cannot start next diff with negative resistances
 		let checkLR = me.diff === 0 ? 40 : 100;
 		let checkCR = me.diff === 0 ? 40 : 100;
-		let nCap = 35; // lvl requirement to attack Normal Baal.
-		let nmCap = 65; // lvl requirement to attack NM Baal.
+		let nCap = 40; // lvl requirement to attack Normal Baal.
+		let nmCap = 70; // lvl requirement to attack NM Baal.
 		let lvlCap = me.diff === 0 ? nCap : me.diff === 1 ? nmCap : 99;
 
 		if (me.gametype === 0 || !Pather.accessToAct(5)) {
@@ -3106,7 +3155,7 @@ function SoloLeveling () {
 		Pather.moveTo(15094, me.classid === 3 ? 5029 : 5038);
 		Pickit.pickItems();
 
-		if (me.charlvl < lvlCap || me.charlvl >= lvlCap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
+		if (me.charlvl < lvlCap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
 			print('ÿc9SoloLevelingÿc0: missing requirements for next difficulty.');
 
 			return true;
@@ -3125,7 +3174,7 @@ function SoloLeveling () {
 		if (portal) {
 			Pather.usePortal(null, null, portal);
 		} else {
-			throw new Error("ÿc9SoloLevelingÿc0: Couldn't access portal.");
+			print("ÿc9SoloLevelingÿc0: Couldn't access portal.");
 		}
 
 		Pather.moveTo(15134, 5923);
@@ -3354,7 +3403,7 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 
 var haveItem = function (type, flag, iName) {
 	if (type && !NTIPAliasType[type]) {
-		throw new Error("No alias for type '" + type + "'");
+		print("ÿc9SoloLevelingÿc0: No alias for type '" + type + "'");
 	}
 
 	if (iName !== undefined) {
@@ -3398,7 +3447,7 @@ var casterCheck = function () {
 	var template = getBuildTemplate();
 
 	if (!include(template)) {
-		throw new Error("getskills Failed to include template: " + template);
+		print("ÿc9SoloLevelingÿc0: getskills Failed to include template: " + template);
 	}
 
 	let castercheck = build.caster;
@@ -3409,6 +3458,29 @@ var casterCheck = function () {
 var isCaster = casterCheck();
 
 //	MERC AUTO EQUIP - modified from dzik's
+var getMercFix = function () { // merc is null fix
+	if (!Config.UseMerc) {
+		return null;
+	}
+
+	var merc = me.getMerc();
+
+	for (var i = 0; i < 3; i++) {
+		if (merc) {
+			if (merc.mode === 0 || merc.mode === 12) {
+				return null;
+			}
+
+			break;
+		}
+
+		delay(100);
+		merc = me.getMerc();
+	}
+
+	return merc;
+};
+
 Item.hasMercTier = function (item) {
 	return Config.AutoEquip && NTIP.GetMercTier(item) > 0 && !me.classic;
 };
@@ -3418,7 +3490,7 @@ Item.canEquipMerc = function (item, bodyLoc) {
 		return false;
 	}
 
-	let mercenary = me.getMerc();
+	let mercenary = getMercFix();
 
 	if (!mercenary) { // dont have merc or he is dead
 		return false;
@@ -3487,7 +3559,7 @@ Item.equipMerc = function (item, bodyLoc) {
 };
 
 Item.getEquippedItemMerc = function (bodyLoc) {
-	let mercenary = me.getMerc();
+	let mercenary = getMercFix();
 	var item = mercenary.getItem();
 
 	if (item) {
@@ -3514,7 +3586,7 @@ Item.getEquippedItemMerc = function (bodyLoc) {
 };
 
 Item.getBodyLocMerc = function (item) {
-	var bodyLoc = false, mercenary = me.getMerc();
+	var bodyLoc = false, mercenary = getMercFix();
 
 	switch (item.itemType) {
 	case 3: // Armor
@@ -3555,7 +3627,7 @@ Item.autoEquipCheckMerc = function (item) {
 		return true;
 	}
 
-	if (Config.AutoEquip && !me.getMerc()) {
+	if (Config.AutoEquip && !getMercFix()) {
 		return false;
 	}
 
@@ -3577,7 +3649,7 @@ Item.autoEquipCheckMerc = function (item) {
 };
 
 Item.autoEquipMerc = function () {
-	if (!Config.AutoEquip || !me.getMerc()) {
+	if (!Config.AutoEquip || !getMercFix()) {
 		return true;
 	}
 
@@ -3660,7 +3732,7 @@ Item.autoEquipMerc = function () {
 
 Item.removeItemsMerc = function () {
 	let cursorItem;
-	let mercenary = me.getMerc();
+	let mercenary = getMercFix();
 
 	if (!mercenary) {
 		return true;
