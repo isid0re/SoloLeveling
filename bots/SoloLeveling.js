@@ -531,36 +531,30 @@ function SoloLeveling () {
 				if (me.diff !== mercDiff && me.diff === 0) {
 					if (merc.getSkill(tempMercAura, 1)) {
 						print('ÿc9SoloLevelingÿc0: prayer merc hired.');
-						removeEventListener("gamepacket", this.gamePacket);
-						this.setupMerc();
 
-						return true;
+						break;
 					} else {
 						print('ÿc9SoloLevelingÿc0: temp merc not available. will try later');
-						removeEventListener("gamepacket", this.gamePacket);
-						this.setupMerc();
 
-						return false;
+						break;
 					}
 				}
 
 				if (me.diff === mercDiff) {
 					if (merc.getSkill(mercAuraWanted, 1)) {
 						print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc hired.');
-						removeEventListener("gamepacket", this.gamePacket);
-						this.setupMerc();
 
-						return true;
+						break;
 					} else {
 						print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
-						removeEventListener("gamepacket", this.gamePacket);
 
-						return false;
+						break;
 					}
 				}
 			}
 		}
 
+		this.setupMerc();
 		this.equipMerc();
 		removeEventListener("gamepacket", this.gamePacket);
 
@@ -1275,6 +1269,11 @@ function SoloLeveling () {
 		}
 
 		var teleportPads = function () {
+			if (me.classid === 1 && me.charlvl >= respecOne) {
+
+				return true;
+			}
+
 			let wpX = 25449;
 			let wpY = 5449;
 			let ntppPath = [[53, 2], [103, -3], [113, -68], [173, -58], [243, -73], [293, -58], [353, -68], [372, -62], [342, -17]];

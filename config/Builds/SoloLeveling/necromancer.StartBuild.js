@@ -12,21 +12,15 @@ var build = {
 		["vitality", "all"]
 	],
 	skills: [
-		[66, 1], // amplified damage
-		[67, 1], // teeth
-		[68, 1], // bone armor
-		[67, 2], // teeth
-		[75, 1], // clay golem
-		[74, 1], // corpse explosion
 		[67, 5], // teeth
+		[68, 1], // bone armor
+		[67, 13], // teeth
+		[75, 1], // clay golem
 		[79, 1], // Golem Mastery
-		[78, 4], // bone wall
-		[67, 7], // teeth
-		[84, 6], // bone spear
-		[89, 1], // summon resist
+		[66, 1], // amplified damage
+		[76, 1], // iron maiden
+		[74, 1], // corpse explosion
 		[84, 7], // bone spear
-		[87, 1], // decrepify
-		[88, 1], // bone prison
-		[87, 2], // decrepify
+		[78, 4], // bone wall
 	]
 };
