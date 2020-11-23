@@ -2798,30 +2798,30 @@ Misc.hireMerc = function () {
 			delay(500);
 			merc = getMercFix();
 
-			if (me.diff !== mercDiff && me.diff === 0) {
-				if (merc.getSkill(tempMercAura, 1)) {
-					print('ÿc9SoloLevelingÿc0: prayer merc hired.');
-
-					break;
-				} else {
-					print('ÿc9SoloLevelingÿc0: temp merc not available. will try later');
-
-					break;
-				}
-			}
-
 			if (me.diff === mercDiff) {
 				if (merc.getSkill(mercAuraWanted, 1)) {
 					print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc hired.');
 
 					break;
-				} else {
-					print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
+				}
+			}
+
+			if (me.diff !== mercDiff && me.diff === 0) {
+				if (merc.getSkill(tempMercAura, 1)) {
+					print('ÿc9SoloLevelingÿc0: prayer merc hired.');
 
 					break;
 				}
 			}
 		}
+	}
+
+	if (me.diff !== mercDiff && me.diff === 0 && !merc.getSkill(tempMercAura, 1)) {
+		print('ÿc9SoloLevelingÿc0: temp merc not available. will try later');
+	}
+
+	if (me.diff === mercDiff && !merc.getSkill(mercAuraWanted, 1)) {
+		print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
 	}
 
 	Misc.setupMerc();
