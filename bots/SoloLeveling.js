@@ -6,798 +6,20 @@
 *	@TODO		- dynamic tiers link tierCalculator to pickit and NTIP
 */
 
-// Character Respecialization Variables
-// ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 28, 0, 25, 0, 0, 0][me.classid];
-const respecTwo = [ 0, 85, 0, 85, 0, 0, 0][me.classid];
-
-//Start SoloLeveling Script
 function SoloLeveling () {
-
-	var mercId = [], merc;
 	var sequence = [
 		"den", "mausoleum", "tristam", "countess", "pits", "andariel", // Act 1
 		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
 		"eye", "heart", "tome", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
-		"shenk", "saveBarby", "anya", "ancients", "baal" // Act 5
+		"shenk", "saveBarby", "anya", "pindle", "ancients", "baal" // Act 5
 	];
-
-	this.checkQuest = function (id, state) {
-		sendPacket(1, 0x40);
-		delay(500);
-
-		return me.getQuest(id, state);
-	};
-
-	this.townTasks = function () {
-		if (!me.inTown) {
-			Town.goToTown();
-		}
-
-		let prevTown;
-
-		switch (me.area) {
-		case 1:
-			prevTown = 1;
-
-			break;
-		case 40:
-			prevTown = 40;
-
-			break;
-		case 75:
-			prevTown = 75;
-
-			break;
-		case 103:
-			prevTown = 103;
-
-			break;
-		case 109:
-			prevTown = 109;
-
-			break;
-		}
-
-		this.unfinishedQuests();
-		Cubing.doCubing();
-		Runewords.makeRunewords();
-		Item.autoEquip();
-		this.equipSWAP();
-		this.equipMerc();
-		Town.stash(true);
-		Town.heal();
-		Town.identify();
-		Town.clearInventory();
-		Town.buyPotions();
-		Town.fillTome(518);
-		Town.shopItems();
-		Town.buyKeys();
-		Town.repair(true);
-		Town.shopItems();
-		Town.gamble();
-		Town.reviveMerc();
-		this.hireMerc();
-		this.equipMerc();
-		Item.autoEquip();
-		this.clearJunk();
-		this.organizeStash();
-		Town.stash(true);
-		this.organizeInventory();
-		this.characterRespec();
-
-		if ((me.classid !== 1 || me.classid === 1 && me.charlvl < respecOne) && (me.area === 40 || me.area === 75)) {
-			this.buyPots(8, "Stamina");
-			this.drinkPots();
-		}
-
-		if (me.inTown && me.area !== prevTown) {
-			Pather.useWaypoint(prevTown);
-		}
-
-		return true;
-	};
-
-	this.unfinishedQuests = function () {
-		//Radament skill book
-		let book = me.getItem(552);
-
-		if (book) {
-			if (book.location === 7) {
-				Town.move('stash');
-				Storage.Inventory.MoveTo(book);
-				delay(300);
-				clickItem(1, book);
-			} else {
-				delay(300);
-				clickItem(1, book);
-			}
-
-			print('ÿc9SoloLevelingÿc0: used Radament skill book');
-		}
-
-		// golden bird
-		if (me.getItem(546)) { // golden bird
-			Town.goToTown(3);
-			Town.move(NPC.Meshif);
-
-			let meshif = getUnit(1, NPC.Meshif);
-
-			if (meshif) {
-				meshif.openMenu();
-				me.cancel();
-			}
-		}
-
-		if (me.getItem(547)) { // ashes
-			Town.goToTown(3);
-			Town.move(NPC.Alkor);
-
-			let alkor = getUnit(1, NPC.Alkor);
-
-			if (alkor) {
-				for (let ashes = 0; ashes < 2; ashes += 1) {
-					alkor.openMenu();
-					me.cancel();
-				}
-			}
-		}
-
-		if (me.getItem(545)) { // potion of life
-			let item = me.getItem(545);
-
-			if (item.location > 3) {
-				this.openStash();
-			}
-
-			item.interact();
-			print('ÿc9SoloLevelingÿc0: used potion of life');
-		}
-
-		//LamEssen's Tome
-		let tome = me.getItem(548);
-
-		if (tome) {
-			if (tome.location === 7) {
-				Town.move('stash');
-				Storage.Inventory.MoveTo(tome);
-				delay(300);
-			}
-
-			Town.goToTown(3);
-			Town.move(NPC.Alkor);
-			let alkor = getUnit(1, NPC.Alkor);
-
-			if (alkor) {
-				alkor.openMenu();
-				me.cancel();
-			}
-
-			print('ÿc9SoloLevelingÿc0: LamEssen Tome');
-		}
-
-		//remove Khalim's Will if quest not completed and restarting run.
-		let kw = me.getItem(174);
-
-		if (kw) {
-			if (Item.getEquippedItem(4).classid === 174) {
-
-				Town.clearInventory();
-				delay(me.ping * 2 + 500);
-
-				clickItem(4, 4); //remove khalim's will
-				delay(me.ping * 2 + 500);
-
-				let cursorItem = getUnit(100);
-
-				if (cursorItem) { // place in inventory
-					Storage.Inventory.MoveTo(cursorItem);
-				}
-
-				Town.move('stash');
-
-				if (Storage.Stash.CanFit(kw)) { // place in stash
-					Storage.Stash.MoveTo(kw);
-				} else {
-					me.cancel();
-				}
-
-				print('ÿc9SoloLevelingÿc0: removed khalims will');
-			}
-		}
-
-		// anya scroll of resistance
-		let scroll = me.getItem(646);
-
-		if (scroll) {
-			if (scroll.location === 7) {
-				Town.move('stash');
-				Storage.Inventory.MoveTo(scroll);
-				delay(300);
-				clickItem(1, scroll);
-			} else {
-				delay(300);
-				clickItem(1, scroll);
-			}
-
-			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
-		}
-
-		return true;
-	};
-
-	this.buyPots = function (quantity, type) {
-
-		let npc, jugs;
-
-		switch (me.area) {
-		case 1:
-			Town.move(NPC.Akara);
-			npc = getUnit(1, NPC.Akara);
-			break;
-		case 40:
-			Town.move(NPC.Lysander);
-			npc = getUnit(1, NPC.Lysander);
-			break;
-		case 75:
-			Town.move(NPC.Alkor);
-			npc = getUnit(1, NPC.Alkor);
-			break;
-		case 103:
-			Town.move(NPC.Jamella);
-			npc = getUnit(1, NPC.Jamella);
-			break;
-		case 109:
-			Town.move(NPC.Malah);
-			npc = getUnit(1, NPC.Malah);
-			break;
-		}
-
-		if (!npc || !npc.openMenu()) {
-			return false;
-		}
-
-		Misc.useMenu(0x0D44);
-
-		switch (type) {
-		case "Thawing":
-			jugs = npc.getItem("wms");
-
-			break;
-		case "Stamina":
-			jugs = npc.getItem("vps");
-
-			break;
-		case "Antidote":
-			jugs = npc.getItem("yps");
-
-			break;
-		}
-
-		print('ÿc9SoloLevelingÿc0: buying ' + quantity + ' ' + type + ' Potions');
-
-		for (let totalspecialpotions = 0; totalspecialpotions < quantity; totalspecialpotions++) {
-
-			if (jugs) {
-				jugs.buy(false);
-			}
-		}
-
-		me.cancel();
-
-		return true;
-	};
-
-	this.drinkPots = function () {
-		let classIds = ["yps", "wms", "vps", ];
-
-		for (let totalpots = 0; totalpots < classIds.length; totalpots++) {
-			let chugs = me.getItem(classIds[totalpots]);
-
-			if (chugs) {
-				do {
-					delay(300);
-					chugs.interact();
-				} while (chugs.getNext());
-			}
-		}
-
-		print('ÿc9SoloLevelingÿc0: drank Special Potions');
-
-		return true;
-	};
-
-	this.organizeStash = function () {
-		if (Storage.Stash.UsedSpacePercent() < 85) {
-			return true;
-		}
-
-		me.overhead('organize stash');
-		Town.move('stash');
-		let stashFit = { sizex: 6, sizey: 4 };
-
-		if (!Storage.Stash.CanFit(stashFit)) {
-			me.cancel();
-
-			let sorted, items = me.findItems(-1, 0, 7);
-
-			items.sort(function (a, b) {
-				return (b.sizex * b.sizey - a.sizex * a.sizey);
-			});
-
-			for (sorted = 0; sorted < items.length; sorted += 1) {
-				Storage.Stash.MoveTo(items[sorted]);
-			}
-		}
-
-		return true;
-	};
-
-	this.organizeInventory = function () {
-		me.overhead('organize inventory');
-		let invfit = { sizex: 4, sizey: 4 };
-
-		if (!Storage.Inventory.CanFit(invfit)) {
-			me.cancel();
-
-			let inv, items = me.findItems(-1, 0, 3);
-
-			items.sort(function (a, b) {
-				return (b.sizex * b.sizey - a.sizex * a.sizey);
-			});
-
-			for (inv = 0; inv < items.length; inv += 1) {
-				Storage.Inventory.MoveTo(items[inv]);
-			}
-		}
-
-		return true;
-	};
-
-	this.clearJunk = function () {
-		let junk = me.getItems();
-
-		for (let count = 0; count < junk.length; count += 1) {
-			// unwanted items runes / bad bases
-			if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
-				(Pickit.checkItem(junk[count]).result === 0 || Pickit.checkItem(junk[count]).result === 4) && // drop unwanted
-				!Pickit.checkItem(junk[count]).result === 1 && // Don't throw NTIP wanted
-				!Cubing.keepItem(junk[count]) && // Don't throw cubing ingredients
-				!Runewords.keepItem(junk[count]) && // Don't throw runeword ingredients
-				!CraftingSystem.keepItem(junk[count]) // Don't throw crafting system ingredients
-			) {
-				if (junk[count].drop()) {
-					me.overhead('cleared junk');
-					delay(250);
-				}
-			}
-
-			// unwanted tier'ed autoequip
-			let stashtier = NTIP.GetTier(junk[count]);
-			let bodyLoc = Item.getBodyLoc(junk[count]);
-
-			if (stashtier > 0 && bodyLoc) {
-				for (let bodypart = 0; bodypart < bodyLoc.length; bodypart += 1) {
-					let equippedTier = Item.getEquippedItem(bodyLoc[bodypart]).tier;
-
-					if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
-						stashtier <= equippedTier // drop same tier or less items
-					) {
-						if (junk[count].drop()) {
-							me.overhead('cleared autoequip junk');
-							delay(250);
-						}
-					}
-				}
-			}
-
-			// unwanted tier'ed merc autoequip
-			if (getMercFix()) {
-				let merctier = NTIP.GetMercTier(junk[count]);
-				let mercbodyLoc = Item.getBodyLocMerc(junk[count]);
-
-				if (merctier > 0 && mercbodyLoc) {
-					for (let mercbodypart = 0; mercbodypart < mercbodyLoc.length; mercbodypart += 1) {
-						let mercequippedTier = Item.getEquippedItemMerc(mercbodyLoc[mercbodypart]).tier;
-
-						if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
-							merctier <= mercequippedTier // drop same merctier or less items
-						) {
-							if (junk[count].drop()) {
-								me.overhead('cleared merc junk');
-								delay(250);
-							}
-						}
-					}
-				}
-			}
-		}
-
-		return true;
-	};
-
-	this.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
-		let id;
-
-		switch (bytes[0]) {
-		case 0x4e: // merc list packet
-			id = (bytes[2] << 8) + bytes[1];
-
-			if (mercId.indexOf(id) !== -1) {
-				mercId.length = 0;
-			}
-
-			mercId.push(id);
-			break;
-		case 0x5d: // golden bird quest
-			if (!this.checkQuest(20, 0)) {
-				let bird = getUnit(4, 546);
-
-				if (bird) {
-					Pickit.pickItem(bird);
-				}
-
-				if (me.getItem(546)) {
-					print("ÿc9SoloLevelingÿc0: activated golden bird quest");
-					me.overhead('golden bird');
-
-					if (!me.inTown) {
-						Town.goToTown();
-					}
-
-					this.unfinishedQuests();
-					Town.heal();
-					Town.move("portalspot");
-					Pather.usePortal(null, me.name);
-				}
-			}
-
-			break;
-		}
-	};
-
-	this.hireMerc = function () {
-		//  classorder =   ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-		let mercAuraName = ["Holy Freeze", "Holy Freeze", "Might", "Holy Freeze", "Defiance", "Blessed Aim", "Holy Freeze"][me.classid];
-		let mercAuraWanted = [114, 114, 98, 114, 104, 108, 114][me.classid];
-		let tempMercAura = 99; //prayer only one not used -- replaciing merc will bug out if changed.
-		// mercdiff = ["Nightmare", "Nightmare", "Nightmare", "Nightmare", "Normal", "Normal", "Nightmare"][me.classid];
-		let mercDiff = [1, 1, 1, 1, 0, 0, 1][me.classid];
-		let mercAura = [[104, 99, 108], [103, 98, 114]];
-
-		function getmercAura () {
-			merc = getMercFix();
-
-			if (!merc) {
-				return null;
-			}
-
-			for (let range = 0; range < mercAura.length; range++) {
-				if (Array.isArray(mercAura[range])) {
-					for (let selection = 0; selection < mercAura[range].length; selection++) {
-						if (merc.getSkill(mercAura[range][selection], 1)) {
-							return mercAura[range][selection];
-						}
-					}
-				} else if (merc.getSkill(mercAura[range], 1)) {
-					return mercAura[range];
-				}
-			}
-
-			return true;
-		}
-
-		if (!Pather.accessToAct(2) || me.diff === 2) { // don't hire if no access to act 2 or if in hell
-			return true;
-		}
-
-		let mercSelected = getmercAura();
-
-		if (mercSelected === mercAuraWanted || me.diff === 0 && mercSelected === tempMercAura) {
-			return true;
-		}
-
-		if (me.diff !== mercDiff && me.diff === 0 && me.gold < 25000 || me.diff === mercDiff && (me.diff === 0 && me.gold < 25000 || me.gold < 100000)) {
-			print('ÿc9SoloLevelingÿc0: not enough gold to hire merc.');
-
-			return true;
-		}
-
-		Pather.getWP(me.area);
-		me.overhead('getting merc');
-
-		Town.goToTown(2);
-
-		Pather.moveTo(5041, 5055);
-		addEventListener("gamepacket", this.gamePacket);
-		Town.move(NPC.Greiz);
-
-		if (mercSelected !== mercAuraWanted && me.diff === mercDiff || mercSelected !== tempMercAura && me.diff === 0) { // replace merc
-			me.overhead('replacing merc');
-			Item.removeItemsMerc(); // strip temp merc gear
-			delay(500 + me.ping);
-		}
-
-		let greiz = getUnit(1, NPC.Greiz);
-
-		if (greiz && greiz.openMenu()) {
-			while (mercId.length > 0) {
-				Misc.useMenu(0x0D45);
-				sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
-				delay(500);
-				merc = getMercFix();
-
-				if (me.diff !== mercDiff && me.diff === 0) {
-					if (merc.getSkill(tempMercAura, 1)) {
-						print('ÿc9SoloLevelingÿc0: prayer merc hired.');
-
-						break;
-					} else {
-						print('ÿc9SoloLevelingÿc0: temp merc not available. will try later');
-
-						break;
-					}
-				}
-
-				if (me.diff === mercDiff) {
-					if (merc.getSkill(mercAuraWanted, 1)) {
-						print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc hired.');
-
-						break;
-					} else {
-						print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
-
-						break;
-					}
-				}
-			}
-		}
-
-		this.setupMerc();
-		this.equipMerc();
-		removeEventListener("gamepacket", this.gamePacket);
-
-		return true;
-	};
-
-	this.setupMerc = function () {
-		if (me.gametype === 0) {
-			return true;
-		}
-
-		if (!getMercFix()) {
-			return true;
-		}
-
-		me.overhead('Pickit: added merc items');
-		print("ÿc9SoloLevelingÿc0: merc items loaded to Pickit");
-
-		var mercHelm = [
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 8 && [ias] >= 20 # [Merctier] == 18",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 6 && [magicdamagereduction] >= 10 # [Merctier] == 17",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 120 && [fhr] >= 30 && [ItemCrushingBlow] >= 35 # [Merctier] == 16",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 200 && [lifeleech] >= 5 && [fhr] >= 10 && [ias] >= 10 # [Merctier] == 15",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lifeleech] >= 9 && [fireresist] >= 33 # [Merctier] == 14",
-			"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lightresist] >= 20 && [coldresist] >= 20 && [fireresist] >= 20 # [Merctier] == 13",
-			"([type] == circlet || [type] == helm) # [lifeleech] >= 10 && [lightresist] >= 15 && [coldresist] >= 15 && [fireresist] >= 15 # [Merctier] == 12",
-			"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [Merctier] == 11",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 120 && [LightResist] >= 25 # [tier] == 10",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 110 && [LightResist] >= 25 # [tier] == 9",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 100 && [LightResist] >= 25 # [tier] == 8",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [LightResist] >= 25 # [tier] == 7",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 80 && [LightResist] >= 25 # [tier] == 6",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 70 && [LightResist] >= 25 # [tier] == 5",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 60 && [LightResist] >= 25 # [tier] == 4",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 50 && [LightResist] >= 25 # [tier] == 3",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 30 && [LightResist] >= 25 # [tier] == 2",
-			"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 20 && [LightResist] >= 25 # [tier] == 1",
-		];
-		NTIP.arrayLooping(mercHelm);
-
-		var mercArmor = [
-			"[Type] == armor && [flag] == runeword # [defense] >= 1800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 62",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 61",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 60",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 59",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 58",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 56",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 55",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 54",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 53",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 52",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 51",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 50",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 49",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 48",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 47",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1300 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 46",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1200 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 45",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1100 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 44",
-			"[Type] == armor && [flag] == runeword # [defense] >= 1000 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 43",
-			"[Type] == armor && [flag] == runeword # [defense] >= 800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 42",
-			"[Type] == armor && [flag] == runeword # [defense] >= 775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 41",
-			"[Type] == armor && [flag] == runeword # [defense] >= 750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 40",
-			"[Type] == armor && [flag] == runeword # [defense] >= 725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 39",
-			"[Type] == armor && [flag] == runeword # [defense] >= 700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 38",
-			"[Type] == armor && [flag] == runeword # [defense] >= 675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 37",
-			"[Type] == armor && [flag] == runeword # [defense] >= 650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 36",
-			"[Type] == armor && [flag] == runeword # [defense] >= 625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 35",
-			"[Type] == armor && [flag] == runeword # [defense] >= 600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 34",
-			"[Type] == armor && [flag] == runeword # [defense] >= 575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 33",
-			"[Type] == armor && [flag] == runeword # [defense] >= 550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 32",
-			"[Type] == armor && [flag] == runeword # [defense] >= 525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 31",
-			"[Type] == armor && [flag] == runeword # [defense] >= 500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 30",
-			"[Type] == armor && [flag] == runeword # [defense] >= 475 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 29",
-			"[Type] == armor && [flag] == runeword # [defense] >= 450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 28",
-			"[Type] == armor && [flag] == runeword # [defense] >= 425 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 27",
-			"[Type] == armor && [flag] == runeword # [defense] >= 400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 26",
-			"[Type] == armor && [flag] == runeword # [defense] >= 375 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 25",
-			"[Type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [Merctier] == 24",
-			"[Name] == KrakenShell && [Quality] == Unique # [enhanceddefense] >= 170 && [strength] >= 40 # [Merctier] == 23",
-			"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # [enhanceddefense] >=160 && ([maxhp] == 60 || [coldresist] == 50) # [Merctier] == 22",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 900 && [fireresist] == 50 # [merctier] == 21",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 875 && [fireresist] == 50 # [merctier] == 20",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 850 && [fireresist] == 50 # [merctier] == 19",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 825 && [fireresist] == 50 # [merctier] == 18",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 800 && [fireresist] == 50 # [merctier] == 17",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 780 && [fireresist] == 50 # [merctier] == 16",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 740 && [fireresist] == 50 # [merctier] == 15",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 700 && [fireresist] == 50 # [merctier] == 14",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 650 && [fireresist] == 50 # [merctier] == 13",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 610 && [fireresist] == 50 # [merctier] == 12",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 390 && [fireresist] == 50 # [merctier] == 11",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 240 && [fireresist] == 50 # [merctier] == 10",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 213 && [fireresist] == 50 # [merctier] == 9",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 194 && [fireresist] == 50 # [merctier] == 8",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 178 && [fireresist] == 50 # [merctier] == 7",
-			"[type] == armor # [enhanceddefense] >= 150 && [ias] >= 15 && [fhr] >= 15 && [dexterity] >= 15 # [merctier] == 6",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [frw] == 25 && [fcr] == 25 # [merctier] == 5",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [frw] == 25 && [fcr] == 25 # [merctier] == 4",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [frw] == 25 && [fcr] == 25 # [merctier] == 3",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 65 && [frw] == 25 && [fcr] == 25 # [merctier] == 2",
-			"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] == 25 && [fcr] == 25 # [merctier] == 1",
-		];
-		NTIP.arrayLooping(mercArmor);
-
-		var mercWeapon = [
-			"[type] == polearm && [flag] == runeword && [flag] == ethereal # [meditationaura] >= 17 # [Merctier] == 22",
-			"[name] == thresher && [quality] == unique # [enhanceddamage] >= 190 && [lifeleech] >= 11 # [Merctier] == 21",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [Merctier] == 20",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [Merctier] == 19",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [Merctier] == 18",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 14 # [Merctier] == 17",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 13 # [Merctier] == 16",
-			"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [Merctier] == 15",
-			"[name] == yari && [quality] == unique # [enhanceddamage] >= 160 && [itemcrushingblow] >= 45 # [Merctier] == 14",
-			"[name] == fuscina && [quality] == unique # [enhanceddamage] >= 140 && [fireresist] >= 50 # [Merctier] == 13",
-			"[name] == halberd && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 12",
-			"[name] == poleaxe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 11",
-			"[name] == warscythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 10",
-			"[name] == scythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 9",
-			"[name] == voulge && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 8",
-		];
-		NTIP.arrayLooping(mercWeapon);
-
-		var mercPrep = [
-			"[Type] == Polearm # [EnhancedDamage] >= 65 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 7",
-			"[Type] == Polearm # [EnhancedDamage] >= 40 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 6",
-			"[Type] == Polearm # [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 5",
-			"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 4",
-			"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 3",
-			"[Type] == Polearm # [lifeleech] >= 4 # [MaxQuantity] == 1 && [Merctier] == 2",
-			"[Type] == Polearm # [lifeleech] >= 3 # [MaxQuantity] == 1 && [Merctier] == 1",
-		];
-
-		if (me.diff === 0) {
-			NTIP.arrayLooping(mercPrep);
-		}
-
-		return true;
-	};
-
-	this.equipMerc = function () {
-		if (me.gametype === 1) {
-			Item.autoEquipMerc();
-			Pickit.pickItems(); // safetycheck for merc items on ground
-			Item.autoEquipMerc();
-		}
-
-		return true;
-	};
-
-	this.equipSWAP = function () {
-		let spirit = me.getItems()
-			.filter(item =>
-				item.getPrefix(20635) // The spirit shield prefix
-				&& item.classid !== 29 // broad sword
-				&& item.classid !== 30 // crystal sword
-				&& item.classid !== 31 // crystal sword
-				&& [3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
-			)
-			.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
-			.first();
-
-		if (spirit) {
-			if (Item.getEquippedItem(12).tier < 0) {
-				Town.move('stash');
-				Storage.Inventory.MoveTo(spirit);
-				Attack.weaponSwitch(); // switch to slot 2
-				spirit.equip();
-				Attack.weaponSwitch();
-			}
-		}
-
-		let cta = me.getItems()
-			.filter(item =>
-				item.getPrefix(20519) // The call to arms prefix
-				&& [1, 3, 6, 7].indexOf(item.location) > -1 // Needs to be on one these locations
-			)
-			.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
-			.first();
-
-		if (cta) {
-			if (cta.location === 1) {
-				return true;
-			} else {
-				Town.move('stash');
-				Storage.Inventory.MoveTo(cta);
-				Attack.weaponSwitch(); // switch to slot 2
-				cta.equip();
-				Attack.weaponSwitch();
-			}
-		}
-
-		return true;
-	};
-
-	this.characterRespec = function () {// Akara reset for build change
-		if (this.checkQuest(41, 0)) {
-			return true;
-		}
-
-		if (me.charlvl === respecOne || me.charlvl === respecTwo) {
-			Precast.doPrecast(true);
-			Town.goToTown(1);
-			Town.move(NPC.Akara);
-
-			let akara = getUnit(1, NPC.Akara);
-
-			if (!akara || !akara.openMenu()) {
-				return false;
-			}
-
-			delay(me.ping * 2);
-
-			if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
-				return false;
-			}
-
-			delay((me.ping * 2) + 1000);
-
-			Town.clearBelt();
-			me.overhead('time to respec');
-
-			delay(250);
-
-			let script = getScript("default.dbj");
-			script.stop();
-			load("default.dbj");
-		}
-
-		return true;
-
-	};
 
 	// Scripts to execute for leveling
 	this.startrun = function () {
 		me.overhead('setup SoloLeveling');
-		delay(500);
-
 		Town.heal();
 		Town.buyPotions();
-
-		me.overhead('Pickit: added quest items');
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
 
 		var questItems = [
@@ -817,12 +39,9 @@ function SoloLeveling () {
 			"[Name] == Khalim'sBrain",
 			"[Name] == Khalim'sFlail",
 			"[Name] == Khalim'sWill",
-			"[Name] == hellforgehammer"
 		];
 		NTIP.arrayLooping(questItems);
-		delay(500);
 
-		me.overhead('Pickit: added general items');
 		print("ÿc9SoloLevelingÿc0: general items loaded to Pickit");
 
 		var generalItems = [
@@ -849,26 +68,25 @@ function SoloLeveling () {
 			"[name] == perfectdiamond # # [MaxQuantity] == 2",
 			"[name] == perfectruby # # [MaxQuantity] == 2",
 			"[name] == perfectsapphire # # [MaxQuantity] == 2",
-			"[name] >= pulrune && [name] <= zodrune",
+			"[name] >= pulrune && [name] <= zodrune"
 		];
 		NTIP.arrayLooping(generalItems);
-		delay(500);
 
 		Town.reviveMerc();
-		this.setupMerc();
+		Misc.setupMerc();
 		me.overhead('starting SoloLeveling');
-		delay(500);
+		delay(250 + me.ping);
 
 		return true;
 	};
 
 	this.den = function () {
 
-		if (this.checkQuest(1, 0)) {
+		if (Misc.checkQuest(1, 0)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("den");
 
 		Pather.moveToExit([2, 8], false);
@@ -917,16 +135,14 @@ function SoloLeveling () {
 	};
 
 	this.mausoleum = function () {
-		if (me.diff === 0 && this.checkQuest(2, 0) || me.diff !== 0 && me.charlvl < respecTwo) {
+		if (me.diff === 0 && Misc.checkQuest(2, 0) || me.diff !== 0 && me.charlvl < respecTwo) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("blood raven");
-
 		Pather.useWaypoint(3);
 		Precast.doPrecast(true);
-
 		Pather.moveToExit(17, true);
 		Pather.moveToPreset(17, 1, 805);
 
@@ -934,13 +150,11 @@ function SoloLeveling () {
 			let raven = getUnit(1, "Blood Raven");
 
 			if (raven && raven.hp > 0) {
-				Attack.kill(267);
+				Attack.kill(raven);
 			}
 		} catch (e) {
 			print("ÿc9SoloLevelingÿc0: Failed to kill Blood Raven");
 		}
-
-		Pickit.pickItems();
 
 		Pickit.pickItems();
 
@@ -965,14 +179,14 @@ function SoloLeveling () {
 	};
 
 	this.tristam = function () {
-		if (me.diff !== 2 || this.checkQuest(4, 0)) {
+		if (me.diff !== 2 || Misc.checkQuest(4, 0)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("cain");
 
-		if (!this.checkQuest(4, 4) && !me.getItem(525)) {
+		if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 			if (!me.getItem(524)) {
 				Pather.useWaypoint(5);
 				Precast.doPrecast(true);
@@ -1039,9 +253,8 @@ function SoloLeveling () {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("countess");
-
 		Pather.useWaypoint(6);
 		Precast.doPrecast(true);
 
@@ -1063,9 +276,8 @@ function SoloLeveling () {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("pits");
-
 		Pather.useWaypoint(6);
 		Precast.doPrecast(true);
 
@@ -1086,24 +298,20 @@ function SoloLeveling () {
 	};
 
 	this.andariel = function () {
-		if (me.diff === 0 && this.checkQuest(6, 0)) {
+		if (me.diff === 0 && Misc.checkQuest(6, 0)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("andy");
-
 		Pather.useWaypoint(35);
 		Precast.doPrecast(true);
-
 		Pather.moveToExit([36, 37], true);
-
 		Town.goToTown();
-		this.townTasks();
-		this.buyPots(10, "Antidote"); // antidote
-		this.drinkPots();
+		Town.doChores();
+		Town.buyPots(10, "Antidote"); // antidote
+		Town.drinkPots();
 		Pather.usePortal(37, me.name);
-
 		Pather.moveTo(22572, 9635);
 		Pather.moveTo(22554, 9618);
 		Pather.moveTo(22542, 9600);
@@ -1112,14 +320,18 @@ function SoloLeveling () {
 		Pather.moveTo(22546, 9554);
 
 		try {
-			Attack.kill(156); // kill Andariel
+			let andy = getUnit(1, "Andariel");
+
+			if (andy && andy.hp > 0) {
+				Attack.kill(andy);
+			}
+
 		} catch (err) {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Andy');
 		}
 
-		delay(2000); // Wait for minions to die.
+		delay(2000 + me.ping); // Wait for minions to die.
 		Pickit.pickItems();
-
 		Town.move(NPC.Warriv);
 		let warriv = getUnit(1, NPC.Warriv);
 
@@ -1133,29 +345,30 @@ function SoloLeveling () {
 	};
 
 	this.radament = function () {
-		if (!Pather.accessToAct(2) || this.checkQuest(9, 0)) {
+		if (!Pather.accessToAct(2) || Misc.checkQuest(9, 0)) {
 			return true;
 		}
 
-		this.townTasks();
-
+		Town.townTasks();
 		me.overhead("radament");
-
 		Pather.useWaypoint(48);
 		Precast.doPrecast(true);
-
 		Pather.moveToExit(49, true);
 		Pather.moveToPreset(me.area, 2, 355);
 
 		try {
-			Attack.kill(229); // Radament
+			let radament = getUnit(1, "Radament");
+
+			if (radament && radament.hp > 0) {
+				Attack.kill(radament); // kill duriel
+			}
+
 		} catch (err) {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Radament');
 		}
 
 		Pickit.pickItems();
 		Town.goToTown();
-
 		let book = me.getItem(552);
 
 		if (book) {
@@ -1172,7 +385,6 @@ function SoloLeveling () {
 
 		Town.move(NPC.Atma);
 		let atma = getUnit(1, NPC.Atma);
-
 		atma.openMenu();
 		me.cancel();
 
@@ -1182,22 +394,18 @@ function SoloLeveling () {
 	this.cube = function () {
 		if (!Pather.accessToAct(2) || me.getItem(549)) {
 			return true;
-		} // skip cube
+		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("cube");
-
 		Pather.useWaypoint(57);
 		Precast.doPrecast(true);
-
 		Pather.moveToExit(60, true);
 		Pather.moveToPreset(me.area, 2, 354);
-
 		Attack.securePosition(me.x, me.y, 30, 3000, true);
-
 		let gbox = getUnit(2, 354);
 		Misc.openChest(gbox);
-		delay(300);
+		delay(300 + me.ping);
 		Pickit.pickItems();
 		Town.goToTown();
 
@@ -1212,16 +420,14 @@ function SoloLeveling () {
 	};
 
 	this.amulet = function () {
-		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || this.checkQuest(10, 0)) {
+		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || Misc.checkQuest(10, 0)) {
 			return true;
-		} // skip amulet
+		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("amulet");
-
 		Pather.useWaypoint(44);
 		Precast.doPrecast(true);
-
 		Pather.moveToExit([45, 58, 61], true);
 
 		if (me.classid !== 1 || me.classid === 1 && me.charlvl <= respecOne) {
@@ -1231,11 +437,9 @@ function SoloLeveling () {
 		}
 
 		Pather.moveTo(15045, 14051);
-
 		let altar = getUnit(2, 149);
 		Misc.openChest(altar);
 		delay(500 + me.ping);
-
 		let viperammy = getUnit(4, 521);
 
 		if (!Pickit.pickItem(viperammy)) {
@@ -1244,7 +448,6 @@ function SoloLeveling () {
 
 		Town.goToTown();
 		Town.move(NPC.Drognan);
-
 		let drognan = getUnit(1, NPC.Drognan);
 
 		if (!drognan || !drognan.openMenu()) {
@@ -1255,7 +458,7 @@ function SoloLeveling () {
 
 		if (me.getItem(521)) {
 			Town.move("stash");
-			delay(me.ping);
+			delay(250 + me.ping);
 			Town.openStash();
 			Storage.Stash.MoveTo(me.getItem(521));
 		}
@@ -1264,12 +467,12 @@ function SoloLeveling () {
 	};
 
 	this.summoner = function () {
-		if (!Pather.accessToAct(2) || this.checkQuest(13, 0)) {
+		if (!Pather.accessToAct(2) || Misc.checkQuest(13, 0)) {
 			return true;
 		}
 
 		var teleportPads = function () {
-			if (me.classid === 1 && me.charlvl >= respecOne) {
+			if (me.getSkill(54, 0)) {
 
 				return true;
 			}
@@ -1332,9 +535,8 @@ function SoloLeveling () {
 			return true;
 		};
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("summoner");
-
 		Pather.useWaypoint(74);
 		Precast.doPrecast(true);
 
@@ -1387,9 +589,8 @@ function SoloLeveling () {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("ancient tunnels");
-
 		Pather.useWaypoint(44);
 		Precast.doPrecast(true);
 
@@ -1417,7 +618,7 @@ function SoloLeveling () {
 	};
 
 	this.staff = function () {
-		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || this.checkQuest(10, 0)) {
+		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || Misc.checkQuest(10, 0)) {
 			return true;
 		} // skip script already cubed horadric staff
 
@@ -1425,9 +626,8 @@ function SoloLeveling () {
 			this.amulet();
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("staff");
-
 		Pather.useWaypoint(43);
 		Precast.doPrecast(true);
 
@@ -1454,7 +654,7 @@ function SoloLeveling () {
 		}
 
 		if (me.getItem(92) && me.getItem(521)) {
-			this.cubeStaff();
+			Misc.cubeStaff();
 		}
 
 		return true;
@@ -1465,11 +665,11 @@ function SoloLeveling () {
 			return true;
 		}
 
+		Town.townTasks();
 		me.overhead("tombs");
 		let tombID = [66, 67, 68, 69, 70, 71, 72];
 
 		for (let number = 0; number < tombID.length; number += 1) {
-			this.townTasks();
 			Pather.useWaypoint(46);
 			Pather.moveToExit(tombID[number], true, true);
 
@@ -1496,169 +696,15 @@ function SoloLeveling () {
 				Attack.clear(50);
 				Pickit.pickItems();
 				Town.goToTown();
-			}
-
-		}
-
-		return true;
-	};
-
-	this.cubeStaff = function () {
-		if (this.checkQuest(10, 0)) {
-			return true;
-		}
-
-		if (!me.inTown) {
-			Town.goToTown();
-		}
-
-		let shaft = me.getItem("msf");
-		let ammy = me.getItem("vip");
-
-		if (!shaft || !ammy) {
-			me.overhead("missing pieces to make staff");
-
-			return false;
-		}
-
-		Storage.Cube.MoveTo(ammy);
-		Storage.Cube.MoveTo(shaft);
-		Cubing.openCube();
-
-		transmute();
-		delay(750 + me.ping);
-
-		let hstaff = me.getItem(91);
-
-		if (!hstaff) {
-			me.overhead("ÿc9SoloLevelingÿc0: Failed to make staff");
-
-			return false;
-		}
-
-		me.overhead("made staff");
-		Storage.Inventory.MoveTo(hstaff);
-		me.cancel();
-
-		return true;
-	};
-
-	this.placeStaff = function () {
-		let tick = getTickCount();
-		let orifice = getUnit(2, 152);
-		let hstaff = me.getItem(91);
-
-		if (!orifice) {
-			return false;
-		}
-
-		if (hstaff) {
-			if (hstaff.location === 7) {
-				Town.goToTown();
-				Storage.Inventory.MoveTo(hstaff);
-				me.cancel();
-				Pather.usePortal(null, me.name);
-			}
-
-			if (hstaff.location === 6) {
-				Town.goToTown();
-				Cubing.openCube();
-				Storage.Inventory.MoveTo(hstaff);
-				me.cancel();
-				Pather.usePortal(null, me.name);
+				Town.doChores();
 			}
 		}
-
-		Misc.openChest(orifice);
-
-		if (!hstaff) {
-			if (getTickCount() - tick < 500) {
-				delay(500 + me.ping);
-			}
-
-			return false;
-		}
-
-		hstaff.toCursor();
-		submitItem();
-		delay(750 + me.ping);
-
-		// unbug cursor
-		let item = me.findItem(-1, 0, 3);
-
-		if (item && item.toCursor()) {
-			Storage.Inventory.MoveTo(item);
-		}
-
-		delay(750 + me.ping);
-
-		return true;
-	};
-
-	this.tyraelTalk = function () {
-		let tyrael = getUnit(1, NPC.Tyrael);
-
-		if (!tyrael) {
-			return false;
-		}
-
-		for (let talk = 0; talk < 3; talk += 1) {
-			if (getDistance(me, tyrael) > 3) {
-				Pather.moveToUnit(tyrael);
-			}
-
-			tyrael.interact();
-			delay(1000 + me.ping);
-			me.cancel();
-
-			if (Pather.getPortal(null)) {
-				me.cancel();
-				break;
-			}
-		}
-
-		Town.goToTown();
-		this.jerhynTalk();
-
-		return true;
-	};
-
-	this.jerhynTalk = function () {
-		Town.move("palace");
-
-		let jerhyn	= getUnit(1, NPC.Jerhyn);
-
-		if (!jerhyn || !jerhyn.openMenu()) {
-			Pather.moveTo(5166, 5206);
-
-			return false;
-		}
-
-		me.cancel();
-
-		Pather.moveToExit(50, true);
-
-		Town.goToTown();
-
-		return true;
-	};
-
-	this.meshifTalk = function () {
-		Town.move(NPC.Meshif);
-
-		let meshif = getUnit(1, NPC.Meshif);
-
-		if (!meshif || !meshif.openMenu()) {
-			return false;
-		}
-
-		Misc.useMenu(0x0D38);
 
 		return true;
 	};
 
 	this.duriel = function () {
-		if (!Pather.accessToAct(2) || this.checkQuest(14, 0)) {
+		if (!Pather.accessToAct(2) || Misc.checkQuest(14, 0)) {
 			return true;
 		}
 
@@ -1682,73 +728,67 @@ function SoloLeveling () {
 			}
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("duriel");
 
 		if (!me.getItem(91)) {
-			this.cubeStaff();
+			Misc.cubeStaff();
 		}
 
 		Pather.useWaypoint(46);
 		Precast.doPrecast(true);
-
 		Pather.moveToExit(getRoom().correcttomb, true);
 		Pather.moveToPreset(me.area, 2, 152);
-
 		Attack.securePosition(me.x, me.y, 30, 3000, true, me.diff === 2);
 
-		if (!this.checkQuest(14, 0)) {
-			this.placeStaff();
+		if (!Misc.checkQuest(14, 0)) {
+			Misc.placeStaff();
 		}
 
 		Town.goToTown();
-		this.townTasks();
-		this.buyPots(10, "Thawing"); // thawing
-		this.drinkPots();
+		Town.doChores();
+		Town.buyPots(10, "Thawing"); // thawing
+		Town.drinkPots();
 		Config.MercWatch = false;
 		Pather.usePortal(null, me.name);
-
-		delay(1000);
+		delay(1000 + me.ping);
 
 		try {
 			Pather.useUnit(2, 100, 73);
-			Attack.kill(211); // kill duriel
+			let duriel = getUnit(1, "Duriel");
+
+			if (duriel && duriel.hp > 0) {
+				Attack.kill(duriel); // kill duriel
+			}
 		} catch (err) {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Duriel');
 		}
 
 		Pickit.pickItems();
 
-		if (!this.checkQuest(15, 0)) {
+		if (!Misc.checkQuest(15, 0)) {
 			Pather.moveTo(22629, 15714);
 			Pather.moveTo(22609, 15707);
 			Pather.moveTo(22579, 15704);
 			Pather.moveTo(22577, 15649, 10);
 			Pather.moveTo(22577, 15609, 10);
-
-			this.tyraelTalk();
-
+			Misc.tyraelTalk();
+			Misc.jerhynTalk();
 		}
 
-		if (!me.inTown) {
-			Town.goToTown();
-		}
-
-		this.meshifTalk();
+		Misc.meshifTalk();
 		Config.MercWatch = true;
 
 		return true;
 	};
 
 	this.eye = function () {
-		if (!Pather.accessToAct(3) || me.getItem(553) || me.getItem(174) || this.checkQuest(18, 0)) {
+		if (!Pather.accessToAct(3) || me.getItem(553) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 			return true;
 		} // skip eye
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("eye");
-		addEventListener("gamepacket", this.gamePacket);
-
 		Pather.useWaypoint(76);
 		Precast.doPrecast(true);
 
@@ -1758,15 +798,12 @@ function SoloLeveling () {
 
 		Town.goToTown();
 		Town.doChores();
-		this.buyPots(10, "Antidote"); // antidote
-		this.drinkPots();
+		Town.buyPots(10, "Antidote"); // antidote
+		Town.drinkPots();
 		Pather.usePortal(85, me.name);
-
 		Pather.moveToPreset(me.area, 2, 407);
 		Attack.clear(0x7);
-
 		let gbox = getUnit(2, 407);
-
 		Misc.openChest(gbox);
 		delay(500 + me.ping);
 		let eye = getUnit(4, 553);
@@ -1784,20 +821,16 @@ function SoloLeveling () {
 			Storage.Stash.MoveTo(me.getItem(553));
 		}
 
-		removeEventListener("gamepacket", this.gamePacket);
-
 		return true;
 	};
 
 	this.heart = function () {
-		if (!Pather.accessToAct(3) || me.getItem(554) || me.getItem(174) || this.checkQuest(18, 0)) {
+		if (!Pather.accessToAct(3) || me.getItem(554) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 			return true;
 		} // skip heart
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("heart");
-		addEventListener("gamepacket", this.gamePacket);
-
 		Pather.useWaypoint(80);
 		Precast.doPrecast(true);
 
@@ -1807,7 +840,6 @@ function SoloLeveling () {
 
 		Attack.clear(0x7); // clear level
 		let gbox = getUnit(2, 405);
-
 		Misc.openChest(gbox);
 		delay(500 + me.ping);
 		let heart = getUnit(4, 554);
@@ -1825,20 +857,16 @@ function SoloLeveling () {
 			Storage.Stash.MoveTo(me.getItem(554));
 		}
 
-		removeEventListener("gamepacket", this.gamePacket);
-
 		return true;
 	};
 
 	this.tome = function () {
-		if (!Pather.accessToAct(3) || this.checkQuest(17, 0)) {
+		if (!Pather.accessToAct(3) || Misc.checkQuest(17, 0)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("tome");
-		addEventListener("gamepacket", this.gamePacket);
-
 		Pather.useWaypoint(80);
 		Precast.doPrecast(true);
 
@@ -1847,7 +875,6 @@ function SoloLeveling () {
 		}
 
 		let stand = getUnit(2, 193);
-
 		Misc.openChest(stand);
 		delay(500 + me.ping);
 		let tome = getUnit(4, 548);
@@ -1857,7 +884,6 @@ function SoloLeveling () {
 		}
 
 		Town.goToTown();
-
 		Town.move(NPC.Alkor);
 		let alkor = getUnit(1, NPC.Alkor);
 
@@ -1866,20 +892,17 @@ function SoloLeveling () {
 		}
 
 		me.cancel();
-		removeEventListener("gamepacket", this.gamePacket);
 
 		return true;
 	};
 
 	this.brain = function () {
-		if (!Pather.accessToAct(3) || me.getItem(555) || me.getItem(174) || this.checkQuest(18, 0)) {
+		if (!Pather.accessToAct(3) || me.getItem(555) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 			return true;
-		} // skip brain
+		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("brain");
-		addEventListener("gamepacket", this.gamePacket);
-
 		Pather.useWaypoint(78);
 		Precast.doPrecast(true);
 
@@ -1889,7 +912,6 @@ function SoloLeveling () {
 
 		Attack.clear(0x7);
 		let gbox = getUnit(2, 406);
-
 		Misc.openChest(gbox);
 		delay(500 + me.ping);
 		let brain = getUnit(4, 555);
@@ -1907,8 +929,6 @@ function SoloLeveling () {
 			Storage.Stash.MoveTo(me.getItem(555));
 		}
 
-		removeEventListener("gamepacket", this.gamePacket);
-
 		return true;
 	};
 
@@ -1917,29 +937,23 @@ function SoloLeveling () {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("lower kurast");
-		addEventListener("gamepacket", this.gamePacket);
-
 		Pather.useWaypoint(79);
 		Precast.doPrecast(true);
 		Misc.openChestsInArea(79);
-		removeEventListener("gamepacket", this.gamePacket);
 
 		return true;
 	};
 
-	this.cubeFlail = function () {
+	this.travincal = function () {
+		if (!Pather.accessToAct(3) || me.diff <= 0 && Misc.checkQuest(21, 0)) {
+			return true;
+		}
+
 		let eye = me.getItem(553);
 		let heart = me.getItem(554);
 		let brain = me.getItem(555);
-		let flail = me.getItem(173);
-
-		me.overhead("cubing flail");
-
-		if (me.getItem(174)) { // Already have the finished Flail.
-			return true;
-		}
 
 		if (!eye) {
 			this.eye();
@@ -1953,110 +967,14 @@ function SoloLeveling () {
 			this.brain();
 		}
 
-		if (!flail) {
-			this.travincal();
-		}
-
-		this.townTasks();
-
-		Town.move("stash");
-
-		if (!Town.openStash()) {
-			Town.openStash();
-		}
-
-		Storage.Cube.MoveTo(eye);
-		Storage.Cube.MoveTo(heart);
-		Storage.Cube.MoveTo(brain);
-		Storage.Cube.MoveTo(flail);
-		Cubing.openCube();
-		transmute();
-		delay(750 + me.ping);
-		Cubing.emptyCube();
-		me.cancel();
-
-		return true;
-	};
-
-	this.equipQuestItem = function (item, loc) {
-		Town.doChores();
-
-		let newitem = me.getItem(item);
-
-		if (newitem) {
-			if (!Item.equip(newitem, loc)) {
-				Pickit.pickItems();
-				print("ÿc9SoloLevelingÿc0: failed to equip item.(equipQuestItem)");
-			}
-		} else {
-			print("ÿc9SoloLevelingÿc0: Lost item before trying to equip it. (equipQuestItem)");
-		}
-
-		if (me.itemoncursor) {
-			let olditem = getUnit(100);
-
-			if (olditem) {
-				if (Storage.Inventory.CanFit(olditem)) {
-					me.overhead("Keeping weapon");
-
-					Storage.Inventory.MoveTo(olditem);
-				} else {
-					me.cancel();
-					me.overhead("No room to keep weapon");
-
-					olditem.drop();
-				}
-			}
-		}
-
-		delay(750 + me.ping);
-
-		Pickit.pickItems();
-
-		return true;
-	};
-
-	this.smashSomething = function (smashable) {
-		let something;
-
-		switch (smashable) {
-		case 404:
-			something = getUnit(2, 404);
-			break;
-		case 376:
-			something = getUnit(2, 376);
-			break;
-		}
-
-		Pather.moveToUnit(something, 0, 0, Config.ClearType, false);
-
-		for (let smash = 0; smash < 5; smash += 1) {
-			if (something) {
-				Skill.cast(0, 0, something);
-
-				delay(750 + me.ping);
-
-			}
-		}
-
-		return true;
-	};
-
-	this.travincal = function () {
-		if (!Pather.accessToAct(3) || me.diff <= 0 && this.checkQuest(21, 0)) {
-			return true;
-		}
-
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("travincal");
-		addEventListener("gamepacket", this.gamePacket);
-
 		Pather.useWaypoint(83); // go to trav
 		Precast.doPrecast(true);
 
-		let Ismail = getUnit(1, "Ismail Vilehand");
+		let ismail = getUnit(1, "Ismail Vilehand");
 
-		if (Ismail && !Attack.canAttack(Ismail)) { // exit if ismail immune
+		if (ismail && !Attack.canAttack(ismail)) { // exit if ismail immune
 			print("ÿc9SoloLevelingÿc0: Failed Travincal. Ismail is immune.");
 
 			return true;
@@ -2069,8 +987,11 @@ function SoloLeveling () {
 
 		Pather.moveToUnit(council);
 
-		try { // kill ismail
-			Attack.kill(Ismail);
+		try {
+			if (ismail && ismail.hp > 0) {
+				Attack.kill(ismail);
+			}
+
 		} catch (error) {
 			try {
 				Attack.clear(30);
@@ -2083,13 +1004,10 @@ function SoloLeveling () {
 
 		Pickit.pickItems();
 
-		if (!this.checkQuest(18, 0)) { // khalim's will quest not complete
-			if (!me.getItem(174) || !me.getItem(173)) { // pickup khalims flail
-				let khalimsflail = getUnit(4, 173);
-
-				if (!Pickit.pickItem(khalimsflail)) {
-					Pickit.pickItems();
-				}
+		if (!Misc.checkQuest(18, 0)) { // khalim's will quest not complete
+			if (!me.getItem(173) || !me.getItem(174)) { // pickup khalims flail
+				Pather.moveToUnit(council);
+				Pickit.pickItems();
 			}
 
 			if (!Pather.moveToPreset(83, 2, 404)) { // go to orb
@@ -2103,18 +1021,18 @@ function SoloLeveling () {
 			}
 
 			if (!me.getItem(174)) { // cube flail to will
-				this.cubeFlail();
+				Misc.cubeFlail();
 				delay(250 + me.ping);
 			}
 
-			this.equipQuestItem(174, 4);
+			Misc.equipQuestItem(174, 4);
 			delay(250 + me.ping);
 
 			if (!Pather.usePortal(83, me.name)) { // return to Trav
 				print("ÿc9SoloLevelingÿc0: Failed to go back to Travincal from town");
 			}
 
-			this.smashSomething(404); // smash orb
+			Misc.smashSomething(404); // smash orb
 			Item.autoEquip(); // equip previous weapon
 			delay(250);
 
@@ -2128,40 +1046,35 @@ function SoloLeveling () {
 			Pather.getWP(101); // get wp
 		}
 
-		removeEventListener("gamepacket", this.gamePacket);
-
 		return true;
 	};
 
 	this.mephisto = function () {
-		if (!Pather.accessToAct(3) || me.diff === 0 && this.checkQuest(22, 0)) {
+		if (!Pather.accessToAct(3) || me.diff === 0 && Misc.checkQuest(22, 0)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("mephisto");
-
 		Pather.useWaypoint(101);
 		Precast.doPrecast(true);
 		Pather.moveToExit(102, true);
 		Town.goToTown();
-		this.townTasks();
-		this.buyPots(10, "Thawing"); // thawing
-		this.drinkPots();
-		this.buyPots(10, "Antidote"); // antidote
-		this.drinkPots();
+		Town.doChores();
+		Town.buyPots(10, "Thawing"); // thawing
+		Town.drinkPots();
+		Town.buyPots(10, "Antidote"); // antidote
+		Town.drinkPots();
 		Pather.usePortal(102, me.name);
-
 		Pather.moveTo(17692, 8048);
 		Pather.moveTo(17563, 8072);
-
 		Config.MercWatch = false;
 
 		try {
 			let mephisto = getUnit(1, "Mephisto");
 
 			if (mephisto && mephisto.hp > 0) {
-				Attack.kill(242);
+				Attack.kill(mephisto);
 			}
 		} catch (err) {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Mephisto');
@@ -2169,7 +1082,6 @@ function SoloLeveling () {
 
 		Config.MercWatch = true;
 		Pickit.pickItems();
-
 		Pather.moveTo(17581, 8070);
 		delay(250 + me.ping * 2);
 		Pather.usePortal(null);
@@ -2178,24 +1090,23 @@ function SoloLeveling () {
 	};
 
 	this.izual = function () {
-		if (this.checkQuest(25, 0) || !Pather.accessToAct(4)) {
+		if (Misc.checkQuest(25, 0) || !Pather.accessToAct(4)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("izual");
-
 		Pather.useWaypoint(106);
 		Precast.doPrecast(true);
 
-		if (!this.checkQuest(25, 1)) {
+		if (!Misc.checkQuest(25, 1)) {
 			Pather.moveToPreset(105, 1, 256);
 
 			try {
 				let izual = getUnit(1, "Izual");
 
 				if (izual && izual.hp > 0) {
-					Attack.kill(256);
+					Attack.kill(izual);
 				}
 			} catch (err) {
 				print('ÿc9SoloLevelingÿc0: Failed to kill Izual');
@@ -2204,25 +1115,19 @@ function SoloLeveling () {
 
 		Town.goToTown();
 		Town.move(NPC.Tyrael);
-
 		let tyrael = getUnit(1, NPC.Tyrael);
-
 		tyrael.openMenu();
 		me.cancel();
-
-		if (getUnit(2, 566)) {
-			Pather.useUnit(2, 566, 109);
-		}
 
 		return true;
 	};
 
 	this.hellforge = function () {
-		if (this.checkQuest(27, 1)) {
+		if (Misc.checkQuest(27, 1)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("forge");
 		Pather.useWaypoint(107);
 		Precast.doPrecast(true);
@@ -2241,10 +1146,7 @@ function SoloLeveling () {
 
 		if (!me.getItem(90)) { // pickup hammer
 			let hammer = getUnit(4, 90);
-
-			if (!Pickit.pickItem(hammer)) {
-				Pickit.pickItems();
-			}
+			Pickit.pickItem(hammer);
 		}
 
 		if (me.getItem(90)) {
@@ -2256,7 +1158,7 @@ function SoloLeveling () {
 
 			if (!me.inTown) { // go to town
 				Town.goToTown();
-				this.equipQuestItem(90, 4);
+				Misc.equipQuestItem(90, 4);
 				Town.move(NPC.Cain);
 				let cain = getUnit(1, NPC.Cain);
 
@@ -2270,9 +1172,8 @@ function SoloLeveling () {
 
 			let forge = getUnit(2, 376);
 			Misc.openChest(forge);
-
 			delay(250 + me.ping * 2);
-			this.smashSomething(376);
+			Misc.smashSomething(376);
 			Item.autoEquip();
 		}
 
@@ -2286,17 +1187,11 @@ function SoloLeveling () {
 			return true;
 		}
 
-		if (!this.checkQuest(25, 0)) { // Izual quest completion check
+		if (!Misc.checkQuest(25, 0)) { // Izual quest completion check
 			Town.move(NPC.Tyrael);
-
 			let tyrael = getUnit(1, NPC.Tyrael);
-
 			tyrael.openMenu();
 			me.cancel();
-
-			if (getUnit(2, 566)) {
-				Pather.useUnit(2, 566, 109);
-			}
 		}
 
 		this.getLayout = function (seal, value) {// Start Diablo Quest
@@ -2320,7 +1215,6 @@ function SoloLeveling () {
 		};
 
 		this.getBoss = function (name) {
-
 			let glow = getUnit(2, 131);
 
 			for (let bossbeating = 0; bossbeating < 24; bossbeating += 1) {
@@ -2551,26 +1445,25 @@ function SoloLeveling () {
 			}
 		};
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("diablo");
 		Pather.useWaypoint(107);
 		Precast.doPrecast(true);
 		Pather.moveToExit(108, true);
 		Attack.clearLevel();
-
 		this.initLayout();
 		this.vizier();
 		this.seis();
 		this.infector();
+		let diablo = getUnit(1, 243);
 
 		try {
 			Pather.moveTo(7788, 5292, 3, 30);
 			me.overhead("attempting Diablo");
 			this.diabloPrep();
-			let diablo = getUnit(1, 243);
 
 			if (diablo && diablo.hp > 0 ) {
-				Attack.kill(243); // Diablo
+				Attack.kill(diablo);
 			}
 		} catch (error) {
 			print("ÿc9SoloLevelingÿc0: Diablo not found. Checking seal bosses.");
@@ -2582,10 +1475,9 @@ function SoloLeveling () {
 
 			try {
 				this.diabloPrep();
-				let diablo = getUnit(1, 243);
 
 				if (diablo && diablo.hp > 0 ) {
-					Attack.kill(243); // Diablo
+					Attack.kill(diablo);
 				}
 			} catch (err) {
 				print("ÿc9SoloLevelingÿc0: Diablo not found.");
@@ -2609,7 +1501,7 @@ function SoloLeveling () {
 			return false;
 		}
 
-		delay(me.ping + 1);
+		delay(250 + me.ping);
 
 		if (getUnit(2, 566)) {
 			me.cancel();
@@ -2622,11 +1514,11 @@ function SoloLeveling () {
 	};
 
 	this.shenk = function () {
-		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(35, 1)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || Misc.checkQuest(35, 1)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("shenk");
 
 		if (!Pather.useWaypoint(111)) {
@@ -2635,7 +1527,7 @@ function SoloLeveling () {
 
 		Precast.doPrecast(true);
 
-		if (!this.checkQuest(35, 1)) {
+		if (!Misc.checkQuest(35, 1)) {
 			Pather.moveTo(3883, 5113);
 			Attack.kill(getLocaleString(22435));
 		}
@@ -2646,16 +1538,15 @@ function SoloLeveling () {
 	};
 
 	this.saveBarby = function () {
-		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(36, 0)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || Misc.checkQuest(36, 0)) {
 			return true;
 		}
-
-		this.townTasks();
-		me.overhead("barbies");
 
 		let coords = [];
 		let barbies = [];
 
+		Town.townTasks();
+		me.overhead("barbies");
 		Pather.useWaypoint(111);
 		Precast.doPrecast(true);
 		barbies = getPresetUnits (me.area, 2, 473);
@@ -2689,20 +1580,18 @@ function SoloLeveling () {
 
 		delay(1000);
 		Town.goToTown();
-
 		Town.move("qual-kehk");
-
 		delay(1000 + me.ping);
 		let qualkehk = getUnit(1, "qual-kehk");
 
-		while (!this.checkQuest(36, 0)) {
+		while (!Misc.checkQuest(36, 0)) {
 			for (let attempt = 0; attempt < 3; attempt += 1) {
 				qualkehk.openMenu();
 				me.cancel();
 				delay(500);
 				sendPacket(1, 0x40); //fresh Quest state.
 
-				if (this.checkQuest(36, 0)) {
+				if (Misc.checkQuest(36, 0)) {
 					break;
 				}
 			}
@@ -2714,13 +1603,12 @@ function SoloLeveling () {
 	};
 
 	this.anya = function () {
-		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(37, 0)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || Misc.checkQuest(37, 0)) {
 			return true;
 		}
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("anya");
-
 		Pather.useWaypoint(113);
 		Precast.doPrecast(true);
 
@@ -2728,26 +1616,21 @@ function SoloLeveling () {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Anya");
 		}
 
-		delay(1000);
-
+		delay(1000 + me.ping);
 		let anya = getUnit(2, 558);
-
 		Pather.moveToUnit(anya);
 		sendPacket(1, 0x13, 4, 0x2, 4, anya.gid);
 		delay(300 + me.ping);
 		me.cancel();
 		Town.goToTown();
 		Town.move(NPC.Malah);
-
 		let malah = getUnit(1, NPC.Malah);
 		malah.openMenu();
 		me.cancel();
-
 		Pather.usePortal(114, me.name);
 		anya.interact();
 		delay(300 + me.ping);
 		me.cancel();
-
 		Town.goToTown();
 		Town.move(NPC.Malah);
 		malah.openMenu();
@@ -2770,8 +1653,46 @@ function SoloLeveling () {
 		return true;
 	};
 
+	this.pindle = function () {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || !Misc.checkQuest(37, 0) || !Misc.checkQuest(37, 1)) {
+			return true;
+		}
+
+		Town.townTasks();
+		me.overhead("Pindle");
+
+		if (!Pather.getPortal(121)) {
+			let anya = getUnit(1, NPC.Anya);
+
+			if (anya) {
+				Town.move("anya");
+				anya.openMenu();
+				me.cancel();
+			}
+		}
+
+		if (!Pather.usePortal(121)) {
+			return true;
+		}
+
+		try {
+			Pather.moveTo(10058, 13234);
+			let pindle = getUnit(1, getLocaleString(22497));
+
+			if (pindle && pindle.hp > 0) {
+				Attack.clear(15, 0, getLocaleString(22497));
+			}
+		} catch (e) {
+			print("ÿc9SoloLevelingÿc0: Failed to kill Pindle");
+		}
+
+		Pickit.pickItems();
+
+		return true;
+	};
+
 	this.ancients = function () {
-		if (me.gametype === 0 || !Pather.accessToAct(5) || this.checkQuest(39, 0)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || Misc.checkQuest(39, 0)) {
 			return true;
 		}
 
@@ -2819,17 +1740,16 @@ function SoloLeveling () {
 		let ancientsPrep = function () { // ancients prep
 			Town.goToTown(); // prep to revised settings
 			Town.fillTome(518);
-			this.buyPots(10, "Thawing");
-			this.drinkPots();
-			this.buyPots(10, "Antidote");
-			this.drinkPots();
+			Town.buyPots(10, "Thawing");
+			Town.drinkPots();
+			Town.buyPots(10, "Antidote");
+			Town.drinkPots();
 			Town.buyPotions();
 			Pather.usePortal(120, me.name);
 		};
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("ancients");
-
 		Pather.useWaypoint(118);
 		Precast.doPrecast(true);
 		Pather.moveToExit(120, true); // enter at ancients plateau
@@ -2850,15 +1770,13 @@ function SoloLeveling () {
 		};
 
 		Town.goToTown();
-		this.townTasks();
-
+		Town.townTasks();
 		me.overhead('updated settings');
 		Object.assign(Config, updateConfig);
-
-		this.buyPots(10, "Thawing"); // prep to revised settings
-		this.drinkPots();
-		this.buyPots(10, "Antidote");
-		this.drinkPots();
+		Town.buyPots(10, "Thawing"); // prep to revised settings
+		Town.drinkPots();
+		Town.buyPots(10, "Antidote");
+		Town.drinkPots();
 		Town.buyPotions();
 		Pather.usePortal(120, me.name);
 
@@ -2886,7 +1804,6 @@ function SoloLeveling () {
 		Attack.clear(50);
 		Pather.moveTo(10048, 12628);
 		me.cancel();
-
 		me.overhead('restored settings');
 		Object.assign(Config, tempConfig);
 
@@ -2915,12 +1832,11 @@ function SoloLeveling () {
 			return true;
 		}
 
-		if (!this.checkQuest(39, 0)) { // Check Ancients Quest
+		if (!Misc.checkQuest(39, 0)) { // Check Ancients Quest
 			this.ancients();
 		}
 
 		this.preattack = function () {// Start Baal
-
 			switch (me.classid) {
 			case 1: // Sorceress
 				switch (Config.AttackSkill[3]) {
@@ -3009,7 +1925,6 @@ function SoloLeveling () {
 		};
 
 		this.clearThrone = function () {
-
 			let monsterList = [];
 			let position = [15094, 5022, 15094, 5041, 15094, 5060, 15094, 5041, 15094, 5022];
 
@@ -3059,14 +1974,11 @@ function SoloLeveling () {
 			return true;
 		};
 
-		this.townTasks();
+		Town.townTasks();
 		me.overhead("baal");
-
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 129);
 		Precast.doPrecast(true);
-
 		Pather.useWaypoint(129);
-
 		Pather.moveToExit([130, 131], true);
 		Pather.moveTo(15095, 5029);
 
@@ -3085,9 +1997,7 @@ function SoloLeveling () {
 		}
 
 		this.clearThrone();
-
 		let tick = getTickCount();
-
 		Pather.moveTo(15094, me.classid === 3 ? 5029 : 5038);
 
 		MainLoop:
@@ -3191,6 +2101,7 @@ function SoloLeveling () {
 
 	this.runsequence = function () {
 		let j, k;
+		addEventListener("gamepacket", Misc.gamePacket);
 
 		for (k = 0; k < sequence.length; k += 1) {
 			if (!me.inTown) {
@@ -3207,6 +2118,8 @@ function SoloLeveling () {
 				me.overhead("sequence " + sequence[k] + " failed.");
 			}
 		}
+
+		removeEventListener("gamepacket", Misc.gamePacket);
 	};
 
 	// Start Running Script
@@ -3214,7 +2127,7 @@ function SoloLeveling () {
 	this.runsequence();
 	let level = ['Normal', 'Nightmare', 'Hell'][me.diff];
 
-	if (this.checkQuest(40, 0) || me.gametype === 0 && this.checkQuest(26, 0)) {
+	if (Misc.checkQuest(40, 0) || me.gametype === 0 && Misc.checkQuest(26, 0)) {
 		D2Bot.printToConsole('SoloLeveling: ' + level + ' difficulty completed. Character Level: ' + me.charlvl + '. Running script again!');
 	} else {
 		D2Bot.printToConsole('SoloLeveling: run completed. Character Level: ' + me.charlvl + '. Running script again!');
@@ -3226,6 +2139,10 @@ function SoloLeveling () {
 }
 
 // Start Global Functions
+if (!isIncluded("common/Town.js")) {
+	include("common/Town.js");
+}
+
 if (!isIncluded("common/Pather.js")) {
 	include("common/Pather.js");
 }
@@ -3238,35 +2155,837 @@ if (!isIncluded("NTItemParser.dbl")) {
 	include("NTItemParser.dbl");
 }
 
-NTIP.addLine = function (itemString) { //NTIP INJECTOR
-	let info = {
-		line: 1,
-		file: "SoloLeveling",
-		string: line
-	};
+// Global variables
+var mercId = [], merc;
 
-	let line = NTIP.ParseLineInt(itemString, info);
+// Character Respecialization Variables
+// ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+const respecOne = [ 0, 28, 26, 25, 0, 0, 0][me.classid];
+const respecTwo = [ 0, 85, 85, 85, 0, 0, 0][me.classid];
 
-	if (line) {
-		NTIP_CheckList.push(line);
-		stringArray.push(info);
+// Customized Functions
+Town.townTasks = function () {
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
+	let prevTown;
+
+	switch (me.area) {
+	case 1:
+		prevTown = 1;
+
+		break;
+	case 40:
+		prevTown = 40;
+
+		break;
+	case 75:
+		prevTown = 75;
+
+		break;
+	case 103:
+		prevTown = 103;
+
+		break;
+	case 109:
+		prevTown = 109;
+
+		break;
+	}
+
+	Attack.weaponSwitch(Attack.getPrimarySlot());
+	this.unfinishedQuests();
+	Cubing.doCubing();
+	Runewords.makeRunewords();
+	Item.autoEquip();
+	this.equipSWAP();
+	Misc.equipMerc();
+	this.stash(true);
+	this.heal();
+	this.identify();
+	this.clearInventory();
+	this.buyPotions();
+	this.fillTome(518);
+	this.shopItems();
+	this.buyKeys();
+	this.repair(true);
+	this.shopItems();
+	this.gamble();
+	this.reviveMerc();
+	Misc.hireMerc();
+	Misc.equipMerc();
+	Item.autoEquip();
+	this.clearJunk();
+	this.organizeStash();
+	Town.stash(true);
+	Town.organizeInventory();
+	this.characterRespec();
+
+	if ((me.classid !== 1 || me.classid === 1 && !me.getSkill(54, 0)) && (me.area === 40 || me.area === 75)) {
+		Town.buyPots(8, "Stamina");
+		Town.drinkPots();
+	}
+
+	if (me.inTown && me.area !== prevTown) {
+		Pather.useWaypoint(prevTown);
+	}
+
+	Config.NoTele = me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
+
+	return true;
+};
+
+Town.doChores = function (repair = false) {
+	if (!me.inTown) {
+		this.goToTown();
+	}
+
+	let i,
+		cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
+
+	Attack.weaponSwitch(Attack.getPrimarySlot());
+
+	this.unfinishedQuests();
+	Cubing.doCubing();
+	Runewords.makeRunewords();
+	Item.autoEquip();
+	this.equipSWAP();
+	Misc.equipMerc();
+	this.stash();
+	this.heal();
+	this.identify();
+	this.clearInventory();
+	this.buyPotions();
+	this.fillTome(518);
+
+	if (Config.FieldID) {
+		this.fillTome(519);
+	}
+
+	this.shopItems();
+	this.buyKeys();
+	this.repair(repair);
+	this.shopItems();
+	this.gamble();
+	this.reviveMerc();
+	Misc.equipMerc();
+	Item.autoEquip();
+	this.stash(true);
+	this.clearScrolls();
+	this.characterRespec();
+
+	for (i = 0; i < cancelFlags.length; i += 1) {
+		if (getUIFlag(cancelFlags[i])) {
+			delay(500);
+			me.cancel();
+
+			break;
+		}
+	}
+
+	me.cancel();
+	Config.NoTele = me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
+
+	return true;
+};
+
+Town.unfinishedQuests = function () {
+	//Radament skill book
+	let book = me.getItem(552);
+
+	if (book) {
+		if (book.location === 7) {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(book);
+			delay(300);
+			clickItem(1, book);
+		} else {
+			delay(300);
+			clickItem(1, book);
+		}
+
+		print('ÿc9SoloLevelingÿc0: used Radament skill book');
+	}
+
+	// golden bird
+	if (me.getItem(546)) { // golden bird
+		Town.goToTown(3);
+		Town.move(NPC.Meshif);
+
+		let meshif = getUnit(1, NPC.Meshif);
+
+		if (meshif) {
+			meshif.openMenu();
+			me.cancel();
+		}
+	}
+
+	if (me.getItem(547)) { // ashes
+		Town.goToTown(3);
+		Town.move(NPC.Alkor);
+
+		let alkor = getUnit(1, NPC.Alkor);
+
+		if (alkor) {
+			for (let ashes = 0; ashes < 2; ashes += 1) {
+				alkor.openMenu();
+				me.cancel();
+			}
+		}
+	}
+
+	if (me.getItem(545)) { // potion of life
+		let item = me.getItem(545);
+
+		if (item.location > 3) {
+			this.openStash();
+		}
+
+		item.interact();
+		print('ÿc9SoloLevelingÿc0: used potion of life');
+	}
+
+	//LamEssen's Tome
+	let tome = me.getItem(548);
+
+	if (tome) {
+		if (tome.location === 7) {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(tome);
+			delay(300);
+		}
+
+		Town.goToTown(3);
+		Town.move(NPC.Alkor);
+		let alkor = getUnit(1, NPC.Alkor);
+
+		if (alkor) {
+			alkor.openMenu();
+			me.cancel();
+		}
+
+		print('ÿc9SoloLevelingÿc0: LamEssen Tome');
+	}
+
+	//remove Khalim's Will if quest not completed and restarting run.
+	let kw = me.getItem(174);
+
+	if (kw) {
+		if (Item.getEquippedItem(4).classid === 174) {
+
+			Town.clearInventory();
+			delay(me.ping * 2 + 500);
+
+			clickItem(4, 4); //remove khalim's will
+			delay(me.ping * 2 + 500);
+
+			let cursorItem = getUnit(100);
+
+			if (cursorItem) { // place in inventory
+				Storage.Inventory.MoveTo(cursorItem);
+			}
+
+			Town.move('stash');
+
+			if (Storage.Stash.CanFit(kw)) { // place in stash
+				Storage.Stash.MoveTo(kw);
+			} else {
+				me.cancel();
+			}
+
+			print('ÿc9SoloLevelingÿc0: removed khalims will');
+		}
+	}
+
+	// anya scroll of resistance
+	let scroll = me.getItem(646);
+
+	if (scroll) {
+		if (scroll.location === 7) {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(scroll);
+			delay(300);
+			clickItem(1, scroll);
+		} else {
+			delay(300);
+			clickItem(1, scroll);
+		}
+
+		print('ÿc9SoloLevelingÿc0: used scroll of resistance');
 	}
 
 	return true;
 };
 
-NTIP.arrayLooping = function (arraytoloop) {
-	for (let q = 0; q < arraytoloop.length; q += 1) {
-		NTIP.addLine(arraytoloop[q]);
+Town.equipSWAP = function () {
+	let spirit = me.getItems()
+		.filter(item =>
+			item.getPrefix(20635) // The spirit shield prefix
+			&& item.classid !== 29 // broad sword
+			&& item.classid !== 30 // crystal sword
+			&& item.classid !== 31 // crystal sword
+			&& [3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
+		)
+		.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
+		.first();
+
+	if (spirit) {
+		if (Item.getEquippedItem(12).tier < 0) {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(spirit);
+			Attack.weaponSwitch(); // switch to slot 2
+			spirit.equip();
+			Attack.weaponSwitch();
+		}
+	}
+
+	let cta = me.getItems()
+		.filter(item =>
+			item.getPrefix(20519) // The call to arms prefix
+			&& [1, 3, 6, 7].indexOf(item.location) > -1 // Needs to be on one these locations
+		)
+		.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
+		.first();
+
+	if (cta) {
+		if (cta.location === 1) {
+			return true;
+		} else {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(cta);
+			Attack.weaponSwitch(); // switch to slot 2
+			cta.equip();
+			Attack.weaponSwitch();
+		}
 	}
 
 	return true;
+};
+
+Town.buyPots = function (quantity, type) {
+	let npc, jugs;
+
+	switch (me.area) {
+	case 1:
+		Town.move(NPC.Akara);
+		npc = getUnit(1, NPC.Akara);
+		break;
+	case 40:
+		Town.move(NPC.Lysander);
+		npc = getUnit(1, NPC.Lysander);
+		break;
+	case 75:
+		Town.move(NPC.Alkor);
+		npc = getUnit(1, NPC.Alkor);
+		break;
+	case 103:
+		Town.move(NPC.Jamella);
+		npc = getUnit(1, NPC.Jamella);
+		break;
+	case 109:
+		Town.move(NPC.Malah);
+		npc = getUnit(1, NPC.Malah);
+		break;
+	}
+
+	if (!npc || !npc.openMenu()) {
+		return false;
+	}
+
+	Misc.useMenu(0x0D44);
+
+	switch (type) {
+	case "Thawing":
+		jugs = npc.getItem("wms");
+
+		break;
+	case "Stamina":
+		jugs = npc.getItem("vps");
+
+		break;
+	case "Antidote":
+		jugs = npc.getItem("yps");
+
+		break;
+	}
+
+	print('ÿc9SoloLevelingÿc0: buying ' + quantity + ' ' + type + ' Potions');
+
+	for (let totalspecialpotions = 0; totalspecialpotions < quantity; totalspecialpotions++) {
+
+		if (jugs) {
+			jugs.buy(false);
+		}
+	}
+
+	me.cancel();
+
+	return true;
+};
+
+Town.drinkPots = function () {
+	let classIds = ["yps", "wms", "vps", ];
+
+	for (let totalpots = 0; totalpots < classIds.length; totalpots++) {
+		let chugs = me.getItem(classIds[totalpots]);
+
+		if (chugs) {
+			do {
+				delay(300);
+				chugs.interact();
+			} while (chugs.getNext());
+		}
+	}
+
+	print('ÿc9SoloLevelingÿc0: drank Special Potions');
+
+	return true;
+};
+
+Town.organizeStash = function () {
+	if (Storage.Stash.UsedSpacePercent() < 85) {
+		return true;
+	}
+
+	Town.move('stash');
+	let stashFit = { sizex: 6, sizey: 8 };
+
+	if (!Storage.Stash.CanFit(stashFit)) {
+		me.cancel();
+		me.overhead('organize stash');
+
+		let sorted, items = me.findItems(-1, 0, 7);
+
+		items.sort(function (a, b) {
+			return (b.sizex * b.sizey - a.sizex * a.sizey);
+		});
+
+		for (sorted = 0; sorted < items.length; sorted += 1) {
+			Storage.Stash.MoveTo(items[sorted]);
+		}
+	}
+
+	return true;
+};
+
+Town.organizeInventory = function () {
+	let invfit = { sizex: 4, sizey: 4 };
+
+	if (!Storage.Inventory.CanFit(invfit)) {
+		me.cancel();
+		me.overhead('organize inventory');
+
+		let inv, items = me.findItems(-1, 0, 3);
+
+		items.sort(function (a, b) {
+			return (b.sizex * b.sizey - a.sizex * a.sizey);
+		});
+
+		for (inv = 0; inv < items.length; inv += 1) {
+			Storage.Inventory.MoveTo(items[inv]);
+		}
+	}
+
+	return true;
+};
+
+Town.clearJunk = function () {
+	let junk = me.getItems();
+
+	for (let count = 0; count < junk.length; count += 1) {
+		// unwanted items runes / bad bases
+		if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
+		(Pickit.checkItem(junk[count]).result === 0 || Pickit.checkItem(junk[count]).result === 4) && // drop unwanted
+		!Pickit.checkItem(junk[count]).result === 1 && // Don't throw NTIP wanted
+		!Cubing.keepItem(junk[count]) && // Don't throw cubing ingredients
+		!Runewords.keepItem(junk[count]) && // Don't throw runeword ingredients
+		!CraftingSystem.keepItem(junk[count]) // Don't throw crafting system ingredients
+		) {
+			if (junk[count].drop()) {
+				me.overhead('cleared junk');
+				delay(250);
+			}
+		}
+
+		// unwanted tier'ed autoequip
+		let stashtier = NTIP.GetTier(junk[count]);
+		let bodyLoc = Item.getBodyLoc(junk[count]);
+
+		if (stashtier > 0 && bodyLoc) {
+			for (let bodypart = 0; bodypart < bodyLoc.length; bodypart += 1) {
+				let equippedTier = Item.getEquippedItem(bodyLoc[bodypart]).tier;
+
+				if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
+					stashtier <= equippedTier // drop same tier or less items
+				) {
+					if (junk[count].drop()) {
+						me.overhead('cleared autoequip junk');
+						delay(250);
+					}
+				}
+			}
+		}
+
+		// unwanted tier'ed merc autoequip
+		if (getMercFix()) {
+			let merctier = NTIP.GetMercTier(junk[count]);
+			let mercbodyLoc = Item.getBodyLocMerc(junk[count]);
+
+			if (merctier > 0 && mercbodyLoc) {
+				for (let mercbodypart = 0; mercbodypart < mercbodyLoc.length; mercbodypart += 1) {
+					let mercequippedTier = Item.getEquippedItemMerc(mercbodyLoc[mercbodypart]).tier;
+
+					if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
+						merctier <= mercequippedTier // drop same merctier or less items
+					) {
+						if (junk[count].drop()) {
+							me.overhead('cleared merc junk');
+							delay(250);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return true;
+};
+
+Town.characterRespec = function () {// Akara reset for build change
+	if (Misc.checkQuest(41, 0)) {
+		return true;
+	}
+
+	if (me.charlvl === respecOne || me.charlvl === respecTwo) {
+		Precast.doPrecast(true);
+		Town.goToTown(1);
+		Town.move(NPC.Akara);
+
+		let akara = getUnit(1, NPC.Akara);
+
+		if (!akara || !akara.openMenu()) {
+			return false;
+		}
+
+		delay(me.ping * 2);
+
+		if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
+			return false;
+		}
+
+		delay((me.ping * 2) + 1000);
+
+		Town.clearBelt();
+		me.overhead('time to respec');
+
+		delay(250);
+
+		let script = getScript("default.dbj");
+		script.stop();
+		load("default.dbj");
+	}
+
+	return true;
+
+};
+
+Misc.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
+	let id;
+
+	switch (bytes[0]) {
+	case 0x4e: // merc list packet
+		id = (bytes[2] << 8) + bytes[1];
+
+		if (mercId.indexOf(id) !== -1) {
+			mercId.length = 0;
+		}
+
+		mercId.push(id);
+		break;
+	case 0x5d: // golden bird quest
+		if (!Misc.checkQuest(20, 0)) {
+			let bird = getUnit(4, 546);
+
+			if (bird) {
+				Pickit.pickItem(bird);
+			}
+
+			if (me.getItem(546)) {
+				print("ÿc9SoloLevelingÿc0: activated golden bird quest");
+				me.overhead('golden bird');
+
+				if (!me.inTown) {
+					Town.goToTown();
+				}
+
+				this.unfinishedQuests();
+				Town.heal();
+				Town.move("portalspot");
+				Pather.usePortal(null, me.name);
+			}
+		}
+
+		break;
+	}
+};
+
+Misc.hireMerc = function () {
+	//  classorder =   ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+	let mercAuraName = ["Holy Freeze", "Holy Freeze", "Might", "Holy Freeze", "Defiance", "Blessed Aim", "Holy Freeze"][me.classid];
+	let mercAuraWanted = [114, 114, 98, 114, 104, 108, 114][me.classid];
+	let tempMercAura = 99; //prayer only one not used -- replaciing merc will bug out if changed.
+	// mercdiff = ["Nightmare", "Nightmare", "Nightmare", "Nightmare", "Normal", "Normal", "Nightmare"][me.classid];
+	let mercDiff = [1, 1, 1, 1, 0, 0, 1][me.classid];
+	let mercAura = [[104, 99, 108], [103, 98, 114]];
+
+	function getmercAura () {
+		merc = getMercFix();
+
+		if (!merc) {
+			return null;
+		}
+
+		for (let range = 0; range < mercAura.length; range++) {
+			if (Array.isArray(mercAura[range])) {
+				for (let selection = 0; selection < mercAura[range].length; selection++) {
+					if (merc.getSkill(mercAura[range][selection], 1)) {
+						return mercAura[range][selection];
+					}
+				}
+			} else if (merc.getSkill(mercAura[range], 1)) {
+				return mercAura[range];
+			}
+		}
+
+		return true;
+	}
+
+	if (!Pather.accessToAct(2) || me.diff === 2) { // don't hire if no access to act 2 or if in hell
+		return true;
+	}
+
+	let mercSelected = getmercAura();
+
+	if (mercSelected === mercAuraWanted || me.diff === 0 && mercSelected === tempMercAura) {
+		return true;
+	}
+
+	if (me.diff !== mercDiff && me.diff === 0 && me.gold < 25000 || me.diff === mercDiff && (me.diff === 0 && me.gold < 25000 || me.gold < 100000)) {
+		print('ÿc9SoloLevelingÿc0: not enough gold to hire merc.');
+
+		return true;
+	}
+
+	Pather.getWP(me.area);
+	me.overhead('getting merc');
+	Town.goToTown(2);
+	Pather.moveTo(5041, 5055);
+	Town.move(NPC.Greiz);
+
+	if (mercSelected !== mercAuraWanted && me.diff === mercDiff || mercSelected !== tempMercAura && me.diff === 0) { // replace merc
+		me.overhead('replacing merc');
+		Item.removeItemsMerc(); // strip temp merc gear
+		delay(500 + me.ping);
+	}
+
+	let greiz = getUnit(1, NPC.Greiz);
+
+	if (greiz && greiz.openMenu()) {
+		while (mercId.length > 0) {
+			Misc.useMenu(0x0D45);
+			sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
+			delay(500);
+			merc = getMercFix();
+
+			if (me.diff !== mercDiff && me.diff === 0) {
+				if (merc.getSkill(tempMercAura, 1)) {
+					print('ÿc9SoloLevelingÿc0: prayer merc hired.');
+
+					break;
+				} else {
+					print('ÿc9SoloLevelingÿc0: temp merc not available. will try later');
+
+					break;
+				}
+			}
+
+			if (me.diff === mercDiff) {
+				if (merc.getSkill(mercAuraWanted, 1)) {
+					print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc hired.');
+
+					break;
+				} else {
+					print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
+
+					break;
+				}
+			}
+		}
+	}
+
+	Misc.setupMerc();
+	Misc.equipMerc();
+
+	return true;
+};
+
+Misc.setupMerc = function () {
+	if (me.gametype === 0) {
+		return true;
+	}
+
+	if (!getMercFix()) {
+		return true;
+	}
+
+	me.overhead('Pickit: added merc items');
+	print("ÿc9SoloLevelingÿc0: merc items loaded to Pickit");
+
+	var mercHelm = [
+		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 8 && [ias] >= 20 # [Merctier] == 18",
+		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 6 && [magicdamagereduction] >= 10 # [Merctier] == 17",
+		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 120 && [fhr] >= 30 && [ItemCrushingBlow] >= 35 # [Merctier] == 16",
+		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 200 && [lifeleech] >= 5 && [fhr] >= 10 && [ias] >= 10 # [Merctier] == 15",
+		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lifeleech] >= 9 && [fireresist] >= 33 # [Merctier] == 14",
+		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lightresist] >= 20 && [coldresist] >= 20 && [fireresist] >= 20 # [Merctier] == 13",
+		"([type] == circlet || [type] == helm) # [lifeleech] >= 10 && [lightresist] >= 15 && [coldresist] >= 15 && [fireresist] >= 15 # [Merctier] == 12",
+		"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [Merctier] == 11",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 120 && [LightResist] >= 25 # [tier] == 10",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 110 && [LightResist] >= 25 # [tier] == 9",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 100 && [LightResist] >= 25 # [tier] == 8",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [LightResist] >= 25 # [tier] == 7",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 80 && [LightResist] >= 25 # [tier] == 6",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 70 && [LightResist] >= 25 # [tier] == 5",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 60 && [LightResist] >= 25 # [tier] == 4",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 50 && [LightResist] >= 25 # [tier] == 3",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 30 && [LightResist] >= 25 # [tier] == 2",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 20 && [LightResist] >= 25 # [tier] == 1",
+	];
+	NTIP.arrayLooping(mercHelm);
+
+	var mercArmor = [
+		"[Type] == armor && [flag] == runeword # [defense] >= 1800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 62",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 61",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 60",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 59",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 58",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 56",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 55",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 54",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 53",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 52",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 51",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 50",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 49",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 48",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 47",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1300 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 46",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1200 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 45",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1100 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 44",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1000 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 43",
+		"[Type] == armor && [flag] == runeword # [defense] >= 800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 42",
+		"[Type] == armor && [flag] == runeword # [defense] >= 775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 41",
+		"[Type] == armor && [flag] == runeword # [defense] >= 750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 40",
+		"[Type] == armor && [flag] == runeword # [defense] >= 725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 39",
+		"[Type] == armor && [flag] == runeword # [defense] >= 700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 38",
+		"[Type] == armor && [flag] == runeword # [defense] >= 675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 37",
+		"[Type] == armor && [flag] == runeword # [defense] >= 650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 36",
+		"[Type] == armor && [flag] == runeword # [defense] >= 625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 35",
+		"[Type] == armor && [flag] == runeword # [defense] >= 600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 34",
+		"[Type] == armor && [flag] == runeword # [defense] >= 575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 33",
+		"[Type] == armor && [flag] == runeword # [defense] >= 550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 32",
+		"[Type] == armor && [flag] == runeword # [defense] >= 525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 31",
+		"[Type] == armor && [flag] == runeword # [defense] >= 500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 30",
+		"[Type] == armor && [flag] == runeword # [defense] >= 475 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 29",
+		"[Type] == armor && [flag] == runeword # [defense] >= 450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 28",
+		"[Type] == armor && [flag] == runeword # [defense] >= 425 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 27",
+		"[Type] == armor && [flag] == runeword # [defense] >= 400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 26",
+		"[Type] == armor && [flag] == runeword # [defense] >= 375 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 25",
+		"[Type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [Merctier] == 24",
+		"[Name] == KrakenShell && [Quality] == Unique # [enhanceddefense] >= 170 && [strength] >= 40 # [Merctier] == 23",
+		"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # [enhanceddefense] >=160 && ([maxhp] == 60 || [coldresist] == 50) # [Merctier] == 22",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 900 && [fireresist] == 50 # [merctier] == 21",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 875 && [fireresist] == 50 # [merctier] == 20",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 850 && [fireresist] == 50 # [merctier] == 19",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 825 && [fireresist] == 50 # [merctier] == 18",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 800 && [fireresist] == 50 # [merctier] == 17",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 780 && [fireresist] == 50 # [merctier] == 16",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 740 && [fireresist] == 50 # [merctier] == 15",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 700 && [fireresist] == 50 # [merctier] == 14",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 650 && [fireresist] == 50 # [merctier] == 13",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 610 && [fireresist] == 50 # [merctier] == 12",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 390 && [fireresist] == 50 # [merctier] == 11",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 240 && [fireresist] == 50 # [merctier] == 10",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 213 && [fireresist] == 50 # [merctier] == 9",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 194 && [fireresist] == 50 # [merctier] == 8",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 178 && [fireresist] == 50 # [merctier] == 7",
+		"[type] == armor # [enhanceddefense] >= 150 && [ias] >= 15 && [fhr] >= 15 && [dexterity] >= 15 # [merctier] == 6",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [frw] == 25 && [fcr] == 25 # [merctier] == 5",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [frw] == 25 && [fcr] == 25 # [merctier] == 4",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [frw] == 25 && [fcr] == 25 # [merctier] == 3",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 65 && [frw] == 25 && [fcr] == 25 # [merctier] == 2",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] == 25 && [fcr] == 25 # [merctier] == 1",
+	];
+	NTIP.arrayLooping(mercArmor);
+
+	var mercWeapon = [
+		"[type] == polearm && [flag] == runeword && [flag] == ethereal # [meditationaura] >= 17 # [Merctier] == 22",
+		"[name] == thresher && [quality] == unique # [enhanceddamage] >= 190 && [lifeleech] >= 11 # [Merctier] == 21",
+		"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [Merctier] == 20",
+		"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [Merctier] == 19",
+		"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [Merctier] == 18",
+		"[type] == polearm && [flag] == runeword # [meditationaura] >= 14 # [Merctier] == 17",
+		"[type] == polearm && [flag] == runeword # [meditationaura] >= 13 # [Merctier] == 16",
+		"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [Merctier] == 15",
+		"[name] == yari && [quality] == unique # [enhanceddamage] >= 160 && [itemcrushingblow] >= 45 # [Merctier] == 14",
+		"[name] == fuscina && [quality] == unique # [enhanceddamage] >= 140 && [fireresist] >= 50 # [Merctier] == 13",
+		"[name] == halberd && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 12",
+		"[name] == poleaxe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 11",
+		"[name] == warscythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 10",
+		"[name] == scythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 9",
+		"[name] == voulge && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 8",
+	];
+	NTIP.arrayLooping(mercWeapon);
+
+	var mercPrep = [
+		"[Type] == Polearm # [EnhancedDamage] >= 65 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 7",
+		"[Type] == Polearm # [EnhancedDamage] >= 40 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 6",
+		"[Type] == Polearm # [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 5",
+		"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 4",
+		"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 3",
+		"[Type] == Polearm # [lifeleech] >= 4 # [MaxQuantity] == 1 && [Merctier] == 2",
+		"[Type] == Polearm # [lifeleech] >= 3 # [MaxQuantity] == 1 && [Merctier] == 1",
+	];
+
+	if (me.diff === 0) {
+		NTIP.arrayLooping(mercPrep);
+	}
+
+	return true;
+};
+
+Misc.equipMerc = function () {
+	if (me.gametype === 1) {
+		Item.autoEquipMerc();
+		Pickit.pickItems(); // safetycheck for merc items on ground
+		Item.autoEquipMerc();
+	}
+
+	return true;
+};
+
+Misc.checkQuest = function (id, state) {
+	sendPacket(1, 0x40);
+	delay(500);
+
+	return me.getQuest(id, state);
 };
 
 Misc.openChests = function (range) {
 	var unit,
 		unitList = [],
-		containers = ["barrel", "loose rock", "hidden stash", "loose boulder", "chest", "chest3", "largeurn", "jar3", "jar2", "jar1", "urn", "armorstand", "weaponrack"];
+		containers = ["barrel", "loose rock", "hidden stash", "loose boulder", "chest", "chest3", "largeurn", "jar3", "jar2", "jar1", "urn", "armorstand", "weaponrack", "holeanim"];
 
 	if (!range) {
 		range = 15;
@@ -3301,6 +3020,293 @@ Misc.openChests = function (range) {
 		if (unit && (Pather.useTeleport() || !checkCollision(me, unit, 0x4)) && this.openChest(unit)) {
 			Pickit.pickItems();
 		}
+	}
+
+	return true;
+};
+
+Misc.cubeStaff = function () {
+	if (Misc.checkQuest(10, 0)) {
+		return true;
+	}
+
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
+	let shaft = me.getItem("msf");
+	let ammy = me.getItem("vip");
+
+	if (!shaft || !ammy) {
+		me.overhead("missing pieces to make staff");
+
+		return false;
+	}
+
+	Storage.Cube.MoveTo(ammy);
+	Storage.Cube.MoveTo(shaft);
+	Cubing.openCube();
+
+	transmute();
+	delay(750 + me.ping);
+
+	let hstaff = me.getItem(91);
+
+	if (!hstaff) {
+		me.overhead("ÿc9SoloLevelingÿc0: Failed to make staff");
+
+		return false;
+	}
+
+	me.overhead("made staff");
+	Storage.Inventory.MoveTo(hstaff);
+	me.cancel();
+
+	return true;
+};
+
+Misc.placeStaff = function () {
+	let tick = getTickCount();
+	let orifice = getUnit(2, 152);
+	let hstaff = me.getItem(91);
+
+	if (!orifice) {
+		return false;
+	}
+
+	if (hstaff) {
+		if (hstaff.location === 7) {
+			Town.goToTown();
+			Storage.Inventory.MoveTo(hstaff);
+			me.cancel();
+			Pather.usePortal(null, me.name);
+		}
+
+		if (hstaff.location === 6) {
+			Town.goToTown();
+			Cubing.openCube();
+			Storage.Inventory.MoveTo(hstaff);
+			me.cancel();
+			Pather.usePortal(null, me.name);
+		}
+	}
+
+	Misc.openChest(orifice);
+
+	if (!hstaff) {
+		if (getTickCount() - tick < 500) {
+			delay(500 + me.ping);
+		}
+
+		return false;
+	}
+
+	hstaff.toCursor();
+	submitItem();
+	delay(750 + me.ping);
+
+	// unbug cursor
+	let item = me.findItem(-1, 0, 3);
+
+	if (item && item.toCursor()) {
+		Storage.Inventory.MoveTo(item);
+	}
+
+	delay(750 + me.ping);
+
+	return true;
+};
+
+Misc.tyraelTalk = function () {
+	let tyrael = getUnit(1, NPC.Tyrael);
+
+	if (!tyrael) {
+		return false;
+	}
+
+	for (let talk = 0; talk < 3; talk += 1) {
+		if (getDistance(me, tyrael) > 3) {
+			Pather.moveToUnit(tyrael);
+		}
+
+		tyrael.interact();
+		delay(1000 + me.ping);
+		me.cancel();
+
+		if (Pather.getPortal(null)) {
+			me.cancel();
+			break;
+		}
+	}
+
+	Town.goToTown();
+
+	return true;
+};
+
+Misc.jerhynTalk = function () {
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
+	Town.move("palace");
+
+	let jerhyn	= getUnit(1, NPC.Jerhyn);
+
+	if (!jerhyn || !jerhyn.openMenu()) {
+		Pather.moveTo(5166, 5206);
+
+		return false;
+	}
+
+	me.cancel();
+
+	Pather.moveToExit(50, true);
+
+	Town.goToTown();
+
+	return true;
+};
+
+Misc.meshifTalk = function () {
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
+	Town.move(NPC.Meshif);
+
+	let meshif = getUnit(1, NPC.Meshif);
+
+	if (!meshif || !meshif.openMenu()) {
+		return false;
+	}
+
+	Misc.useMenu(0x0D38);
+
+	return true;
+};
+
+Misc.cubeFlail = function () {
+	me.overhead("cubing flail");
+
+	if (me.getItem(174)) { // Already have the finished Flail.
+		return true;
+	}
+
+	Town.townTasks();
+	Town.move("stash");
+
+	if (!Town.openStash()) {
+		Town.openStash();
+	}
+
+	let eye = me.getItem(553);
+	let heart = me.getItem(554);
+	let brain = me.getItem(555);
+	let flail = me.getItem(173);
+	Storage.Cube.MoveTo(eye);
+	Storage.Cube.MoveTo(heart);
+	Storage.Cube.MoveTo(brain);
+	Storage.Cube.MoveTo(flail);
+	Cubing.openCube();
+	transmute();
+	delay(750 + me.ping);
+	Cubing.emptyCube();
+	me.cancel();
+
+	return true;
+};
+
+Misc.equipQuestItem = function (item, loc) {
+	Town.townTasks();
+	let newitem = me.getItem(item);
+
+	if (newitem) {
+		if (newitem.location === 7) {
+			Town.move("stash");
+			delay(250 + me.ping);
+			Town.openStash();
+			Storage.Inventory.MoveTo(newitem);
+		}
+
+		if (!Item.equip(newitem, loc)) {
+			Pickit.pickItems();
+			print("ÿc9SoloLevelingÿc0: failed to equip item.(Misc.equipQuestItem)");
+		}
+	} else {
+		print("ÿc9SoloLevelingÿc0: Lost item before trying to equip it. (Misc.equipQuestItem)");
+	}
+
+	if (me.itemoncursor) {
+		let olditem = getUnit(100);
+
+		if (olditem) {
+			if (Storage.Inventory.CanFit(olditem)) {
+				me.overhead("Keeping weapon");
+
+				Storage.Inventory.MoveTo(olditem);
+			} else {
+				me.cancel();
+				me.overhead("No room to keep weapon");
+
+				olditem.drop();
+			}
+		}
+	}
+
+	delay(750 + me.ping);
+
+	Pickit.pickItems();
+
+	return true;
+};
+
+Misc.smashSomething = function (smashable) {
+	let something;
+
+	switch (smashable) {
+	case 404:
+		something = getUnit(2, 404);
+		break;
+	case 376:
+		something = getUnit(2, 376);
+		break;
+	}
+
+	Pather.moveToUnit(something, 0, 0, Config.ClearType, false);
+
+	for (let smash = 0; smash < 5; smash += 1) {
+		if (something) {
+			Skill.cast(0, 0, something);
+
+			delay(750 + me.ping);
+
+		}
+	}
+
+	return true;
+};
+
+NTIP.addLine = function (itemString) { //NTIP INJECTOR
+	let info = {
+		line: 1,
+		file: "SoloLeveling",
+		string: line
+	};
+
+	let line = NTIP.ParseLineInt(itemString, info);
+
+	if (line) {
+		NTIP_CheckList.push(line);
+		stringArray.push(info);
+	}
+
+	return true;
+};
+
+NTIP.arrayLooping = function (arraytoloop) {
+	for (let q = 0; q < arraytoloop.length; q += 1) {
+		NTIP.addLine(arraytoloop[q]);
 	}
 
 	return true;
@@ -3400,6 +3406,88 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 	return false;
 };
 
+Item.getBodyLoc = function (item) {
+	var bodyLoc;
+
+	switch (item.itemType) {
+	case 2: // Shield
+	case 70: // Auric Shields
+	case 69: // Voodoo Heads
+		bodyLoc = 5;
+
+		break;
+	case 3: // Armor
+		bodyLoc = 3;
+
+		break;
+	case 5: // Arrows
+	case 6: // Bolts
+		bodyLoc = 5;
+
+		break;
+	case 10: // Ring
+		bodyLoc = [6, 7];
+
+		break;
+	case 12: // Amulet
+		bodyLoc = 2;
+
+		break;
+	case 15: // Boots
+		bodyLoc = 9;
+
+		break;
+	case 16: // Gloves
+		bodyLoc = 10;
+
+		break;
+	case 19: // Belt
+		bodyLoc = 8;
+
+		break;
+	case 37: // Helm
+	case 71: // Barb Helm
+	case 75: // Circlet
+	case 72: // Druid Pelts
+		bodyLoc = 1;
+
+		break;
+	case 24: //
+	case 25: //
+	case 26: //
+	case 27: //
+	case 28: //
+	case 29: //
+	case 30: //
+	case 31: //
+	case 32: //
+	case 33: //
+	case 34: //
+	case 35: //
+	case 36: //
+	case 42: //
+	case 43: //
+	case 44: //
+	case 67: // Handtohand (Assasin Claw)
+	case 68: //
+	case 85: //
+	case 86: //
+	case 87: //
+	case 88: //
+		bodyLoc = 4;
+
+		break;
+	default:
+		return false;
+	}
+
+	if (typeof bodyLoc === "number") {
+		bodyLoc = [bodyLoc];
+	}
+
+	return bodyLoc;
+};
+
 var haveItem = function (type, flag, iName) {
 	if (type && !NTIPAliasType[type]) {
 		print("ÿc9SoloLevelingÿc0: No alias for type '" + type + "'");
@@ -3462,7 +3550,7 @@ var getMercFix = function () { // merc is null fix
 		return null;
 	}
 
-	var merc = me.getMerc();
+	merc = me.getMerc();
 
 	for (var i = 0; i < 3; i++) {
 		if (merc) {
