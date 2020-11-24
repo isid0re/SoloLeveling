@@ -318,6 +318,7 @@ function SoloLeveling () {
 		Pather.moveTo(22572, 9582);
 		Pather.moveTo(22554, 9566);
 		Pather.moveTo(22546, 9554);
+		Config.MercWatch = false;
 
 		try {
 			let andy = getUnit(1, "Andariel");
@@ -332,6 +333,7 @@ function SoloLeveling () {
 
 		delay(2000 + me.ping); // Wait for minions to die.
 		Pickit.pickItems();
+		Config.MercWatch = true;
 		Town.move(NPC.Warriv);
 		let warriv = getUnit(1, NPC.Warriv);
 
@@ -1455,6 +1457,7 @@ function SoloLeveling () {
 		this.vizier();
 		this.seis();
 		this.infector();
+		Config.MercWatch = false;
 		let diablo = getUnit(1, 243);
 
 		try {
@@ -1492,9 +1495,9 @@ function SoloLeveling () {
 			return true;
 		}
 
+		Config.MercWatch = true;
 		Town.goToTown();
 		Town.move(NPC.Tyrael);
-
 		let tyrael = getUnit(1, NPC.Tyrael);
 
 		if (!tyrael || !tyrael.openMenu()) {
@@ -2422,9 +2425,9 @@ Town.equipSWAP = function () {
 	let spirit = me.getItems()
 		.filter(item =>
 			item.getPrefix(20635) // The spirit shield prefix
-			&& item.classid !== 29 // broad sword
-			&& item.classid !== 30 // crystal sword
-			&& item.classid !== 31 // crystal sword
+			&& item.classid !== 29 // no broad sword
+			&& item.classid !== 30 // no crystal sword
+			&& item.classid !== 31 // no long sword
 			&& [3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
 		)
 		.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
@@ -2851,16 +2854,16 @@ Misc.setupMerc = function () {
 		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lightresist] >= 20 && [coldresist] >= 20 && [fireresist] >= 20 # [Merctier] == 13",
 		"([type] == circlet || [type] == helm) # [lifeleech] >= 10 && [lightresist] >= 15 && [coldresist] >= 15 && [fireresist] >= 15 # [Merctier] == 12",
 		"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [Merctier] == 11",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 120 && [LightResist] >= 25 # [tier] == 10",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 110 && [LightResist] >= 25 # [tier] == 9",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 100 && [LightResist] >= 25 # [tier] == 8",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [LightResist] >= 25 # [tier] == 7",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 80 && [LightResist] >= 25 # [tier] == 6",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 70 && [LightResist] >= 25 # [tier] == 5",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 60 && [LightResist] >= 25 # [tier] == 4",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 50 && [LightResist] >= 25 # [tier] == 3",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 30 && [LightResist] >= 25 # [tier] == 2",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 20 && [LightResist] >= 25 # [tier] == 1",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 120 && [LightResist] >= 25 # [Merctier] == 10",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 110 && [LightResist] >= 25 # [Merctier] == 9",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 100 && [LightResist] >= 25 # [Merctier] == 8",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [LightResist] >= 25 # [Merctier] == 7",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 80 && [LightResist] >= 25 # [Merctier] == 6",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 70 && [LightResist] >= 25 # [Merctier] == 5",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 60 && [LightResist] >= 25 # [Merctier] == 4",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 50 && [LightResist] >= 25 # [Merctier] == 3",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 30 && [LightResist] >= 25 # [Merctier] == 2",
+		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 20 && [LightResist] >= 25 # [Merctier] == 1",
 	];
 	NTIP.arrayLooping(mercHelm);
 
@@ -2905,27 +2908,27 @@ Misc.setupMerc = function () {
 		"[Type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [Merctier] == 24",
 		"[Name] == KrakenShell && [Quality] == Unique # [enhanceddefense] >= 170 && [strength] >= 40 # [Merctier] == 23",
 		"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # [enhanceddefense] >=160 && ([maxhp] == 60 || [coldresist] == 50) # [Merctier] == 22",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 900 && [fireresist] == 50 # [merctier] == 21",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 875 && [fireresist] == 50 # [merctier] == 20",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 850 && [fireresist] == 50 # [merctier] == 19",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 825 && [fireresist] == 50 # [merctier] == 18",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 800 && [fireresist] == 50 # [merctier] == 17",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 780 && [fireresist] == 50 # [merctier] == 16",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 740 && [fireresist] == 50 # [merctier] == 15",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 700 && [fireresist] == 50 # [merctier] == 14",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 650 && [fireresist] == 50 # [merctier] == 13",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 610 && [fireresist] == 50 # [merctier] == 12",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 390 && [fireresist] == 50 # [merctier] == 11",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 240 && [fireresist] == 50 # [merctier] == 10",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 213 && [fireresist] == 50 # [merctier] == 9",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 194 && [fireresist] == 50 # [merctier] == 8",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 178 && [fireresist] == 50 # [merctier] == 7",
-		"[type] == armor # [enhanceddefense] >= 150 && [ias] >= 15 && [fhr] >= 15 && [dexterity] >= 15 # [merctier] == 6",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [frw] == 25 && [fcr] == 25 # [merctier] == 5",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [frw] == 25 && [fcr] == 25 # [merctier] == 4",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [frw] == 25 && [fcr] == 25 # [merctier] == 3",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 65 && [frw] == 25 && [fcr] == 25 # [merctier] == 2",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] == 25 && [fcr] == 25 # [merctier] == 1",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 900 && [fireresist] == 50 # [Merctier] == 21",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 875 && [fireresist] == 50 # [Merctier] == 20",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 850 && [fireresist] == 50 # [Merctier] == 19",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 825 && [fireresist] == 50 # [Merctier] == 18",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 800 && [fireresist] == 50 # [Merctier] == 17",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 780 && [fireresist] == 50 # [Merctier] == 16",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 740 && [fireresist] == 50 # [Merctier] == 15",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 700 && [fireresist] == 50 # [Merctier] == 14",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 650 && [fireresist] == 50 # [Merctier] == 13",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 610 && [fireresist] == 50 # [Merctier] == 12",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 390 && [fireresist] == 50 # [Merctier] == 11",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 240 && [fireresist] == 50 # [Merctier] == 10",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 213 && [fireresist] == 50 # [Merctier] == 9",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 194 && [fireresist] == 50 # [Merctier] == 8",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 178 && [fireresist] == 50 # [Merctier] == 7",
+		"[type] == armor # [enhanceddefense] >= 150 && [ias] >= 15 && [fhr] >= 15 && [dexterity] >= 15 # [Merctier] == 6",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [frw] == 25 && [fcr] == 25 # [Merctier] == 5",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [frw] == 25 && [fcr] == 25 # [Merctier] == 4",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [frw] == 25 && [fcr] == 25 # [Merctier] == 3",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 65 && [frw] == 25 && [fcr] == 25 # [Merctier] == 2",
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] == 25 && [fcr] == 25 # [Merctier] == 1",
 	];
 	NTIP.arrayLooping(mercArmor);
 
