@@ -338,7 +338,7 @@ function SoloLeveling () {
 		let warriv = getUnit(1, NPC.Warriv);
 
 		if (!warriv || !warriv.openMenu()) {
-			return false;
+			delay(250 + me.ping);
 		}
 
 		Misc.useMenu(0x0D36);
@@ -347,6 +347,17 @@ function SoloLeveling () {
 	};
 
 	this.radament = function () {
+		if (me.area === 1 && !Pather.accessToAct(2)) {
+			Town.move(NPC.Warriv);
+			let warriv = getUnit(1, NPC.Warriv);
+
+			if (!warriv || !warriv.openMenu()) {
+				delay(250 + me.ping);
+			}
+
+			Misc.useMenu(0x0D36);
+		}
+
 		if (!Pather.accessToAct(2) || Misc.checkQuest(9, 0)) {
 			return true;
 		}
@@ -2163,7 +2174,7 @@ var mercId = [], merc;
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 28, 26, 25, 0, 0, 0][me.classid];
+const respecOne = [ 0, 27, 26, 25, 0, 0, 0][me.classid];
 const respecTwo = [ 0, 85, 85, 85, 0, 0, 0][me.classid];
 
 // Customized Functions
@@ -2339,13 +2350,13 @@ Town.unfinishedQuests = function () {
 	}
 
 	if (me.getItem(545)) { // potion of life
-		let item = me.getItem(545);
+		let lp = me.getItem(545);
 
-		if (item.location > 3) {
+		if (lp.location === 7) {
 			this.openStash();
 		}
 
-		item.interact();
+		lp.interact();
 		print('ÿc9SoloLevelingÿc0: used potion of life');
 	}
 
@@ -2398,6 +2409,16 @@ Town.unfinishedQuests = function () {
 			}
 
 			print('ÿc9SoloLevelingÿc0: removed khalims will');
+		}
+	}
+
+	// hellforge hammer
+	let hammer = me.getItem(90);
+
+	if (hammer) {
+		if (hammer.location === 3) {
+			Town.move('stash');
+			Storage.Stash.MoveTo(hammer);
 		}
 	}
 
@@ -2722,7 +2743,7 @@ Misc.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
 					Town.goToTown();
 				}
 
-				this.unfinishedQuests();
+				Town.unfinishedQuests();
 				Town.heal();
 				Town.move("portalspot");
 				Pather.usePortal(null, me.name);
@@ -3768,7 +3789,7 @@ Item.autoEquipMerc = function () {
 
 	me.cancel();
 
-	for (i = 0; i < items.length; i += 1) { // Remove items without tier
+	for (i = 0; i < items.length; i += 1) {
 		if (NTIP.GetMercTier(items[i]) === 0) {
 			items.splice(i, 1);
 

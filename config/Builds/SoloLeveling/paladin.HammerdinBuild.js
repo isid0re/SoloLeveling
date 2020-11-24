@@ -7,7 +7,7 @@
 var build = {
 	caster: true,
 	stats: [
-		["vitality", 130], ["dexterity", 27], ["strength", 48], ["vitality", 165], ["dexterity", 39], ["strength", 61], ["vitality", 241], ["strength", 89], ["vitality", 330], ["dexterity", "block"], ["vitality", "all"]
+		["strength", 47], ["dexterity", 27], ["vitality", 166], ["dexterity", 39], ["strength", 61], ["vitality", 241], ["strength", 89], ["vitality", 330], ["dexterity", "block"], ["vitality", "all"]
 	],
 	skills: [
 		[98, 1], // might
