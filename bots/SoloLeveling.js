@@ -19,6 +19,7 @@ function SoloLeveling () {
 	this.startrun = function () {
 		print('ÿc9SoloLevelingÿc0: setup SoloLeveling');
 		me.overhead('setup SoloLeveling');
+		Town.unfinishedQuests();
 		Town.heal();
 		Town.buyPotions();
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
@@ -1278,13 +1279,14 @@ function SoloLeveling () {
 		}
 
 		Pickit.pickItems();
+		let havehammer = me.getItem(90);
 
-		if (!me.getItem(90)) { // pickup hammer
+		if (!havehammer) { // pickup hammer
 			let hammer = getUnit(4, 90);
 			Pickit.pickItem(hammer);
 		}
 
-		if (me.getItem(90)) {
+		if (havehammer) {
 			if (!Pather.moveToPreset(me.area, 2, 376)) {
 				print('ÿc9SoloLevelingÿc0: Failed to move to forge');
 			}
@@ -1718,7 +1720,7 @@ function SoloLeveling () {
 
 		delay(1000 + me.ping);
 		Town.goToTown();
-		Town.npcInteract("qual-kehk");
+		Town.npcInteract("qual_kehk");
 
 		return true;
 	};
@@ -2829,7 +2831,7 @@ Town.clearJunk = function () {
 		// unwanted items runes / bad bases
 		if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
 		(Pickit.checkItem(junk[count]).result === 0 || Pickit.checkItem(junk[count]).result === 4) && // drop unwanted
-		!Pickit.checkItem(junk[count]).result === 1 && // Don't throw NTIP wanted
+		!(junk[count].classid >= 630 && junk[count].classid <= 642) && // Don't throw good runes
 		!Cubing.keepItem(junk[count]) && // Don't throw cubing ingredients
 		!Runewords.keepItem(junk[count]) && // Don't throw runeword ingredients
 		!CraftingSystem.keepItem(junk[count]) // Don't throw crafting system ingredients
@@ -2916,31 +2918,85 @@ Town.characterRespec = function () {// Akara reset for build change
 };
 
 Town.npcInteract = function (name) {
-	let npc = name;
-	let npcUnit = getUnit(1, npc);
+	let npc;
+
+	switch (name) {
+	case "akara":
+		npc = getUnit(1, NPC.Akara);
+
+		break;
+	case "warriv":
+		npc = getUnit(1, NPC.Warriv);
+
+		break;
+	case "meshif":
+		npc = getUnit(1, NPC.Meshif);
+
+		break;
+	case "tyrael":
+		npc = getUnit(1, NPC.Tyrael);
+
+		break;
+	case "jerhyn":
+		npc = getUnit(1, NPC.Jerhyn);
+
+		break;
+	case "alkor":
+		npc = getUnit(1, NPC.Alkor);
+
+		break;
+	case "atma":
+		npc = getUnit(1, NPC.Atma);
+
+		break;
+	case "kashya":
+		npc = getUnit(1, NPC.Kashya);
+
+		break;
+	case "drognan":
+		npc = getUnit(1, NPC.Drognan);
+
+		break;
+	case "cain":
+		npc = getUnit(1, NPC.Cain);
+
+		break;
+	case "qual_kehk":
+		npc = getUnit(1, NPC.Qual_Kehk);
+
+		break;
+	case "malah":
+		npc = getUnit(1, NPC.Malah);
+
+		break;
+	case "anya":
+		npc = getUnit(1, NPC.Anya);
+
+		break;
+	}
 
 	if (!me.inTown) {
 		Town.goToTown();
 	}
 
-	while (!npcUnit) {
-		Town.move(npc);
+	while (!npc) {
+		Town.move(name);
 		Packet.flash(me.gid);
 		delay(me.ping * 2);
-
-		npcUnit = getUnit(1, npc);
+		npc = getUnit(1, name);
 	}
 
 	for (let i = 0; i < 5; i += 1) {
-		if (!npcUnit.openMenu()) {
+		if (!npc.openMenu()) {
 			me.cancel();
 		}
 
-		if (npcUnit.openMenu()) {
+		if (npc.openMenu()) {
 			break;
 		}
 
 		Packet.flash(me.gid);
+		me.cancel();
 	}
 
 	return true;
@@ -3462,6 +3518,7 @@ Misc.equipQuestItem = function (item, loc) {
 			delay(250 + me.ping);
 			Town.openStash();
 			Storage.Inventory.MoveTo(newitem);
+			me.cancel();
 		}
 
 		if (!Item.equip(newitem, loc)) {
