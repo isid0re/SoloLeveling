@@ -17,6 +17,7 @@ function SoloLeveling () {
 
 	// Scripts to execute for leveling
 	this.startrun = function () {
+		print('ÿc9SoloLevelingÿc0: setup SoloLeveling');
 		me.overhead('setup SoloLeveling');
 		Town.heal();
 		Town.buyPotions();
@@ -39,6 +40,7 @@ function SoloLeveling () {
 			"[Name] == Khalim'sBrain",
 			"[Name] == Khalim'sFlail",
 			"[Name] == Khalim'sWill",
+			"[Name] == ScrollofResistance",
 		];
 		NTIP.arrayLooping(questItems);
 
@@ -81,12 +83,12 @@ function SoloLeveling () {
 	};
 
 	this.den = function () {
-
 		if (Misc.checkQuest(1, 0)) {
 			return true;
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting den');
 		me.overhead("den");
 
 		Pather.moveToExit([2, 8], false);
@@ -105,8 +107,14 @@ function SoloLeveling () {
 			Attack.clearLevel();
 		}
 
-		Pather.getWP(3);
-		Pather.useWaypoint(1);
+		if (!Pather.checkWP(3)) {
+			Pather.getWP(3);
+			Pather.useWaypoint(1);
+		} else {
+			Pather.getWP(3);
+			Pather.useWaypoint(1);
+		}
+
 		Town.doChores();
 
 		if (!Pather.usePortal(2, me.name)) {
@@ -124,12 +132,7 @@ function SoloLeveling () {
 			Town.goToTown();
 		}
 
-		Town.move(NPC.Akara);
-
-		let akara = getUnit(1, NPC.Akara);
-
-		akara.openMenu();
-		me.cancel();
+		Town.npcInteract("akara");
 
 		return true;
 	};
@@ -140,8 +143,15 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting blood raven');
 		me.overhead("blood raven");
-		Pather.useWaypoint(3);
+
+		if (!Pather.checkWP(3)) {
+			Pather.getWP(3);
+		} else {
+			Pather.useWaypoint(3);
+		}
+
 		Precast.doPrecast(true);
 		Pather.moveToExit(17, true);
 		Pather.moveToPreset(17, 1, 805);
@@ -159,10 +169,7 @@ function SoloLeveling () {
 		Pickit.pickItems();
 
 		if (me.diff === 0) {
-			Town.move(NPC.Kashya);
-			let kashya = getUnit(1, NPC.Kashya);
-			kashya.openMenu();
-			me.cancel();
+			Town.npcInteract("kashya");
 
 			return true;
 		}
@@ -184,11 +191,19 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting cain');
 		me.overhead("cain");
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 3);
+		Precast.doPrecast(true);
 
 		if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 			if (!me.getItem(524)) {
-				Pather.useWaypoint(5);
+				if (!Pather.checkWP(5)) {
+					Pather.getWP(5);
+				} else {
+					Pather.useWaypoint(5);
+				}
+
 				Precast.doPrecast(true);
 
 				if (!Pather.moveToPreset(me.area, 2, 30, 5, 5)) {
@@ -202,17 +217,17 @@ function SoloLeveling () {
 				Town.goToTown();
 			}
 
-			Town.move(NPC.Akara);
-			let akara = getUnit(1, NPC.Akara);
-			akara.openMenu();
-			me.cancel();
+			Town.npcInteract("akara");
 		}
 
-		Pather.useWaypoint(4);
+		if (!Pather.checkWP(4)) {
+			Pather.getWP(4);
+		} else {
+			Pather.useWaypoint(4);
+		}
+
 		Precast.doPrecast(true);
-
 		Pather.moveToPreset(me.area, 2, 17, 0, 0, false, true);
-
 		Attack.clear(15, 0x7);
 
 		if (me.getItem(525)) {
@@ -254,9 +269,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting countess');
 		me.overhead("countess");
-		Pather.useWaypoint(6);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 5);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(6)) {
+			Pather.getWP(6);
+		} else {
+			Pather.useWaypoint(6);
+		}
 
 		try {
 			Pather.moveToExit([20, 21, 22, 23, 24, 25], true);
@@ -277,9 +299,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting pits');
 		me.overhead("pits");
-		Pather.useWaypoint(6);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 5);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(6)) {
+			Pather.getWP(6);
+		} else {
+			Pather.useWaypoint(6);
+		}
 
 		if (!Pather.moveToExit([7, 12], true)) {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Pit level 1");
@@ -303,8 +332,18 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting andy');
 		me.overhead("andy");
-		Pather.useWaypoint(35);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 32);
+		Precast.doPrecast(true);
+
+
+		if (!Pather.checkWP(35)) {
+			Pather.getWP(35);
+		} else {
+			Pather.useWaypoint(35);
+		}
+
 		Precast.doPrecast(true);
 		Pather.moveToExit([36, 37], true);
 		Town.goToTown();
@@ -312,6 +351,7 @@ function SoloLeveling () {
 		Town.buyPots(10, "Antidote"); // antidote
 		Town.drinkPots();
 		Pather.usePortal(37, me.name);
+		Precast.doPrecast(true);
 		Pather.moveTo(22572, 9635);
 		Pather.moveTo(22554, 9618);
 		Pather.moveTo(22542, 9600);
@@ -334,38 +374,28 @@ function SoloLeveling () {
 		delay(2000 + me.ping); // Wait for minions to die.
 		Pickit.pickItems();
 		Config.MercWatch = true;
-		Town.move(NPC.Warriv);
-		let warriv = getUnit(1, NPC.Warriv);
-
-		if (!warriv || !warriv.openMenu()) {
-			delay(250 + me.ping);
-		}
-
-		Misc.useMenu(0x0D36);
+		Pather.changeAct();
 
 		return true;
 	};
 
 	this.radament = function () {
-		if (me.area === 1 && !Pather.accessToAct(2)) {
-			Town.move(NPC.Warriv);
-			let warriv = getUnit(1, NPC.Warriv);
-
-			if (!warriv || !warriv.openMenu()) {
-				delay(250 + me.ping);
-			}
-
-			Misc.useMenu(0x0D36);
-		}
-
 		if (!Pather.accessToAct(2) || Misc.checkQuest(9, 0)) {
 			return true;
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting radament');
 		me.overhead("radament");
-		Pather.useWaypoint(48);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(48)) {
+			Pather.getWP(48);
+		} else {
+			Pather.useWaypoint(48);
+		}
+
 		Pather.moveToExit(49, true);
 		Pather.moveToPreset(me.area, 2, 355);
 
@@ -382,24 +412,8 @@ function SoloLeveling () {
 
 		Pickit.pickItems();
 		Town.goToTown();
-		let book = me.getItem(552);
-
-		if (book) {
-			if (book.location === 7) {
-				Town.move('stash');
-				Storage.Inventory.MoveTo(book);
-				delay(300);
-				clickItem(1, book);
-			} else {
-				delay(300);
-				clickItem(1, book);
-			}
-		}
-
-		Town.move(NPC.Atma);
-		let atma = getUnit(1, NPC.Atma);
-		atma.openMenu();
-		me.cancel();
+		Town.unfinishedQuests();
+		Town.npcInteract("atma");
 
 		return true;
 	};
@@ -410,9 +424,17 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting cube');
 		me.overhead("cube");
-		Pather.useWaypoint(57);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(57)) {
+			Pather.getWP(57);
+		} else {
+			Pather.useWaypoint(57);
+		}
+
 		Pather.moveToExit(60, true);
 		Pather.moveToPreset(me.area, 2, 354);
 		Attack.securePosition(me.x, me.y, 30, 3000, true);
@@ -438,10 +460,20 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting amulet');
 		me.overhead("amulet");
-		Pather.useWaypoint(44);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+
+		if (!Pather.checkWP(44)) {
+			Pather.getWP(44);
+		} else {
+			Pather.useWaypoint(44);
+		}
+
 		Pather.moveToExit([45, 58, 61], true);
+		Precast.doPrecast(true);
 
 		if (me.classid !== 1 || me.classid === 1 && me.charlvl <= respecOne) {
 			Pather.moveTo(15065, 14047);
@@ -460,14 +492,7 @@ function SoloLeveling () {
 		}
 
 		Town.goToTown();
-		Town.move(NPC.Drognan);
-		let drognan = getUnit(1, NPC.Drognan);
-
-		if (!drognan || !drognan.openMenu()) {
-			return false;
-		}
-
-		me.cancel();
+		Town.npcInteract("drognan");
 
 		if (me.getItem(521)) {
 			Town.move("stash");
@@ -549,9 +574,16 @@ function SoloLeveling () {
 		};
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting summoner');
 		me.overhead("summoner");
-		Pather.useWaypoint(74);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(74)) {
+			Pather.getWP(74);
+		} else {
+			Pather.useWaypoint(74);
+		}
 
 		try {
 			teleportPads();
@@ -590,8 +622,13 @@ function SoloLeveling () {
 		}
 
 		Pather.usePortal(46);
-		Pather.getWP(46);
-		Pather.useWaypoint(40);
+
+		if (!Pather.checkWP(46)) {
+			Pather.getWP(46);
+			Pather.useWaypoint(40);
+		} else {
+			Pather.useWaypoint(40);
+		}
 
 		return true;
 
@@ -603,9 +640,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting ancient tunnels');
 		me.overhead("ancient tunnels");
-		Pather.useWaypoint(44);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(44)) {
+			Pather.getWP(44);
+		} else {
+			Pather.useWaypoint(44);
+		}
 
 		if (Pather.moveToPreset(me.area, 2, 580) && Misc.openChests(5)) {
 			Pickit.pickItems();
@@ -640,9 +684,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting staff');
 		me.overhead("staff");
-		Pather.useWaypoint(43);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(43)) {
+			Pather.getWP(43);
+		} else {
+			Pather.useWaypoint(43);
+		}
 
 		if (!Pather.moveToExit([62, 63, 64], true) || !Pather.moveToPreset(me.area, 2, 356)) {
 			return false;
@@ -679,11 +730,18 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting tombs');
 		me.overhead("tombs");
 		let tombID = [66, 67, 68, 69, 70, 71, 72];
 
 		for (let number = 0; number < tombID.length; number += 1) {
-			Pather.useWaypoint(46);
+			if (!Pather.checkWP(46)) {
+				Pather.getWP(46);
+			} else {
+				Pather.useWaypoint(46);
+			}
+
+			Precast.doPrecast(true);
 			Pather.moveToExit(tombID[number], true, true);
 
 			if (me.area === tombID[number]) {
@@ -742,14 +800,21 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting duriel');
 		me.overhead("duriel");
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
+		Precast.doPrecast(true);
 
 		if (!me.getItem(91)) {
 			Misc.cubeStaff();
 		}
 
-		Pather.useWaypoint(46);
-		Precast.doPrecast(true);
+		if (!Pather.checkWP(46)) {
+			Pather.getWP(46);
+		} else {
+			Pather.useWaypoint(46);
+		}
+
 		Pather.moveToExit(getRoom().correcttomb, true);
 		Pather.moveToPreset(me.area, 2, 152);
 		Attack.securePosition(me.x, me.y, 30, 3000, true, me.diff === 2);
@@ -786,10 +851,9 @@ function SoloLeveling () {
 			Pather.moveTo(22577, 15649, 10);
 			Pather.moveTo(22577, 15609, 10);
 			Misc.tyraelTalk();
-			Misc.jerhynTalk();
 		}
 
-		Misc.meshifTalk();
+		Pather.changeAct();
 		Config.MercWatch = true;
 
 		return true;
@@ -801,9 +865,16 @@ function SoloLeveling () {
 		} // skip eye
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting eye');
 		me.overhead("eye");
-		Pather.useWaypoint(76);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(76)) {
+			Pather.getWP(76);
+		} else {
+			Pather.useWaypoint(76);
+		}
 
 		if (!Pather.moveToExit([76, 85], true)) {
 			print('ÿc9SoloLevelingÿc0: Failed to get the eye');
@@ -843,9 +914,16 @@ function SoloLeveling () {
 		} // skip heart
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting heart');
 		me.overhead("heart");
-		Pather.useWaypoint(80);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(80)) {
+			Pather.getWP(80);
+		} else {
+			Pather.useWaypoint(80);
+		}
 
 		if (!Pather.moveToExit([80, 92, 93], true) || !Pather.moveToPreset(me.area, 2, 405)) {
 			print('ÿc9SoloLevelingÿc0: Failed to get the heart');
@@ -879,9 +957,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting tome');
 		me.overhead("tome");
-		Pather.useWaypoint(80);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(80)) {
+			Pather.getWP(80);
+		} else {
+			Pather.useWaypoint(80);
+		}
 
 		if (!Pather.moveToExit(94, true) || !Pather.moveToPreset(me.area, 2, 193)) {
 			print('ÿc9SoloLevelingÿc0: Failed to get LamEssen Tome');
@@ -897,14 +982,7 @@ function SoloLeveling () {
 		}
 
 		Town.goToTown();
-		Town.move(NPC.Alkor);
-		let alkor = getUnit(1, NPC.Alkor);
-
-		if (!alkor || !alkor.openMenu()) {
-			return false;
-		}
-
-		me.cancel();
+		Town.unfinishedQuests();
 
 		return true;
 	};
@@ -915,9 +993,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting brain');
 		me.overhead("brain");
-		Pather.useWaypoint(78);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(78)) {
+			Pather.getWP(78);
+		} else {
+			Pather.useWaypoint(78);
+		}
 
 		if (!Pather.moveToExit([88, 89, 91], true) || !Pather.moveToPreset(me.area, 2, 406)) {
 			print('ÿc9SoloLevelingÿc0: Failed to get the Brain');
@@ -951,9 +1036,17 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting lower kurast');
 		me.overhead("lower kurast");
-		Pather.useWaypoint(79);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(79)) {
+			Pather.getWP(79);
+		} else {
+			Pather.useWaypoint(79);
+		}
+
 		Misc.openChestsInArea(79);
 
 		return true;
@@ -981,9 +1074,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting travincal');
 		me.overhead("travincal");
-		Pather.useWaypoint(83); // go to trav
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(83)) {
+			Pather.getWP(83);
+		} else {
+			Pather.useWaypoint(83);
+		}
 
 		let ismail = getUnit(1, "Ismail Vilehand");
 
@@ -1033,7 +1133,7 @@ function SoloLeveling () {
 				Town.goToTown();
 			}
 
-			if (!me.getItem(174)) { // cube flail to will
+			if (!me.getItem(174) && me.getItem(173)) { // cube flail to will
 				Misc.cubeFlail();
 				delay(250 + me.ping);
 			}
@@ -1056,7 +1156,9 @@ function SoloLeveling () {
 				Pather.moveToExit(100, true);
 			}
 
-			Pather.getWP(101); // get wp
+			if (!Pather.checkWP(101)) {
+				Pather.getWP(101);
+			}
 		}
 
 		return true;
@@ -1068,9 +1170,17 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting mephisto');
 		me.overhead("mephisto");
-		Pather.useWaypoint(101);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(101)) {
+			Pather.getWP(101);
+		} else {
+			Pather.useWaypoint(101);
+		}
+
 		Pather.moveToExit(102, true);
 		Town.goToTown();
 		Town.doChores();
@@ -1079,6 +1189,7 @@ function SoloLeveling () {
 		Town.buyPots(10, "Antidote"); // antidote
 		Town.drinkPots();
 		Pather.usePortal(102, me.name);
+		Precast.doPrecast(true);
 		Pather.moveTo(17692, 8048);
 		Pather.moveTo(17563, 8072);
 		Config.MercWatch = false;
@@ -1108,9 +1219,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting izual');
 		me.overhead("izual");
-		Pather.useWaypoint(106);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(106)) {
+			Pather.getWP(106);
+		} else {
+			Pather.useWaypoint(106);
+		}
 
 		if (!Misc.checkQuest(25, 1)) {
 			Pather.moveToPreset(105, 1, 256);
@@ -1127,23 +1245,27 @@ function SoloLeveling () {
 		}
 
 		Town.goToTown();
-		Town.move(NPC.Tyrael);
-		let tyrael = getUnit(1, NPC.Tyrael);
-		tyrael.openMenu();
-		me.cancel();
+		Town.npcInteract("tyrael");
 
 		return true;
 	};
 
 	this.hellforge = function () {
-		if (Misc.checkQuest(27, 1)) {
+		if (!Pather.accessToAct(4) || Misc.checkQuest(27, 1)) {
 			return true;
 		}
 
 		Town.townTasks();
-		me.overhead("forge");
-		Pather.useWaypoint(107);
+		print('ÿc9SoloLevelingÿc0: starting hellforge');
+		me.overhead("hellforge");
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(107)) {
+			Pather.getWP(107);
+		} else {
+			Pather.useWaypoint(107);
+		}
 
 		if (!Pather.moveToPreset(me.area, 2, 376)) {
 			print("ÿc9SoloLevelingÿc0: Failed to move to forge");
@@ -1172,14 +1294,7 @@ function SoloLeveling () {
 			if (!me.inTown) { // go to town
 				Town.goToTown();
 				Misc.equipQuestItem(90, 4);
-				Town.move(NPC.Cain);
-				let cain = getUnit(1, NPC.Cain);
-
-				if (!me.getItem(551)) { // get soulstone
-					cain.openMenu();
-					me.cancel();
-				}
-
+				Town.npcInteract("cain");
 				Pather.usePortal(null, me.name);
 			}
 
@@ -1201,10 +1316,7 @@ function SoloLeveling () {
 		}
 
 		if (!Misc.checkQuest(25, 0)) { // Izual quest completion check
-			Town.move(NPC.Tyrael);
-			let tyrael = getUnit(1, NPC.Tyrael);
-			tyrael.openMenu();
-			me.cancel();
+			Town.npcInteract("tyrael");
 		}
 
 		this.getLayout = function (seal, value) {// Start Diablo Quest
@@ -1459,8 +1571,17 @@ function SoloLeveling () {
 		};
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting diablo');
 		me.overhead("diablo");
-		Pather.useWaypoint(107);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
+		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(107)) {
+			Pather.getWP(107);
+		} else {
+			Pather.useWaypoint(107);
+		}
+
 		Precast.doPrecast(true);
 		Pather.moveToExit(108, true);
 		Attack.clearLevel();
@@ -1508,20 +1629,10 @@ function SoloLeveling () {
 
 		Config.MercWatch = true;
 		Town.goToTown();
-		Town.move(NPC.Tyrael);
-		let tyrael = getUnit(1, NPC.Tyrael);
 
-		if (!tyrael || !tyrael.openMenu()) {
-			return false;
-		}
-
-		delay(250 + me.ping);
-
-		if (getUnit(2, 566)) {
-			me.cancel();
+		if (!Pather.changeAct()) {
+			delay(500 + me.ping);
 			Pather.useUnit(2, 566, 109);
-		} else {
-			Misc.useMenu(0x58D2);
 		}
 
 		return true;
@@ -1533,10 +1644,15 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting shenk');
 		me.overhead("shenk");
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
+		Precast.doPrecast(true);
 
-		if (!Pather.useWaypoint(111)) {
-			return true;
+		if (!Pather.checkWP(111)) {
+			Pather.getWP(111);
+		} else {
+			Pather.useWaypoint(111);
 		}
 
 		Precast.doPrecast(true);
@@ -1560,9 +1676,17 @@ function SoloLeveling () {
 		let barbies = [];
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting barbies');
 		me.overhead("barbies");
-		Pather.useWaypoint(111);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(111)) {
+			Pather.getWP(111);
+		} else {
+			Pather.useWaypoint(111);
+		}
+
 		barbies = getPresetUnits (me.area, 2, 473);
 
 		if (!barbies) {
@@ -1592,26 +1716,9 @@ function SoloLeveling () {
 			delay(1500 + 2 * me.ping);
 		}
 
-		delay(1000);
-		Town.goToTown();
-		Town.move("qual-kehk");
 		delay(1000 + me.ping);
-		let qualkehk = getUnit(1, "qual-kehk");
-
-		while (!Misc.checkQuest(36, 0)) {
-			for (let attempt = 0; attempt < 3; attempt += 1) {
-				qualkehk.openMenu();
-				me.cancel();
-				delay(500);
-				sendPacket(1, 0x40); //fresh Quest state.
-
-				if (Misc.checkQuest(36, 0)) {
-					break;
-				}
-			}
-
-			break;
-		}
+		Town.goToTown();
+		Town.npcInteract("qual-kehk");
 
 		return true;
 	};
@@ -1622,9 +1729,16 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting anya');
 		me.overhead("anya");
-		Pather.useWaypoint(113);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(113)) {
+			Pather.getWP(113);
+		} else {
+			Pather.useWaypoint(113);
+		}
 
 		if (!Pather.moveToExit(114, true) || !Pather.moveToPreset(me.area, 2, 460)) {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Anya");
@@ -1637,32 +1751,17 @@ function SoloLeveling () {
 		delay(300 + me.ping);
 		me.cancel();
 		Town.goToTown();
-		Town.move(NPC.Malah);
-		let malah = getUnit(1, NPC.Malah);
-		malah.openMenu();
-		me.cancel();
+		Town.npcInteract("malah");
 		Pather.usePortal(114, me.name);
 		anya.interact();
 		delay(300 + me.ping);
 		me.cancel();
 		Town.goToTown();
-		Town.move(NPC.Malah);
-		malah.openMenu();
-		me.cancel();
+		Town.npcInteract("malah");
 		delay(500 + me.ping);
-
-		let scroll = me.getItem(646);
-
-		if (scroll) {
-			clickItem(1, scroll);
-		}
-
-		print('ÿc9SoloLevelingÿc0: used scroll of resistance');
-
-		Town.move(NPC.Anya);
-		let townAnya = getUnit(1, NPC.Anya);
-		townAnya.openMenu();
-		me.cancel();
+		Town.unfinishedQuests();
+		Town.doChores();
+		Town.npcInteract("anya");
 
 		return true;
 	};
@@ -1673,16 +1772,13 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting pindle');
 		me.overhead("Pindle");
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
+		Precast.doPrecast(true);
 
 		if (!Pather.getPortal(121)) {
-			let anya = getUnit(1, NPC.Anya);
-
-			if (anya) {
-				Town.move("anya");
-				anya.openMenu();
-				me.cancel();
-			}
+			Town.npcInteract("anya");
 		}
 
 		if (!Pather.usePortal(121)) {
@@ -1763,9 +1859,17 @@ function SoloLeveling () {
 		};
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting ancients');
 		me.overhead("ancients");
-		Pather.useWaypoint(118);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+
+		if (!Pather.checkWP(118)) {
+			Pather.getWP(118);
+		} else {
+			Pather.useWaypoint(118);
+		}
+
 		Pather.moveToExit(120, true); // enter at ancients plateau
 
 		let tempConfig = Misc.copy(Config); // save and update config settings
@@ -1821,9 +1925,12 @@ function SoloLeveling () {
 		me.overhead('restored settings');
 		Object.assign(Config, tempConfig);
 
-		try { //get WSK waypoint
+		try {
 			Pather.moveToExit([128, 129], true);
-			Pather.getWP(129);
+
+			if (!Pather.checkWP(129)) {
+				Pather.getWP(129);
+			}
 		} catch (err) {
 			print('ÿc9SoloLevelingÿc0: Cleared Ancients. Failed to get WSK Waypoint');
 		}
@@ -1989,10 +2096,17 @@ function SoloLeveling () {
 		};
 
 		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting baal');
 		me.overhead("baal");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 129);
+		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
-		Pather.useWaypoint(129);
+
+		if (!Pather.checkWP(129)) {
+			Pather.getWP(129);
+		} else {
+			Pather.useWaypoint(129);
+		}
+
 		Pather.moveToExit([130, 131], true);
 		Pather.moveTo(15095, 5029);
 
@@ -2285,7 +2399,7 @@ Town.doChores = function (repair = false) {
 	this.reviveMerc();
 	Misc.equipMerc();
 	Item.autoEquip();
-	this.stash(true);
+	this.stash();
 	this.clearScrolls();
 	this.characterRespec();
 
@@ -2310,54 +2424,45 @@ Town.unfinishedQuests = function () {
 
 	if (book) {
 		if (book.location === 7) {
-			Town.move('stash');
-			Storage.Inventory.MoveTo(book);
-			delay(300);
-			clickItem(1, book);
-		} else {
-			delay(300);
+			this.openStash();
+			delay(300 + me.ping);
+		}
+
+		if (!book.interact()) {
 			clickItem(1, book);
 		}
 
-		print('ÿc9SoloLevelingÿc0: used Radament skill book');
+		if (book.interact() || clickItem(1, book)) {
+			print('ÿc9SoloLevelingÿc0: used Radament skill book');
+		}
 	}
 
 	// golden bird
 	if (me.getItem(546)) { // golden bird
 		Town.goToTown(3);
-		Town.move(NPC.Meshif);
-
-		let meshif = getUnit(1, NPC.Meshif);
-
-		if (meshif) {
-			meshif.openMenu();
-			me.cancel();
-		}
+		Town.npcInteract("meshif");
 	}
 
 	if (me.getItem(547)) { // ashes
 		Town.goToTown(3);
-		Town.move(NPC.Alkor);
-
-		let alkor = getUnit(1, NPC.Alkor);
-
-		if (alkor) {
-			for (let ashes = 0; ashes < 2; ashes += 1) {
-				alkor.openMenu();
-				me.cancel();
-			}
-		}
+		Town.npcInteract("alkor");
 	}
 
 	if (me.getItem(545)) { // potion of life
-		let lp = me.getItem(545);
+		let pol = me.getItem(545);
 
-		if (lp.location === 7) {
+		if (pol.location === 7) {
 			this.openStash();
+			delay(300 + me.ping);
 		}
 
-		lp.interact();
-		print('ÿc9SoloLevelingÿc0: used potion of life');
+		if (!pol.interact()) {
+			clickItem(1, pol);
+		}
+
+		if (pol.interact() || clickItem(1, pol)) {
+			print('ÿc9SoloLevelingÿc0: used potion of life');
+		}
 	}
 
 	//LamEssen's Tome
@@ -2367,19 +2472,12 @@ Town.unfinishedQuests = function () {
 		if (tome.location === 7) {
 			Town.move('stash');
 			Storage.Inventory.MoveTo(tome);
-			delay(300);
+			delay(300 + me.ping);
 		}
 
 		Town.goToTown(3);
-		Town.move(NPC.Alkor);
-		let alkor = getUnit(1, NPC.Alkor);
-
-		if (alkor) {
-			alkor.openMenu();
-			me.cancel();
-		}
-
-		print('ÿc9SoloLevelingÿc0: LamEssen Tome');
+		Town.npcInteract("alkor");
+		print('ÿc9SoloLevelingÿc0: LamEssen Tome completed');
 	}
 
 	//remove Khalim's Will if quest not completed and restarting run.
@@ -2427,16 +2525,17 @@ Town.unfinishedQuests = function () {
 
 	if (scroll) {
 		if (scroll.location === 7) {
-			Town.move('stash');
-			Storage.Inventory.MoveTo(scroll);
-			delay(300);
-			clickItem(1, scroll);
-		} else {
-			delay(300);
+			this.openStash();
+			delay(300 + me.ping);
+		}
+
+		if (!scroll.interact()) {
 			clickItem(1, scroll);
 		}
 
-		print('ÿc9SoloLevelingÿc0: used scroll of resistance');
+		if (scroll.interact() || clickItem(1, scroll)) {
+			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
+		}
 	}
 
 	return true;
@@ -2684,14 +2783,7 @@ Town.characterRespec = function () {// Akara reset for build change
 	if (me.charlvl === respecOne || me.charlvl === respecTwo) {
 		Precast.doPrecast(true);
 		Town.goToTown(1);
-		Town.move(NPC.Akara);
-
-		let akara = getUnit(1, NPC.Akara);
-
-		if (!akara || !akara.openMenu()) {
-			return false;
-		}
-
+		Town.npcInteract("akara");
 		delay(me.ping * 2);
 
 		if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
@@ -2712,6 +2804,37 @@ Town.characterRespec = function () {// Akara reset for build change
 
 	return true;
 
+};
+
+Town.npcInteract = function (name) {
+	let npc = name;
+	let npcUnit = getUnit(1, npc);
+
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
+	while (!npcUnit) {
+		Town.move(npc);
+		Packet.flash(me.gid);
+		delay(me.ping * 2);
+
+		npcUnit = getUnit(1, npc);
+	}
+
+	for (let i = 0; i < 5; i += 1) {
+		if (!npcUnit.openMenu()) {
+			me.cancel();
+		}
+
+		if (npcUnit.openMenu()) {
+			break;
+		}
+
+		Packet.flash(me.gid);
+	}
+
+	return true;
 };
 
 Misc.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
@@ -2736,7 +2859,7 @@ Misc.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
 			}
 
 			if (me.getItem(546)) {
-				print("ÿc9SoloLevelingÿc0: activated golden bird quest");
+				print("ÿc9SoloLevelingÿc0: start golden bird");
 				me.overhead('golden bird');
 
 				if (!me.inTown) {
@@ -3164,70 +3287,49 @@ Misc.tyraelTalk = function () {
 	}
 
 	Town.goToTown();
-
-	return true;
-};
-
-Misc.jerhynTalk = function () {
-	if (!me.inTown) {
-		Town.goToTown();
-	}
-
 	Town.move("palace");
-
-	let jerhyn	= getUnit(1, NPC.Jerhyn);
-
-	if (!jerhyn || !jerhyn.openMenu()) {
-		Pather.moveTo(5166, 5206);
-
-		return false;
-	}
-
-	me.cancel();
-
+	Town.npcInteract("jerhyn");
 	Pather.moveToExit(50, true);
-
 	Town.goToTown();
 
 	return true;
 };
 
-Misc.meshifTalk = function () {
-	if (!me.inTown) {
-		Town.goToTown();
-	}
-
-	Town.move(NPC.Meshif);
-
-	let meshif = getUnit(1, NPC.Meshif);
-
-	if (!meshif || !meshif.openMenu()) {
-		return false;
-	}
-
-	Misc.useMenu(0x0D38);
-
-	return true;
-};
-
 Misc.cubeFlail = function () {
+	let eye = me.getItem(553);
+	let heart = me.getItem(554);
+	let brain = me.getItem(555);
+	let flail = me.getItem(173);
+
 	me.overhead("cubing flail");
 
-	if (me.getItem(174)) { // Already have the finished Flail.
+	if (me.getItem(174)) {
 		return true;
+	}
+
+	if (!eye) {
+		this.eye();
+	}
+
+	if (!heart) {
+		this.heart();
+	}
+
+	if (!brain) {
+		this.brain();
 	}
 
 	Town.townTasks();
 	Town.move("stash");
 
+	if (me.findItems(-1, -1, 6)) {
+		Cubing.emptyCube();
+	}
+
 	if (!Town.openStash()) {
 		Town.openStash();
 	}
 
-	let eye = me.getItem(553);
-	let heart = me.getItem(554);
-	let brain = me.getItem(555);
-	let flail = me.getItem(173);
 	Storage.Cube.MoveTo(eye);
 	Storage.Cube.MoveTo(heart);
 	Storage.Cube.MoveTo(brain);
@@ -3286,26 +3388,27 @@ Misc.equipQuestItem = function (item, loc) {
 };
 
 Misc.smashSomething = function (smashable) {
-	let something;
+	let something, tool;
 
 	switch (smashable) {
 	case 404:
 		something = getUnit(2, 404);
+		tool = 174;
+
 		break;
 	case 376:
 		something = getUnit(2, 376);
+		tool = 90;
+
 		break;
 	}
 
-	Pather.moveToUnit(something, 0, 0, Config.ClearType, false);
+	while (me.getItem(tool)) {
+		Pather.moveToUnit(something, 0, 0, Config.ClearType, false);
+		Skill.cast(0, 0, something);
+		something.interact();
 
-	for (let smash = 0; smash < 5; smash += 1) {
-		if (something) {
-			Skill.cast(0, 0, something);
-
-			delay(750 + me.ping);
-
-		}
+		delay(750 + me.ping);
 	}
 
 	return true;
@@ -3334,6 +3437,85 @@ NTIP.arrayLooping = function (arraytoloop) {
 	}
 
 	return true;
+};
+
+Pather.killMonsters = function (arg) {
+	var monList;
+
+	if (Config.Countess.KillGhosts && [21, 22, 23, 24, 25].indexOf(me.area) > -1) {
+		monList = Attack.getMob(38, 0, 30);
+
+		if (monList) {
+			Attack.clearList(monList);
+		}
+	}
+
+	if ([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38].indexOf(me.area) > -1) {
+		monList = Attack.getMob(58, 0, 30);
+
+		if (monList) {
+			Attack.clearList(monList);
+		}
+	}
+
+	if ((typeof Config.ClearPath === "number" || typeof Config.ClearPath === "object") && arg.clearPath === false) {
+		switch (typeof Config.ClearPath) {
+		case "number":
+			Attack.clear(30, Config.ClearPath);
+
+			break;
+		case "object":
+			if (!Config.ClearPath.hasOwnProperty("Areas") || Config.ClearPath.Areas.length === 0 || Config.ClearPath.Areas.indexOf(me.area) > -1) {
+				Attack.clear(Config.ClearPath.Range, Config.ClearPath.Spectype);
+			}
+
+			break;
+		}
+	}
+
+	if (arg.clearPath !== false) {
+		Attack.clear(15, typeof arg.clearPath === "number" ? arg.clearPath : 0);
+	}
+};
+
+Pather.checkWP = function(area) {
+	if (!getWaypoint(Pather.wpAreas.indexOf(area))) {
+		if (me.inTown) {
+			Town.move("waypoint");
+		}
+
+		let wp;
+
+		for (let i = 0; i < 15; i += 1) {
+			wp = getUnit(2, "waypoint");
+
+			if (wp && wp.area === me.area) {
+				if (!me.inTown && getDistance(me, wp) > 7) {
+					Pather.moveToUnit(wp);
+				}
+
+				Misc.click(0, 0, wp);
+
+				let tick = getTickCount();
+
+				while (getTickCount() - tick < Math.max(Math.round((i + 1) * 1000 / (i / 5 + 1)), me.ping * 2)) {
+					if (getUIFlag(0x14)) { // Waypoint screen is open
+						delay(500);
+						break;
+					}
+
+					delay(50);
+				}
+			}
+
+			if (getUIFlag(0x14)) { // Waypoint screen is open
+				me.cancel();
+				break;
+			}
+		}
+	}
+
+	return getWaypoint(Pather.wpAreas.indexOf(area));
 };
 
 Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
@@ -3428,6 +3610,61 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 	}
 
 	return false;
+};
+
+Pather.changeAct = function () {
+	let npc, code, newAct,
+		prevAct = me.act;
+
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
+	switch (prevAct) {
+	case 1:
+		npc = "warriv";
+		code = 0x0D36;
+		newAct = 2;
+
+		break;
+	case 2:
+		npc = "meshif";
+		code = 0x0D38;
+		newAct = 3;
+
+		break;
+	case 4:
+		npc = "tyrael";
+		code = 0x58D2;
+		newAct = 5;
+
+		break;
+	}
+
+	let npcUnit = getUnit(1, npc);
+
+	while (!npcUnit) {
+		Town.move(npc);
+		Packet.flash(me.gid);
+		delay(me.ping * 2);
+
+		npcUnit = getUnit(1, npc);
+	}
+
+	for (let i = 0; i < 5; i += 1) {
+		if (!npcUnit.openMenu() || Misc.useMenu(code)) {
+			delay(500 + me.ping);
+			me.cancel();
+		}
+
+		if (me.act === newAct) {
+			break;
+		}
+
+		Packet.flash(me.gid);
+	}
+
+	return true;
 };
 
 Item.getBodyLoc = function (item) {
