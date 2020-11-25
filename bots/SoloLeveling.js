@@ -196,6 +196,7 @@ function SoloLeveling () {
 		me.overhead("cain");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 3);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(1);
 
 		if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 			if (!me.getItem(524)) {
@@ -274,6 +275,7 @@ function SoloLeveling () {
 		me.overhead("countess");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 5);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(1);
 
 		if (!Pather.checkWP(6)) {
 			Pather.getWP(6);
@@ -304,6 +306,7 @@ function SoloLeveling () {
 		me.overhead("pits");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 5);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(1);
 
 		if (!Pather.checkWP(6)) {
 			Pather.getWP(6);
@@ -337,7 +340,7 @@ function SoloLeveling () {
 		me.overhead("andy");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 32);
 		Precast.doPrecast(true);
-
+		Pather.useWaypoint(1);
 
 		if (!Pather.checkWP(35)) {
 			Pather.getWP(35);
@@ -390,6 +393,7 @@ function SoloLeveling () {
 		me.overhead("radament");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(48)) {
 			Pather.getWP(48);
@@ -429,6 +433,7 @@ function SoloLeveling () {
 		me.overhead("cube");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(57)) {
 			Pather.getWP(57);
@@ -465,7 +470,7 @@ function SoloLeveling () {
 		me.overhead("amulet");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
-
+		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(44)) {
 			Pather.getWP(44);
@@ -579,6 +584,7 @@ function SoloLeveling () {
 		me.overhead("summoner");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(74)) {
 			Pather.getWP(74);
@@ -645,6 +651,7 @@ function SoloLeveling () {
 		me.overhead("ancient tunnels");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(44)) {
 			Pather.getWP(44);
@@ -689,6 +696,7 @@ function SoloLeveling () {
 		me.overhead("staff");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(43)) {
 			Pather.getWP(43);
@@ -805,6 +813,7 @@ function SoloLeveling () {
 		me.overhead("duriel");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(40);
 
 		if (!me.getItem(91)) {
 			Misc.cubeStaff();
@@ -870,6 +879,7 @@ function SoloLeveling () {
 		me.overhead("eye");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(76)) {
 			Pather.getWP(76);
@@ -919,6 +929,7 @@ function SoloLeveling () {
 		me.overhead("heart");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(80)) {
 			Pather.getWP(80);
@@ -962,6 +973,7 @@ function SoloLeveling () {
 		me.overhead("tome");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(80)) {
 			Pather.getWP(80);
@@ -998,6 +1010,7 @@ function SoloLeveling () {
 		me.overhead("brain");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(78)) {
 			Pather.getWP(78);
@@ -1041,6 +1054,7 @@ function SoloLeveling () {
 		me.overhead("lower kurast");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(79)) {
 			Pather.getWP(79);
@@ -1054,7 +1068,7 @@ function SoloLeveling () {
 	};
 
 	this.travincal = function () {
-		if (!Pather.accessToAct(3) || me.diff <= 0 && Misc.checkQuest(21, 0)) {
+		if (!Pather.accessToAct(3) || me.diff <= 0 && Misc.checkQuest(18, 0)) {
 			return true;
 		}
 
@@ -1079,6 +1093,7 @@ function SoloLeveling () {
 		me.overhead("travincal");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(83)) {
 			Pather.getWP(83);
@@ -1175,6 +1190,7 @@ function SoloLeveling () {
 		me.overhead("mephisto");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(101)) {
 			Pather.getWP(101);
@@ -1224,6 +1240,7 @@ function SoloLeveling () {
 		me.overhead("izual");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(103);
 
 		if (!Pather.checkWP(106)) {
 			Pather.getWP(106);
@@ -1252,7 +1269,7 @@ function SoloLeveling () {
 	};
 
 	this.hellforge = function () {
-		if (!Pather.accessToAct(4) || Misc.checkQuest(27, 1)) {
+		if (!Pather.accessToAct(4) || Misc.checkQuest(27, 0)) {
 			return true;
 		}
 
@@ -1261,6 +1278,7 @@ function SoloLeveling () {
 		me.overhead("hellforge");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(103);
 
 		if (!Pather.checkWP(107)) {
 			Pather.getWP(107);
@@ -1308,6 +1326,8 @@ function SoloLeveling () {
 		}
 
 		Pickit.pickItems();
+		Town.goToTown();
+		Town.npcInteract("cain");
 
 		return true;
 	};
@@ -1577,6 +1597,7 @@ function SoloLeveling () {
 		me.overhead("diablo");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(103);
 
 		if (!Pather.checkWP(107)) {
 			Pather.getWP(107);
@@ -1593,33 +1614,21 @@ function SoloLeveling () {
 		this.infector();
 		Config.MercWatch = false;
 		let diablo = getUnit(1, 243);
+		Pather.moveTo(7788, 5292, 3, 30);
+		this.diabloPrep();
 
-		try {
-			Pather.moveTo(7788, 5292, 3, 30);
-			me.overhead("attempting Diablo");
-			this.diabloPrep();
-
-			if (diablo && diablo.hp > 0 ) {
-				Attack.kill(diablo);
-			}
-		} catch (error) {
+		if (!diablo) {
 			print("ÿc9SoloLevelingÿc0: Diablo not found. Checking seal bosses.");
 			this.infector();
 			this.seis();
 			this.vizier();
-			me.overhead("second attempt");
 			Pather.moveTo(7788, 5292, 3, 30);
+			this.diabloPrep();
+		}
 
-			try {
-				this.diabloPrep();
-
-				if (diablo && diablo.hp > 0 ) {
-					Attack.kill(diablo);
-				}
-			} catch (err) {
-				print("ÿc9SoloLevelingÿc0: Diablo not found.");
-
-				return true;
+		if (diablo) {
+			while ( diablo.hp > 0) {
+				Attack.kill(diablo);
 			}
 		}
 
@@ -1632,7 +1641,10 @@ function SoloLeveling () {
 		Config.MercWatch = true;
 		Town.goToTown();
 
-		if (!Pather.changeAct()) {
+		if (Misc.checkQuest(28, 0)) {
+			Pather.changeAct();
+		} else {
+			Town.npcInteract("tyrael");
 			delay(500 + me.ping);
 			Pather.useUnit(2, 566, 109);
 		}
@@ -1650,6 +1662,7 @@ function SoloLeveling () {
 		me.overhead("shenk");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(111)) {
 			Pather.getWP(111);
@@ -1682,6 +1695,7 @@ function SoloLeveling () {
 		me.overhead("barbies");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(111)) {
 			Pather.getWP(111);
@@ -1735,6 +1749,7 @@ function SoloLeveling () {
 		me.overhead("anya");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(113)) {
 			Pather.getWP(113);
@@ -1778,6 +1793,7 @@ function SoloLeveling () {
 		me.overhead("Pindle");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(109);
 
 		if (!Pather.getPortal(121)) {
 			Town.npcInteract("anya");
@@ -1865,6 +1881,7 @@ function SoloLeveling () {
 		me.overhead("ancients");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(118)) {
 			Pather.getWP(118);
@@ -1899,6 +1916,7 @@ function SoloLeveling () {
 		Town.drinkPots();
 		Town.buyPotions();
 		Pather.usePortal(120, me.name);
+		Precast.doPrecast(true);
 
 		if (!Pather.moveToPreset(me.area, 2, 546)) { // move to altar
 			print("ÿc9SoloLevelingÿc0: Failed to move to ancients' altar");
@@ -1926,6 +1944,7 @@ function SoloLeveling () {
 		me.cancel();
 		me.overhead('restored settings');
 		Object.assign(Config, tempConfig);
+		Precast.doPrecast(true);
 
 		try {
 			Pather.moveToExit([128, 129], true);
@@ -2102,6 +2121,7 @@ function SoloLeveling () {
 		me.overhead("baal");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
+		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(129)) {
 			Pather.getWP(129);
@@ -3509,7 +3529,7 @@ Misc.cubeFlail = function () {
 };
 
 Misc.equipQuestItem = function (item, loc) {
-	Town.townTasks();
+	Town.doChores();
 	let newitem = me.getItem(item);
 
 	if (newitem) {
