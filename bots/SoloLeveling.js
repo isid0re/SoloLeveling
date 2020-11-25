@@ -2418,6 +2418,115 @@ Town.doChores = function (repair = false) {
 	return true;
 };
 
+Town.buyPotions = function () {
+	var i, j, npc, useShift, col, beltSize, pot,
+		needPots = false,
+		needBuffer = true,
+		buffer = {
+			hp: 0,
+			mp: 0
+		};
+
+	beltSize = Storage.BeltSize();
+	col = this.checkColumns(beltSize);
+
+	if (Config.HPBuffer > 0 || Config.MPBuffer > 0) {
+		pot = me.getItem(-1, 0);
+
+		if (pot) {
+			do {
+				if (pot.location === 3) {
+					switch (pot.itemType) {
+					case 76:
+						buffer.hp += 1;
+
+						break;
+					case 77:
+						buffer.mp += 1;
+
+						break;
+					}
+				}
+			} while (pot.getNext());
+		}
+	}
+
+	for (i = 0; i < 4; i += 1) {
+		if (["hp", "mp"].indexOf(Config.BeltColumn[i]) > -1 && col[i] > (beltSize - Math.min(Config.MinColumn[i], beltSize))) {
+			needPots = true;
+		}
+	}
+
+	if (buffer.mp < Config.MPBuffer || buffer.hp < Config.HPBuffer) {
+		for (i = 0; i < 4; i += 1) {
+			if (col[i] >= beltSize && (!needPots || Config.BeltColumn[i] === "rv")) {
+				needBuffer = false;
+
+				break;
+			}
+		}
+	}
+
+	if (buffer.mp >= Config.MPBuffer && buffer.hp >= Config.HPBuffer) {
+		needBuffer = false;
+	}
+
+	if (!needPots && !needBuffer) {
+		return true;
+	}
+
+	if (me.diff === 0 && Pather.accessToAct(4) && me.act < 4) {
+		this.goToTown(4);
+	}
+
+	npc = this.initNPC("Shop", "buyPotions");
+
+	if (!npc) {
+		return false;
+	}
+
+	for (i = 0; i < 4; i += 1) {
+		if (col[i] > 0) {
+			useShift = this.shiftCheck(col, beltSize);
+			pot = this.getPotion(npc, Config.BeltColumn[i]);
+
+			if (pot) {
+				if (useShift) {
+					pot.buy(true);
+				} else {
+					for (j = 0; j < col[i]; j += 1) {
+						pot.buy(false);
+					}
+				}
+			}
+		}
+
+		col = this.checkColumns(beltSize);
+	}
+
+	if (needBuffer && buffer.hp < Config.HPBuffer) {
+		for (i = 0; i < Config.HPBuffer - buffer.hp; i += 1) {
+			pot = this.getPotion(npc, "hp");
+
+			if (Storage.Inventory.CanFit(pot)) {
+				pot.buy(false);
+			}
+		}
+	}
+
+	if (needBuffer && buffer.mp < Config.MPBuffer) {
+		for (i = 0; i < Config.MPBuffer - buffer.mp; i += 1) {
+			pot = this.getPotion(npc, "mp");
+
+			if (Storage.Inventory.CanFit(pot)) {
+				pot.buy(false);
+			}
+		}
+	}
+
+	return true;
+};
+
 Town.unfinishedQuests = function () {
 	//Radament skill book
 	let book = me.getItem(552);
@@ -3439,7 +3548,7 @@ NTIP.arrayLooping = function (arraytoloop) {
 	return true;
 };
 
-Pather.killMonsters = function (arg) {
+Pather.killMonsters = function (arg) { // summoner targeting provided by penguins0690
 	var monList;
 
 	if (Config.Countess.KillGhosts && [21, 22, 23, 24, 25].indexOf(me.area) > -1) {
@@ -3450,8 +3559,8 @@ Pather.killMonsters = function (arg) {
 		}
 	}
 
-	if ([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38].indexOf(me.area) > -1) {
-		monList = Attack.getMob(58, 0, 30);
+	if (!me.inTown) {
+		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30);
 
 		if (monList) {
 			Attack.clearList(monList);
@@ -3478,7 +3587,7 @@ Pather.killMonsters = function (arg) {
 	}
 };
 
-Pather.checkWP = function(area) {
+Pather.checkWP = function (area) {
 	if (!getWaypoint(Pather.wpAreas.indexOf(area))) {
 		if (me.inTown) {
 			Town.move("waypoint");
@@ -3665,6 +3774,16 @@ Pather.changeAct = function () {
 	}
 
 	return true;
+};
+
+Unit.prototype.getItems = function (...args) {
+	let items = this.getItems.apply(this, args);
+
+	if (!items.length) {
+		return [];
+	}
+
+	return items;
 };
 
 Item.getBodyLoc = function (item) {
