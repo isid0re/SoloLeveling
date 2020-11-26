@@ -2445,6 +2445,12 @@ Town.doChores = function (repair = false) {
 };
 
 Town.buyPotions = function () {
+	let TPtomes = me.getItem(518);
+
+	if (!TPtomes) { // no town portal book
+		return false;
+	}
+
 	var i, j, npc, useShift, col, beltSize, pot,
 		needPots = false,
 		needBuffer = true,
@@ -3342,11 +3348,11 @@ Misc.openChests = function (range) {
 			if (unit.name && unit.mode === 0 && getDistance(me.x, me.y, unit.x, unit.y) <= range && containers.indexOf(unit.name.toLowerCase()) > -1) {
 				unitList.push(copyUnit(unit));
 			}
-			
+
 			if (unit.name && getDistance(me.x, me.y, unit.x, unit.y) <= 2 && pita.indexOf(unit.name.toLowerCase()) > -1) {
 				unitList.push(copyUnit(unit));
 			}
-			
+
 		} while (unit.getNext());
 	}
 
