@@ -21,8 +21,8 @@ function LoadConfig () {
 	Config.UseRejuvHP = 65;
 	Config.UseMP = 15;
 	Config.UseMercHP = 75;
-	Config.HPBuffer = 4;
-	Config.MPBuffer = 8;
+	Config.HPBuffer = me.diff === 0 ? 8 : 4;
+	Config.MPBuffer = me.diff === 0 ? 2 : 6;
 	Config.RejuvBuffer = 4;
 
 	// Chicken settings
@@ -38,15 +38,15 @@ function LoadConfig () {
 	Config.Inventory[2] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
-	Config.StashGold = 1000;
+	Config.StashGold = me.charlvl * 100;
 	Config.LowGold = 500000;
 
 	//AutoEquip
 	Config.AutoEquip = true;
 
 	// Pickit config.
-	Config.PickRange = 20;
-	Config.FastPick = false;
+	Config.PickRange = me.diff === 0 ? 10 : me.diff === 1 ? 20 : 40;
+	Config.FastPick = true;
 	Config.ItemInfo = true;
 	Config.CainID.Enable = false;
 	Config.FieldID = false;
@@ -67,7 +67,7 @@ function LoadConfig () {
 	Config.LogExperience = false; // Print experience statistics in the manager.
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
-	Config.OpenChests = me.diff !== 0 ? 2 : true;
+	Config.OpenChests = me.diff === 2 ? 2 : true;
 
 	// Shrine Scanner - scan for shrines while moving.
 	Config.ScanShrines = [15, 1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14];
@@ -204,7 +204,7 @@ function LoadConfig () {
 	var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
 	var middleBuild = "Hammerdin"; // starts at respecOne ends when reaching respecTwo
 	var playStyle = isCaster ? 'Caster' : 'Melee'; //based on final build
-	var startBelt = ["hp", "hp", "hp", "mp"];
+	var startBelt = ["hp", "hp", "hp", "hp"];
 	var middleBelt = ["hp", "hp", "mp", "mp"];
 	var finalBelt = ["hp", "hp", "mp", "rv"];
 	Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;

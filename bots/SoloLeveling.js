@@ -77,8 +77,8 @@ function SoloLeveling () {
 
 		Town.reviveMerc();
 		Misc.setupMerc();
-		me.overhead('starting SoloLeveling');
-		delay(250 + me.ping);
+		print('ÿc9SoloLevelingÿc0: starting run');
+		me.overhead('starting run');
 
 		return true;
 	};
@@ -92,16 +92,18 @@ function SoloLeveling () {
 		print('ÿc9SoloLevelingÿc0: starting den');
 		me.overhead("den");
 
-		Pather.moveToExit([2, 8], false);
+		if (!Pather.checkWP(3)) {
+			Pather.moveToExit([2, 8], false);
 
-		if (!me.getItem(518)) {
-			let tp = me.getItem(529);
+			if (!me.getItem(518)) {
+				let tp = me.getItem(529);
 
-			if (tp) {
-				clickItem(1, tp);
+				if (tp) {
+					clickItem(1, tp);
+				}
+			} else {
+				Pather.makePortal();
 			}
-		} else {
-			Pather.makePortal();
 		}
 
 		if (me.charlvl < 3) {
@@ -2351,7 +2353,7 @@ Town.townTasks = function () {
 	Item.autoEquip();
 	this.equipSWAP();
 	Misc.equipMerc();
-	this.stash(true);
+	this.stash();
 	this.heal();
 	this.identify();
 	this.clearInventory();
@@ -2361,6 +2363,7 @@ Town.townTasks = function () {
 	this.buyKeys();
 	this.repair(true);
 	this.shopItems();
+	this.clearInventory();
 	this.gamble();
 	this.reviveMerc();
 	Misc.hireMerc();
@@ -2368,7 +2371,7 @@ Town.townTasks = function () {
 	Item.autoEquip();
 	this.clearJunk();
 	this.organizeStash();
-	Town.stash(true);
+	Town.stash();
 	Town.organizeInventory();
 	this.characterRespec();
 
@@ -2417,6 +2420,7 @@ Town.doChores = function (repair = false) {
 	this.buyKeys();
 	this.repair(repair);
 	this.shopItems();
+	this.clearInventory();
 	this.gamble();
 	this.reviveMerc();
 	Misc.equipMerc();
@@ -3317,7 +3321,8 @@ Misc.checkQuest = function (id, state) {
 Misc.openChests = function (range) {
 	var unit,
 		unitList = [],
-		containers = ["barrel", "loose rock", "hidden stash", "loose boulder", "chest", "chest3", "largeurn", "jar3", "jar2", "jar1", "urn", "armorstand", "weaponrack", "holeanim"];
+		containers = [ "loose rock", "hidden stash", "loose boulder", "chest", "chest3", "armorstand", "holeanim", "weaponrack"],
+		pita = ["barrel", "largeurn", "jar3", "jar2", "jar1", "urn"]; // pain in the ass
 
 	if (!range) {
 		range = 15;
@@ -3326,11 +3331,7 @@ Misc.openChests = function (range) {
 	// Testing all container code
 	if (Config.OpenChests === 2) {
 		containers = [
-			"chest", "loose rock", "hidden stash", "loose boulder", "corpseonstick", "casket", "armorstand", "weaponrack", "barrel", "holeanim", "tomb2",
-			"tomb3", "roguecorpse", "ratnest", "corpse", "goo pile", "largeurn", "urn", "chest3", "jug", "skeleton", "guardcorpse", "sarcophagus", "object2",
-			"cocoon", "basket", "stash", "hollow log", "hungskeleton", "pillar", "skullpile", "skull pile", "jar3", "jar2", "jar1", "bonechest", "woodchestl",
-			"woodchestr", "barrel wilderness", "burialchestr", "burialchestl", "explodingchest", "chestl", "chestr", "groundtomb", "icecavejar1", "icecavejar2",
-			"icecavejar3", "icecavejar4", "deadperson", "deadperson2", "evilurn", "tomb1l", "tomb3l", "groundtombl"
+			"chest", "loose rock", "hidden stash", "loose boulder", "corpseonstick", "casket", "armorstand", "weaponrack", "barrel", "holeanim", "tomb2", "tomb3", "roguecorpse", "ratnest", "corpse", "goo pile", "largeurn", "urn", "chest3", "jug", "skeleton", "guardcorpse", "sarcophagus", "object2", "cocoon", "basket", "stash", "hollow log", "hungskeleton", "pillar", "skullpile", "skull pile", "jar3", "jar2", "jar1", "bonechest", "woodchestl", "woodchestr", "barrel wilderness", "burialchestr", "burialchestl", "explodingchest", "chestl", "chestr", "groundtomb", "icecavejar1", "icecavejar2", "icecavejar3", "icecavejar4", "deadperson", "deadperson2", "evilurn", "tomb1l", "tomb3l", "groundtombl"
 		];
 	}
 
@@ -3341,12 +3342,16 @@ Misc.openChests = function (range) {
 			if (unit.name && unit.mode === 0 && getDistance(me.x, me.y, unit.x, unit.y) <= range && containers.indexOf(unit.name.toLowerCase()) > -1) {
 				unitList.push(copyUnit(unit));
 			}
+			
+			if (unit.name && getDistance(me.x, me.y, unit.x, unit.y) <= 2 && pita.indexOf(unit.name.toLowerCase()) > -1) {
+				unitList.push(copyUnit(unit));
+			}
+			
 		} while (unit.getNext());
 	}
 
 	while (unitList.length > 0) {
 		unitList.sort(Sort.units);
-
 		unit = unitList.shift();
 
 		if (unit && (Pather.useTeleport() || !checkCollision(me, unit, 0x4)) && this.openChest(unit)) {
