@@ -668,7 +668,7 @@ function LoadConfig () {
 
 	var autoequipTiers = [ // autoequip setup
 		//weapon
-		"[Type] == Scepter && [flag] != ethereal # [enhanceddamage] >= 10 # [tier] == 1",
+		"[Type] == Scepter && [flag] != ethereal # [enhanceddamage] >= 0 # [tier] == 1",
 		"[Type] == Scepter && [flag] != ethereal # [enhanceddamage] >= 20 # [tier] == 2",
 		"[type] == scepter # [skillconcentration] == 1 # [tier] == 3",
 		"[type] == scepter # [skillconcentration] >= 2 # [tier] == 4",

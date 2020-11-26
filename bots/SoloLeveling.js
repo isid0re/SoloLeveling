@@ -32,7 +32,7 @@ function SoloLeveling () {
 			"[Name] == ShaftOfTheHoradricStaff",
 			"[Name] == TopOfTheHoradricStaff",
 			"[Name] == HoradricStaff",
-			"[Name] == ajadefigurine",
+			//"[Name] == ajadefigurine",
 			"[Name] == TheGoldenBird",
 			"[Name] == potionoflife",
 			"[Name] == lamesen'stome",
@@ -214,10 +214,7 @@ function SoloLeveling () {
 					print("ÿc9SoloLevelingÿc0: Failed to move to Tree of Inifuss");
 				}
 
-				let tree = getUnit(2, 30);
-				Misc.openChest(tree);
-				delay(300);
-				Pickit.pickItems();
+				Misc.getQuestItem(524, 30);
 				Town.goToTown();
 			}
 
@@ -417,7 +414,7 @@ function SoloLeveling () {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Radament');
 		}
 
-		Pickit.pickItems();
+		Misc.getQuestItem(552);
 		Town.goToTown();
 		Town.unfinishedQuests();
 		Town.npcInteract("atma");
@@ -446,18 +443,9 @@ function SoloLeveling () {
 		Pather.moveToExit(60, true);
 		Pather.moveToPreset(me.area, 2, 354);
 		Attack.securePosition(me.x, me.y, 30, 3000, true);
-		let gbox = getUnit(2, 354);
-		Misc.openChest(gbox);
-		delay(300 + me.ping);
-		Pickit.pickItems();
+		Misc.getQuestItem(549, 354);
 		Town.goToTown();
-
-		if (me.getItem(549)) {
-			Town.move("stash");
-			delay(me.ping);
-			Town.openStash();
-			Storage.Stash.MoveTo(me.getItem(549));
-		}
+		Misc.stashQuestItem(549);
 
 		return true;
 	};
@@ -490,24 +478,10 @@ function SoloLeveling () {
 		}
 
 		Pather.moveTo(15045, 14051);
-		let altar = getUnit(2, 149);
-		Misc.openChest(altar);
-		delay(500 + me.ping);
-		let viperammy = getUnit(4, 521);
-
-		if (!Pickit.pickItem(viperammy)) {
-			Pickit.pickItems();
-		}
-
+		Misc.getQuestItem(521, 149);
 		Town.goToTown();
 		Town.npcInteract("drognan");
-
-		if (me.getItem(521)) {
-			Town.move("stash");
-			delay(250 + me.ping);
-			Town.openStash();
-			Storage.Stash.MoveTo(me.getItem(521));
-		}
+		Misc.stashQuestItem(521);
 
 		return true;
 	};
@@ -687,7 +661,7 @@ function SoloLeveling () {
 	this.staff = function () {
 		if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || Misc.checkQuest(10, 0)) {
 			return true;
-		} // skip script already cubed horadric staff
+		}
 
 		if (!me.getItem(521)) {
 			this.amulet();
@@ -710,26 +684,12 @@ function SoloLeveling () {
 			return false;
 		}
 
-		let gbox = getUnit(2, 356);
-		Misc.openChest(gbox);
-		let shaft = getUnit(4, 92);
-		delay(500 + me.ping);
-
-		if (!Pickit.pickItem(shaft)) {
-			Pickit.pickItems();
-		}
-
+		Misc.getQuestItem(92, 356);
 		Town.goToTown();
-
-		if (me.getItem(92)) {
-			Town.move("stash");
-			delay(me.ping);
-			Town.openStash();
-			Storage.Stash.MoveTo(me.getItem(92));
-		}
+		Misc.stashQuestItem(92);
 
 		if (me.getItem(92) && me.getItem(521)) {
-			Misc.cubeStaff();
+			Misc.cubeQuestItems(91, 92, 521);
 		}
 
 		return true;
@@ -790,24 +750,28 @@ function SoloLeveling () {
 			return true;
 		}
 
-		if (!me.getItem(521)) {
-			for (let getAmmy = 0; getAmmy < 5; getAmmy++) {
-				try {
-					this.amulet();
-				} catch (err) {
-					print('ÿc9SoloLevelingÿc0: Failed attempt to get amulet');
+		if (!Misc.checkQuest(14, 0) && !me.getItem(91)) {
+			if (!me.getItem(521)) {
+				for (let getAmmy = 0; getAmmy < 5; getAmmy++) {
+					try {
+						this.amulet();
+					} catch (err) {
+						print('ÿc9SoloLevelingÿc0: Failed attempt to get amulet');
+					}
 				}
 			}
-		}
 
-		if (!me.getItem(92)) {
-			for (let getStaff = 0; getStaff < 5; getStaff++) {
-				try {
-					this.staff();
-				} catch (err) {
-					print('ÿc9SoloLevelingÿc0: Failed attempt to get staff');
+			if (!me.getItem(92)) {
+				for (let getStaff = 0; getStaff < 5; getStaff++) {
+					try {
+						this.staff();
+					} catch (err) {
+						print('ÿc9SoloLevelingÿc0: Failed attempt to get staff');
+					}
 				}
 			}
+
+			Misc.cubeQuestItems(91, 92, 521);
 		}
 
 		Town.townTasks();
@@ -816,10 +780,6 @@ function SoloLeveling () {
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
 		Precast.doPrecast(true);
 		Pather.useWaypoint(40);
-
-		if (!me.getItem(91)) {
-			Misc.cubeStaff();
-		}
 
 		if (!Pather.checkWP(46)) {
 			Pather.getWP(46);
@@ -900,23 +860,9 @@ function SoloLeveling () {
 		Pather.usePortal(85, me.name);
 		Pather.moveToPreset(me.area, 2, 407);
 		Attack.clear(0x7);
-		let gbox = getUnit(2, 407);
-		Misc.openChest(gbox);
-		delay(500 + me.ping);
-		let eye = getUnit(4, 553);
-
-		if (!Pickit.pickItem(eye)) {
-			Pickit.pickItems();
-		}
-
+		Misc.getQuestItem(553, 407);
 		Town.goToTown();
-
-		if (me.getItem(553)) {
-			Town.move("stash");
-			delay(me.ping);
-			Town.openStash();
-			Storage.Stash.MoveTo(me.getItem(553));
-		}
+		Misc.stashQuestItem(553);
 
 		return true;
 	};
@@ -944,23 +890,9 @@ function SoloLeveling () {
 		}
 
 		Attack.clear(0x7); // clear level
-		let gbox = getUnit(2, 405);
-		Misc.openChest(gbox);
-		delay(500 + me.ping);
-		let heart = getUnit(4, 554);
-
-		if (!Pickit.pickItem(heart)) {
-			Pickit.pickItems();
-		}
-
+		Misc.getQuestItem(554, 405);
 		Town.goToTown();
-
-		if (me.getItem(554)) {
-			Town.move("stash");
-			delay(me.ping);
-			Town.openStash();
-			Storage.Stash.MoveTo(me.getItem(554));
-		}
+		Misc.stashQuestItem(554);
 
 		return true;
 	};
@@ -987,15 +919,7 @@ function SoloLeveling () {
 			print('ÿc9SoloLevelingÿc0: Failed to get LamEssen Tome');
 		}
 
-		let stand = getUnit(2, 193);
-		Misc.openChest(stand);
-		delay(500 + me.ping);
-		let tome = getUnit(4, 548);
-
-		if (!Pickit.pickItem(tome)) {
-			Pickit.pickItems();
-		}
-
+		Misc.getQuestItem(548, 193);
 		Town.goToTown();
 		Town.unfinishedQuests();
 
@@ -1025,23 +949,9 @@ function SoloLeveling () {
 		}
 
 		Attack.clear(0x7);
-		let gbox = getUnit(2, 406);
-		Misc.openChest(gbox);
-		delay(500 + me.ping);
-		let brain = getUnit(4, 555);
-
-		if (!Pickit.pickItem(brain)) {
-			Pickit.pickItems();
-		}
-
+		Misc.getQuestItem(555, 406);
 		Town.goToTown();
-
-		if (me.getItem(555)) {
-			Town.move("stash");
-			delay(me.ping);
-			Town.openStash();
-			Storage.Stash.MoveTo(me.getItem(555));
-		}
+		Misc.stashQuestItem(555);
 
 		return true;
 	};
@@ -1074,19 +984,15 @@ function SoloLeveling () {
 			return true;
 		}
 
-		let eye = me.getItem(553);
-		let heart = me.getItem(554);
-		let brain = me.getItem(555);
-
-		if (!eye) {
+		if (!me.getItem(553)) {
 			this.eye();
 		}
 
-		if (!heart) {
+		if (!me.getItem(554)) {
 			this.heart();
 		}
 
-		if (!brain) {
+		if (!me.getItem(555)) {
 			this.brain();
 		}
 
@@ -1136,10 +1042,8 @@ function SoloLeveling () {
 		Pickit.pickItems();
 
 		if (!Misc.checkQuest(18, 0)) { // khalim's will quest not complete
-			if (!me.getItem(173) || !me.getItem(174)) { // pickup khalims flail
-				Pather.moveToUnit(council);
-				Pickit.pickItems();
-			}
+			Pather.moveToUnit(council);
+			Pickit.pickItems();
 
 			if (!Pather.moveToPreset(83, 2, 404)) { // go to orb
 				print('ÿc9SoloLevelingÿc0: Failed to move to compelling orb');
@@ -1152,7 +1056,7 @@ function SoloLeveling () {
 			}
 
 			if (!me.getItem(174) && me.getItem(173)) { // cube flail to will
-				Misc.cubeFlail();
+				Misc.cubeQuestItems(174, 553, 554, 555, 173);
 				delay(250 + me.ping);
 			}
 
@@ -1165,7 +1069,11 @@ function SoloLeveling () {
 
 			Misc.smashSomething(404); // smash orb
 			Item.autoEquip(); // equip previous weapon
-			delay(250);
+			let entrance = getUnit(2, 386);
+
+			while (entrance === undefined) { // wait till durance is open
+				delay(me.ping);
+			}
 
 			try {
 				Pather.moveToExit(100, true); // take entrance
@@ -1298,34 +1206,26 @@ function SoloLeveling () {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Hephasto');
 		}
 
-		Pickit.pickItems();
-		let havehammer = me.getItem(90);
+		Misc.getQuestItem(90);
+		Misc.equipQuestItem(90, 4);
 
-		if (!havehammer) { // pickup hammer
-			let hammer = getUnit(4, 90);
-			Pickit.pickItem(hammer);
+		if (!me.inTown) { // go to town
+			Town.goToTown();
+			Town.doChores();
+			Town.npcInteract("cain");
+			Pather.usePortal(null, me.name);
 		}
 
-		if (havehammer) {
-			if (!Pather.moveToPreset(me.area, 2, 376)) {
-				print('ÿc9SoloLevelingÿc0: Failed to move to forge');
-			}
-
-			Attack.clear(15); // clear area around forge
-
-			if (!me.inTown) { // go to town
-				Town.goToTown();
-				Misc.equipQuestItem(90, 4);
-				Town.npcInteract("cain");
-				Pather.usePortal(null, me.name);
-			}
-
-			let forge = getUnit(2, 376);
-			Misc.openChest(forge);
-			delay(250 + me.ping * 2);
-			Misc.smashSomething(376);
-			Item.autoEquip();
+		if (!Pather.moveToPreset(me.area, 2, 376)) {
+			print('ÿc9SoloLevelingÿc0: Failed to move to forge');
 		}
+
+		Attack.clear(15); // clear area around forge
+		let forge = getUnit(2, 376);
+		Misc.openChest(forge);
+		delay(250 + me.ping * 2);
+		Misc.smashSomething(376);
+		Item.autoEquip();
 
 		Pickit.pickItems();
 		Town.goToTown();
@@ -1763,21 +1663,26 @@ function SoloLeveling () {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Anya");
 		}
 
-		delay(1000 + me.ping);
-		let anya = getUnit(2, 558);
-		Pather.moveToUnit(anya);
-		sendPacket(1, 0x13, 4, 0x2, 4, anya.gid);
-		delay(300 + me.ping);
-		me.cancel();
+		let frozenanya = getUnit(2, 558);
+
+		if (frozenanya) {
+			Pather.moveToUnit(frozenanya);
+			sendPacket(1, 0x13, 4, 0x2, 4, frozenanya.gid);
+			delay(1000 + me.ping);
+			me.cancel();
+		}
+
 		Town.goToTown();
 		Town.npcInteract("malah");
 		Pather.usePortal(114, me.name);
-		anya.interact();
-		delay(300 + me.ping);
-		me.cancel();
+
+		while (!frozenanya.mode) {
+			sendPacket(1, 0x13, 4, 0x2, 4, frozenanya.gid);
+			delay(3 * me.ping);
+		}
+
 		Town.goToTown();
 		Town.npcInteract("malah");
-		delay(500 + me.ping);
 		Town.unfinishedQuests();
 		Town.doChores();
 		Town.npcInteract("anya");
@@ -1968,9 +1873,6 @@ function SoloLeveling () {
 		let checkFR = me.diff === 0 ? 40 : 100; // cannot start next diff with negative resistances
 		let checkLR = me.diff === 0 ? 40 : 100;
 		let checkCR = me.diff === 0 ? 40 : 100;
-		let nCap = 40; // lvl requirement to attack Normal Baal.
-		let nmCap = 70; // lvl requirement to attack NM Baal.
-		let lvlCap = me.diff === 0 ? nCap : me.diff === 1 ? nmCap : 99;
 
 		if (me.gametype === 0 || !Pather.accessToAct(5)) {
 			return true;
@@ -2216,7 +2118,7 @@ function SoloLeveling () {
 		Pather.moveTo(15094, me.classid === 3 ? 5029 : 5038);
 		Pickit.pickItems();
 
-		if (me.charlvl < lvlCap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
+		if (me.charlvl < levelcap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
 			print('ÿc9SoloLevelingÿc0: missing requirements for next difficulty.');
 
 			return true;
@@ -2308,7 +2210,8 @@ if (!isIncluded("NTItemParser.dbl")) {
 }
 
 // Global variables
-var mercId = [], merc;
+var merc, mercId = [],
+	levelcap = [40, 70, 100][me.diff];
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
@@ -2639,27 +2542,13 @@ Town.unfinishedQuests = function () {
 				Storage.Inventory.MoveTo(cursorItem);
 			}
 
-			Town.move('stash');
-
-			if (Storage.Stash.CanFit(kw)) { // place in stash
-				Storage.Stash.MoveTo(kw);
-			} else {
-				me.cancel();
-			}
-
+			Misc.stashQuestItem(174);
 			print('ÿc9SoloLevelingÿc0: removed khalims will');
 		}
 	}
 
 	// hellforge hammer
-	let hammer = me.getItem(90);
-
-	if (hammer) {
-		if (hammer.location === 3) {
-			Town.move('stash');
-			Storage.Stash.MoveTo(hammer);
-		}
-	}
+	Misc.stashQuestItem(90);
 
 	// anya scroll of resistance
 	let scroll = me.getItem(646);
@@ -2667,7 +2556,7 @@ Town.unfinishedQuests = function () {
 	if (scroll) {
 		if (scroll.location === 7) {
 			this.openStash();
-			delay(300 + me.ping);
+			delay(250 + me.ping);
 		}
 
 		if (!scroll.interact()) {
@@ -3009,25 +2898,15 @@ Town.npcInteract = function (name) {
 		Town.goToTown();
 	}
 
-	while (!npc) {
-		Town.move(name);
-		Packet.flash(me.gid);
-		delay(me.ping * 2);
-		npc = getUnit(1, name);
-	}
+	Town.move(name);
+	Packet.flash(me.gid);
+	delay(me.ping * 2);
 
-	for (let i = 0; i < 5; i += 1) {
-		if (!npc.openMenu()) {
-			me.cancel();
-		}
-
-		if (npc.openMenu()) {
-			break;
-		}
-
-		Packet.flash(me.gid);
+	if (!npc || !npc.openMenu()) {
 		me.cancel();
 	}
+
+	Packet.flash(me.gid);
 
 	return true;
 };
@@ -3047,15 +2926,15 @@ Misc.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
 		break;
 	case 0x5d: // golden bird quest
 		if (!Misc.checkQuest(20, 0)) {
-			let bird = getUnit(4, 546);
+			let jadefigurine = getUnit(4, 546);
 
-			if (bird) {
-				Pickit.pickItem(bird);
+			if (jadefigurine) {
+				Pickit.pickItem(jadefigurine);
 			}
 
 			if (me.getItem(546)) {
-				print("ÿc9SoloLevelingÿc0: start golden bird");
-				me.overhead('golden bird');
+				print("ÿc9SoloLevelingÿc0: starting jade figurine");
+				me.overhead('jade figurine');
 
 				if (!me.inTown) {
 					Town.goToTown();
@@ -3167,6 +3046,8 @@ Misc.hireMerc = function () {
 	}
 
 	Misc.setupMerc();
+	Misc.equipMerc();
+	Pickit.pickItems(); // safetycheck for merc items on ground
 	Misc.equipMerc();
 
 	return true;
@@ -3310,8 +3191,6 @@ Misc.setupMerc = function () {
 Misc.equipMerc = function () {
 	if (me.gametype === 1) {
 		Item.autoEquipMerc();
-		Pickit.pickItems(); // safetycheck for merc items on ground
-		Item.autoEquipMerc();
 	}
 
 	return true;
@@ -3368,8 +3247,8 @@ Misc.openChests = function (range) {
 	return true;
 };
 
-Misc.cubeStaff = function () {
-	if (Misc.checkQuest(10, 0)) {
+Misc.cubeQuestItems = function (outcome, ...classids) {
+	if (me.getItem(outcome)) {
 		return true;
 	}
 
@@ -3377,35 +3256,65 @@ Misc.cubeStaff = function () {
 		Town.goToTown();
 	}
 
-	let shaft = me.getItem("msf");
-	let ammy = me.getItem("vip");
-
-	if (!shaft || !ammy) {
-		me.overhead("missing pieces to make staff");
-
-		return false;
+	if (outcome === 91) {
+		me.overhead('cubing staff');
+	} else {
+		me.overhead('cubing flail');
 	}
 
-	Storage.Cube.MoveTo(ammy);
-	Storage.Cube.MoveTo(shaft);
-	Cubing.openCube();
+	Town.openStash();
 
-	transmute();
-	delay(750 + me.ping);
-
-	let hstaff = me.getItem(91);
-
-	if (!hstaff) {
-		me.overhead("ÿc9SoloLevelingÿc0: Failed to make staff");
-
-		return false;
+	if (me.findItems(-1, -1, 6)) {
+		Cubing.emptyCube();
 	}
 
-	me.overhead("made staff");
-	Storage.Inventory.MoveTo(hstaff);
-	me.cancel();
+	let cubingItem;
 
-	return true;
+	for (let classid of classids) {
+		cubingItem = me.getItem(classid);
+
+		if (!cubingItem || !Storage.Cube.MoveTo(cubingItem)) {
+			return false;
+		}
+	}
+
+	while (!Cubing.openCube()) {
+		delay(me.ping * 2);
+		Packet.flash(me.gid);
+	}
+
+	let wantedItem;
+	let tick = getTickCount();
+
+	while (getTickCount() - tick < 5000) {
+		sendPacket(1, 0x4f, 2, 0x18, 2, 0, 2, 0);
+		delay(me.ping + 50);
+
+		wantedItem = me.getItem(outcome);
+
+		if (wantedItem) {
+			Storage.Inventory.MoveTo(wantedItem);
+
+			if (Storage.Stash.CanFit(wantedItem)) {
+				Storage.Stash.MoveTo(wantedItem);
+			}
+
+			break;
+		}
+	}
+
+	for (let i = 0; i < 15; i += 1) {
+		sendPacket(1, 0x4f, 2, 0x17, 2, 0, 2, 0); // close cube
+		me.cancel();
+
+		if (!getUIFlag(0x1A)) {
+			break;
+		}
+
+		delay(me.ping + 50);
+	}
+
+	return me.getItem(outcome);
 };
 
 Misc.placeStaff = function () {
@@ -3491,56 +3400,65 @@ Misc.tyraelTalk = function () {
 	return true;
 };
 
-Misc.cubeFlail = function () {
-	let eye = me.getItem(553);
-	let heart = me.getItem(554);
-	let brain = me.getItem(555);
-	let flail = me.getItem(173);
-
-	me.overhead("cubing flail");
-
-	if (me.getItem(174)) {
-		return true;
+Misc.stashQuestItem = function (classid) {
+	if (!me.getItem(classid)) {
+		return false;
 	}
 
-	if (!eye) {
-		this.eye();
+	if (!me.inTown) {
+		Town.goToTown();
 	}
 
-	if (!heart) {
-		this.heart();
-	}
-
-	if (!brain) {
-		this.brain();
-	}
-
-	Town.townTasks();
+	let questItem = me.getItem(classid);
 	Town.move("stash");
+	Town.openStash();
 
-	if (me.findItems(-1, -1, 6)) {
-		Cubing.emptyCube();
+	while (questItem.location !== 7) {
+		Storage.Stash.MoveTo(questItem);
+		delay(me.ping);
+
+		questItem = me.getItem(classid);
 	}
-
-	if (!Town.openStash()) {
-		Town.openStash();
-	}
-
-	Storage.Cube.MoveTo(eye);
-	Storage.Cube.MoveTo(heart);
-	Storage.Cube.MoveTo(brain);
-	Storage.Cube.MoveTo(flail);
-	Cubing.openCube();
-	transmute();
-	delay(750 + me.ping);
-	Cubing.emptyCube();
-	me.cancel();
 
 	return true;
 };
 
+Misc.getQuestItem = function (classid, chestID) {
+	if (me.getItem(classid)) {
+		return true;
+	}
+
+	if (chestID !== undefined) {
+		let chest = getUnit(2, chestID);
+
+		if (!chest) {
+			return false;
+		}
+
+		Misc.openChest(chest);
+	}
+
+	let questItem;
+	let tick = getTickCount();
+
+	while (getTickCount() - tick < 2000) {
+		questItem = getUnit(4, classid);
+
+		if (questItem) {
+			break;
+		}
+
+		delay(50);
+	}
+
+	if (!Pickit.pickquestItem(questItem)) {
+		Pickit.pickquestItems();
+	}
+
+	return me.getItem(classid);
+};
+
 Misc.equipQuestItem = function (item, loc) {
-	Town.doChores();
 	let newitem = me.getItem(item);
 
 	if (newitem) {
@@ -3565,12 +3483,12 @@ Misc.equipQuestItem = function (item, loc) {
 
 		if (olditem) {
 			if (Storage.Inventory.CanFit(olditem)) {
-				me.overhead("Keeping weapon");
+				print("ÿc9SoloLevelingÿc0: Keeping weapon");
 
 				Storage.Inventory.MoveTo(olditem);
 			} else {
 				me.cancel();
-				me.overhead("No room to keep weapon");
+				print("ÿc9SoloLevelingÿc0: No room to keep weapon");
 
 				olditem.drop();
 			}
@@ -3608,7 +3526,7 @@ Misc.smashSomething = function (smashable) {
 		delay(750 + me.ping);
 	}
 
-	return true;
+	return !me.getItem(tool);
 };
 
 NTIP.addLine = function (itemString) { //NTIP INJECTOR
@@ -3810,8 +3728,7 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 };
 
 Pather.changeAct = function () {
-	let npc, code, newAct,
-		prevAct = me.act;
+	let npc, code,	prevAct = me.act;
 
 	if (!me.inTown) {
 		Town.goToTown();
@@ -3821,19 +3738,16 @@ Pather.changeAct = function () {
 	case 1:
 		npc = "warriv";
 		code = 0x0D36;
-		newAct = 2;
 
 		break;
 	case 2:
 		npc = "meshif";
 		code = 0x0D38;
-		newAct = 3;
 
 		break;
 	case 4:
 		npc = "tyrael";
 		code = 0x58D2;
-		newAct = 5;
 
 		break;
 	}
@@ -3848,17 +3762,9 @@ Pather.changeAct = function () {
 		npcUnit = getUnit(1, npc);
 	}
 
-	for (let i = 0; i < 5; i += 1) {
-		if (!npcUnit.openMenu() || Misc.useMenu(code)) {
-			delay(500 + me.ping);
-			me.cancel();
-		}
-
-		if (me.act === newAct) {
-			break;
-		}
-
-		Packet.flash(me.gid);
+	if (!npcUnit.openMenu() || !Misc.useMenu(code)) {
+		me.cancel();
+		delay(500 + (2 * me.ping));
 	}
 
 	return true;
