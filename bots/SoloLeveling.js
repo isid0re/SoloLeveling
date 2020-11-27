@@ -3451,8 +3451,8 @@ Misc.getQuestItem = function (classid, chestID) {
 		delay(50);
 	}
 
-	if (!Pickit.pickquestItem(questItem)) {
-		Pickit.pickquestItems();
+	if (!Pickit.pickItem(questItem)) {
+		Pickit.pickItems();
 	}
 
 	return me.getItem(classid);
