@@ -1184,6 +1184,7 @@ function SoloLeveling () {
 		}
 
 		Town.townTasks();
+		NTIP.addLine("[name] == hellforgehammer");
 		print('ÿc9SoloLevelingÿc0: starting hellforge');
 		me.overhead("hellforge");
 		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
@@ -1211,10 +1212,11 @@ function SoloLeveling () {
 
 		if (!me.inTown) { // go to town
 			Town.goToTown();
-			Town.doChores();
-			Town.npcInteract("cain");
-			Pather.usePortal(null, me.name);
 		}
+
+		//Town.doChores();
+		Town.npcInteract("cain");
+		Pather.usePortal(null, me.name);
 
 		if (!Pather.moveToPreset(me.area, 2, 376)) {
 			print('ÿc9SoloLevelingÿc0: Failed to move to forge');
@@ -1226,7 +1228,6 @@ function SoloLeveling () {
 		delay(250 + me.ping * 2);
 		Misc.smashSomething(376);
 		Item.autoEquip();
-
 		Pickit.pickItems();
 		Town.goToTown();
 		Town.npcInteract("cain");
@@ -2301,8 +2302,6 @@ Town.doChores = function (repair = false) {
 		cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
 
 	Attack.weaponSwitch(Attack.getPrimarySlot());
-
-	this.unfinishedQuests();
 	Cubing.doCubing();
 	Runewords.makeRunewords();
 	Item.autoEquip();
@@ -2839,66 +2838,78 @@ Town.characterRespec = function () {// Akara reset for build change
 Town.npcInteract = function (name) {
 	let npc;
 
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
 	switch (name) {
 	case "akara":
+		Town.move(NPC.Akara);
 		npc = getUnit(1, NPC.Akara);
 
 		break;
 	case "warriv":
+		Town.move(NPC.Warriv);
 		npc = getUnit(1, NPC.Warriv);
 
 		break;
 	case "meshif":
+		Town.move(NPC.Meshif);
 		npc = getUnit(1, NPC.Meshif);
 
 		break;
 	case "tyrael":
+		Town.move(NPC.Tyrael);
 		npc = getUnit(1, NPC.Tyrael);
 
 		break;
 	case "jerhyn":
+		Town.move(NPC.Jerhyn);
 		npc = getUnit(1, NPC.Jerhyn);
 
 		break;
 	case "alkor":
+		Town.move(NPC.Alkor);
 		npc = getUnit(1, NPC.Alkor);
 
 		break;
 	case "atma":
+		Town.move(NPC.Atma);
 		npc = getUnit(1, NPC.Atma);
 
 		break;
 	case "kashya":
+		Town.move(NPC.Kashya);
 		npc = getUnit(1, NPC.Kashya);
 
 		break;
 	case "drognan":
+		Town.move(NPC.Drognan);
 		npc = getUnit(1, NPC.Drognan);
 
 		break;
 	case "cain":
+		Town.move(NPC.Cain);
 		npc = getUnit(1, NPC.Cain);
 
 		break;
 	case "qual_kehk":
+		Town.move(NPC.Qual_Kehk);
 		npc = getUnit(1, NPC.Qual_Kehk);
 
 		break;
 	case "malah":
+		Town.move(NPC.Malah);
 		npc = getUnit(1, NPC.Malah);
 
 		break;
 	case "anya":
+		Town.move(NPC.Anya);
 		npc = getUnit(1, NPC.Anya);
 
 		break;
 	}
 
-	if (!me.inTown) {
-		Town.goToTown();
-	}
-
-	Town.move(name);
 	Packet.flash(me.gid);
 	delay(me.ping * 2);
 
@@ -3448,7 +3459,7 @@ Misc.getQuestItem = function (classid, chestID) {
 			break;
 		}
 
-		delay(50);
+		delay(50 + me.ping);
 	}
 
 	if (!Pickit.pickItem(questItem)) {
@@ -3565,7 +3576,7 @@ Pather.killMonsters = function (arg) { // summoner targeting provided by penguin
 		}
 	}
 
-	if (!me.inTown) {
+	if ([8, 3, 38, 6, 27, 28, 33, 34, 35, 37, 56, 57, 60, 45, 58, 61, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
 		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30);
 
 		if (monList) {
@@ -3894,7 +3905,6 @@ var haveItem = function (type, flag, iName) {
 };
 
 // DYNAMIC TIERS prep
-
 var casterCheck = function () {
 	function getBuildTemplate () {
 		let buildType = finalBuild;
