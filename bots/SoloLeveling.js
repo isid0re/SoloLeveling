@@ -196,9 +196,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting cain');
 		me.overhead("cain");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 3);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(1);
 
 		if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 			if (!me.getItem(524)) {
@@ -272,15 +269,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting countess');
 		me.overhead("countess");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 5);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(1);
 
 		if (!Pather.checkWP(6)) {
 			Pather.getWP(6);
 		} else {
 			Pather.useWaypoint(6);
 		}
+
+		Precast.doPrecast(true);
 
 		try {
 			Pather.moveToExit([20, 21, 22, 23, 24, 25], true);
@@ -303,15 +299,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting pits');
 		me.overhead("pits");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 5);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(1);
 
 		if (!Pather.checkWP(6)) {
 			Pather.getWP(6);
 		} else {
 			Pather.useWaypoint(6);
 		}
+
+		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([7, 12], true)) {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Pit level 1");
@@ -337,9 +332,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting andy');
 		me.overhead("andy");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 32);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(1);
 
 		if (!Pather.checkWP(35)) {
 			Pather.getWP(35);
@@ -390,15 +382,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting radament');
 		me.overhead("radament");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(48)) {
 			Pather.getWP(48);
 		} else {
 			Pather.useWaypoint(48);
 		}
+
+		Precast.doPrecast(true);
 
 		Pather.moveToExit(49, true);
 		Pather.moveToPreset(me.area, 2, 355);
@@ -414,7 +405,7 @@ function SoloLeveling () {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Radament');
 		}
 
-		Misc.getQuestItem(552);
+		Pickit.pickItems();
 		Town.goToTown();
 		Town.unfinishedQuests();
 		Town.npcInteract("atma");
@@ -430,9 +421,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting cube');
 		me.overhead("cube");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(57)) {
 			Pather.getWP(57);
@@ -440,6 +428,7 @@ function SoloLeveling () {
 			Pather.useWaypoint(57);
 		}
 
+		Precast.doPrecast(true);
 		Pather.moveToExit(60, true);
 		Pather.moveToPreset(me.area, 2, 354);
 		Attack.securePosition(me.x, me.y, 30, 3000, true);
@@ -458,9 +447,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting amulet');
 		me.overhead("amulet");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(44)) {
 			Pather.getWP(44);
@@ -468,6 +454,7 @@ function SoloLeveling () {
 			Pather.useWaypoint(44);
 		}
 
+		Precast.doPrecast(true);
 		Pather.moveToExit([45, 58, 61], true);
 		Precast.doPrecast(true);
 
@@ -492,7 +479,7 @@ function SoloLeveling () {
 		}
 
 		var teleportPads = function () {
-			if (me.getSkill(54, 0)) {
+			if (Pather.useTeleport) {
 
 				return true;
 			}
@@ -533,7 +520,7 @@ function SoloLeveling () {
 				me.overhead('Using telepad layout');
 
 				for (let i = 0; i < tppPath.length; i += 1) {
-					for (let h = 0; h < 3; h += 1) {
+					for (let h = 0; h < 5; h += 1) {
 						Pather.moveTo(wpX - tppPath[i][0], wpY - tppPath[i][1]);
 
 						for (let activate = 0; activate < tppID.length; activate += 1) {
@@ -542,7 +529,7 @@ function SoloLeveling () {
 							if (telepad) {
 								do {
 									if (Math.abs((telepad.x - (wpX - tppPath[i][0]) + (telepad.y - (wpY - tppPath[i][1])))) <= 0) {
-										delay(50);
+										delay(100 + me.ping);
 										telepad.interact();
 									}
 								} while (telepad.getNext());
@@ -558,9 +545,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting summoner');
 		me.overhead("summoner");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(74)) {
 			Pather.getWP(74);
@@ -568,12 +552,13 @@ function SoloLeveling () {
 			Pather.useWaypoint(74);
 		}
 
+		Precast.doPrecast(true);
+		teleportPads();
+
 		try {
-			teleportPads();
 			Pather.moveToPreset(me.area, 2, 357, -3, -3);
 		} catch (err) {
 			print('ÿc9SoloLevelingÿc0: Failed to reach Summoner. Retry');
-			teleportPads();
 
 			if (!Pather.moveToPreset(me.area, 2, 357, -3, -3)) {
 				print('ÿc9SoloLevelingÿc0: Failed to reach summoner');
@@ -592,15 +577,11 @@ function SoloLeveling () {
 
 		let journal = getUnit(2, 357);
 
-		for (let read = 0; read < 5; read += 1) {
-			if (journal) {
+		if (journal) {
+			while (!Pather.getPortal(46)) {
 				Misc.openChest(journal);
-				delay(2 * me.ping + 1000);
+				delay(1000 + me.ping);
 				me.cancel();
-			}
-
-			if (Pather.getPortal(46)) {
-				break;
 			}
 		}
 
@@ -625,15 +606,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting ancient tunnels');
 		me.overhead("ancient tunnels");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(44)) {
 			Pather.getWP(44);
 		} else {
 			Pather.useWaypoint(44);
 		}
+
+		Precast.doPrecast(true);
 
 		if (Pather.moveToPreset(me.area, 2, 580) && Misc.openChests(5)) {
 			Pickit.pickItems();
@@ -670,15 +650,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting staff');
 		me.overhead("staff");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(43)) {
 			Pather.getWP(43);
 		} else {
 			Pather.useWaypoint(43);
 		}
+
+		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([62, 63, 64], true) || !Pather.moveToPreset(me.area, 2, 356)) {
 			return false;
@@ -777,9 +756,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting duriel');
 		me.overhead("duriel");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(40);
 
 		if (!Pather.checkWP(46)) {
 			Pather.getWP(46);
@@ -787,6 +763,7 @@ function SoloLeveling () {
 			Pather.useWaypoint(46);
 		}
 
+		Precast.doPrecast(true);
 		Pather.moveToExit(getRoom().correcttomb, true);
 		Pather.moveToPreset(me.area, 2, 152);
 		Attack.securePosition(me.x, me.y, 30, 3000, true, me.diff === 2);
@@ -839,15 +816,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting eye');
 		me.overhead("eye");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(76)) {
 			Pather.getWP(76);
 		} else {
 			Pather.useWaypoint(76);
 		}
+
+		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([76, 85], true)) {
 			print('ÿc9SoloLevelingÿc0: Failed to get the eye');
@@ -875,15 +851,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting heart');
 		me.overhead("heart");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(80)) {
 			Pather.getWP(80);
 		} else {
 			Pather.useWaypoint(80);
 		}
+
+		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([80, 92, 93], true) || !Pather.moveToPreset(me.area, 2, 405)) {
 			print('ÿc9SoloLevelingÿc0: Failed to get the heart');
@@ -905,15 +880,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting tome');
 		me.overhead("tome");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(80)) {
 			Pather.getWP(80);
 		} else {
 			Pather.useWaypoint(80);
 		}
+
+		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(94, true) || !Pather.moveToPreset(me.area, 2, 193)) {
 			print('ÿc9SoloLevelingÿc0: Failed to get LamEssen Tome');
@@ -934,15 +908,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting brain');
 		me.overhead("brain");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(78)) {
 			Pather.getWP(78);
 		} else {
 			Pather.useWaypoint(78);
 		}
+
+		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit([88, 89, 91], true) || !Pather.moveToPreset(me.area, 2, 406)) {
 			print('ÿc9SoloLevelingÿc0: Failed to get the Brain');
@@ -964,9 +937,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting lower kurast');
 		me.overhead("lower kurast");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(79)) {
 			Pather.getWP(79);
@@ -974,6 +944,7 @@ function SoloLeveling () {
 			Pather.useWaypoint(79);
 		}
 
+		Precast.doPrecast(true);
 		Misc.openChestsInArea(79);
 
 		return true;
@@ -999,9 +970,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting travincal');
 		me.overhead("travincal");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(83)) {
 			Pather.getWP(83);
@@ -1009,6 +977,7 @@ function SoloLeveling () {
 			Pather.useWaypoint(83);
 		}
 
+		Precast.doPrecast(true);
 		let ismail = getUnit(1, "Ismail Vilehand");
 
 		if (ismail && !Attack.canAttack(ismail)) { // exit if ismail immune
@@ -1072,7 +1041,7 @@ function SoloLeveling () {
 			let entrance = getUnit(2, 386);
 
 			while (entrance === undefined) { // wait till durance is open
-				delay(me.ping);
+				delay(1 + me.ping);
 			}
 
 			try {
@@ -1098,9 +1067,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting mephisto');
 		me.overhead("mephisto");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(75);
 
 		if (!Pather.checkWP(101)) {
 			Pather.getWP(101);
@@ -1108,6 +1074,7 @@ function SoloLeveling () {
 			Pather.useWaypoint(101);
 		}
 
+		Precast.doPrecast(true);
 		Pather.moveToExit(102, true);
 		Town.goToTown();
 		Town.doChores();
@@ -1148,15 +1115,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting izual');
 		me.overhead("izual");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(103);
 
 		if (!Pather.checkWP(106)) {
 			Pather.getWP(106);
 		} else {
 			Pather.useWaypoint(106);
 		}
+
+		Precast.doPrecast(true);
 
 		if (!Misc.checkQuest(25, 1)) {
 			Pather.moveToPreset(105, 1, 256);
@@ -1183,13 +1149,11 @@ function SoloLeveling () {
 			return true;
 		}
 
-		Town.townTasks();
 		NTIP.addLine("[name] == hellforgehammer");
+		NTIP.addLine("[name] == mephisto'ssoulstone");
+		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting hellforge');
 		me.overhead("hellforge");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(103);
 
 		if (!Pather.checkWP(107)) {
 			Pather.getWP(107);
@@ -1197,8 +1161,10 @@ function SoloLeveling () {
 			Pather.useWaypoint(107);
 		}
 
+		Precast.doPrecast(true);
+
 		if (!Pather.moveToPreset(me.area, 2, 376)) {
-			print("ÿc9SoloLevelingÿc0: Failed to move to forge");
+			print("ÿc9SoloLevelingÿc0: Failed to move to Hephasto");
 		}
 
 		try {
@@ -1207,29 +1173,40 @@ function SoloLeveling () {
 			print('ÿc9SoloLevelingÿc0: Failed to kill Hephasto');
 		}
 
-		Misc.getQuestItem(90);
-		Misc.equipQuestItem(90, 4);
-
 		if (!me.inTown) { // go to town
 			Town.goToTown();
 		}
 
-		//Town.doChores();
+		Town.doChores();
 		Town.npcInteract("cain");
+
+		if (me.getItem(90)) {
+			Misc.equipQuestItem(90, 4);
+		}
+
 		Pather.usePortal(null, me.name);
+
+		if (!me.getItem(90)) {
+			Misc.getQuestItem(90);
+			Misc.equipQuestItem(90, 4);
+		}
 
 		if (!Pather.moveToPreset(me.area, 2, 376)) {
 			print('ÿc9SoloLevelingÿc0: Failed to move to forge');
 		}
 
-		Attack.clear(15); // clear area around forge
+		Attack.clear(15);
 		let forge = getUnit(2, 376);
 		Misc.openChest(forge);
 		delay(250 + me.ping * 2);
 		Misc.smashSomething(376);
 		Item.autoEquip();
 		Pickit.pickItems();
-		Town.goToTown();
+
+		if (!me.inTown) { // go to town
+			Town.goToTown();
+		}
+
 		Town.npcInteract("cain");
 
 		return true;
@@ -1286,7 +1263,7 @@ function SoloLeveling () {
 					return true;
 				}
 
-				delay(250);
+				delay(250 + me.ping);
 			}
 
 			return !!glow;
@@ -1343,7 +1320,7 @@ function SoloLeveling () {
 					case 1: // Sorceress
 						if ([56, 59, 64].indexOf(Config.AttackSkill[1]) > -1) {
 							if (me.getState(121)) {
-								delay(500);
+								delay(500 + me.ping);
 							} else {
 								Skill.cast(Config.AttackSkill[1], 0, 7793, 5293);
 							}
@@ -1351,7 +1328,7 @@ function SoloLeveling () {
 							break;
 						}
 
-						delay(500);
+						delay(500 + me.ping);
 
 						break;
 					case 3: // Paladin
@@ -1366,7 +1343,7 @@ function SoloLeveling () {
 							break;
 						}
 
-						delay(500);
+						delay(500 + me.ping);
 
 						break;
 					case 6: // Assassin
@@ -1380,14 +1357,14 @@ function SoloLeveling () {
 							}
 						}
 
-						delay(500);
+						delay(500 + me.ping);
 
 						break;
 					default:
-						delay(500);
+						delay(500 + me.ping);
 					}
 				} else {
-					delay(500);
+					delay(500 + me.ping);
 				}
 
 				if (getUnit(1, 243)) {
@@ -1414,7 +1391,7 @@ function SoloLeveling () {
 						break;
 					}
 
-					delay(100);
+					delay(100 + me.ping);
 				}
 
 				if (!seal) {
@@ -1431,7 +1408,7 @@ function SoloLeveling () {
 					seal.interact();
 				}
 
-				delay(classid === 394 ? 1000 : 500);
+				delay(classid === 394 ? 1000 + me.ping : 500 + me.ping);
 
 				if (!seal.mode) {
 					if (classid === 394 && Attack.validSpot(seal.x + 15, seal.y)) { // de seis optimization
@@ -1440,7 +1417,7 @@ function SoloLeveling () {
 						Pather.moveTo(seal.x - 5, seal.y - 5);
 					}
 
-					delay(500);
+					delay(500 + me.ping);
 				} else {
 					return true;
 				}
@@ -1485,7 +1462,7 @@ function SoloLeveling () {
 			this.openSeal(392);
 
 			if (this.infLayout === 1) {
-				delay(1);
+				delay(1 + me.ping);
 			} else {
 				Pather.moveTo(7928, 5295, 3, 30); // temp
 			}
@@ -1498,9 +1475,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting diablo');
 		me.overhead("diablo");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(103);
 
 		if (!Pather.checkWP(107)) {
 			Pather.getWP(107);
@@ -1516,9 +1490,9 @@ function SoloLeveling () {
 		this.seis();
 		this.infector();
 		Config.MercWatch = false;
-		let diablo = getUnit(1, 243);
 		Pather.moveTo(7788, 5292, 3, 30);
 		this.diabloPrep();
+		let diablo = getUnit(1, 243);
 
 		if (!diablo) {
 			print("ÿc9SoloLevelingÿc0: Diablo not found. Checking seal bosses.");
@@ -1563,9 +1537,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting shenk');
 		me.overhead("shenk");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(111)) {
 			Pather.getWP(111);
@@ -1596,9 +1567,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting barbies');
 		me.overhead("barbies");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(111)) {
 			Pather.getWP(111);
@@ -1606,6 +1574,7 @@ function SoloLeveling () {
 			Pather.useWaypoint(111);
 		}
 
+		Precast.doPrecast(true);
 		barbies = getPresetUnits (me.area, 2, 473);
 
 		if (!barbies) {
@@ -1632,10 +1601,9 @@ function SoloLeveling () {
 				}
 			}
 
-			delay(1500 + 2 * me.ping);
+			delay(1500 + me.ping);
 		}
 
-		delay(1000 + me.ping);
 		Town.goToTown();
 		Town.npcInteract("qual_kehk");
 
@@ -1650,15 +1618,14 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting anya');
 		me.overhead("anya");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(113)) {
 			Pather.getWP(113);
 		} else {
 			Pather.useWaypoint(113);
 		}
+
+		Precast.doPrecast(true);
 
 		if (!Pather.moveToExit(114, true) || !Pather.moveToPreset(me.area, 2, 460)) {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Anya");
@@ -1669,7 +1636,7 @@ function SoloLeveling () {
 		if (frozenanya) {
 			Pather.moveToUnit(frozenanya);
 			sendPacket(1, 0x13, 4, 0x2, 4, frozenanya.gid);
-			delay(1000 + me.ping);
+			delay(1200 + me.ping);
 			me.cancel();
 		}
 
@@ -1677,12 +1644,15 @@ function SoloLeveling () {
 		Town.npcInteract("malah");
 		Pather.usePortal(114, me.name);
 
-		while (!frozenanya.mode) {
-			sendPacket(1, 0x13, 4, 0x2, 4, frozenanya.gid);
-			delay(3 * me.ping);
+		if (frozenanya) {
+			while (!frozenanya.mode) {
+				sendPacket(1, 0x13, 4, 0x2, 4, frozenanya.gid);
+				delay(300 + me.ping);
+			}
 		}
 
 		Town.goToTown();
+		Town.clearJunk();
 		Town.npcInteract("malah");
 		Town.unfinishedQuests();
 		Town.doChores();
@@ -1699,9 +1669,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting pindle');
 		me.overhead("Pindle");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(109);
 
 		if (!Pather.getPortal(121)) {
 			Town.npcInteract("anya");
@@ -1712,6 +1679,7 @@ function SoloLeveling () {
 		}
 
 		try {
+			Precast.doPrecast(true);
 			Pather.moveTo(10058, 13234);
 			let pindle = getUnit(1, getLocaleString(22497));
 
@@ -1754,7 +1722,7 @@ function SoloLeveling () {
 					break;
 				}
 
-				delay(20);
+				delay(20 + me.ping);
 			}
 
 			let altar = getUnit(2, 546);
@@ -1787,9 +1755,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting ancients');
 		me.overhead("ancients");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(118)) {
 			Pather.getWP(118);
@@ -1797,8 +1762,8 @@ function SoloLeveling () {
 			Pather.useWaypoint(118);
 		}
 
+		Precast.doPrecast(true);
 		Pather.moveToExit(120, true); // enter at ancients plateau
-
 		let tempConfig = Misc.copy(Config); // save and update config settings
 		let updateConfig = {
 			TownCheck: false,
@@ -1833,7 +1798,7 @@ function SoloLeveling () {
 		touchAltar(); //activate altar
 
 		while (!getUnit(1, 541)) { //wait for ancients to spawn
-			delay(250);
+			delay(250 + me.ping);
 		}
 
 		while (!canAncients()) {// reroll ancients if unable to attack
@@ -1843,7 +1808,7 @@ function SoloLeveling () {
 			touchAltar();
 
 			while (!getUnit(1, 542)) {
-				delay(10);
+				delay(10 + me.ping);
 			}
 		}
 
@@ -1894,7 +1859,7 @@ function SoloLeveling () {
 				case 64:
 					if (me.getState(121)) {
 						while (me.getState(121)) {
-							delay(100);
+							delay(100 + me.ping);
 						}
 					} else {
 						return Skill.cast(Config.AttackSkill[1], 0, 15094 + rand(-1, 1), 5028);
@@ -2006,7 +1971,7 @@ function SoloLeveling () {
 						Pather.moveTo(15072, 5002);
 
 						while (hydra.mode !== 12) {
-							delay(500);
+							delay(500 + me.ping);
 
 							if (!copyUnit(hydra).x) {
 								break;
@@ -2024,9 +1989,6 @@ function SoloLeveling () {
 		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting baal');
 		me.overhead("baal");
-		Pather.useWaypoint(Config.RandomPrecast ? "random" : 35);
-		Precast.doPrecast(true);
-		Pather.useWaypoint(109);
 
 		if (!Pather.checkWP(129)) {
 			Pather.getWP(129);
@@ -2034,6 +1996,7 @@ function SoloLeveling () {
 			Pather.useWaypoint(129);
 		}
 
+		Precast.doPrecast(true);
 		Pather.moveToExit([130, 131], true);
 		Pather.moveTo(15095, 5029);
 
@@ -2107,13 +2070,13 @@ function SoloLeveling () {
 				}
 
 				if (!this.preattack()) {
-					delay(100);
+					delay(100 + me.ping);
 				}
 
 				break;
 			}
 
-			delay(10);
+			delay(10 + me.ping);
 		}
 
 		Pather.moveTo(15094, me.classid === 3 ? 5029 : 5038);
@@ -2126,11 +2089,11 @@ function SoloLeveling () {
 		}
 
 		Pather.moveTo(15090, 5008);
-		delay(5000);
+		delay(5000 + me.ping);
 		Precast.doPrecast(true);
 
 		while (getUnit(1, 543)) {
-			delay(500);
+			delay(500 + me.ping);
 		}
 
 		let portal = getUnit(2, 563);
@@ -2288,7 +2251,11 @@ Town.townTasks = function () {
 		Pather.useWaypoint(prevTown);
 	}
 
-	Config.NoTele = me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
+	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
+
+	if (Pather.useTeleport) {
+		Config.Dodge = !Config.NoTele;
+	}
 
 	return true;
 };
@@ -2333,7 +2300,7 @@ Town.doChores = function (repair = false) {
 
 	for (i = 0; i < cancelFlags.length; i += 1) {
 		if (getUIFlag(cancelFlags[i])) {
-			delay(500);
+			delay(500 + me.ping);
 			me.cancel();
 
 			break;
@@ -2341,7 +2308,11 @@ Town.doChores = function (repair = false) {
 	}
 
 	me.cancel();
-	Config.NoTele = me.diff === 0 && me.gold < 25000 ? true : me.diff !== 0 && me.gold < 100000 ? true : false;
+	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
+
+	if (Pather.useTeleport) {
+		Config.Dodge = !Config.NoTele;
+	}
 
 	return true;
 };
@@ -2530,10 +2501,10 @@ Town.unfinishedQuests = function () {
 		if (Item.getEquippedItem(4).classid === 174) {
 
 			Town.clearInventory();
-			delay(me.ping * 2 + 500);
+			delay(500 + me.ping * 2);
 
 			clickItem(4, 4); //remove khalim's will
-			delay(me.ping * 2 + 500);
+			delay(500 + me.ping * 2);
 
 			let cursorItem = getUnit(100);
 
@@ -2546,8 +2517,14 @@ Town.unfinishedQuests = function () {
 		}
 	}
 
-	// hellforge hammer
-	Misc.stashQuestItem(90);
+	// hellforge hammer at startup to avoid selling and d/c
+	let hammer = me.getItem(90);
+
+	if (hammer) {
+		if (hammer.location === 3) {
+			Misc.stashQuestItem(90);
+		}
+	}
 
 	// anya scroll of resistance
 	let scroll = me.getItem(646);
@@ -2684,7 +2661,7 @@ Town.drinkPots = function () {
 
 		if (chugs) {
 			do {
-				delay(300);
+				delay(300 + me.ping);
 				chugs.interact();
 			} while (chugs.getNext());
 		}
@@ -2756,7 +2733,7 @@ Town.clearJunk = function () {
 		) {
 			if (junk[count].drop()) {
 				me.overhead('cleared junk');
-				delay(250);
+				delay(250 + me.ping);
 			}
 		}
 
@@ -2773,7 +2750,7 @@ Town.clearJunk = function () {
 				) {
 					if (junk[count].drop()) {
 						me.overhead('cleared autoequip junk');
-						delay(250);
+						delay(250 + me.ping);
 					}
 				}
 			}
@@ -2793,7 +2770,7 @@ Town.clearJunk = function () {
 					) {
 						if (junk[count].drop()) {
 							me.overhead('cleared merc junk');
-							delay(250);
+							delay(250 + me.ping);
 						}
 					}
 				}
@@ -2813,18 +2790,18 @@ Town.characterRespec = function () {// Akara reset for build change
 		Precast.doPrecast(true);
 		Town.goToTown(1);
 		Town.npcInteract("akara");
-		delay(me.ping * 2);
+		delay(10 + me.ping * 2);
 
 		if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
 			return false;
 		}
 
-		delay((me.ping * 2) + 1000);
+		delay(1000 + me.ping * 2);
 
 		Town.clearBelt();
 		me.overhead('time to respec');
 
-		delay(250);
+		delay(250 + me.ping);
 
 		let script = getScript("default.dbj");
 		script.stop();
@@ -2866,6 +2843,11 @@ Town.npcInteract = function (name) {
 	case "jerhyn":
 		Town.move(NPC.Jerhyn);
 		npc = getUnit(1, NPC.Jerhyn);
+
+		if (!npc) {
+			me.cancel();
+			Pather.moveTo(5166, 5206);
+		}
 
 		break;
 	case "alkor":
@@ -2911,7 +2893,7 @@ Town.npcInteract = function (name) {
 	}
 
 	Packet.flash(me.gid);
-	delay(me.ping * 2);
+	delay(1 + me.ping * 2);
 
 	if (!npc || !npc.openMenu()) {
 		me.cancel();
@@ -2993,7 +2975,7 @@ Misc.hireMerc = function () {
 		return true;
 	}
 
-	if (!Pather.accessToAct(2) || me.diff === 2) { // don't hire if no access to act 2 or if in hell
+	if (me.gametype === 0 || !Pather.accessToAct(2) || me.diff === 2) { // don't hire if classic, no access to act 2, or if in hell
 		return true;
 	}
 
@@ -3027,7 +3009,7 @@ Misc.hireMerc = function () {
 		while (mercId.length > 0) {
 			Misc.useMenu(0x0D45);
 			sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
-			delay(500);
+			delay(500 + me.ping);
 			merc = getMercFix();
 
 			if (me.diff === mercDiff) {
@@ -3209,7 +3191,7 @@ Misc.equipMerc = function () {
 
 Misc.checkQuest = function (id, state) {
 	sendPacket(1, 0x40);
-	delay(500);
+	delay(500 + me.ping);
 
 	return me.getQuest(id, state);
 };
@@ -3273,6 +3255,7 @@ Misc.cubeQuestItems = function (outcome, ...classids) {
 		me.overhead('cubing flail');
 	}
 
+	Town.clearInventory();
 	Town.openStash();
 
 	if (me.findItems(-1, -1, 6)) {
@@ -3290,7 +3273,7 @@ Misc.cubeQuestItems = function (outcome, ...classids) {
 	}
 
 	while (!Cubing.openCube()) {
-		delay(me.ping * 2);
+		delay(1 + me.ping * 2);
 		Packet.flash(me.gid);
 	}
 
@@ -3299,7 +3282,7 @@ Misc.cubeQuestItems = function (outcome, ...classids) {
 
 	while (getTickCount() - tick < 5000) {
 		sendPacket(1, 0x4f, 2, 0x18, 2, 0, 2, 0);
-		delay(me.ping + 50);
+		delay(50 + me.ping);
 
 		wantedItem = me.getItem(outcome);
 
@@ -3322,7 +3305,7 @@ Misc.cubeQuestItems = function (outcome, ...classids) {
 			break;
 		}
 
-		delay(me.ping + 50);
+		delay(50 + me.ping);
 	}
 
 	return me.getItem(outcome);
@@ -3426,7 +3409,7 @@ Misc.stashQuestItem = function (classid) {
 
 	while (questItem.location !== 7) {
 		Storage.Stash.MoveTo(questItem);
-		delay(me.ping);
+		delay(1 + me.ping);
 
 		questItem = me.getItem(classid);
 	}
@@ -3624,13 +3607,13 @@ Pather.checkWP = function (area) {
 
 				let tick = getTickCount();
 
-				while (getTickCount() - tick < Math.max(Math.round((i + 1) * 1000 / (i / 5 + 1)), me.ping * 2)) {
+				while (getTickCount() - tick < Math.max(Math.round((i + 1) * 1000 / (i / 5 + 1)), (1 + me.ping * 2))) {
 					if (getUIFlag(0x14)) { // Waypoint screen is open
-						delay(500);
+						delay(500 + me.ping);
 						break;
 					}
 
-					delay(50);
+					delay(50 + me.ping);
 				}
 			}
 
@@ -3669,7 +3652,7 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 							return true;
 						}
 
-						delay(10);
+						delay(10 + me.ping);
 					}
 				}
 			}
@@ -3747,35 +3730,31 @@ Pather.changeAct = function () {
 
 	switch (prevAct) {
 	case 1:
-		npc = "warriv";
+		Town.move(NPC.Warriv);
+		npc = getUnit(1, NPC.Warriv);
 		code = 0x0D36;
 
 		break;
 	case 2:
-		npc = "meshif";
+		Town.move(NPC.Meshif);
+		npc = getUnit(1, NPC.Meshif);
 		code = 0x0D38;
 
 		break;
 	case 4:
-		npc = "tyrael";
+		Town.move(NPC.Tyrael);
+		npc = getUnit(1, NPC.Tyrael);
 		code = 0x58D2;
 
 		break;
 	}
 
-	let npcUnit = getUnit(1, npc);
+	Packet.flash(me.gid);
+	delay(1 + me.ping * 2);
 
-	while (!npcUnit) {
-		Town.move(npc);
-		Packet.flash(me.gid);
-		delay(me.ping * 2);
-
-		npcUnit = getUnit(1, npc);
-	}
-
-	if (!npcUnit.openMenu() || !Misc.useMenu(code)) {
+	if (!npc || !npc.openMenu() || !Misc.useMenu(code)) {
 		me.cancel();
-		delay(500 + (2 * me.ping));
+		delay(1000 + me.ping * 2);
 	}
 
 	return true;
@@ -3945,7 +3924,7 @@ var getMercFix = function () { // merc is null fix
 			break;
 		}
 
-		delay(100);
+		delay(100 + me.ping);
 		merc = me.getMerc();
 	}
 
@@ -4000,7 +3979,7 @@ Item.equipMerc = function (item, bodyLoc) {
 	for (i = 0; i < 3; i += 1) {
 		if (item.toCursor()) {
 			clickItem(4, bodyLoc);
-			delay(me.ping * 2 + 500);
+			delay(500 + me.ping * 2);
 
 			if (item.bodylocation === bodyLoc) {
 				if (getCursorType() === 3) {
@@ -4214,7 +4193,7 @@ Item.removeItemsMerc = function () {
 	if (items) {
 		for (var i = 0; i < items.length; i++) {
 			clickItem(4, items[i].bodylocation);
-			delay(me.ping * 2 + 500);
+			delay(500 + me.ping * 2);
 
 			cursorItem = getUnit(100);
 
