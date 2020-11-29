@@ -729,7 +729,7 @@ function SoloLeveling () {
 			return true;
 		}
 
-		if (!Misc.checkQuest(14, 0) && !me.getItem(91)) {
+		if (!Misc.checkQuest(10, 0) && !me.getItem(91)) {
 			if (!me.getItem(521)) {
 				for (let getAmmy = 0; getAmmy < 5; getAmmy++) {
 					try {
@@ -768,7 +768,7 @@ function SoloLeveling () {
 		Pather.moveToPreset(me.area, 2, 152);
 		Attack.securePosition(me.x, me.y, 30, 3000, true, me.diff === 2);
 
-		if (!Misc.checkQuest(14, 0)) {
+		if (!Misc.checkQuest(10, 0)) {
 			Misc.placeStaff();
 		}
 
@@ -794,12 +794,14 @@ function SoloLeveling () {
 		Pickit.pickItems();
 
 		if (!Misc.checkQuest(15, 0)) {
-			Pather.moveTo(22629, 15714);
-			Pather.moveTo(22609, 15707);
-			Pather.moveTo(22579, 15704);
-			Pather.moveTo(22577, 15649, 10);
-			Pather.moveTo(22577, 15609, 10);
-			Misc.tyraelTalk();
+			Misc.tyraelTomb();
+			Town.move("palace");
+			Town.npcInteract("jerhyn");
+			Pather.moveToExit(50, true);
+
+			if (!me.inTown) {
+				Town.goToTown();
+			}
 		}
 
 		Pather.changeAct();
@@ -1033,20 +1035,23 @@ function SoloLeveling () {
 			delay(250 + me.ping);
 
 			if (!Pather.usePortal(83, me.name)) { // return to Trav
-				print("ÿc9SoloLevelingÿc0: Failed to go back to Travincal from town");
+				print("ÿc9SoloLevelingÿc0: Failed to go back to Travincal and smash orb");
 			}
 
 			Misc.smashSomething(404); // smash orb
 			Item.autoEquip(); // equip previous weapon
-			let entrance = getUnit(2, 386);
 
-			while (entrance === undefined) { // wait till durance is open
-				delay(1 + me.ping);
+			if (!me.inTown) { // go to town
+				Town.goToTown();
 			}
 
-			try {
-				Pather.moveToExit(100, true); // take entrance
-			} catch (e) {
+			Town.doChores();
+
+			if (!Pather.usePortal(83, me.name)) { // return to Trav
+				print("ÿc9SoloLevelingÿc0: Failed to go back to Travincal and take entrance");
+			}
+
+			if (!Pather.moveToExit(100, true)) {
 				delay(250 + me.ping * 2);
 				Pather.moveToExit(100, true);
 			}
@@ -1187,7 +1192,7 @@ function SoloLeveling () {
 		Pather.usePortal(null, me.name);
 
 		if (!me.getItem(90)) {
-			Misc.getQuestItem(90);
+			Pickit.pickItems();
 			Misc.equipQuestItem(90, 4);
 		}
 
@@ -1201,6 +1206,7 @@ function SoloLeveling () {
 		delay(250 + me.ping * 2);
 		Misc.smashSomething(376);
 		Item.autoEquip();
+		delay(1000 + me.ping);
 		Pickit.pickItems();
 
 		if (!me.inTown) { // go to town
@@ -2253,7 +2259,7 @@ Town.townTasks = function () {
 
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
 
-	if (Pather.useTeleport) {
+	if (me.classid === 1) {
 		Config.Dodge = !Config.NoTele;
 	}
 
@@ -2517,13 +2523,20 @@ Town.unfinishedQuests = function () {
 		}
 	}
 
-	// hellforge hammer at startup to avoid selling and d/c
+	// drop hellforge hammer at startup to avoid selling and d/c
 	let hammer = me.getItem(90);
 
 	if (hammer) {
-		if (hammer.location === 3) {
-			Misc.stashQuestItem(90);
+		Town.goToTown(1);
+
+		if (hammer.location === 7) {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(hammer);
+			delay(300 + me.ping);
+			me.cancel();
 		}
+
+		hammer.drop();
 	}
 
 	// anya scroll of resistance
@@ -3241,7 +3254,7 @@ Misc.openChests = function (range) {
 };
 
 Misc.cubeQuestItems = function (outcome, ...classids) {
-	if (me.getItem(outcome)) {
+	if (me.getItem(outcome) || me.act === 2 && Misc.checkQuest(10, 0) || me.act === 3 && Misc.checkQuest(18, 0)) {
 		return true;
 	}
 
@@ -3316,6 +3329,10 @@ Misc.placeStaff = function () {
 	let orifice = getUnit(2, 152);
 	let hstaff = me.getItem(91);
 
+	if (Misc.checkQuest(10, 0)) {
+		return true;
+	}
+
 	if (!orifice) {
 		return false;
 	}
@@ -3363,7 +3380,13 @@ Misc.placeStaff = function () {
 	return true;
 };
 
-Misc.tyraelTalk = function () {
+Misc.tyraelTomb = function () {
+	Pather.moveTo(22629, 15714);
+	Pather.moveTo(22609, 15707);
+	Pather.moveTo(22579, 15704);
+	Pather.moveTo(22577, 15649, 10);
+	Pather.moveTo(22577, 15609, 10);
+
 	let tyrael = getUnit(1, NPC.Tyrael);
 
 	if (!tyrael) {
@@ -3385,11 +3408,9 @@ Misc.tyraelTalk = function () {
 		}
 	}
 
-	Town.goToTown();
-	Town.move("palace");
-	Town.npcInteract("jerhyn");
-	Pather.moveToExit(50, true);
-	Town.goToTown();
+	if (!Pather.usePortal(null)) {
+		Town.goToTown();
+	}
 
 	return true;
 };
