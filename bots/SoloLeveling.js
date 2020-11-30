@@ -1206,7 +1206,7 @@ function SoloLeveling () {
 		delay(250 + me.ping * 2);
 		Misc.smashSomething(376);
 		Item.autoEquip();
-		delay(1000 + me.ping);
+		delay(2500 + me.ping);
 		Pickit.pickItems();
 
 		if (!me.inTown) { // go to town
@@ -2258,10 +2258,7 @@ Town.townTasks = function () {
 	}
 
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
-
-	if (me.classid === 1) {
-		Config.Dodge = !Config.NoTele;
-	}
+	Config.Dodge = me.classid === 1 ? !Config.NoTele : false;
 
 	return true;
 };
@@ -2315,10 +2312,7 @@ Town.doChores = function (repair = false) {
 
 	me.cancel();
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
-
-	if (Pather.useTeleport) {
-		Config.Dodge = !Config.NoTele;
-	}
+	Config.Dodge = me.classid === 1 ? !Config.NoTele : false;
 
 	return true;
 };
