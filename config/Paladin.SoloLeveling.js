@@ -147,9 +147,9 @@ function LoadConfig () {
 	Config.UseRejuvHP = 65;
 	Config.UseMP = 15;
 	Config.UseMercHP = 75;
-	Config.HPBuffer = me.diff === 0 ? 8 : 4;
-	Config.MPBuffer = me.diff === 0 ? 2 : 6;
-	Config.RejuvBuffer = 4;
+	Config.HPBuffer = 0;
+	Config.MPBuffer = 0;
+	Config.RejuvBuffer = 0;
 
 	// Chicken settings
 	Config.LifeChicken = 10;
@@ -338,8 +338,8 @@ function LoadConfig () {
 		var finalBelt = ["hp", "mp", "mp", "rv"];
 		Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
 		this.configBelt();
-		var bufferHP = [10, 4, 2, 2];
-		var bufferMP = [0, 4, 6, 4];
+		var bufferHP = [10, 8, 4, 2];
+		var bufferMP = [0, 2, 6, 4];
 		var bufferRV = [0, 4, 4, 2];
 		var chooseBuffer = me.charlvl < 12 ? 1 : me.charlvl < respecOne ? 2 : me.charlvl < respecTwo ? 3 : 4;
 		Config.HPBuffer = [bufferHP][chooseBuffer];
