@@ -329,7 +329,6 @@ function LoadConfig () {
 		};
 
 		// Character Build Setup
-
 		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
 		var middleBuild = "Hammerdin"; // starts at respecOne ends when reaching respecTwo
 		var playStyle = isCaster ? 'Caster' : 'Melee'; //based on final build
@@ -341,7 +340,7 @@ function LoadConfig () {
 		var bufferHP = [10, 8, 4, 2];
 		var bufferMP = [0, 2, 6, 4];
 		var bufferRV = [0, 4, 4, 2];
-		var chooseBuffer = me.charlvl < 12 ? 1 : me.charlvl < respecOne ? 2 : me.charlvl < respecTwo ? 3 : 4;
+		var chooseBuffer = me.charlvl < 12 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
 		Config.HPBuffer = [bufferHP][chooseBuffer];
 		Config.MPBuffer = [bufferMP][chooseBuffer];
 		Config.RejuvBuffer = [bufferRV][chooseBuffer];

@@ -189,7 +189,7 @@ function SoloLeveling () {
 	};
 
 	this.tristam = function () {
-		if (me.diff !== 2 || Misc.checkQuest(4, 0)) {
+		if (me.diff === 1 || Misc.checkQuest(4, 0)) {
 			return true;
 		}
 
@@ -256,6 +256,10 @@ function SoloLeveling () {
 			}
 
 			Misc.openChest(gibbet);
+		}
+
+		if (me.diff === 0) {
+			Attack.clearLevel();
 		}
 
 		return true;
@@ -479,7 +483,7 @@ function SoloLeveling () {
 		}
 
 		var teleportPads = function () {
-			if (Pather.useTeleport) {
+			if (me.getSkill(54, 0)) {
 
 				return true;
 			}
@@ -675,7 +679,7 @@ function SoloLeveling () {
 	};
 
 	this.tombs = function () {
-		if (me.charlvl > 23) {
+		if (me.charlvl > 22) {
 			return true;
 		}
 
@@ -1386,7 +1390,7 @@ function SoloLeveling () {
 				Pather.moveToPreset(108, 2, classid, classid === 394 ? 5 : 2, classid === 394 ? 5 : 0);
 
 				if (sealspot > 1) {
-					Attack.clear(10);
+					Attack.clear(15);
 				}
 
 				let seal = getUnit(2, classid);
@@ -1536,7 +1540,7 @@ function SoloLeveling () {
 	};
 
 	this.shenk = function () {
-		if (me.gametype === 0 || !Pather.accessToAct(5) || Misc.checkQuest(35, 1)) {
+		if (me.gametype === 0 || !Pather.accessToAct(5) || me.diff === 0 && Misc.checkQuest(35, 1) || me.diff === 1 && Misc.checkQuest(35, 1)) {
 			return true;
 		}
 
@@ -1842,9 +1846,9 @@ function SoloLeveling () {
 		let FR = me.getStat(39); // fire resist
 		let LR = me.getStat(41); // lightning resist
 		let CR = me.getStat(43); // cold resist
-		let checkFR = me.diff === 0 ? 40 : 100; // cannot start next diff with negative resistances
-		let checkLR = me.diff === 0 ? 40 : 100;
-		let checkCR = me.diff === 0 ? 40 : 100;
+		let checkFR = me.diff === 0 ? 80 : 150; // cannot start next diff with negative resistances
+		let checkLR = me.diff === 0 ? 80 : 150;
+		let checkCR = me.diff === 0 ? 80 : 150;
 
 		if (me.gametype === 0 || !Pather.accessToAct(5)) {
 			return true;
