@@ -802,6 +802,11 @@ function SoloLeveling () {
 
 		if (!Misc.checkQuest(15, 0)) {
 			Misc.tyraelTomb();
+
+			if (!me.inTown) {
+				Town.goToTown();
+			}
+
 			Town.move("palace");
 			Town.npcInteract("jerhyn");
 			Pather.moveToExit(50, true);
@@ -2265,7 +2270,7 @@ Town.townTasks = function () {
 	}
 
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
-	Config.Dodge = me.classid === 1 ? !Config.NoTele : false;
+	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
 
 	return true;
 };
@@ -2307,7 +2312,7 @@ Town.doChores = function (repair = false) {
 
 	me.cancel();
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
-	Config.Dodge = me.classid === 1 ? !Config.NoTele : false;
+	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
 
 	return true;
 };
@@ -3202,7 +3207,7 @@ Misc.openChests = function (range) {
 	var unit,
 		unitList = [],
 		containers = [ "loose rock", "hidden stash", "loose boulder", "chest", "chest3", "armorstand", "holeanim", "weaponrack"],
-		pita = ["barrel", "largeurn", "jar3", "jar2", "jar1", "urn"]; // pain in the ass
+		pita = ["barrel", "largeurn", "jar3", "jar2", "jar1", "urn", "jug"]; // pain in the ass
 
 	if (!range) {
 		range = 15;
