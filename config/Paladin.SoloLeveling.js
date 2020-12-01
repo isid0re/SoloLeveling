@@ -8,8 +8,6 @@ function LoadConfig () {
 	Scripts.UserAddon = false; // !!!YOU MUST SET THIS TO FALSE IF YOU WANT TO RUN BOSS/AREA SCRIPTS!!!
 	Scripts.SoloLeveling = true; // *** Leveling Script turn off when ready ***
 
-	Scripts.SoloLeveling = true; // *** Leveling Script turn off when done leveling ***
-
 	//  *** Do not turn on Boss/area scripts while SoloLeveling is active!!!!! ***
 	// *** act 1 ***
 	Scripts.Corpsefire = false;
@@ -332,19 +330,16 @@ function LoadConfig () {
 		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
 		var middleBuild = "Hammerdin"; // starts at respecOne ends when reaching respecTwo
 		var playStyle = isCaster ? 'Caster' : 'Melee'; //based on final build
-		var startBelt = ["hp", "hp", "hp", "hp"];
-		var middleBelt = ["hp", "hp", "mp", "mp"];
-		var finalBelt = ["hp", "mp", "mp", "rv"];
-		Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
-		this.configBelt();
-		var bufferHP = [10, 8, 4, 2];
-		var bufferMP = [0, 2, 6, 4];
-		var bufferRV = [0, 4, 4, 2];
 		var chooseBuffer = me.charlvl < 12 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
-		Config.HPBuffer = [bufferHP][chooseBuffer];
-		Config.MPBuffer = [bufferMP][chooseBuffer];
-		Config.RejuvBuffer = [bufferRV][chooseBuffer];
-
+		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "hp", "mp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
+		Config.BeltColumn = beltPots;
+		this.configBelt();
+		var bufferHP = [13, 3, 3, 0][chooseBuffer];
+		var bufferMP = [0, 6, 6, 0][chooseBuffer];
+		var bufferRV = [0, 4, 4, 4][chooseBuffer];
+		Config.HPBuffer = bufferHP;
+		Config.MPBuffer = bufferMP;
+		Config.RejuvBuffer = bufferRV;
 		Config.AutoSkill.Build = specPush("skills");
 		Config.AutoStat.Build = specPush("stats");
 		Config.AutoBuild.Template = me.charlvl < respecOne ? startBuild : me.charlvl < respecTwo ? middleBuild : finalBuild;

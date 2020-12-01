@@ -332,19 +332,16 @@ function LoadConfig () {
 		// Character Build Setup
 		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
 		var middleBuild = "BlizzBaller"; // starts at respecOne ends when reaching respecTwo
-		var startBelt = ["hp", "hp", "mp", "mp"];
-		var middleBelt = ["hp", "hp", "mp", "mp"];
-		var finalBelt = ["hp", "mp", "mp", "rv"];
-		Config.BeltColumn = me.charlvl < respecOne ? startBelt : me.charlvl < respecTwo ? middleBelt : finalBelt;
+		var chooseBuffer = me.charlvl < 5 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
+		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
+		Config.BeltColumn = beltPots;
 		this.configBelt();
-		var bufferHP = [2, 2, 2, 0];
-		var bufferMP = [10, 10, 6, 0];
-		var bufferRV = [0, 4, 4, 0];
-		var chooseBuffer = me.charlvl < 12 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
-		Config.HPBuffer = [bufferHP][chooseBuffer];
-		Config.MPBuffer = [bufferMP][chooseBuffer];
-		Config.RejuvBuffer = [bufferRV][chooseBuffer];
-
+		var bufferHP = [3, 2, 2, 2][chooseBuffer];
+		var bufferMP = [10, 7, 7, 4][chooseBuffer];
+		var bufferRV = [0, 4, 4, 4][chooseBuffer];
+		Config.HPBuffer = bufferHP;
+		Config.MPBuffer = bufferMP;
+		Config.RejuvBuffer = bufferRV;
 		Config.AutoSkill.Build = specPush("skills");
 		Config.AutoStat.Build = specPush("stats");
 		Config.AutoBuild.Template = me.charlvl < respecOne ? startBuild : me.charlvl < respecTwo ? middleBuild : finalBuild;

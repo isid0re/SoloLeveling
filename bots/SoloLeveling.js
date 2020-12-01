@@ -212,10 +212,13 @@ function SoloLeveling () {
 				}
 
 				Misc.getQuestItem(524, 30);
-				Town.goToTown();
+				Pickit.pickItems();
 			}
 
-			Town.npcInteract("akara");
+			if (me.getItem(524)) {
+				Town.goToTown();
+				Town.npcInteract("akara");
+			}
 		}
 
 		if (!Pather.checkWP(4)) {
@@ -2272,9 +2275,6 @@ Town.doChores = function (repair = false) {
 		this.goToTown();
 	}
 
-	let i,
-		cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
-
 	Attack.weaponSwitch(Attack.getPrimarySlot());
 	Cubing.doCubing();
 	Runewords.makeRunewords();
@@ -2304,15 +2304,6 @@ Town.doChores = function (repair = false) {
 	this.stash();
 	this.clearScrolls();
 	this.characterRespec();
-
-	for (i = 0; i < cancelFlags.length; i += 1) {
-		if (getUIFlag(cancelFlags[i])) {
-			delay(500 + me.ping);
-			me.cancel();
-
-			break;
-		}
-	}
 
 	me.cancel();
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
@@ -3461,7 +3452,7 @@ Misc.getQuestItem = function (classid, chestID) {
 			break;
 		}
 
-		delay(50 + me.ping);
+		delay(100 + me.ping);
 	}
 
 	if (!Pickit.pickItem(questItem)) {
@@ -3578,7 +3569,7 @@ Pather.killMonsters = function (arg) { // summoner targeting provided by penguin
 		}
 	}
 
-	if ([8, 3, 38, 6, 27, 28, 33, 34, 35, 37, 56, 57, 60, 45, 58, 61, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
+	if ([8, 3, 38, 6, 27, 28, 33, 34, 35, 37, 38, 56, 57, 60, 45, 58, 61, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
 		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30);
 
 		if (monList) {
