@@ -163,7 +163,7 @@ function LoadConfig () {
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	Config.StashGold = me.charlvl * 100;
-	Config.LowGold = 500000;
+	Config.LowGold = 300000;
 
 	//AutoEquip
 	Config.AutoEquip = true;

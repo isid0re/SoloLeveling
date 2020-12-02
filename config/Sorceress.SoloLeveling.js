@@ -164,7 +164,7 @@ function LoadConfig () {
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	Config.StashGold = me.charlvl * 100;
-	Config.LowGold = 500000;
+	Config.LowGold = 300000;
 
 	//AutoEquip
 	Config.AutoEquip = true;
@@ -336,8 +336,8 @@ function LoadConfig () {
 		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
 		Config.BeltColumn = beltPots;
 		this.configBelt();
-		var bufferHP = [3, 2, 2, 2][chooseBuffer];
-		var bufferMP = [10, 7, 7, 4][chooseBuffer];
+		var bufferHP = [4, 4, 10, 2][chooseBuffer];
+		var bufferMP = [12, 10, 4, 4][chooseBuffer];
 		var bufferRV = [0, 4, 4, 4][chooseBuffer];
 		Config.HPBuffer = bufferHP;
 		Config.MPBuffer = bufferMP;

@@ -39,7 +39,6 @@ var AutoBuildTemplate = {
 		//StatPoints: [-1,-1,-1,-1,-1],						// This doesn't matter. We don't have stat points to spend at lvl 1
 		Update: function () {
 			Config.AttackSkill = [-1, 56, 47, 56, 47, 64, 55];
-
 			Config.LowManaSkill = [0, 0];
 			Config.SkipImmune = ["fire and cold"];
 		}

@@ -8,7 +8,7 @@
 
 function SoloLeveling () {
 	var sequence = [
-		"den", "mausoleum", "tristam", "countess", "pits", "andariel", // Act 1
+		"den", "bloodraven", "rakanishu", "tristam", "countess", "pits", "andariel", // Act 1
 		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
 		"eye", "heart", "tome", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
@@ -23,7 +23,6 @@ function SoloLeveling () {
 		Town.heal();
 		Town.buyPotions();
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
-
 		var questItems = [
 			"[Name] == ScrollOfInifuss",
 			"[Name] == KeyToTheCairnStones",
@@ -46,7 +45,6 @@ function SoloLeveling () {
 		NTIP.arrayLooping(questItems);
 
 		print("ÿc9SoloLevelingÿc0: general items loaded to Pickit");
-
 		var generalItems = [
 			"[name] == tomeoftownportal",
 			"[name] == gold # [gold] >= 500",
@@ -75,6 +73,37 @@ function SoloLeveling () {
 		];
 		NTIP.arrayLooping(generalItems);
 
+		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
+		var valuableItems = [
+			'[type] == amazonspear && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == amazonjavelin && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == javelin && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == anyshield && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == voodooheads && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == primalhelm && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == orb && [quality] >= normal # [enhanceddamage] >= 600',
+			'[type] == wand && [quality] >= normal # [enhanceddamage] >= 600',
+			'[type] == staff && [quality] >= normal # [enhanceddamage] >= 600',
+			'[type] == pelt && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == helm && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == boots && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == axe && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == sword && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == bow && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == scepter && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == throwingknife && [quality] >= magic # [enhanceddamage] >= 600',
+			'([type] == handtohand || [type] == assassinclaw) && [quality] >= magic  # [enhanceddamage] >= 600',
+			'[type] == crossbow && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == club && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == mace && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == hammer && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == crossbow && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == throwingaxe && [quality] >= magic # [enhanceddamage] >= 600',
+			'[type] == knife && [quality] >= magic # [enhanceddamage] >= 600',
+		];
+		NTIP.arrayLooping(valuableItems);
+
+
 		Town.reviveMerc();
 		Misc.setupMerc();
 		print('ÿc9SoloLevelingÿc0: starting run');
@@ -93,7 +122,7 @@ function SoloLeveling () {
 		me.overhead("den");
 
 		if (!Pather.checkWP(3)) {
-			Pather.moveToExit([2, 8], false);
+			Pather.moveToExit([2, 8], false, true);
 
 			if (!me.getItem(518)) {
 				let tp = me.getItem(529);
@@ -106,7 +135,7 @@ function SoloLeveling () {
 			}
 		}
 
-		if (me.charlvl < 3) {
+		if (me.classid !== 4 && me.charlvl < 3) {
 			Attack.clearLevel();
 		}
 
@@ -140,7 +169,7 @@ function SoloLeveling () {
 		return true;
 	};
 
-	this.mausoleum = function () {
+	this.bloodraven = function () {
 		if (me.diff === 0 && Misc.checkQuest(2, 0) || me.diff !== 0 && me.charlvl < respecTwo) {
 			return true;
 		}
@@ -184,6 +213,28 @@ function SoloLeveling () {
 		}
 
 		Attack.clearLevel();
+
+		return true;
+	};
+
+	this.rakanishu = function () {
+		if (me.diff === 0 && Misc.checkQuest(4, 0) || me.diff === 1 || me.diff === 2) {
+			return true;
+		}
+
+		Town.townTasks();
+		print('ÿc9SoloLevelingÿc0: starting rakanishu');
+		me.overhead("rakanishu");
+
+		if (Pather.checkWP(4)) {
+			Pather.getWP(4);
+		} else {
+			Pather.useWaypoint(4);
+		}
+
+		Pather.moveToPreset(me.area, 2, 17, 0, 0, false, true);
+		Attack.clear(30, 0x7);
+		Pickit.pickItems();
 
 		return true;
 	};
@@ -262,7 +313,7 @@ function SoloLeveling () {
 		}
 
 		if (me.diff === 0) {
-			Attack.clearLevel();
+			Attack.clear(30);
 		}
 
 		return true;
@@ -682,7 +733,7 @@ function SoloLeveling () {
 	};
 
 	this.tombs = function () {
-		if (me.charlvl > 22) {
+		if (me.charlvl > 23) {
 			return true;
 		}
 
@@ -965,7 +1016,7 @@ function SoloLeveling () {
 	};
 
 	this.travincal = function () {
-		if (!Pather.accessToAct(3) || me.diff <= 0 && Misc.checkQuest(18, 0)) {
+		if (!Pather.accessToAct(3) || me.diff === 0 && Misc.checkQuest(18, 0) || me.diff === 1 && Misc.checkQuest(18, 0)) {
 			return true;
 		}
 
@@ -1854,9 +1905,10 @@ function SoloLeveling () {
 		let FR = me.getStat(39); // fire resist
 		let LR = me.getStat(41); // lightning resist
 		let CR = me.getStat(43); // cold resist
-		let checkFR = me.diff === 0 ? 80 : 150; // cannot start next diff with negative resistances
-		let checkLR = me.diff === 0 ? 80 : 150;
-		let checkCR = me.diff === 0 ? 80 : 150;
+		let checkFR = me.diff === 0 ? 60 : 100; // cannot start next diff with negative resistances
+		let checkLR = me.diff === 0 ? 60 : 100;
+		let checkCR = me.diff === 0 ? 60 : 100;
+		Config.BossPriority = false;
 
 		if (me.gametype === 0 || !Pather.accessToAct(5)) {
 			return true;
@@ -3163,17 +3215,17 @@ Misc.setupMerc = function () {
 		"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [Merctier] == 15",
 		"[name] == yari && [quality] == unique # [enhanceddamage] >= 160 && [itemcrushingblow] >= 45 # [Merctier] == 14",
 		"[name] == fuscina && [quality] == unique # [enhanceddamage] >= 140 && [fireresist] >= 50 # [Merctier] == 13",
-		"[name] == halberd && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 12",
-		"[name] == poleaxe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 11",
-		"[name] == warscythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 10",
-		"[name] == scythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 9",
-		"[name] == voulge && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 8",
+		"[name] == lochaberaxe && [quality] == unique # [enhanceddamage] >= 150 # [Merctier] == 12",
+		"[name] == poleaxe && [quality] == unique # [enhanceddamage] >= 50 # [Merctier] == 11",
+		"[name] == halberd && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 10",
+		"[name] == poleaxe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 9",
+		"[name] == warscythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 8",
+		"[name] == scythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 7",
+		"[name] == voulge && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 6",
 	];
 	NTIP.arrayLooping(mercWeapon);
 
 	var mercPrep = [
-		"[Type] == Polearm # [EnhancedDamage] >= 65 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 7",
-		"[Type] == Polearm # [EnhancedDamage] >= 40 && [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 6",
 		"[Type] == Polearm # [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 5",
 		"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 4",
 		"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 3",
@@ -3525,6 +3577,10 @@ Misc.smashSomething = function (smashable) {
 		tool = 90;
 
 		break;
+	}
+
+	if (Item.getEquippedItem(4).classid !== tool) {
+		return false;
 	}
 
 	while (me.getItem(tool)) {
