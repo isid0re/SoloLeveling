@@ -733,7 +733,9 @@ function SoloLeveling () {
 	};
 
 	this.tombs = function () {
-		if (me.charlvl > 23) {
+		let tombsLimit = 23;
+
+		if (me.charlvl >= tombsLimit) {
 			return true;
 		}
 
@@ -743,6 +745,10 @@ function SoloLeveling () {
 		let tombID = [66, 67, 68, 69, 70, 71, 72];
 
 		for (let number = 0; number < tombID.length; number += 1) {
+			if (me.charlvl >= tombsLimit) {
+				break;
+			}
+
 			if (!Pather.checkWP(46)) {
 				Pather.getWP(46);
 			} else {
@@ -2249,7 +2255,7 @@ var merc, mercId = [],
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 27, 26, 25, 0, 0, 0][me.classid];
+const respecOne = [ 0, 28, 26, 25, 0, 0, 0][me.classid];
 const respecTwo = [ 0, 85, 85, 85, 0, 0, 0][me.classid];
 
 // Customized Functions
@@ -3454,7 +3460,7 @@ Misc.tyraelTomb = function () {
 		}
 	}
 
-	if (!Pather.usePortal(null)) {
+	if (!me.inTown) {
 		Town.goToTown();
 	}
 

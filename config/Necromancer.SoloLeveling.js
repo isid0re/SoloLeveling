@@ -103,9 +103,19 @@ function LoadConfig () {
 		Config.Baal.KillBaal = true; // Kill Baal. Leaves game after wave 5 if false.
 
 	// Pickit config. Default folder is kolbot/pickit.
-
 	//Config.PickitFiles.push("kolton.nip");
 	//Config.PickitFiles.push("LLD.nip");
+
+	// Gambling config
+	Config.Gamble = true;
+	Config.GambleGoldStart = 2000000;
+	Config.GambleGoldStop = 750000;
+
+	// List of item names or classids for gambling. Check libs/NTItemAlias.dbl file for other item classids.
+	Config.GambleItems.push("Amulet");
+	//Config.GambleItems.push("Ring");
+	Config.GambleItems.push("Circlet");
+	Config.GambleItems.push("Coronet");
 
 	// Automule settings
 	Config.AutoMule.Trigger = [];
@@ -247,7 +257,7 @@ function LoadConfig () {
 	Config.AutoBuild.DebugMode = true;
 
 	// Class specific config
-	Config.Dodge = me.getSkill(75, 0) ? true : false;
+	Config.Dodge = false;
 	Config.DodgeRange = 5;
 
 	Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse. Use skill number or set to 0 to disable.
@@ -541,7 +551,7 @@ function LoadConfig () {
 			// merc Strength
 			if (me.diff !== 2) {
 				var Strength = [
-					"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd) && [Quality] == Normal # [Sockets] == 2 # [MaxQuantity] == 1",
+					"([Name] == voulge || [Name] == poleaxe || [Name] == scythe || [Name] == warscythe || [Name] == halberd) && [Quality] >= Normal && [Quality] <= Superior  # [Sockets] == 2 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(Strength);
 
