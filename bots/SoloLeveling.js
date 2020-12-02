@@ -391,6 +391,12 @@ function SoloLeveling () {
 		print('ÿc9SoloLevelingÿc0: starting andy');
 		me.overhead("andy");
 
+		if (me.diff === 0 && Misc.checkQuest(6, 1)) {
+			Pather.changeAct();
+
+			return true;
+		}
+
 		if (!Pather.checkWP(35)) {
 			Pather.getWP(35);
 		} else {
@@ -1089,7 +1095,7 @@ function SoloLeveling () {
 				print('ÿc9SoloLevelingÿc0: Failed to move to compelling orb');
 			}
 
-			Attack.clear(5); // clear area around orb
+			Attack.clear(15); // clear area around orb
 
 			if (!me.inTown) { // go to town
 				Town.goToTown();
@@ -3064,6 +3070,7 @@ Misc.hireMerc = function () {
 
 	if (mercSelected !== mercAuraWanted && me.diff === mercDiff || mercSelected !== tempMercAura && me.diff === 0) { // replace merc
 		me.overhead('replacing merc');
+		Town.organizeInventory();
 		Item.removeItemsMerc(); // strip temp merc gear
 		delay(500 + me.ping);
 	}
@@ -3346,32 +3353,26 @@ Misc.cubeQuestItems = function (outcome, ...classids) {
 	let tick = getTickCount();
 
 	while (getTickCount() - tick < 5000) {
-		sendPacket(1, 0x4f, 2, 0x18, 2, 0, 2, 0);
-		delay(50 + me.ping);
+		if (Cubing.openCube()) {
+			transmute();
+			delay(750 + me.ping);
 
-		wantedItem = me.getItem(outcome);
+			wantedItem = me.getItem(outcome);
 
-		if (wantedItem) {
-			Storage.Inventory.MoveTo(wantedItem);
+			if (wantedItem) {
+				Storage.Inventory.MoveTo(wantedItem);
 
-			if (Storage.Stash.CanFit(wantedItem)) {
-				Storage.Stash.MoveTo(wantedItem);
+				if (Storage.Stash.CanFit(wantedItem)) {
+					Storage.Stash.MoveTo(wantedItem);
+					me.cancel();
+				}
+
+				break;
 			}
-
-			break;
 		}
 	}
 
-	for (let i = 0; i < 15; i += 1) {
-		sendPacket(1, 0x4f, 2, 0x17, 2, 0, 2, 0); // close cube
-		me.cancel();
-
-		if (!getUIFlag(0x1A)) {
-			break;
-		}
-
-		delay(50 + me.ping);
-	}
+	me.cancel();
 
 	return me.getItem(outcome);
 };
