@@ -180,7 +180,7 @@ function LoadConfig () {
 	Config.AutoEquip = true;
 
 	// Pickit config.
-	Config.PickRange = me.diff === 0 ? 10 : me.diff === 1 ? 20 : 40;
+	Config.PickRange = me.diff === 0 ? 20 : 40;
 	Config.FastPick = true;
 	Config.ItemInfo = true;
 	Config.CainID.Enable = false;
@@ -230,11 +230,12 @@ function LoadConfig () {
 	Config.MinColumn = [ 3, 3, 0, 0];
 	Config.BeltColumn = ["hp", "mp", "rv", "rv"];
 
-	Config.BossPriority = true;
+	Config.MaxAttackCount = 1000;
+	Config.BossPriority = me.diff === 0 ? true : false;
 	Config.ClearType = 0;
 	Config.ClearPath = {
 		Range: 15,
-		Spectype: 0,
+		Spectype: me.getSkill(54, 0) ? 0xF : 0,
 	};
 
 	//Runewords, Cubing, & Crafting
@@ -261,8 +262,8 @@ function LoadConfig () {
 	Config.DodgeRange = 20; // Distance to keep from monsters.
 	Config.DodgeHP = 100; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
-	Config.CastStatic = 50;
-	Config.StaticList = ["The Countess", "Mephisto", "Izual", "Diablo", "Colenzo the Annihilator", "Achmel the Cursed", "Bartuc the Bloody", "Ventar the Unholy", "Lister the Tormentor", "Baal"];
+	Config.CastStatic = 40;
+	Config.StaticList = ["Duriel", "Mephisto", "Izual", "Diablo", "Colenzo the Annihilator", "Achmel the Cursed", "Bartuc the Bloody", "Ventar the Unholy", "Lister the Tormentor", "Baal"];
 
 	/*-----------------------------------------*/
 	//			DO NOT TOUCH BELOW 			   //
@@ -343,11 +344,11 @@ function LoadConfig () {
 		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
 		var middleBuild = "BlizzBaller"; // starts at respecOne ends when reaching respecTwo
 		var chooseBuffer = me.charlvl < 5 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
-		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
+		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
 		Config.BeltColumn = beltPots;
 		this.configBelt();
-		var bufferHP = [4, 4, 10, 2][chooseBuffer];
-		var bufferMP = [12, 10, 4, 4][chooseBuffer];
+		var bufferHP = [4, 4, 4, 2][chooseBuffer];
+		var bufferMP = [12, 10, 10, 4][chooseBuffer];
 		var bufferRV = [0, 4, 4, 4][chooseBuffer];
 		Config.HPBuffer = bufferHP;
 		Config.MPBuffer = bufferMP;

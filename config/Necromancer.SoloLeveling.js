@@ -230,6 +230,7 @@ function LoadConfig () {
 	Config.MinColumn = [ 3, 3, 0, 0];
 	Config.BeltColumn = ["hp", "mp", "rv", "rv"];
 
+	Config.MaxAttackCount = 1000;
 	Config.BossPriority = true;
 	Config.ClearType = 0;
 	Config.ClearPath = {
@@ -352,11 +353,11 @@ function LoadConfig () {
 		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
 		var middleBuild = "Explosion"; // starts at respecOne ends when reaching respecTwo
 		var chooseBuffer = me.charlvl < 5 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
-		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
+		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
 		Config.BeltColumn = beltPots;
 		this.configBelt();
-		var bufferHP = [4, 4, 10, 2][chooseBuffer];
-		var bufferMP = [12, 10, 4, 4][chooseBuffer];
+		var bufferHP = [4, 4, 4, 2][chooseBuffer];
+		var bufferMP = [12, 10, 10, 4][chooseBuffer];
 		var bufferRV = [0, 4, 4, 4][chooseBuffer];
 		Config.HPBuffer = bufferHP;
 		Config.MPBuffer = bufferMP;

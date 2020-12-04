@@ -133,21 +133,15 @@ function SoloLeveling () {
 			} else {
 				Pather.makePortal();
 			}
-		}
 
-		if (me.classid !== 4 && me.charlvl < 3) {
-			Attack.clearLevel();
-		}
+			if (me.classid !== 4 && me.charlvl < 3) {
+				Attack.clearLevel();
+			}
 
-		if (!Pather.checkWP(3)) {
 			Pather.getWP(3);
 			Pather.useWaypoint(1);
-		} else {
-			Pather.getWP(3);
-			Pather.useWaypoint(1);
+			Town.doChores();
 		}
-
-		Town.doChores();
 
 		if (!Pather.usePortal(2, me.name)) {
 			Pather.moveToExit(2, true);
@@ -187,17 +181,7 @@ function SoloLeveling () {
 		Precast.doPrecast(true);
 		Pather.moveToExit(17, true);
 		Pather.moveToPreset(17, 1, 805);
-
-		try {
-			let raven = getUnit(1, "Blood Raven");
-
-			if (raven && raven.hp > 0) {
-				Attack.kill(raven);
-			}
-		} catch (e) {
-			print("ÿc9SoloLevelingÿc0: Failed to kill Blood Raven");
-		}
-
+		Attack.killTarget("Blood Raven");
 		Pickit.pickItems();
 
 		if (me.diff === 0) {
@@ -418,18 +402,7 @@ function SoloLeveling () {
 		Pather.moveTo(22554, 9566);
 		Pather.moveTo(22546, 9554);
 		Config.MercWatch = false;
-
-		try {
-			let andy = getUnit(1, "Andariel");
-
-			if (andy && andy.hp > 0) {
-				Attack.kill(andy);
-			}
-
-		} catch (err) {
-			print('ÿc9SoloLevelingÿc0: Failed to kill Andy');
-		}
-
+		Attack.killTarget("Andariel");
 		delay(2000 + me.ping); // Wait for minions to die.
 		Pickit.pickItems();
 		Config.MercWatch = true;
@@ -457,18 +430,7 @@ function SoloLeveling () {
 
 		Pather.moveToExit(49, true);
 		Pather.moveToPreset(me.area, 2, 355);
-
-		try {
-			let radament = getUnit(1, "Radament");
-
-			if (radament && radament.hp > 0) {
-				Attack.kill(radament); // kill duriel
-			}
-
-		} catch (err) {
-			print('ÿc9SoloLevelingÿc0: Failed to kill Radament');
-		}
-
+		Attack.killTarget("Radament");
 		Pickit.pickItems();
 		Town.goToTown();
 		Town.unfinishedQuests();
@@ -849,18 +811,8 @@ function SoloLeveling () {
 		Config.MercWatch = false;
 		Pather.usePortal(null, me.name);
 		delay(1000 + me.ping);
-
-		try {
-			Pather.useUnit(2, 100, 73);
-			let duriel = getUnit(1, "Duriel");
-
-			if (duriel && duriel.hp > 0) {
-				Attack.kill(duriel); // kill duriel
-			}
-		} catch (err) {
-			print('ÿc9SoloLevelingÿc0: Failed to kill Duriel');
-		}
-
+		Pather.useUnit(2, 100, 73);
+		Attack.killTarget("Duriel");
 		Pickit.pickItems();
 
 		if (!Misc.checkQuest(15, 0)) {
@@ -1055,36 +1007,13 @@ function SoloLeveling () {
 		}
 
 		Precast.doPrecast(true);
-		let ismail = getUnit(1, "Ismail Vilehand");
-
-		if (ismail && !Attack.canAttack(ismail)) { // exit if ismail immune
-			print("ÿc9SoloLevelingÿc0: Failed Travincal. Ismail is immune.");
-
-			return true;
-		}
-
 		let council = {
 			x: me.x + 76,
 			y: me.y - 67
 		};
 
 		Pather.moveToUnit(council);
-
-		try {
-			if (ismail && ismail.hp > 0) {
-				Attack.kill(ismail);
-			}
-
-		} catch (error) {
-			try {
-				Attack.clear(30);
-			} catch (err) {
-				print('ÿc9SoloLevelingÿc0: Failed to kill ismail');
-
-				return false;
-			}
-		}
-
+		Attack.killTarget("Ismail Vilehand");
 		Pickit.pickItems();
 
 		if (!Misc.checkQuest(18, 0)) { // khalim's will quest not complete
@@ -1095,7 +1024,7 @@ function SoloLeveling () {
 				print('ÿc9SoloLevelingÿc0: Failed to move to compelling orb');
 			}
 
-			Attack.clear(15); // clear area around orb
+			Attack.clear(10); // clear area around orb
 
 			if (!me.inTown) { // go to town
 				Town.goToTown();
@@ -1167,17 +1096,7 @@ function SoloLeveling () {
 		Pather.moveTo(17692, 8048);
 		Pather.moveTo(17563, 8072);
 		Config.MercWatch = false;
-
-		try {
-			let mephisto = getUnit(1, "Mephisto");
-
-			if (mephisto && mephisto.hp > 0) {
-				Attack.kill(mephisto);
-			}
-		} catch (err) {
-			print('ÿc9SoloLevelingÿc0: Failed to kill Mephisto');
-		}
-
+		Attack.killTarget("Mephisto");
 		Config.MercWatch = true;
 		Pickit.pickItems();
 		Pather.moveTo(17581, 8070);
@@ -1206,16 +1125,7 @@ function SoloLeveling () {
 
 		if (!Misc.checkQuest(25, 1)) {
 			Pather.moveToPreset(105, 1, 256);
-
-			try {
-				let izual = getUnit(1, "Izual");
-
-				if (izual && izual.hp > 0) {
-					Attack.kill(izual);
-				}
-			} catch (err) {
-				print('ÿc9SoloLevelingÿc0: Failed to kill Izual');
-			}
+			Attack.killTarget("Izual");
 		}
 
 		Town.goToTown();
@@ -1584,12 +1494,7 @@ function SoloLeveling () {
 			this.diabloPrep();
 		}
 
-		if (diablo) {
-			while ( diablo.hp > 0) {
-				Attack.kill(diablo);
-			}
-		}
-
+		Attack.killTarget(243); //diablo
 		Pickit.pickItems();
 
 		if (me.gametype === 0) {
@@ -1629,7 +1534,7 @@ function SoloLeveling () {
 
 		if (!Misc.checkQuest(35, 1)) {
 			Pather.moveTo(3883, 5113);
-			Attack.kill(getLocaleString(22435));
+			Attack.killTarget(getLocaleString(22435));
 		}
 
 		Pickit.pickItems();
@@ -1759,18 +1664,9 @@ function SoloLeveling () {
 			return true;
 		}
 
-		try {
-			Precast.doPrecast(true);
-			Pather.moveTo(10058, 13234);
-			let pindle = getUnit(1, getLocaleString(22497));
-
-			if (pindle && pindle.hp > 0) {
-				Attack.clear(15, 0, getLocaleString(22497));
-			}
-		} catch (e) {
-			print("ÿc9SoloLevelingÿc0: Failed to kill Pindle");
-		}
-
+		Precast.doPrecast(true);
+		Pather.moveTo(10058, 13234);
+		Attack.killTarget(getLocaleString(22497)); // pindleskin
 		Pickit.pickItems();
 
 		return true;
@@ -2187,13 +2083,7 @@ function SoloLeveling () {
 		}
 
 		Pather.moveTo(15134, 5923);
-
-		try {
-			Attack.kill(544); // Baal
-		} catch (err) {
-			print('ÿc9SoloLevelingÿc0: Failed to kill Baal');
-		}
-
+		Attack.killTarget(544); // Baal
 		Pickit.pickItems();
 
 		return true;
@@ -2265,6 +2155,30 @@ const respecOne = [ 0, 28, 26, 25, 0, 0, 0][me.classid];
 const respecTwo = [ 0, 85, 85, 85, 0, 0, 0][me.classid];
 
 // Customized Functions
+Attack.killTarget = function (name) {
+	let target = getUnit(1, name);
+
+	if (target && !Attack.canAttack(target)) { // exit if target is immune
+		print("ÿc9SoloLevelingÿc0: Attack failed. " + target.name + " is immune.");
+
+		return true;
+	}
+
+	if (target) {
+		while (target.hp > 0) {
+			Attack.kill(target); // kill target
+
+			if (target.dead || !target) {
+				break;
+			}
+		}
+	}
+
+	Pickit.pickItems();
+
+	return true;
+};
+
 Town.townTasks = function () {
 	if (!me.inTown) {
 		Town.goToTown();
@@ -3832,8 +3746,9 @@ Pather.changeAct = function () {
 
 	if (!npc || !npc.openMenu() || !Misc.useMenu(code)) {
 		me.cancel();
-		delay(1000 + me.ping * 2);
 	}
+
+	delay(2500 + me.ping * 2);
 
 	return true;
 };

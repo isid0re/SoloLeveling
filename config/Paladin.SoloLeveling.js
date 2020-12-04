@@ -198,7 +198,7 @@ function LoadConfig () {
 	Config.MiniShopBot = true;
 	Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
 	Config.TownCheck = me.findItem("tbk", 0, 3);
-	Config.LogExperience = false; // Print experience statistics in the manager.
+	Config.LogExperience = true; // Print experience statistics in the manager.
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
 	Config.OpenChests = me.diff === 2 ? 2 : true;
@@ -229,6 +229,7 @@ function LoadConfig () {
 	Config.MinColumn = [ 3, 3, 0, 0];
 	Config.BeltColumn = ["hp", "mp", "rv", "rv"];
 
+	Config.MaxAttackCount = 1000;
 	Config.BossPriority = true;
 	Config.ClearType = 0;
 	Config.ClearPath = {
