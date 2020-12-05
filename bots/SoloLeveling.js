@@ -134,7 +134,7 @@ function SoloLeveling () {
 				Pather.makePortal();
 			}
 
-			if (me.classid !== 4 && me.charlvl < 3) {
+			if (me.classid !== 3 && me.charlvl < 3) {
 				Attack.clearLevel();
 			}
 
@@ -2129,6 +2129,10 @@ function SoloLeveling () {
 }
 
 // Start Global Functions
+if (!isIncluded("common/Attack.js")) {
+	include("common/Attack.js");
+}
+
 if (!isIncluded("common/Town.js")) {
 	include("common/Town.js");
 }
