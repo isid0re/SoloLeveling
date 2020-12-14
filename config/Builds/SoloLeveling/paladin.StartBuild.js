@@ -5,6 +5,9 @@
 
 var build = {
 	caster: false,
+	skillstab: 24, //combat
+	wantedskills: [106, 102], //zeal, holy fire
+	usefulskills: [98, 100], //might, resist fire
 	stats: [
 		["vitality", 80], // base 25
 		["dexterity", 27], // base 20

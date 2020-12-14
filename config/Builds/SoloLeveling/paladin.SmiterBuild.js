@@ -5,6 +5,9 @@
 
 var build = {
 	caster: false,
+	skillstab: 24, //combat
+	wantedskills: [97, 122], //smite, fanaticism
+	usefulskills: [117, 125], //holy shield, salvation
 	stats: [
 		["strength", 115], ["vitality", "300"], ["dexterity", "block"], ["vitality", "all"]
 	],

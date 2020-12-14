@@ -5,6 +5,9 @@
 
 var build = {
 	caster: true,
+	skillstab: 18, //summon
+	wantedskills: [70, 74], // raise skelly, corpse explosion
+	usefulskills: [66, 69, 68, 87], //ampdamage, skelly mastery, bone armor, decrepify
 	stats: [
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
 	],

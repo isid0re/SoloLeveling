@@ -5,7 +5,11 @@
 
 var build = {
 	caster: true,
+	skillstab: 9, //lightning
+	wantedskills: [38, 42], // charged bolt, static
+	usefulskills: [40, 49], // frozen armor, lightning
 	stats: [
+		["strength", 15],
 		["vitality", 70],
 		["strength", 35],
 		["energy", 85],

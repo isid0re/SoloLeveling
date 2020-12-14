@@ -5,8 +5,11 @@
 
 var build = {
 	caster: true,
+	skillstab: 10, //cold
+	wantedskills: [59, 47, 65], // blizzard, fireball, cold mastery
+	usefulskills: [55, 56, 61], // glacial spike, meteor, fire mastery
 	stats: [
-		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
+		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 84], ["dexterity", "block"], ["vitality", "all"]
 	],
 	skills: [
 		[36, 1], // Fire Bolt
@@ -30,10 +33,9 @@ var build = {
 		[65, 1, false], // cold mastery
 		[47, 20], // fireball 20
 		[59, 20], // blizzard 20
-		[56, 5], // meteor
-		[36, 20], // Fire Bolt
-		[65, 12], // cold mastery
 		[55, 20], // gspike
-		[61, 10], // Fire Mastery
+		[56, 20], // meteor
+		[65, 5], // cold mastery
+		[36, 20], // Fire Bolt
 	]
 };

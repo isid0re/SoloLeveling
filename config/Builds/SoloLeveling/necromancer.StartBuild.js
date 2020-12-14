@@ -5,6 +5,9 @@
 
 var build = {
 	caster: true,
+	skillstab: 17, //bone
+	wantedskills: [67, 84], // teeth, bonespear
+	usefulskills: [66, 68, 87], //ampdamage, bone armor, decrepify
 	stats: [
 		["vitality", 70],
 		["strength", 35],

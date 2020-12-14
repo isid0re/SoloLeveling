@@ -5,8 +5,11 @@
 
 var build = {
 	caster: true,
+	skillstab: 8, //fire
+	wantedskills: [64, 56, 65], // frozen orb, meteor, cold mastery
+	usefulskills: [47, 61], // fireball, fire mastery
 	stats: [
-		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
+		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 84], ["dexterity", "block"], ["vitality", "all"]
 	],
 	skills: [
 		[36, 1], // Fire Bolt

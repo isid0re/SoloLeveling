@@ -3,7 +3,7 @@
 *	@author		isid0re
 *	@desc		AutoPlay leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
 *				Make sure kolbot difficulty is set to "highest"
-*	@TODO		- dynamic tiers link tierCalculator to pickit and NTIP
+*	@TODO		- dynamic tiers calibrate weights for mercscore and tierscore
 */
 
 function SoloLeveling () {
@@ -17,8 +17,8 @@ function SoloLeveling () {
 
 	// Scripts to execute for leveling
 	this.startrun = function () {
-		print('ÿc9SoloLevelingÿc0: setup SoloLeveling');
-		me.overhead('setup SoloLeveling');
+		print('ÿc9SoloLevelingÿc0: starting run');
+		me.overhead('starting run');
 		Town.unfinishedQuests();
 		Town.heal();
 		Town.buyPotions();
@@ -43,7 +43,6 @@ function SoloLeveling () {
 			"[Name] == ScrollofResistance",
 		];
 		NTIP.arrayLooping(questItems);
-
 		print("ÿc9SoloLevelingÿc0: general items loaded to Pickit");
 		var generalItems = [
 			"[name] == tomeoftownportal",
@@ -72,7 +71,6 @@ function SoloLeveling () {
 			"[name] >= pulrune && [name] <= zodrune"
 		];
 		NTIP.arrayLooping(generalItems);
-
 		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
 		var valuableItems = [
 			'[type] == amazonspear && [quality] >= magic # [enhanceddamage] >= 600',
@@ -102,12 +100,8 @@ function SoloLeveling () {
 			'[type] == knife && [quality] >= magic # [enhanceddamage] >= 600',
 		];
 		NTIP.arrayLooping(valuableItems);
-
-
 		Town.reviveMerc();
 		Misc.setupMerc();
-		print('ÿc9SoloLevelingÿc0: starting run');
-		me.overhead('starting run');
 
 		return true;
 	};
@@ -117,7 +111,6 @@ function SoloLeveling () {
 			return true;
 		}
 
-		Town.townTasks();
 		print('ÿc9SoloLevelingÿc0: starting den');
 		me.overhead("den");
 
@@ -140,8 +133,9 @@ function SoloLeveling () {
 
 			Pather.getWP(3);
 			Pather.useWaypoint(1);
-			Town.doChores();
 		}
+
+		Town.doChores();
 
 		if (!Pather.usePortal(2, me.name)) {
 			Pather.moveToExit(2, true);
@@ -701,7 +695,7 @@ function SoloLeveling () {
 	};
 
 	this.tombs = function () {
-		let tombsLimit = 23;
+		let tombsLimit = 21;
 
 		if (me.charlvl >= tombsLimit) {
 			return true;
@@ -1069,7 +1063,7 @@ function SoloLeveling () {
 	};
 
 	this.mephisto = function () {
-		if (!Pather.accessToAct(3) || me.diff === 0 && Misc.checkQuest(22, 0)) {
+		if (!Pather.accessToAct(3) || me.diff === 0 && Misc.checkQuest(23, 0)) {
 			return true;
 		}
 
@@ -2061,6 +2055,7 @@ function SoloLeveling () {
 		Pickit.pickItems();
 
 		if (me.charlvl < levelcap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
+			D2Bot.printToConsole('SoloLeveling: missing requirements for next difficulty.');
 			print('ÿc9SoloLevelingÿc0: missing requirements for next difficulty.');
 
 			return true;
@@ -2098,13 +2093,13 @@ function SoloLeveling () {
 				Town.goToTown();
 			}
 
-			for (j = 0; j < 3; j += 1) {
+			for (j = 0; j < 5; j += 1) {
 				if (this[sequence[k]]()) {
 					break;
 				}
 			}
 
-			if (j === 3) {
+			if (j === 5) {
 				me.overhead("sequence " + sequence[k] + " failed.");
 			}
 		}
@@ -2150,8 +2145,8 @@ if (!isIncluded("NTItemParser.dbl")) {
 }
 
 // Global variables
-var merc, mercId = [],
-	levelcap = [40, 70, 100][me.diff];
+var merc, mercId = [], NTIP_CheckListNoTier = [],
+	levelcap = [37, 63, 100][me.diff];
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
@@ -2168,13 +2163,11 @@ Attack.killTarget = function (name) {
 		return true;
 	}
 
-	if (target) {
-		while (target.hp > 0) {
-			Attack.kill(target); // kill target
+	while (target && target.hp > 0) {
+		Attack.kill(target); // kill target
 
-			if (target.dead || !target) {
-				break;
-			}
+		if (target.dead || !target || target.hp === 0) {
+			break;
 		}
 	}
 
@@ -2188,7 +2181,7 @@ Town.townTasks = function () {
 		Town.goToTown();
 	}
 
-	let prevTown;
+	let prevTown, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
 
 	switch (me.area) {
 	case 1:
@@ -2217,32 +2210,40 @@ Town.townTasks = function () {
 	this.unfinishedQuests();
 	Cubing.doCubing();
 	Runewords.makeRunewords();
-	Item.autoEquip();
 	this.equipSWAP();
-	Misc.equipMerc();
-	this.stash();
 	this.heal();
 	this.identify();
 	this.clearInventory();
 	this.buyPotions();
 	this.fillTome(518);
 	this.shopItems();
+	this.reviveMerc();
 	this.buyKeys();
 	this.repair(true);
 	this.shopItems();
-	this.clearInventory();
-	this.gamble();
-	this.reviveMerc();
+	Item.autoEquip();
 	Misc.hireMerc();
 	Misc.equipMerc();
-	Item.autoEquip();
+	this.gamble();
+	this.clearInventory();
 	this.clearJunk();
 	this.organizeStash();
 	Town.stash();
 	Town.organizeInventory();
 	this.characterRespec();
 
-	if ((me.classid !== 1 || me.classid === 1 && !me.getSkill(54, 0)) && (me.area === 40 || me.area === 75)) {
+	for (i = 0; i < cancelFlags.length; i += 1) {
+		if (getUIFlag(cancelFlags[i])) {
+			delay(500);
+			me.cancel();
+
+			break;
+		}
+	}
+
+	me.cancel();
+
+	if ((me.classid !== 1 && !me.getSkill(115, 0) || me.classid === 1 && !me.getSkill(54, 0)) && (me.area === 40 || me.area === 75)) {
 		Town.buyPots(8, "Stamina");
 		Town.drinkPots();
 	}
@@ -2262,13 +2263,12 @@ Town.doChores = function (repair = false) {
 		this.goToTown();
 	}
 
+	let i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
+
 	Attack.weaponSwitch(Attack.getPrimarySlot());
 	Cubing.doCubing();
 	Runewords.makeRunewords();
-	Item.autoEquip();
 	this.equipSWAP();
-	Misc.equipMerc();
-	this.stash();
 	this.heal();
 	this.identify();
 	this.clearInventory();
@@ -2280,19 +2280,32 @@ Town.doChores = function (repair = false) {
 	}
 
 	this.shopItems();
+	this.reviveMerc();
 	this.buyKeys();
 	this.repair(repair);
 	this.shopItems();
-	this.clearInventory();
-	this.gamble();
-	this.reviveMerc();
-	Misc.equipMerc();
 	Item.autoEquip();
+	Misc.hireMerc();
+	Misc.equipMerc();
+	this.gamble();
+	this.clearInventory();
+	this.clearJunk();
 	this.stash();
 	this.clearScrolls();
+	Town.organizeInventory();
 	this.characterRespec();
 
+	for (i = 0; i < cancelFlags.length; i += 1) {
+		if (getUIFlag(cancelFlags[i])) {
+			delay(500);
+			me.cancel();
+
+			break;
+		}
+	}
+
 	me.cancel();
+
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
 	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
 
@@ -2409,6 +2422,66 @@ Town.buyPotions = function () {
 				pot.buy(false);
 			}
 		}
+	}
+
+	return true;
+};
+
+Town.shopItems = function () {
+	if (!Config.MiniShopBot) {
+		return true;
+	}
+
+	var i, item, result,
+		items = [],
+		npc = getInteractedNPC();
+
+	if (!npc || !npc.itemcount) {
+		return false;
+	}
+
+	item = npc.getItem();
+
+	if (!item) {
+		return false;
+	}
+
+	print("ÿc4MiniShopBotÿc0: Scanning " + npc.itemcount + " items.");
+
+	do {
+		if (this.ignoredItemTypes.indexOf(item.itemType) === -1) {
+			items.push(copyUnit(item));
+		}
+	} while (item.getNext());
+
+	for (i = 0; i < items.length; i += 1) {
+		result = Pickit.checkItem(items[i]);
+
+		if (result.result === 1 && Item.autoEquipCheck(items[i]) && Item.canEquip(items[i])) {
+			try {
+				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
+					Misc.itemLogger("Shopped", items[i]);
+					Misc.logItem("Shopped", items[i], result.line);
+					items[i].buy();
+				}
+			} catch (e) {
+				print(e);
+			}
+		}
+
+		if (result.result === 1 && Item.autoEquipCheckMerc(items[i]) && Item.canEquipMerc(items[i], Item.getBodyLocMerc(items[i])[0])) {
+			try {
+				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
+					Misc.itemLogger("Merc Shopped", items[i]);
+					Misc.logItem("Merc Shopped", items[i], result.line);
+					items[i].buy();
+				}
+			} catch (e) {
+				print(e);
+			}
+		}
+
+		delay(2);
 	}
 
 	return true;
@@ -2650,7 +2723,7 @@ Town.drinkPots = function () {
 
 		if (chugs) {
 			do {
-				delay(300 + me.ping);
+				delay(10 + me.ping);
 				chugs.interact();
 			} while (chugs.getNext());
 		}
@@ -2662,7 +2735,7 @@ Town.drinkPots = function () {
 };
 
 Town.organizeStash = function () {
-	if (Storage.Stash.UsedSpacePercent() < 85) {
+	if (Storage.Stash.UsedSpacePercent() < 65) {
 		return true;
 	}
 
@@ -2680,7 +2753,7 @@ Town.organizeStash = function () {
 		});
 
 		for (sorted = 0; sorted < items.length; sorted += 1) {
-			Storage.Stash.MoveTo(items[sorted]);
+			movetoStash(items[sorted], true);
 		}
 	}
 
@@ -2701,7 +2774,7 @@ Town.organizeInventory = function () {
 		});
 
 		for (inv = 0; inv < items.length; inv += 1) {
-			Storage.Inventory.MoveTo(items[inv]);
+			movetoInventory(items[inv], true);
 		}
 	}
 
@@ -2709,62 +2782,58 @@ Town.organizeInventory = function () {
 };
 
 Town.clearJunk = function () {
-	let junk = me.getItems();
+	let junk = me.findItems(-1, 0);
 
-	for (let count = 0; count < junk.length; count += 1) {
-		// unwanted items runes / bad bases
-		if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
-		(Pickit.checkItem(junk[count]).result === 0 || Pickit.checkItem(junk[count]).result === 4) && // drop unwanted
-		!(junk[count].classid >= 630 && junk[count].classid <= 642) && // Don't throw good runes
-		!Cubing.keepItem(junk[count]) && // Don't throw cubing ingredients
-		!Runewords.keepItem(junk[count]) && // Don't throw runeword ingredients
-		!CraftingSystem.keepItem(junk[count]) // Don't throw crafting system ingredients
+	if (!junk) {
+		return false;
+	}
+
+	while (junk.length > 0) {
+		if ((junk[0].location === 7 || junk[0].location === 3) && // stash or inventory
+			!Pickit.checkItem(junk[0]).result === 1 && // Don't throw pickit wanted items
+			!Cubing.keepItem(junk[0]) && // Don't throw cubing ingredients
+			!Runewords.keepItem(junk[0]) && // Don't throw runeword ingredients
+			!CraftingSystem.keepItem(junk[0]) && // Don't throw crafting system ingredients
+			(Pickit.checkItem(junk[0]).result === 0 || Pickit.checkItem(junk[0]).result === 4) // only drop unwanted
 		) {
-			if (junk[count].drop()) {
+			if (junk[0].drop()) {
 				me.overhead('cleared junk');
-				delay(250 + me.ping);
+				print("ÿc9SoloLevelingÿc0: Cleared junk - " + junk[0].name);
+				delay(50 + me.ping);
 			}
 		}
 
-		// unwanted tier'ed autoequip
-		let stashtier = NTIP.GetTier(junk[count]);
-		let bodyLoc = Item.getBodyLoc(junk[count]);
+		let tier = NTIP.GetTier(junk[0]);
+		let bodyLoc = Item.getBodyLoc(junk[0])[0];
 
-		if (stashtier > 0 && bodyLoc) {
-			for (let bodypart = 0; bodypart < bodyLoc.length; bodypart += 1) {
-				let equippedTier = Item.getEquippedItem(bodyLoc[bodypart]).tier;
-
-				if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
-					stashtier <= equippedTier // drop same tier or less items
-				) {
-					if (junk[count].drop()) {
-						me.overhead('cleared autoequip junk');
-						delay(250 + me.ping);
-					}
+		if (tier > 0 && bodyLoc) {
+			if ((junk[0].location === 7 || junk[0].location === 3) &&
+			NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 &&
+			tier <= Item.getEquippedItem(bodyLoc).tier) {
+				if (junk[0].drop()) {
+					me.overhead('cleared autoequip junk');
+					print("ÿc9SoloLevelingÿc0: Cleared autoequip junk - " + junk[0].name);
+					delay(50 + me.ping);
 				}
 			}
 		}
 
-		// unwanted tier'ed merc autoequip
-		if (getMercFix()) {
-			let merctier = NTIP.GetMercTier(junk[count]);
-			let mercbodyLoc = Item.getBodyLocMerc(junk[count]);
+		let merctier = mercscore(junk[0]);
+		let mercbodyLoc = Item.getBodyLocMerc(junk[0])[0];
 
-			if (merctier > 0 && mercbodyLoc) {
-				for (let mercbodypart = 0; mercbodypart < mercbodyLoc.length; mercbodypart += 1) {
-					let mercequippedTier = Item.getEquippedItemMerc(mercbodyLoc[mercbodypart]).tier;
-
-					if ((junk[count].location === 7 || junk[count].location === 3) && // stash or inventory
-						merctier <= mercequippedTier // drop same merctier or less items
-					) {
-						if (junk[count].drop()) {
-							me.overhead('cleared merc junk');
-							delay(250 + me.ping);
-						}
-					}
+		if (merctier > 0 && mercbodyLoc) {
+			if ((junk[0].location === 7 || junk[0].location === 3) &&
+				NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 &&
+				merctier <= Item.getEquippedItemMerc(mercbodyLoc).tier) {
+				if (junk[0].drop()) {
+					me.overhead('cleared merc junk');
+					print("ÿc9SoloLevelingÿc0: Cleared merc junk - " + junk[0].name);
+					delay(50 + me.ping);
 				}
 			}
 		}
+
+		junk.shift();
 	}
 
 	return true;
@@ -2891,6 +2960,86 @@ Town.npcInteract = function (name) {
 	Packet.flash(me.gid);
 
 	return true;
+};
+
+var movetoInventory = function (item, sorting = false) {
+	if (item.mode === 3) {
+		return false;
+	}
+
+	if (item.location === 3 && sorting === false) {
+		return true;
+	}
+
+	let spot = Storage.Inventory.FindSpot(item);
+
+	if (!spot) {
+		return false;
+	}
+
+	if (item.location === 6) {
+		while (!Cubing.openCube()) {
+			delay(1 + me.ping * 2);
+			Packet.flash(me.gid);
+		}
+	}
+
+	if (Packet.itemToCursor(item)) {
+		for (let i = 0; i < 15; i += 1) {
+			sendPacket(1, 0x18, 4, item.gid, 4, spot.y, 4, spot.x, 4, 0x00);
+
+			let tick = getTickCount();
+
+			while (getTickCount() - tick < Math.max(1000, me.ping * 2 + 200)) {
+				if (!me.itemoncursor) {
+					return true;
+				}
+
+				delay(10 + me.ping);
+			}
+		}
+	}
+
+	return false;
+};
+
+var movetoStash = function (item, sorting = false) {
+	if (item.mode === 3) {
+		return false;
+	}
+
+	if (item.location === 7 && sorting === false) {
+		return true;
+	}
+
+	let spot = Storage.Stash.FindSpot(item);
+
+	if (!spot) {
+		return false;
+	}
+
+	while (!Town.openStash()) {
+		Packet.flash(me.gid);
+		delay(me.ping * 2);
+	}
+
+	if (Packet.itemToCursor(item)) {
+		for (let i = 0; i < 15; i += 1) {
+			sendPacket(1, 0x18, 4, item.gid, 4, spot.y, 4, spot.x, 4, 0x04);
+
+			let tick = getTickCount();
+
+			while (getTickCount() - tick < Math.max(1000, me.ping * 2 + 200)) {
+				if (!me.itemoncursor) {
+					return true;
+				}
+
+				delay(10 + me.ping);
+			}
+		}
+	}
+
+	return false;
 };
 
 Misc.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
@@ -3048,125 +3197,12 @@ Misc.setupMerc = function () {
 	me.overhead('Pickit: added merc items');
 	print("ÿc9SoloLevelingÿc0: merc items loaded to Pickit");
 
-	var mercHelm = [
-		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 8 && [ias] >= 20 # [Merctier] == 18",
-		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 6 && [magicdamagereduction] >= 10 # [Merctier] == 17",
-		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 120 && [fhr] >= 30 && [ItemCrushingBlow] >= 35 # [Merctier] == 16",
-		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 200 && [lifeleech] >= 5 && [fhr] >= 10 && [ias] >= 10 # [Merctier] == 15",
-		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lifeleech] >= 9 && [fireresist] >= 33 # [Merctier] == 14",
-		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 160 && [lightresist] >= 20 && [coldresist] >= 20 && [fireresist] >= 20 # [Merctier] == 13",
-		"([type] == circlet || [type] == helm) # [lifeleech] >= 10 && [lightresist] >= 15 && [coldresist] >= 15 && [fireresist] >= 15 # [Merctier] == 12",
-		"([type] == circlet || [type] == helm) # [lifeleech] >= 5 # [Merctier] == 11",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 120 && [LightResist] >= 25 # [Merctier] == 10",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 110 && [LightResist] >= 25 # [Merctier] == 9",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 100 && [LightResist] >= 25 # [Merctier] == 8",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [LightResist] >= 25 # [Merctier] == 7",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 80 && [LightResist] >= 25 # [Merctier] == 6",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 70 && [LightResist] >= 25 # [Merctier] == 5",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 60 && [LightResist] >= 25 # [Merctier] == 4",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 50 && [LightResist] >= 25 # [Merctier] == 3",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 30 && [LightResist] >= 25 # [Merctier] == 2",
-		"([type] == helm || [type] == circlet) && [flag] != ethereal && [flag] == runeword # [defense] >= 20 && [LightResist] >= 25 # [Merctier] == 1",
+	var mercGear = [
+		"([type] == circlet || [type] == helm) # [enhanceddefense] >= 100 && [lifeleech] >= 8 && [ias] >= 20 # [Merctier] == mercscore(item)",
+		"[Type] == armor && [flag] == runeword # [defense] >= 1800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == mercscore(item)",
+		"[Type] == Polearm # [lifeleech] >= 3 # [MaxQuantity] == 1 && [Merctier] == mercscore(item)",
 	];
-	NTIP.arrayLooping(mercHelm);
-
-	var mercArmor = [
-		"[Type] == armor && [flag] == runeword # [defense] >= 1800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 62",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 61",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 60",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 59",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 58",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 56",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 55",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 54",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 53",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 52",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 51",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 50",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 49",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 48",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 47",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1300 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 46",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1200 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 45",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1100 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 44",
-		"[Type] == armor && [flag] == runeword # [defense] >= 1000 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 43",
-		"[Type] == armor && [flag] == runeword # [defense] >= 800 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 42",
-		"[Type] == armor && [flag] == runeword # [defense] >= 775 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 41",
-		"[Type] == armor && [flag] == runeword # [defense] >= 750 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 40",
-		"[Type] == armor && [flag] == runeword # [defense] >= 725 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 39",
-		"[Type] == armor && [flag] == runeword # [defense] >= 700 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 38",
-		"[Type] == armor && [flag] == runeword # [defense] >= 675 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 37",
-		"[Type] == armor && [flag] == runeword # [defense] >= 650 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 36",
-		"[Type] == armor && [flag] == runeword # [defense] >= 625 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 35",
-		"[Type] == armor && [flag] == runeword # [defense] >= 600 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 34",
-		"[Type] == armor && [flag] == runeword # [defense] >= 575 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 33",
-		"[Type] == armor && [flag] == runeword # [defense] >= 550 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 32",
-		"[Type] == armor && [flag] == runeword # [defense] >= 525 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 31",
-		"[Type] == armor && [flag] == runeword # [defense] >= 500 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 30",
-		"[Type] == armor && [flag] == runeword # [defense] >= 475 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 29",
-		"[Type] == armor && [flag] == runeword # [defense] >= 450 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 28",
-		"[Type] == armor && [flag] == runeword # [defense] >= 425 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 27",
-		"[Type] == armor && [flag] == runeword # [defense] >= 400 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 26",
-		"[Type] == armor && [flag] == runeword # [defense] >= 375 && [ias] == 45 && [coldresist] == 30 # [Merctier] == 25",
-		"[Type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [Merctier] == 24",
-		"[Name] == KrakenShell && [Quality] == Unique # [enhanceddefense] >= 170 && [strength] >= 40 # [Merctier] == 23",
-		"([Name] == Cuirass || [Name] == MeshArmor) && [Quality] == Unique # [enhanceddefense] >=160 && ([maxhp] == 60 || [coldresist] == 50) # [Merctier] == 22",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 900 && [fireresist] == 50 # [Merctier] == 21",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 875 && [fireresist] == 50 # [Merctier] == 20",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 850 && [fireresist] == 50 # [Merctier] == 19",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 825 && [fireresist] == 50 # [Merctier] == 18",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 800 && [fireresist] == 50 # [Merctier] == 17",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 780 && [fireresist] == 50 # [Merctier] == 16",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 740 && [fireresist] == 50 # [Merctier] == 15",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 700 && [fireresist] == 50 # [Merctier] == 14",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 650 && [fireresist] == 50 # [Merctier] == 13",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 610 && [fireresist] == 50 # [Merctier] == 12",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 390 && [fireresist] == 50 # [Merctier] == 11",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 240 && [fireresist] == 50 # [Merctier] == 10",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 213 && [fireresist] == 50 # [Merctier] == 9",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 194 && [fireresist] == 50 # [Merctier] == 8",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 178 && [fireresist] == 50 # [Merctier] == 7",
-		"[type] == armor # [enhanceddefense] >= 150 && [ias] >= 15 && [fhr] >= 15 && [dexterity] >= 15 # [Merctier] == 6",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 111 && [frw] == 25 && [fcr] == 25 # [Merctier] == 5",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 102 && [frw] == 25 && [fcr] == 25 # [Merctier] == 4",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 90 && [frw] == 25 && [fcr] == 25 # [Merctier] == 3",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [defense] >= 65 && [frw] == 25 && [fcr] == 25 # [Merctier] == 2",
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] == 25 && [fcr] == 25 # [Merctier] == 1",
-	];
-	NTIP.arrayLooping(mercArmor);
-
-	var mercWeapon = [
-		"[type] == polearm && [flag] == runeword && [flag] == ethereal # [meditationaura] >= 17 # [Merctier] == 22",
-		"[name] == thresher && [quality] == unique # [enhanceddamage] >= 190 && [lifeleech] >= 11 # [Merctier] == 21",
-		"[type] == polearm && [flag] == runeword # [meditationaura] >= 17 # [Merctier] == 20",
-		"[type] == polearm && [flag] == runeword # [meditationaura] >= 16 # [Merctier] == 19",
-		"[type] == polearm && [flag] == runeword # [meditationaura] >= 15 # [Merctier] == 18",
-		"[type] == polearm && [flag] == runeword # [meditationaura] >= 14 # [Merctier] == 17",
-		"[type] == polearm && [flag] == runeword # [meditationaura] >= 13 # [Merctier] == 16",
-		"[type] == polearm && [flag] == runeword # [meditationaura] >= 12 # [Merctier] == 15",
-		"[name] == yari && [quality] == unique # [enhanceddamage] >= 160 && [itemcrushingblow] >= 45 # [Merctier] == 14",
-		"[name] == fuscina && [quality] == unique # [enhanceddamage] >= 140 && [fireresist] >= 50 # [Merctier] == 13",
-		"[name] == lochaberaxe && [quality] == unique # [enhanceddamage] >= 150 # [Merctier] == 12",
-		"[name] == poleaxe && [quality] == unique # [enhanceddamage] >= 50 # [Merctier] == 11",
-		"[name] == halberd && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 10",
-		"[name] == poleaxe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 9",
-		"[name] == warscythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 8",
-		"[name] == scythe && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 7",
-		"[name] == voulge && [flag] == runeword # [lifeleech] >= 7 # [Merctier] == 6",
-	];
-	NTIP.arrayLooping(mercWeapon);
-
-	var mercPrep = [
-		"[Type] == Polearm # [LifeLeech] >= 7 # [MaxQuantity] == 1 && [Merctier] == 5",
-		"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 4",
-		"[Type] == Polearm # [LifeLeech] >= 6 # [MaxQuantity] == 1 && [Merctier] == 3",
-		"[Type] == Polearm # [lifeleech] >= 4 # [MaxQuantity] == 1 && [Merctier] == 2",
-		"[Type] == Polearm # [lifeleech] >= 3 # [MaxQuantity] == 1 && [Merctier] == 1",
-	];
-
-	if (me.diff === 0) {
-		NTIP.arrayLooping(mercPrep);
-	}
+	NTIP.arrayLooping(mercGear);
 
 	return true;
 };
@@ -3529,6 +3565,12 @@ NTIP.addLine = function (itemString) { //NTIP INJECTOR
 	let line = NTIP.ParseLineInt(itemString, info);
 
 	if (line) {
+		if (!itemString.toLowerCase().includes("tier")) {
+			NTIP_CheckListNoTier.push(line);
+		} else {
+			NTIP_CheckListNoTier.push([false, false]);
+		}
+
 		NTIP_CheckList.push(line);
 		stringArray.push(info);
 	}
@@ -3542,6 +3584,146 @@ NTIP.arrayLooping = function (arraytoloop) {
 	}
 
 	return true;
+};
+
+NTIP.CheckItem = function (item, entryList, verbose) {
+	var i, list, identified, num,
+		rval = {},
+		result = 0;
+
+	if (!entryList) {
+		list = NTIP_CheckList;
+	} else {
+		list = entryList;
+	}
+
+	identified = item.getFlag(0x10);
+
+	for (i = 0; i < list.length; i++) {
+		try {
+			// Get the values in separated variables (its faster)
+			const [type, stat, wanted] = list[i];
+
+			if (typeof type === 'function') {
+				if (type(item)) {
+					if (typeof stat === 'function') {
+						if (stat(item)) {
+							if (wanted && wanted.MaxQuantity && !isNaN(wanted.MaxQuantity)) {
+								num = NTIP.CheckQuantityOwned(type, stat);
+
+								if (num < wanted.MaxQuantity) {
+									result = 1;
+
+									break;
+								} else {
+									if (item.getParent() && item.getParent().name === me.name && item.mode === 0 && num === wanted.MaxQuantity) { // attempt at inv fix for maxquantity
+										result = 1;
+
+										break;
+									}
+								}
+							} else {
+								result = 1;
+
+								break;
+							}
+						} else if (!identified && result === 0 || !identified && result === 1) {
+							result = -1;
+
+							if (verbose) {
+								rval.line = stringArray[i].file + " #" + stringArray[i].line;
+							}
+						}
+					} else {
+						if (wanted && wanted.MaxQuantity && !isNaN(wanted.MaxQuantity)) {
+							num = NTIP.CheckQuantityOwned(type, null);
+
+							if (num < wanted.MaxQuantity) {
+								result = 1;
+
+								break;
+							} else {
+								if (item.getParent() && item.getParent().name === me.name && item.mode === 0 && num === wanted.MaxQuantity) { // attempt at inv fix for maxquantity
+									result = 1;
+
+									break;
+								}
+							}
+						} else {
+							result = 1;
+
+							break;
+						}
+					}
+				}
+			} else if (typeof stat === 'function') {
+				if (stat(item)) {
+					if (wanted && wanted.MaxQuantity && !isNaN(wanted.MaxQuantity)) {
+						num = NTIP.CheckQuantityOwned(null, stat);
+
+						if (num < wanted.MaxQuantity) {
+							result = 1;
+
+							break;
+						} else {
+							if (item.getParent() && item.getParent().name === me.name && item.mode === 0 && num === wanted.MaxQuantity) { // attempt at inv fix for maxquantity
+								result = 1;
+
+								break;
+							}
+						}
+					} else {
+						result = 1;
+
+						break;
+					}
+				} else if (!identified && result === 0 || !identified && result === 1) {
+					result = -1;
+
+					if (verbose) {
+						rval.line = stringArray[i].file + " #" + stringArray[i].line;
+					}
+				}
+			}
+		} catch (pickError) {
+			showConsole();
+
+			if (!entryList) {
+				Misc.errorReport("ÿc1Pickit error! Line # ÿc2" + stringArray[i].line + " ÿc1Entry: ÿc0" + stringArray[i].string + " (" + stringArray[i].file + ") Error message: " + pickError.message + " Trigger item: " + item.fname.split("\n").reverse().join(" "));
+
+				NTIP_CheckList.splice(i, 1); // Remove the element from the list
+			} else {
+				Misc.errorReport("ÿc1Pickit error in runeword config!");
+			}
+
+			result = 0;
+		}
+	}
+
+	if (verbose) {
+		switch (result) {
+		case -1:
+			break;
+		case 1:
+			rval.line = stringArray[i].file + " #" + stringArray[i].line;
+
+			break;
+		default:
+			rval.line = null;
+
+			break;
+		}
+
+		rval.result = result;
+
+		if (!identified && result === 1) {
+			rval.result = -1;
+		}
+
+		return rval;
+	}
+
+	return result;
 };
 
 Pather.killMonsters = function (arg) { // summoner targeting provided by penguins0690
@@ -3637,8 +3819,6 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 			if ((getDistance(door, x, y) < 4 && getDistance(me, door) < 9) || getDistance(me, door) < 4) {
 				for (i = 0; i < 3; i += 1) {
 					Misc.click(0, 0, door);
-					//door.interact();
-
 					tick = getTickCount();
 
 					while (getTickCount() - tick < 1000) {
@@ -3880,8 +4060,8 @@ var haveItem = function (type, flag, iName) {
 	return itemCHECK;
 };
 
-// DYNAMIC TIERS prep
-var casterCheck = function () {
+// Dynamic Tiers
+var buildCheck = function () {
 	function getBuildTemplate () {
 		let buildType = finalBuild;
 		let build = buildType + "Build" ;
@@ -3894,15 +4074,290 @@ var casterCheck = function () {
 	var template = getBuildTemplate();
 
 	if (!include(template)) {
-		print("ÿc9SoloLevelingÿc0: getskills Failed to include template: " + template);
+		throw new Error("buildCheck(): Failed to include template: " + template);
 	}
 
-	let castercheck = build.caster;
-
-	return castercheck;
+	return {
+		caster: build.caster,
+		tabSkills: build.skillstab,
+		wantedSkills: build.wantedskills,
+		usefulSkills: build.usefulskills,
+	};
 };
 
-var isCaster = casterCheck();
+var isCaster = buildCheck().caster;
+
+var mercscore = function (item) {
+	var mercWeights = {
+		IAS: 3.5,
+		MINDMG:	3, // min damage
+		MAXDMG: 3, // max damage
+		ELEDMG: 2, // elemental damage
+		AR:	0.5, // attack rating
+		CB: 3, // crushing blow
+		LL: 1.5, //lifeleach
+		// regen
+		HPREGEN: 2,
+		FHR: 3, // faster hit recovery
+		DEF: 0.05, // defense
+		HP:	2,
+		STR:	1.5,
+		DEX:	1.5,
+		ALL:	180, // + all skills
+		FR: 3.5, // fire resist
+		LR: 4, // lightning resist
+		CR: 2, // cold resist
+		PR: 1, // poison resist
+	};
+
+	let mercRating = 1;
+	mercRating += item.getStatEx(151, 120) * 100; // meditation aura
+	mercRating += item.getStatEx(151, 123) * 1000; // conviction aura
+	mercRating += item.getStatEx(93) * mercWeights.IAS; // add IAS
+	mercRating += item.getStatEx(21) * mercWeights.MINDMG; // add MIN damage
+	mercRating += item.getStatEx(22) * mercWeights.MAXDMG; // add MAX damage
+	mercRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55) + item.getStatEx(57) + item.getStatEx(58)) * mercWeights.ELEDMG; // add elemental damage
+	mercRating += item.getStatEx(19) * mercWeights.AR; // add AR
+	mercRating += item.getStatEx(136) * mercWeights.CB; // add crushing blow
+	mercRating += item.getStatEx(60) * mercWeights.LL; // add LL
+	mercRating += item.getStatEx(74) * mercWeights.HPREGEN; // add hp regeneration
+	mercRating += item.getStatEx(99) * mercWeights.FHR; // add faster hit recovery
+	mercRating += item.getStatEx(31) * mercWeights.DEF; //	add Defense
+	mercRating += (item.getStatEx(3) + item.getStatEx(7) + (item.getStatEx(216) / 2048 * me.charlvl)) * mercWeights.HP; // add HP
+	mercRating += item.getStatEx(0) * mercWeights.STR; // add STR
+	mercRating += item.getStatEx(2) * mercWeights.DEX; // add DEX
+	mercRating += item.getStatEx(127) * mercWeights.ALL; // add all skills
+	mercRating += item.getStatEx(39) * mercWeights.FR; // add FR
+	mercRating += item.getStatEx(43) * mercWeights.CR; // add CR
+	mercRating += item.getStatEx(41) * mercWeights.LR; // add LR
+	mercRating += item.getStatEx(45) * mercWeights.PR; // add PR
+
+	return mercRating;
+};
+
+var tierscore = function (item) {
+	var resistWeights = {
+		FR: 3.5, // fire resist
+		LR: 4, // lightning resist
+		CR: 2, // cold resist
+		PR: 1, // poison resist
+	};
+
+	var generalWeights = {
+		CBF: 25, // cannot be frozen
+		FRW: 1, // faster run/walk
+		FHR: 3, // faster hit recovery
+		DEF: 0.05, // defense
+		ICB: 3, // increased chance to block
+		// base stats
+		HP:	2,
+		MANA:	0.8,
+		STR:	1.5,
+		DEX:	1.5,
+	};
+
+	var casterWeights = {
+		//breakpoint stats
+		FCR:	3.5,
+		IAS:	0,
+		// Attack
+		MINDMG:	0, // min damage
+		MAXDMG: 0, // max damage
+		ELEDMG: 0, // elemental damage
+		AR:	0, // attack rating
+		CB: 0, // crushing blow
+		// leaching
+		LL:	0, //lifeleach
+		ML:	0, //manaleach
+		// regen
+		HPREGEN: 2,
+		MANAREGEN: 2,
+		// sockets
+		sockets:	30,
+	};
+
+	var meleeWeights = {
+		//breakpoint stats
+		FCR: 0,
+		IAS: 3.5,
+		// Attack
+		MINDMG:	3, // min damage
+		MAXDMG: 3, // max damage
+		ELEDMG: 2, // elemental damage
+		AR:	0.5, // attack rating
+		CB: 3, // crushing blow
+		// leaching
+		LL: 1.5, //lifeleach
+		ML:	1.5, //manaleach
+		// regen
+		HPREGEN: 2,
+		MANAREGEN: 2,
+		// sockets
+		sockets:	30,
+	};
+
+	var skillsWeights = {
+		ALL:	180, // + all skills
+		CLASS:	175, // + class tab
+		TAB: 100, // + skill tab
+		WANTED: 30, // + wanted key skills
+		USEFUL: 20 // + wanted supportive skills
+	};
+
+	this.generalScore = function (item) {
+		// cannot be frozen
+		let cbfItem = NTIPAliasStat["itemcannotbefrozen"],
+			cbfRating = 0,
+			needsCBF = !me.getSkill(54, 0),
+			body = {
+				None: 0,
+				Head: 1,
+				Neck: 2,
+				Torso: 3,
+				RightArm: 4,
+				LeftArm: 5,
+				RingRight: 6,
+				RingLeft: 7,
+				Belt: 8,
+				Feet: 9,
+				Gloves: 10,
+			};
+
+		if (needsCBF && item.getStatEx(cbfItem)) {
+			let haveCBF = false;
+			Object.keys(body).forEach(part => {
+				if (Items.getEquippedItem(body[part]).getStatEx(cbfItem)) {
+					haveCBF = true;
+				}
+			});
+
+			if (!haveCBF) {
+				cbfRating = generalWeights.CBF;
+			}
+		}
+
+		// faster run/walk
+		let frwRating = 0,
+			needsFrw = !me.getSkill(54, 0); // value FRW if no teleport
+
+		if (needsFrw) {
+			frwRating = item.getStatEx(96) * generalWeights.FRW;
+		}
+
+		//start generalRating
+		let generalRating = 0;
+		generalRating += cbfRating; // add cannot be frozen
+		generalRating += frwRating; // add faster run walk
+		generalRating += item.getStatEx(99) * generalWeights.FHR; // add faster hit recovery
+		generalRating += item.getStatEx(31) * generalWeights.DEF; //	add Defense
+		generalRating += (item.getStatEx(20) + item.getStatEx(102)) * generalWeights.ICB; //add increased chance to block
+		generalRating += (item.getStatEx(3) + item.getStatEx(7) + (item.getStatEx(216) / 2048 * me.charlvl)) * generalWeights.HP; // add HP
+		generalRating += (item.getStatEx(1) + item.getStatEx(9) + (item.getStatEx(217) / 2048 * me.charlvl)) * generalWeights.MANA;// add mana
+		generalRating += item.getStatEx(0) * generalWeights.STR; // add STR
+		generalRating += item.getStatEx(2) * generalWeights.DEX; // add DEX
+
+		return generalRating;
+	};
+
+	this.resistScore = function (item) {
+		let resistRating = 0;
+		// current total resists
+		let currFR = me.getStat(39); // current fire resist
+		let currCR = me.getStat(43); // current cold resist
+		let currLR = me.getStat(41); // current lite resist
+		let currPR = me.getStat(45); // current poison resist
+		// get item body location
+		let itembodyloc = Item.getBodyLoc(item); // resulting array
+
+		if (!itembodyloc) {
+			return resistRating;
+		}
+
+		let bodyloc = itembodyloc[0]; // extract bodyloc from array
+		// get item resists stats from olditem equipped on body location
+		let equippedItems = me.getItems()
+			.filter(item => [1].indexOf(item.location) > -1 ) // limit search to equipped body parts
+			.sort((a, b) => a.location - b.location); // Sort on body, low to high.
+		let oldItem = equippedItems[bodyloc];
+		let olditemFR = oldItem !== undefined ? oldItem.getStatEx(39) : 0; // equipped fire resist
+		let olditemCR = oldItem !== undefined ? oldItem.getStatEx(43) : 0; // equipped cold resist
+		let olditemLR = oldItem !== undefined ? oldItem.getStatEx(41) : 0; // equipped lite resist
+		let olditemPR = oldItem !== undefined ? oldItem.getStatEx(45) : 0; // equipped poison resist
+		// subtract olditem resists from current total resists
+		let baseFR = currFR - olditemFR;
+		let baseCR = currCR - olditemCR;
+		let baseLR = currLR - olditemLR;
+		let basePR = currPR - olditemPR;
+		// if baseRes < max resists give score value upto max resists reached
+		let maxRes = 175;
+		let FRlimit = Math.max(maxRes - baseFR, 0);
+		let CRlimit = Math.max(maxRes - baseCR, 0);
+		let LRlimit = Math.max(maxRes - baseLR, 0);
+		let PRlimit = Math.max(maxRes - basePR, 0);
+		// get new item stats
+		let newitemFR = Math.max(item.getStatEx(39), 0); // fire resist
+		let newitemCR = Math.max(item.getStatEx(43), 0); // cold resist
+		let newitemLR = Math.max(item.getStatEx(41), 0); // lite resist
+		let newitemPR = Math.max(item.getStatEx(45), 0); // poison resist
+		// newitemRes upto reslimit
+		let effectiveFR = Math.min(newitemFR, FRlimit);
+		let effectiveCR = Math.min(newitemCR, CRlimit);
+		let effectiveLR = Math.min(newitemLR, LRlimit);
+		let effectivePR = Math.min(newitemPR, PRlimit);
+		// sum resistRatings
+		resistRating += effectiveFR * resistWeights.FR; // add fireresist
+		resistRating += effectiveCR * resistWeights.CR; // add coldresist
+		resistRating += effectiveLR * resistWeights.LR; // add literesist
+		resistRating += effectivePR * resistWeights.PR; // add poisonresist
+
+		return resistRating;
+	};
+
+	var buildWeights = isCaster ? casterWeights : meleeWeights;
+
+	this.buildScore = function (item) {
+		let buildRating = 0;
+		buildRating += item.getStatEx(105) * buildWeights.FCR; // add FCR
+		buildRating += item.getStatEx(93) * buildWeights.IAS; // add IAS
+		buildRating += item.getStatEx(21) * buildWeights.MINDMG; // add MIN damage
+		buildRating += item.getStatEx(22) * buildWeights.MAXDMG; // add MAX damage
+		buildRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55) + item.getStatEx(57) + item.getStatEx(58)) * buildWeights.ELEDMG; // add elemental damage
+		buildRating += item.getStatEx(19) * buildWeights.AR; // add AR
+		buildRating += item.getStatEx(60) * buildWeights.LL; // add LL
+		buildRating += item.getStatEx(62) * buildWeights.ML; // add ML
+		buildRating += item.getStatEx(74) * buildWeights.HPREGEN; // add hp regeneration
+		buildRating += item.getStatEx(26) * buildWeights.MANAREGEN; // add mana recovery
+
+		return buildRating;
+	},
+
+	this.skillsScore = function (item) {
+		let skillsRating = 0;
+		skillsRating += item.getStatEx(127) * skillsWeights.ALL; // + all skills
+		skillsRating += item.getStatEx(83, me.classid) * skillsWeights.CLASS; // + class skills
+		skillsRating += item.getStatEx(188, buildCheck().tabSkills) * skillsWeights.TAB; // + TAB skills
+		let selectedWeights = [skillsWeights.WANTED, skillsWeights.USEFUL];
+		let selectedSkills = [buildCheck().wantedSkills, buildCheck().usefulSkills];
+
+		for (let i = 0; i < selectedWeights.length; i++) {
+			for (let j = 0; j < selectedSkills.length; j++) {
+				for (let k = 0; k < selectedSkills[j].length; k++) {
+					skillsRating += item.getStatEx(107, selectedSkills[j][k]) * selectedWeights[i];
+				}
+			}
+		}
+
+		return skillsRating;
+	};
+
+	let tier = 1; // set to 1 for native autoequip to use items.
+	tier += this.generalScore(item);
+	tier += this.resistScore(item);
+	tier += this.buildScore(item);
+	tier += this.skillsScore(item);
+
+	return tier;
+};
 
 //	MERC AUTO EQUIP - modified from dzik's
 var getMercFix = function () { // merc is null fix
@@ -4007,14 +4462,19 @@ Item.equipMerc = function (item, bodyLoc) {
 
 Item.getEquippedItemMerc = function (bodyLoc) {
 	let mercenary = getMercFix();
-	var item = mercenary.getItem();
+
+	if (!mercenary) { // dont have merc or he is dead
+		return false;
+	}
+
+	let item = mercenary.getItem();
 
 	if (item) {
 		do {
 			if (item.bodylocation === bodyLoc && item.location === 1) {
 				return {
 					classid: item.classid,
-					tier: NTIP.GetMercTier(item),
+					tier: mercscore(item),
 					name: item.fname,
 					str: item.getStatEx(0),
 					dex: item.getStatEx(2)
@@ -4033,7 +4493,11 @@ Item.getEquippedItemMerc = function (bodyLoc) {
 };
 
 Item.getBodyLocMerc = function (item) {
-	var bodyLoc = false, mercenary = getMercFix();
+	let bodyLoc = false, mercenary = getMercFix();
+
+	if (!mercenary) { // dont have merc or he is dead
+		return false;
+	}
 
 	switch (item.itemType) {
 	case 3: // Armor
@@ -4078,13 +4542,11 @@ Item.autoEquipCheckMerc = function (item) {
 		return false;
 	}
 
-	var i,
-		tier = NTIP.GetMercTier(item),
-		bodyLoc = Item.getBodyLocMerc(item);
+	let i, tier = mercscore(item), bodyLoc = Item.getBodyLocMerc(item);
 
 	if (tier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
-			var oldTier = Item.getEquippedItemMerc(bodyLoc[i]).tier; // Low tier items shouldn't be kept if they can't be equipped
+			var oldTier = Math.max(Item.getEquippedItemMerc(bodyLoc[i]).tier, 0); // Low tier items shouldn't be kept if they can't be equipped
 
 			if (tier > oldTier && (Item.canEquipMerc(item) || !item.getFlag(0x10))) {
 				return true;
@@ -4100,8 +4562,7 @@ Item.autoEquipMerc = function () {
 		return true;
 	}
 
-	var i, j, tier, bodyLoc, tome, scroll,
-		items = me.findItems(-1, 0);
+	let i, j, tier, bodyLoc, tome, scroll, gid, items = me.findItems(-1, 0);
 
 	if (!items) {
 		return false;
@@ -4136,7 +4597,7 @@ Item.autoEquipMerc = function () {
 	while (items.length > 0) {
 		items.sort(sortEq);
 
-		tier = NTIP.GetMercTier(items[0]);
+		tier = mercscore(items[0]);
 		bodyLoc = Item.getBodyLocMerc(items[0]);
 
 		if (tier > 0 && bodyLoc) {
@@ -4155,9 +4616,12 @@ Item.autoEquipMerc = function () {
 						}
 					}
 
+					merc = getMercFix();
+					gid = items[0].gid;
+
 					if (Item.equipMerc(items[0], bodyLoc[j])) {
 						print("ÿc9SoloLevelingÿc0: equipped merc item.");
-
+						Misc.logItem("Merc Equipped", merc.getItem(-1, -1, gid));
 					}
 
 					let cursorItem = getUnit(100);
@@ -4178,8 +4642,7 @@ Item.autoEquipMerc = function () {
 };
 
 Item.removeItemsMerc = function () {
-	let cursorItem;
-	let mercenary = getMercFix();
+	let cursorItem, mercenary = getMercFix();
 
 	if (!mercenary) {
 		return true;
