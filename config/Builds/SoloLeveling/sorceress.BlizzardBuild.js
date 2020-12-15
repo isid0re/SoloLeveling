@@ -7,7 +7,7 @@ var build = {
 	caster: true,
 	skillstab: 10, //cold
 	wantedskills: [59, 65], // blizzard, cold mastery
-	usefulskills: [55, 45], // glacial spike, ice blast
+	usefulskills: [55, 45, 42], // glacial spike, ice blast, static
 	stats: [
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 84], ["dexterity", "block"], ["vitality", "all"]
 	],

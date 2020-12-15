@@ -2164,9 +2164,9 @@ Attack.killTarget = function (name) {
 	}
 
 	while (target && target.hp > 0) {
-		Attack.kill(target); // kill target
+		ClassAttack.doAttack(target); // kill target
 
-		if (target.dead || !target || target.hp === 0) {
+		if (target.mode === 0 || target.mode === 12) {
 			break;
 		}
 	}
@@ -2225,10 +2225,9 @@ Town.townTasks = function () {
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.gamble();
-	this.clearInventory();
+	Town.stash();
 	this.clearJunk();
 	this.organizeStash();
-	Town.stash();
 	Town.organizeInventory();
 	this.characterRespec();
 
@@ -2263,7 +2262,30 @@ Town.doChores = function (repair = false) {
 		this.goToTown();
 	}
 
-	let i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
+	let prevTown, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
+
+	switch (me.area) {
+	case 1:
+		prevTown = 1;
+
+		break;
+	case 40:
+		prevTown = 40;
+
+		break;
+	case 75:
+		prevTown = 75;
+
+		break;
+	case 103:
+		prevTown = 103;
+
+		break;
+	case 109:
+		prevTown = 109;
+
+		break;
+	}
 
 	Attack.weaponSwitch(Attack.getPrimarySlot());
 	Cubing.doCubing();
@@ -2288,9 +2310,8 @@ Town.doChores = function (repair = false) {
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.gamble();
-	this.clearInventory();
-	this.clearJunk();
 	this.stash();
+	this.clearJunk();
 	this.clearScrolls();
 	Town.organizeInventory();
 	this.characterRespec();
@@ -2305,6 +2326,10 @@ Town.doChores = function (repair = false) {
 	}
 
 	me.cancel();
+
+	if (me.inTown && me.area !== prevTown) {
+		Pather.useWaypoint(prevTown);
+	}
 
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
 	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
@@ -2432,8 +2457,28 @@ Town.shopItems = function () {
 		return true;
 	}
 
+	function indexOfMax (arr) {
+		if (arr.length === 0) {
+			return -1;
+		}
+
+		var max = arr[0];
+		var maxIndex = 0;
+
+		for (let index = 1; index < arr.length; index++) {
+			if (arr[index] > max) {
+				maxIndex = index;
+				max = arr[index];
+			}
+		}
+
+		return maxIndex;
+	}
+
 	var i, item, result,
 		items = [],
+		tierscoreCheck = [],
+		mercscoreCheck = [],
 		npc = getInteractedNPC();
 
 	if (!npc || !npc.itemcount) {
@@ -2451,13 +2496,18 @@ Town.shopItems = function () {
 	do {
 		if (this.ignoredItemTypes.indexOf(item.itemType) === -1) {
 			items.push(copyUnit(item));
+			tierscoreCheck.push(tierscore(item));
+			mercscoreCheck.push(mercscore(item));
 		}
 	} while (item.getNext());
 
-	for (i = 0; i < items.length; i += 1) {
+	let besttierIndex = indexOfMax(tierscoreCheck);
+	let bestmercIndex = indexOfMax(mercscoreCheck);
+
+	for (i = 0; i < items.length; i += 1) { // pickit wanted only
 		result = Pickit.checkItem(items[i]);
 
-		if (result.result === 1 && Item.autoEquipCheck(items[i]) && Item.canEquip(items[i])) {
+		if (result.result === 1 && NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result !== 0) {
 			try {
 				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
 					Misc.itemLogger("Shopped", items[i]);
@@ -2469,15 +2519,29 @@ Town.shopItems = function () {
 			}
 		}
 
-		if (result.result === 1 && Item.autoEquipCheckMerc(items[i]) && Item.canEquipMerc(items[i], Item.getBodyLocMerc(items[i])[0])) {
+		if (result.result === 1 && i === besttierIndex && Item.canEquip(items[i]) && tierscore(items[i]) > Item.getEquippedItem(Item.getBodyLoc(items[i])[0]).tier) {
 			try {
 				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
-					Misc.itemLogger("Merc Shopped", items[i]);
-					Misc.logItem("Merc Shopped", items[i], result.line);
+					Misc.itemLogger("AutoEquip Shopped", items[i]);
+					Misc.logItem("AutoEquip Shopped", items[i], result.line);
 					items[i].buy();
 				}
 			} catch (e) {
 				print(e);
+			}
+		}
+
+		if (Item.getBodyLocMerc(items[i])[0] !== undefined) {
+			if (result.result === 1 && i === bestmercIndex && Item.canEquipMerc(items[i], Item.getBodyLocMerc(items[i])[0]) && Item.autoEquipCheckMerc(items[i])) {
+				try {
+					if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
+						Misc.itemLogger("Merc Shopped", items[i]);
+						Misc.logItem("Merc Shopped", items[i], result.line);
+						items[i].buy();
+					}
+				} catch (e) {
+					print(e);
+				}
 			}
 		}
 
@@ -4597,7 +4661,7 @@ Item.autoEquipMerc = function () {
 	while (items.length > 0) {
 		items.sort(sortEq);
 
-		tier = mercscore(items[0]);
+		tier = NTIP.CheckItem(items[0], NTIP_CheckListNoTier, true).result === 0 ? mercscore(items[0]) : 0;
 		bodyLoc = Item.getBodyLocMerc(items[0]);
 
 		if (tier > 0 && bodyLoc) {

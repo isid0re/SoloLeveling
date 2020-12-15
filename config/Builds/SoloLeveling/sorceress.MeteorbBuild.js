@@ -7,7 +7,7 @@ var build = {
 	caster: true,
 	skillstab: 8, //fire
 	wantedskills: [64, 56, 65], // frozen orb, meteor, cold mastery
-	usefulskills: [47, 61], // fireball, fire mastery
+	usefulskills: [47, 61, 42], // fireball, fire mastery, static
 	stats: [
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 84], ["dexterity", "block"], ["vitality", "all"]
 	],
