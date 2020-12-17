@@ -235,7 +235,7 @@ function LoadConfig () {
 	Config.ClearType = 0;
 	Config.ClearPath = {
 		Range: 15,
-		Spectype: me.diff === 1 ? 0xF : 0,
+		Spectype: 0,
 	};
 
 	//Runewords, Cubing, & Crafting
@@ -262,7 +262,7 @@ function LoadConfig () {
 	Config.DodgeRange = 20; // Distance to keep from monsters.
 	Config.DodgeHP = 100; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
-	Config.CastStatic = 40;
+	Config.CastStatic = 50;
 	Config.StaticList = ["Duriel", "Mephisto", "Izual", "Diablo", "Colenzo the Annihilator", "Achmel the Cursed", "Bartuc the Bloody", "Ventar the Unholy", "Lister the Tormentor", "Baal"];
 
 	/*-----------------------------------------*/

@@ -361,7 +361,7 @@ function SoloLeveling () {
 	};
 
 	this.andariel = function () {
-		if (me.diff === 0 && Misc.checkQuest(6, 0)) {
+		if (me.diff === 0 && Misc.checkQuest(7, 0)) {
 			return true;
 		}
 
@@ -400,7 +400,10 @@ function SoloLeveling () {
 		delay(2000 + me.ping); // Wait for minions to die.
 		Pickit.pickItems();
 		Config.MercWatch = true;
-		Pather.changeAct();
+
+		if (!Misc.checkQuest(7, 0)) {
+			Pather.changeAct();
+		}
 
 		return true;
 	};
@@ -2151,11 +2154,25 @@ var merc, mercId = [], NTIP_CheckListNoTier = [],
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 const respecOne = [ 0, 28, 26, 25, 0, 0, 0][me.classid];
-const respecTwo = [ 0, 85, 85, 85, 0, 0, 0][me.classid];
+const respecTwo = [ 0, 85, 75, 85, 0, 0, 0][me.classid];
 
 // Customized Functions
 Attack.killTarget = function (name) {
-	let target = getUnit(1, name);
+	let target;
+
+	for (let i = 0; i < 3; i += 1) {
+		target = getUnit(1, name);
+
+		if (target) {
+			break;
+		}
+
+		delay(300 + me.ping);
+	}
+
+	if (!target) {
+		print("ÿc9SoloLevelingÿc0: Attack failed. " + target.name + " not found.");
+	}
 
 	if (target && !Attack.canAttack(target)) { // exit if target is immune
 		print("ÿc9SoloLevelingÿc0: Attack failed. " + target.name + " is immune.");
@@ -2163,17 +2180,22 @@ Attack.killTarget = function (name) {
 		return true;
 	}
 
-	while (target && target.hp > 0) {
-		ClassAttack.doAttack(target); // kill target
+	for (let h = 0; h < Config.MaxAttackCount; h += 1) {
+		ClassAttack.doAttack(target);
 
-		if (target.mode === 0 || target.mode === 12) {
+		if (target.dead) {
+
 			break;
+		}
+
+		if (me.classid === 1 && me.getSkill(54, 0) && getDistance(me, target) <= 10) {
+			Pather.moveTo(target.x, me.y < target.y ? target.y + 15 : target.y - 15);
 		}
 	}
 
 	Pickit.pickItems();
 
-	return true;
+	return target.dead;
 };
 
 Town.townTasks = function () {
@@ -2519,15 +2541,17 @@ Town.shopItems = function () {
 			}
 		}
 
-		if (result.result === 1 && i === besttierIndex && Item.canEquip(items[i]) && tierscore(items[i]) > Item.getEquippedItem(Item.getBodyLoc(items[i])[0]).tier) {
-			try {
-				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
-					Misc.itemLogger("AutoEquip Shopped", items[i]);
-					Misc.logItem("AutoEquip Shopped", items[i], result.line);
-					items[i].buy();
+		if (Item.getBodyLoc(items[i])[0] !== undefined) {
+			if (result.result === 1 && i === besttierIndex && Item.canEquip(items[i]) && tierscore(items[i]) > Item.getEquippedItem(Item.getBodyLoc(items[i])[0]).tier) {
+				try {
+					if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
+						Misc.itemLogger("AutoEquip Shopped", items[i]);
+						Misc.logItem("AutoEquip Shopped", items[i], result.line);
+						items[i].buy();
+					}
+				} catch (e) {
+					print(e);
 				}
-			} catch (e) {
-				print(e);
 			}
 		}
 
@@ -2839,6 +2863,157 @@ Town.organizeInventory = function () {
 
 		for (inv = 0; inv < items.length; inv += 1) {
 			movetoInventory(items[inv], true);
+		}
+	}
+
+	return true;
+};
+
+Town.clearInventory = function () {
+	var i, col, result, item, beltSize,
+		items = [];
+
+	this.checkQuestItems(); // only golden bird quest for now
+
+	// Return potions to belt
+	item = me.getItem(-1, 0);
+
+	if (item) {
+		do {
+			if (item.location === 3 && [76, 77, 78].indexOf(item.itemType) > -1) {
+				items.push(copyUnit(item));
+			}
+		} while (item.getNext());
+
+		beltSize = Storage.BeltSize();
+		col = this.checkColumns(beltSize);
+
+		// Sort from HP to RV
+		items.sort(function (a, b) {
+			return a.itemType - b.itemType;
+		});
+
+		while (items.length) {
+			item = items.shift();
+
+			for (i = 0; i < 4; i += 1) {
+				if (item.code.indexOf(Config.BeltColumn[i]) > -1 && col[i] > 0) {
+					if (col[i] === beltSize) { // Pick up the potion and put it in belt if the column is empty
+						if (item.toCursor()) {
+							clickItem(0, i, 0, 2);
+						}
+					} else {
+						clickItem(2, item.x, item.y, item.location); // Shift-click potion
+					}
+
+					delay(me.ping + 200);
+
+					col = this.checkColumns(beltSize);
+				}
+			}
+		}
+	}
+
+	// Cleanup remaining potions
+	item = me.getItem(-1, 0);
+
+	if (item) {
+		items = [
+			[], // array for hp
+			[] // array for mp
+		];
+
+		do {
+			if (item.itemType === 76) {
+				items[0].push(copyUnit(item));
+			}
+
+			if (item.itemType === 77) {
+				items[1].push(copyUnit(item));
+			}
+		} while (item.getNext());
+
+		// Cleanup healing potions
+		while (items[0].length > Config.HPBuffer) {
+			items[0].shift().interact();
+			delay(200 + me.ping);
+		}
+
+		// Cleanup mana potions
+		while (items[1].length > Config.MPBuffer) {
+			items[1].shift().interact();
+			delay(200 + me.ping);
+		}
+	}
+
+	// Any leftover items from a failed ID (crashed game, disconnect etc.)
+	items = Storage.Inventory.Compare(Config.Inventory);
+
+	for (i = 0; !!items && i < items.length; i += 1) {
+		if ([18, 41, 76, 77, 78].indexOf(items[i].itemType) === -1 && // Don't drop tomes, keys or potions
+			items[i].classid !== 524 && // Scroll of Inifuss
+			items[i].classid !== 525 && // Key to Cairn Stones
+			items[i].classid !== 549 && // Horadric Cube
+			items[i].classid !== 92 && // Staff of Kings
+			items[i].classid !== 521 && // Viper Amulet
+			items[i].classid !== 91 && // Horadric Staff
+			items[i].classid !== 552 && // Book of Skill
+			items[i].classid !== 545 && // Potion of Life
+			items[i].classid !== 546 && // A Jade Figurine
+			items[i].classid !== 547 && // The Golden Bird
+			items[i].classid !== 548 && // Lam Esen's Tome
+			items[i].classid !== 553 && // Khalim's Eye
+			items[i].classid !== 554 && // Khalim's Heart
+			items[i].classid !== 555 && // Khalim's Brain
+			items[i].classid !== 173 && // Khalim's Flail
+			items[i].classid !== 174 && // Khalim's Will
+			items[i].classid !== 644 && // Malah's Potion
+			items[i].classid !== 646 && // Scroll of Resistance
+			(items[i].code !== 529 || !!me.findItem(518, 0, 3)) && // Don't throw scrolls if no tome is found (obsolete code?)
+			(items[i].code !== 530 || !!me.findItem(519, 0, 3)) && // Don't throw scrolls if no tome is found (obsolete code?)
+			!Cubing.keepItem(items[i]) && // Don't throw cubing ingredients
+			!Runewords.keepItem(items[i]) && // Don't throw runeword ingredients
+			!CraftingSystem.keepItem(items[i]) // Don't throw crafting system ingredients
+		) {
+			result = Pickit.checkItem(items[i]).result;
+
+			if (!Item.autoEquipCheck(items[i])) {
+				result = 0;
+			}
+
+			if (NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result === 1) { // don't throw pickit items if fails autoequip
+				result = 1;
+			}
+
+			switch (result) {
+			case 0: // Drop item
+				if ((getUIFlag(0x0C) || getUIFlag(0x08)) && (items[i].getItemCost(1) <= 1 || items[i].itemType === 39)) { // Quest items and such
+					me.cancel();
+					delay(200);
+				}
+
+				if (getUIFlag(0xC) || (Config.PacketShopping && getInteractedNPC() && getInteractedNPC().itemcount > 0)) { // Might as well sell the item if already in shop
+					print("clearInventory sell " + items[i].name);
+					Misc.itemLogger("Sold", items[i]);
+					items[i].sell();
+				} else {
+					Misc.itemLogger("Dropped", items[i], "clearInventory");
+					items[i].drop();
+				}
+
+				break;
+			case 4: // Sell item
+				try {
+					print("LowGold sell " + items[i].name);
+					this.initNPC("Shop", "clearInventory");
+					Misc.itemLogger("Sold", items[i]);
+					items[i].sell();
+				} catch (e) {
+					print(e);
+				}
+
+				break;
+			}
 		}
 	}
 
@@ -4196,6 +4371,21 @@ var mercscore = function (item) {
 	mercRating += item.getStatEx(41) * mercWeights.LR; // add LR
 	mercRating += item.getStatEx(45) * mercWeights.PR; // add PR
 
+	let rwBase;
+
+	for (let x = 0; x < Config.Runewords.length; x += 1) {
+		let sockets = Config.Runewords[x][0].length;
+		let baseCID = Config.Runewords[x][1];
+
+		if (item.classid === baseCID && item.quality < 4 && item.getStat(194) === sockets && !item.getFlag(NTIPAliasFlag["runeword"])) {
+			rwBase = true;
+		}
+	}
+
+	if (rwBase) {
+		mercRating = -1;
+	}
+
 	return mercRating;
 };
 
@@ -4212,7 +4402,7 @@ var tierscore = function (item) {
 		FRW: 1, // faster run/walk
 		FHR: 3, // faster hit recovery
 		DEF: 0.05, // defense
-		ICB: 3, // increased chance to block
+		ICB: 2, // increased chance to block
 		// base stats
 		HP:	2,
 		MANA:	0.8,
@@ -4236,8 +4426,6 @@ var tierscore = function (item) {
 		// regen
 		HPREGEN: 2,
 		MANAREGEN: 2,
-		// sockets
-		sockets:	30,
 	};
 
 	var meleeWeights = {
@@ -4256,8 +4444,6 @@ var tierscore = function (item) {
 		// regen
 		HPREGEN: 2,
 		MANAREGEN: 2,
-		// sockets
-		sockets:	30,
 	};
 
 	var skillsWeights = {
@@ -4331,7 +4517,7 @@ var tierscore = function (item) {
 		let currLR = me.getStat(41); // current lite resist
 		let currPR = me.getStat(45); // current poison resist
 		// get item body location
-		let itembodyloc = Item.getBodyLoc(item); // resulting array
+		let itembodyloc = Item.getBodyLoc(item);
 
 		if (!itembodyloc) {
 			return resistRating;
@@ -4414,11 +4600,41 @@ var tierscore = function (item) {
 		return skillsRating;
 	};
 
+	// multiplier for belt type based on slots
+	let beltSlots;
+
+	switch (item.code) {
+	case "lbl": // sash
+	case "vbl": // light belt
+		beltSlots = 2;
+	case "mbl": // belt
+	case "tbl": // heavy belt
+		beltSlots = 3;
+	default: // everything else
+		beltSlots = 4;
+	}
+
+	let beltCheck = Item.getBodyLoc(item) === 8 ? beltSlots : 1; // if not a belt don't multiply
 	let tier = 1; // set to 1 for native autoequip to use items.
-	tier += this.generalScore(item);
-	tier += this.resistScore(item);
-	tier += this.buildScore(item);
-	tier += this.skillsScore(item);
+	tier += this.generalScore(item) * beltCheck;
+	tier += this.resistScore(item) * beltCheck;
+	tier += this.buildScore(item) * beltCheck;
+	tier += this.skillsScore(item) * beltCheck;
+
+	let rwBase; // don't score runeword base armors
+
+	for (let x = 0; x < Config.Runewords.length; x += 1) {
+		let sockets = Config.Runewords[x][0].length;
+		let baseCID = Config.Runewords[x][1];
+
+		if (item.classid === baseCID && item.quality < 4 && item.getStat(194) === sockets && !item.getFlag(NTIPAliasFlag["runeword"])) {
+			rwBase = true;
+		}
+	}
+
+	if (rwBase) {
+		tier = -1;
+	}
 
 	return tier;
 };
