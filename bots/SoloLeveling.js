@@ -3825,56 +3825,6 @@ NTIP.arrayLooping = function (arraytoloop) {
 	return true;
 };
 
-NTIP.generateTierFunc = function (tierType) {
-	return function (item) {
-		let i, tier = -1;
-
-		const updateTier = (wanted) => {
-			const tmpTier = wanted[tierType](item);
-
-			if (tier < tmpTier) {
-				tier = tmpTier;
-			}
-		};
-
-		// Go through ALL lines that describe the item
-		for (i = 0; i < NTIP_CheckList.length; i += 1) {
-
-			if (NTIP_CheckList[i].length !== 3) {
-				continue;
-			}
-
-			let [type,stat,wanted] = NTIP_CheckList[i];
-
-			// If the line doesnt have a tier of this type, we dont need to call it
-			if (typeof wanted === 'object' && wanted && typeof wanted[tierType] === 'function') {
-				try {
-					if (typeof type === 'function') {
-						if (type(item)) {
-							if (typeof stat === 'function') {
-								if (stat(item)) {
-									updateTier(wanted);
-								}
-							} else {
-								updateTier(wanted);
-							}
-						}
-					} else if (typeof stat === 'function') {
-						if (stat(item)) {
-							updateTier(wanted);
-						}
-					}
-				} catch (e) {
-					const info = stringArray[i];
-				//	Misc.errorReport("ÿc1Pickit Tier ("+tierType+") error! Line # ÿc2" + info.line + " ÿc1Entry: ÿc0" + info.string + " (" + info.file + ") Error message: " + e.message); 
-				}
-			}
-		}
-
-		return tier;
-	};
-};
-
 NTIP.CheckItem = function (item, entryList, verbose) {
 	var i, list, identified, num,
 		rval = {},
@@ -4650,26 +4600,11 @@ var tierscore = function (item) {
 		return skillsRating;
 	};
 
-	// multiplier for belt type based on slots
-	let beltSlots;
-
-	switch (item.code) {
-	case "lbl": // sash
-	case "vbl": // light belt
-		beltSlots = 2;
-	case "mbl": // belt
-	case "tbl": // heavy belt
-		beltSlots = 3;
-	default: // everything else
-		beltSlots = 4;
-	}
-
-	let beltCheck = Item.getBodyLoc(item) === 8 ? beltSlots : 1; // if not a belt don't multiply
 	let tier = 1; // set to 1 for native autoequip to use items.
-	tier += this.generalScore(item) * beltCheck;
-	tier += this.resistScore(item) * beltCheck;
-	tier += this.buildScore(item) * beltCheck;
-	tier += this.skillsScore(item) * beltCheck;
+	tier += this.generalScore(item);
+	tier += this.resistScore(item);
+	tier += this.buildScore(item);
+	tier += this.skillsScore(item);
 
 	let rwBase; // don't score runeword base armors
 
