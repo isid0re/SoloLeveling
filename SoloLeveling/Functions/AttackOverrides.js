@@ -21,9 +21,8 @@ Attack.killTarget = function (name) {
 		print("ÿc9SoloLevelingÿc0: Attack failed. " + target.name + " not found.");
 		Attack.clear(20);
 		Pickit.pickItems();
-		
+
 		return true;
-		
 	}
 
 	if (target && !Attack.canAttack(target)) { // exit if target is immune

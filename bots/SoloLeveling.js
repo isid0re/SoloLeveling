@@ -3,17 +3,16 @@
 *	@author		isid0re
 *	@desc		Solo leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
 *				Make sure kolbot difficulty is set to "highest"
-*	@TODO		
 */
 
 // Sequence Settings
 var sequence = [
-		"den", "bloodraven", "tristam", "countess", "pits", "andariel", // Act 1
-		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
-		"eye", "heart", "tome", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
-		"izual", "hellforge", "diablo", //Act 4
-		"shenk", "saveBarby", "anya", "pindle", "ancients", "baal" // Act 5
-	];
+	"den", "bloodraven", "tristam", "countess", "pits", "andariel", // Act 1
+	"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
+	"eye", "heart", "tome", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
+	"izual", "hellforge", "diablo", //Act 4
+	"shenk", "saveBarby", "anya", "pindle", "ancients", "baal" // Act 5
+];
 
 //---------------- Do Not Touch Below ----------------\\
 
@@ -80,15 +79,15 @@ function SoloLeveling () {
 
 		return true;
 	};
-	
+
 	this.runsequence = function () {
 		let j, k;
-		
+
 		for (k = 0; k < sequence.length; k += 1) {
 			if (!isIncluded("SoloLeveling/Scripts/" + sequence[k] + ".js")) {
 				include("SoloLeveling/Scripts/" + sequence[k] + ".js");
 			}
-			
+
 			if (!me.inTown) {
 				Town.goToTown();
 			}
@@ -104,13 +103,13 @@ function SoloLeveling () {
 			}
 		}
 	};
-	
+
 	// Start Running Script
 	this.setup();
 	addEventListener("gamepacket", Misc.gamePacket);
 	this.runsequence();
 	removeEventListener("gamepacket", Misc.gamePacket);
-	
+
 	if (Misc.checkQuest(40, 0) || me.gametype === 0 && Misc.checkQuest(26, 0)) {
 		D2Bot.printToConsole('SoloLeveling: ' + difficulty + ' difficulty completed. Character Level: ' + me.charlvl + '. Running script again!');
 	} else {
@@ -120,4 +119,4 @@ function SoloLeveling () {
 	scriptBroadcast('quit');
 
 	return true;
-}	
+}

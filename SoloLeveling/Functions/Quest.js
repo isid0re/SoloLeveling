@@ -182,7 +182,7 @@ var Quest = {
 
 		return true;
 	},
-	
+
 	collectItem: function (classid, chestID) {
 		if (me.getItem(classid)) {
 			return true;

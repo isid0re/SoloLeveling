@@ -371,6 +371,8 @@ var tierscore = function (item) {
 			for (let part = 0; part < body.length; part++) {
 				if (Items.getEquippedItem(body[part]).getStatEx(cbfItem)) {
 					haveCBF = true;
+
+					break;
 				}
 			}
 
