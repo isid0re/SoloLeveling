@@ -311,7 +311,7 @@ function LoadConfig () {
 
 				let build = buildType + "Build" ;
 				let classname = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-				let template = "config/Builds/SoloLeveling/" + classname + "." + build + ".js";
+				let template = "SoloLeveling/BuildFiles/" + classname + "." + build + ".js";
 
 				return template.toLowerCase();
 			}
@@ -569,7 +569,7 @@ function LoadConfig () {
 			}
 
 			var Treachery = [ // merc Treachery
-				"([Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3",
+				"([Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Treachery);
 
@@ -803,19 +803,19 @@ function LoadConfig () {
 
 		var autoequipTiers = [ // dynamic tiers autoequip setup
 			//weapon
-			"([Type] == Scepter || [Type] == Mace || [Type] == Sword || [Type] == knife) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"([Type] == Scepter || [Type] == Mace && [Quality] >= Magic || [Type] == Sword && ([Quality] >= Magic || [flag] == runeword) || [Type] == knife && [Quality] >= Magic) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//Helmet
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//belt
-			"[type] == belt && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[type] == belt && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//boots
-			"[Type] == Boots && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//armor
-			"[type] == armor && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//shield
-			"([type] == shield || [type] == auricshields) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"([type] == shield || [type] == auricshields) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//gloves
-			"[Type] == Gloves && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//ammy
 			"[Type] == Amulet && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//rings

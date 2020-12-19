@@ -324,7 +324,7 @@ function LoadConfig () {
 
 				let build = buildType + "Build" ;
 				let classname = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-				let template = "config/Builds/SoloLeveling/" + classname + "." + build + ".js";
+				let template = "SoloLeveling/BuildFiles/" + classname + "." + build + ".js";
 
 				return template.toLowerCase();
 			}
@@ -695,24 +695,24 @@ function LoadConfig () {
 
 		var autoequipTiers = [ // autoequip setup
 			//weapon
-			"([type] == wand || [type] == sword || [type] == knife) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"([type] == wand || [type] == sword && ([Quality] >= Magic || [flag] == runeword) || [type] == knife && [Quality] >= Magic) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//Helmet
 			"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000", // harlequin's crest
-			"([type] == helm || [type] == circlet) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//belt
 			"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
-			"[type] == belt && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[type] == belt && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//boots
 			"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 50 # [tier] == 100000", //war traveler
-			"[Type] == Boots && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//armor
 			"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
-			"[type] == armor && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//shield
-			"([type] == shield || [type] == auricshields) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"([type] == shield && ([Quality] >= Magic || [flag] == runeword) || [type] == voodooheads) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//gloves
 			"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000",
-			"[Type] == Gloves && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//ammy
 			"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
 			"[Type] == Amulet && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",

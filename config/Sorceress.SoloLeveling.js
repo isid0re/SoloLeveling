@@ -315,7 +315,7 @@ function LoadConfig () {
 
 				let build = buildType + "Build" ;
 				let classname = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-				let template = "config/Builds/SoloLeveling/" + classname + "." + build + ".js";
+				let template = "SoloLeveling/BuildFiles/" + classname + "." + build + ".js";
 
 				return template.toLowerCase();
 			}
@@ -341,7 +341,7 @@ function LoadConfig () {
 		};
 
 		// Character Build Setup
-		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
+		var startBuild = "Start"; // build ends when reaching respecOne
 		var middleBuild = "BlizzBaller"; // starts at respecOne ends when reaching respecTwo
 		var chooseBuffer = me.charlvl < 5 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
 		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
@@ -656,25 +656,25 @@ function LoadConfig () {
 		var autoequipTiers = [ // autoequip setup
 			//weapon
 			"[name] == swirlingcrystal && [quality] == set && [flag] != ethereal # [skilllightningmastery]+[skillfiremastery]+[skillcoldmastery] >= 3 # [tier] == 100000", //tals orb
-			"([type] == orb || [type] == wand || [type] == sword || [type] == knife) && [flag] != ethereal # [enhanceddamage] >= 0 # [tier] == tierscore(item)",
+			"([type] == orb || [type] == wand && [Quality] >= Magic || [type] == sword && ([Quality] >= Magic || [flag] == runeword) || [type] == knife && [Quality] >= Magic) && [flag] != ethereal # [enhanceddamage] >= 0 # [tier] == tierscore(item)",
 			//Helmet
 			"[name] == deathmask && [quality] == set && [flag] != ethereal # [coldresist] == 15 && [lightresist] == 15 # [tier] == 100000", //tals mask
-			"([type] == helm || [type] == circlet) && [flag] != ethereal #  [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal #  [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//belt
 			"[name] == meshbelt && [quality] == set && [flag] != ethereal # [itemmagicbonus] >= 10 # [tier] == 100000", //tals belt
-			"[type] == belt && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[type] == belt && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//boots
 			"[Name] == SharkskinBoots && [Quality] == Unique && [Flag] != Ethereal # [MaxHP] >= 65 # [tier] == 100000", //waterwalks
-			"[Type] == Boots && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//armor
 			"[name] == lacqueredplate && [quality] == set # [coldresist] >= 1 # [tier] == 100000", //tals armor
-			"[type] == armor && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//shield
 			"[name] == roundshield && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 180 # [tier] == 100000", //mosers
-			"[type] == shield && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[type] == shield && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//gloves
 			"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000", //magefist
-			"[Type] == Gloves && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//ammy
 			"[name] == amulet && [quality] == set # [lightresist] == 33 # [tier] == 100000", //tals ammy
 			"[Type] == Amulet && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
