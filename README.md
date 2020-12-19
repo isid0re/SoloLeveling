@@ -1,6 +1,6 @@
 # SoloLeveling
 
-An auto leveling script for all Diablo 2 softcore expansion characters using Kolbot from level 1 to 99. After the initial setup, the bot will operate without user involvement.
+An automated leveling script for all Diablo 2 softcore expansion characters using Kolbot from level 1 to 99. After the initial setup, the bot will operate without user involvement.
 
 ### Features
 - Operates in Hell difficulty within 24 hours
@@ -14,10 +14,17 @@ An auto leveling script for all Diablo 2 softcore expansion characters using Kol
 
 This script is designed to be plug and play with [blizzhackers/kolbot](https://github.com/blizzhackers/kolbot) after you've installed Kolbot per it's installation instructions. If you are downloading Kolbot from the discord link use the "New Development" link.
 
-1. Download SoloLeveling 
-2. Copy ```SoloLeveling.js``` from ```SoloLeveling\bots\``` into ```Kolbot\d2bs\kolbot\libs\bots\```
-3. Copy all of the files from ```SoloLeveling\config\Builds``` including the folder ```\SoloLeveling\``` and its contents into ```Kolbot\d2bs\kolbot\libs\config\Builds\```
-4. Copy the ```Classname.SoloLeveling.js``` config files from ```SoloLeveling\config``` into ```Kolbot\d2bs\kolbot\libs\config\```
+1. Download SoloLeveling.zip
+2. Extract and copy all files into the ```libs``` folder.
+3. A proper installation will have the following folders and files added to the `libs` directory.
+```	
+	bots\				sololeveling.js
+	SoloLeveling\Scripts\ 		[multiple scripts used for bot sequences]
+	SoloLeveling\Functions\ 	[the various overrides and globals used by this script]
+	SoloLeveling\BuildFiles\ 	[the various build files for the bots]
+	configs\Builds\ 		[the autobuild templates for the bot builds]
+	configs\ 			[the various class config files for the bots]
+```
 
 ### Usage
 1. Select the character config file for the class you want to build.
@@ -28,9 +35,9 @@ Paladin.SoloLeveling.js >> Paladin.YourCharacterNameGoesHere.js
 3. Select the finalbuild you want to have by removing the // lines. The following example shows the finalbuild selected will be a Hammerdin:  
 ```
 Scripts.SoloLeveling = true; // *** Leveling Script  ***
-	const finalBuild = "Hammerdin";
-	//const finalBuild = "Smiter";
-	//const finalBuild = "Zealot";
+	var finalBuild = "Hammerdin";
+	//var finalBuild = "Smiter";
+	//var finalBuild = "Zealot";
 ``` 
 4. Add a profile in D2Bot as you normally would using the character name as spelled in the selected config file.
 5. Ensure the Difficulty is set to HIGHEST.
