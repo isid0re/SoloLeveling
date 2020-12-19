@@ -17,7 +17,8 @@ This script is designed to be plug and play with [blizzhackers/kolbot](https://g
 1. Download SoloLeveling.zip
 2. Extract and copy all files into the ```libs``` folder.
 3. A proper installation will have the following folders and files added to the `libs` directory.
-```	bots\				sololeveling.js
+```	
+	bots\				sololeveling.js
 	SoloLeveling\Scripts\ 		[multiple scripts used for bot sequences]
 	SoloLeveling\Functions\ 	[the various overrides and globals used by this script]
 	SoloLeveling\BuildFiles\ 	[the various build files for the bots]
