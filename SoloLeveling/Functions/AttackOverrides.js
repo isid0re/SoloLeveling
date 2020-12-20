@@ -18,8 +18,8 @@ Attack.killTarget = function (name) {
 	}
 
 	if (!target) {
-		print("ÿc9SoloLevelingÿc0: Attack failed. " + target.name + " not found.");
-		Attack.clear(20);
+		print("ÿc9SoloLevelingÿc0: Target not found. Performing Attack.Clear(25)");
+		Attack.clear(25);
 		Pickit.pickItems();
 
 		return true;

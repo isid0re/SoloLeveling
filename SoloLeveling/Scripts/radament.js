@@ -1,9 +1,7 @@
 /*
-*	@filename	SoloLeveling.js
+*	@filename	radament.js
 *	@author		isid0re
-*	@desc		AutoPlay leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
-*				Make sure kolbot difficulty is set to "highest"
-*	@TODO		- dynamic tiers calibrate weights for mercscore and tierscore
+*	@desc		radament quest for skillbook
 */
 
 function radament () {
@@ -32,4 +30,4 @@ function radament () {
 	Town.npcInteract("atma");
 
 	return true;
-};
+}

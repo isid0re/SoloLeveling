@@ -1,9 +1,7 @@
 /*
-*	@filename	SoloLeveling.js
+*	@filename	bloodraven.js
 *	@author		isid0re
-*	@desc		AutoPlay leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
-*				Make sure kolbot difficulty is set to "highest"
-*	@TODO		- dynamic tiers calibrate weights for mercscore and tierscore
+*	@desc		kill bloodraven for free merc normal a1 and maus MF hunting for endgame
 */
 
 function bloodraven () {
@@ -42,4 +40,4 @@ function bloodraven () {
 	Attack.clearLevel();
 
 	return true;
-};
+}

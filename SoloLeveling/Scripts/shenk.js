@@ -1,9 +1,7 @@
 /*
-*	@filename	SoloLeveling.js
+*	@filename	shenk.js
 *	@author		isid0re
-*	@desc		AutoPlay leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
-*				Make sure kolbot difficulty is set to "highest"
-*	@TODO		- dynamic tiers calibrate weights for mercscore and tierscore
+*	@desc		shenk quest for sockets and wp's
 */
 
 function shenk () {
@@ -31,4 +29,4 @@ function shenk () {
 	Pickit.pickItems();
 
 	return true;
-};
+}

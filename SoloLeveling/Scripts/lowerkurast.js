@@ -1,9 +1,7 @@
 /*
-*	@filename	SoloLeveling.js
+*	@filename	lowerkurast.js
 *	@author		isid0re
-*	@desc		AutoPlay leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
-*				Make sure kolbot difficulty is set to "highest"
-*	@TODO		- dynamic tiers calibrate weights for mercscore and tierscore
+*	@desc		LK runs for MF, rune drops, and gold
 */
 
 function lowerkurast () {
@@ -25,4 +23,4 @@ function lowerkurast () {
 	Misc.openChestsInArea(79);
 
 	return true;
-};
+}

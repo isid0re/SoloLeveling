@@ -166,7 +166,7 @@ function diablo () {
 
 		return false;
 	};
-	
+
 	this.openSeal = function (classid) {
 		for (let sealspot = 0; sealspot < 5; sealspot += 1) {
 			Pather.moveToPreset(108, 2, classid, classid === 394 ? 5 : 2, classid === 394 ? 5 : 0);
@@ -284,9 +284,9 @@ function diablo () {
 	Config.MercWatch = false;
 	Pather.moveTo(7788, 5292, 3, 30);
 	this.diabloPrep();
-	let diablo = getUnit(1, 243);
+	let theD = getUnit(1, 243);
 
-	if (!diablo) {
+	if (!theD) {
 		print("ÿc9SoloLevelingÿc0: Diablo not found. Checking seal bosses.");
 		this.infector();
 		this.seis();
@@ -314,4 +314,4 @@ function diablo () {
 	}
 
 	return true;
-};
+}

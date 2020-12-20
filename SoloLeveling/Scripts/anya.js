@@ -1,9 +1,7 @@
 /*
-*	@filename	SoloLeveling.js
+*	@filename	anya.js
 *	@author		isid0re
-*	@desc		AutoPlay leveling for any class type. Just make a character and name it. Uses predefined buildtemplates.
-*				Make sure kolbot difficulty is set to "highest"
-*	@TODO		- dynamic tiers calibrate weights for mercscore and tierscore
+*	@desc		Anya rescue from frozen river
 */
 
 function anya () {
@@ -55,4 +53,4 @@ function anya () {
 	Town.npcInteract("anya");
 
 	return true;
-};
+}
