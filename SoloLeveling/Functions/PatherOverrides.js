@@ -125,7 +125,7 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 			if ((getDistance(monstadoor1, x, y) < 4 && getDistance(me, monstadoor1) < 9) || getDistance(me, monstadoor1) < 4) {
 
 				for (p = 0; p < 20 && monstadoor1.hp; p += 1) {
-					ClassAttack.doAttack(monstadoor1);
+					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstadoor1);
 				}
 
 				me.overhead("Broke a barricaded door!");
@@ -138,7 +138,7 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 			if ((getDistance(monstadoor2, x, y) < 4 && getDistance(me, monstadoor2) < 9) || getDistance(me, monstadoor2) < 4) {
 
 				for (p = 0; p < 20 && monstadoor2.hp; p += 1) {
-					ClassAttack.doAttack(monstadoor2);
+					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstadoor2);
 				}
 
 				me.overhead("Broke a barricaded door!");
@@ -151,7 +151,7 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 			if ((getDistance(monstawall1, x, y) < 4 && getDistance(me, monstawall1) < 9) || getDistance(me, monstawall1) < 4) {
 
 				for (p = 0; p < 20 && monstawall1.hp; p += 1) {
-					ClassAttack.doAttack(monstawall1);
+					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstawall1);
 				}
 
 				me.overhead("Broke a barricaded wall!");
@@ -164,7 +164,7 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 			if ((getDistance(monstawall2, x, y) < 4 && getDistance(me, monstawall2) < 9) || getDistance(me, monstawall2) < 4) {
 
 				for (p = 0; p < 20 && monstawall2.hp; p += 1) {
-					ClassAttack.doAttack(monstawall2);
+					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstawall2);
 				}
 
 				me.overhead("Broke a barricaded wall!");

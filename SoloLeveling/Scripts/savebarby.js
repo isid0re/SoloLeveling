@@ -45,7 +45,7 @@ function saveBarby () {
 			Pather.moveToUnit(door, 1, 0);
 
 			for (let i = 0; i < 20 && door.hp; i += 1) {
-				ClassAttack.doAttack(door);
+				Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), door);
 			}
 		}
 
