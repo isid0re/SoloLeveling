@@ -50,6 +50,10 @@ Attack.killTarget = function (name) {
 };
 
 if (me.classid === 2) { // Necromancer
+	if (!isIncluded("common/Attacks/Necromancer.js")) {
+		include("common/Attacks/Necromancer.js");
+	}
+
 	ClassAttack.isCursable = function (unit) {
 		if (copyUnit(unit).name === undefined || unit.name.indexOf(getLocaleString(11086)) > -1) { // "Possessed"
 			return false;
