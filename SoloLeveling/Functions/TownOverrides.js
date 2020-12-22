@@ -52,6 +52,7 @@ Town.townTasks = function () {
 	Item.autoEquip();
 	Misc.hireMerc();
 	Misc.equipMerc();
+	this.clearInventory();
 	this.gamble();
 	Town.stash();
 	this.clearJunk();
@@ -137,6 +138,7 @@ Town.doChores = function (repair = false) {
 	Item.autoEquip();
 	Misc.hireMerc();
 	Misc.equipMerc();
+	this.clearInventory();
 	this.gamble();
 	this.stash();
 	this.clearJunk();
@@ -789,6 +791,10 @@ Town.clearInventory = function () {
 				result = 0;
 			}
 
+			if (!Item.autoEquipCheckMerc(items[i])) {
+				result = 0;
+			}
+
 			if (NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result === 1) { // don't throw pickit items if fails autoequip
 				result = 1;
 			}
@@ -855,7 +861,8 @@ Town.clearJunk = function () {
 
 		if (tier > 0 && bodyLoc) {
 			if ((junk[0].location === 7 || junk[0].location === 3) &&
-			NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 &&
+			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 ||
+			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 1 && junk[0].getFlag(NTIPAliasFlag["runeword"]))) &&
 			tier <= Item.getEquippedItem(bodyLoc).tier) {
 				if (junk[0].drop()) {
 					me.overhead('cleared autoequip junk');
@@ -870,7 +877,8 @@ Town.clearJunk = function () {
 
 		if (merctier > 0 && mercbodyLoc) {
 			if ((junk[0].location === 7 || junk[0].location === 3) &&
-				NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 &&
+			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 ||
+			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 1 && junk[0].getFlag(NTIPAliasFlag["runeword"]))) &&
 				merctier <= Item.getEquippedItemMerc(mercbodyLoc).tier) {
 				if (junk[0].drop()) {
 					me.overhead('cleared merc junk');

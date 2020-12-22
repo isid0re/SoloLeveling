@@ -260,6 +260,7 @@ Misc.hireMerc = function () {
 			if (me.diff !== mercDiff && me.diff === 0) {
 				if (merc.getSkill(tempMercAura, 1)) {
 					print('ÿc9SoloLevelingÿc0: prayer merc hired.');
+					NTIP.addLine("[Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)");
 
 					break;
 				}
@@ -298,9 +299,12 @@ Misc.setupMerc = function () {
 	var mercGear = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 	];
 	NTIP.arrayLooping(mercGear);
+
+	if (me.diff !== 0) {
+		NTIP.addLine("[Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)");
+	}
 
 	return true;
 };

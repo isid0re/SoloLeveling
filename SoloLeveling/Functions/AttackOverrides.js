@@ -64,12 +64,18 @@ if (me.classid === 2) { // Necromancer
 		}
 
 		switch (unit.classid) {
+		case 190: // maggotegg1
+		case 191: // maggotegg1
+		case 192: // maggotegg1
+		case 193: // maggotegg1
+		case 194: // maggotegg1
 		case 206: // Foul Crow Nest
 		case 207: // BloodHawkNest
 		case 208: // BlackVultureNest
 		case 258: // Water Watcher
 		case 261: // Water Watcher
 		case 266: // Flavie
+		case 273: // gargoyle trap
 		case 348: // Turret
 		case 349: // Turret
 		case 350: // Turret
@@ -82,6 +88,7 @@ if (me.classid === 2) { // Necromancer
 		case 524: // Barricade Wall Right
 		case 525: // Barricade Wall Left
 		case 528: // Evil Demon Hut
+		case 681: // maggotegg1 (WSK)
 			return false;
 		}
 

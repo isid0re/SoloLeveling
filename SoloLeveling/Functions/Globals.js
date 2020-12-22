@@ -259,7 +259,7 @@ var mercscore = function (item) {
 	mercRating += item.getStatEx(93) * mercWeights.IAS; // add IAS
 	mercRating += item.getStatEx(21) * mercWeights.MINDMG; // add MIN damage
 	mercRating += item.getStatEx(22) * mercWeights.MAXDMG; // add MAX damage
-	mercRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55) + item.getStatEx(57) + item.getStatEx(58)) * mercWeights.ELEDMG; // add elemental damage
+	mercRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55)) * mercWeights.ELEDMG; // add elemental damage
 	mercRating += item.getStatEx(19) * mercWeights.AR; // add AR
 	mercRating += item.getStatEx(136) * mercWeights.CB; // add crushing blow
 	mercRating += item.getStatEx(60) * mercWeights.LL; // add LL
@@ -363,13 +363,15 @@ var tierscore = function (item) {
 		let cbfItem = NTIPAliasStat["itemcannotbefrozen"],
 			cbfRating = 0,
 			needsCBF = !me.getSkill(54, 0),
-			body = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; //body slots
+			body = me.getItems()
+				.filter(item => [1].indexOf(item.location) > -1 ) // limit search to equipped body parts
+				.sort((a, b) => a.location - b.location); // Sort on body, low to high.
 
 		if (needsCBF && item.getStatEx(cbfItem)) {
 			let haveCBF = false;
 
-			for (let part = 0; part < body.length; part++) {
-				if (Items.getEquippedItem(body[part]).getStatEx(cbfItem)) {
+			for (let part = 0; part < body.length; part++) { // total 10 body slots
+				if (body[part].getStatEx(cbfItem)) {
 					haveCBF = true;
 
 					break;
