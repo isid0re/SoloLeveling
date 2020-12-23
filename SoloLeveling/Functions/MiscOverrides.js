@@ -532,7 +532,7 @@ Item.autoEquipMerc = function () {
 	while (items.length > 0) {
 		items.sort(sortEq);
 
-		tier = NTIP.CheckItem(items[0], NTIP_CheckListNoTier, true).result === 0 ? mercscore(items[0]) : 0;
+		tier = mercscore(items[0]);
 		bodyLoc = Item.getBodyLocMerc(items[0]);
 
 		if (tier > 0 && bodyLoc) {

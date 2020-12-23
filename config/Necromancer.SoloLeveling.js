@@ -180,7 +180,7 @@ function LoadConfig () {
 	Config.AutoEquip = true;
 
 	// Pickit config.
-	Config.PickRange = me.diff === 0 ? 10 : me.diff === 1 ? 20 : 40;
+	Config.PickRange = me.diff === 0 ? 20 : 40;
 	Config.FastPick = true;
 	Config.ItemInfo = true;
 	Config.CainID.Enable = false;

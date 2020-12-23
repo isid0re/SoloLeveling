@@ -10,8 +10,8 @@ function tristam () {
 	}
 
 	Town.townTasks();
-	print('ÿc9SoloLevelingÿc0: starting cain');
-	me.overhead("cain");
+	print('ÿc9SoloLevelingÿc0: starting tristam');
+	me.overhead("tristam");
 
 	if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 		if (!me.getItem(524)) {

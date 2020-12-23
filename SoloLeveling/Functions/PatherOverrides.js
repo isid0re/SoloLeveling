@@ -4,7 +4,7 @@
 *	@desc		Pather.js fixes to improve functionality
 */
 
-Pather.killMonsters = function (arg) { // summoner targeting provided by penguins0690
+NodeAction.killMonsters = function (arg) { // summoner targeting provided by penguins0690
 	var monList;
 
 	if (Config.Countess.KillGhosts && [21, 22, 23, 24, 25].indexOf(me.area) > -1) {
@@ -40,6 +40,12 @@ Pather.killMonsters = function (arg) { // summoner targeting provided by penguin
 
 	if (arg.clearPath !== false) {
 		Attack.clear(15, typeof arg.clearPath === "number" ? arg.clearPath : 0);
+	}
+};
+
+NodeAction.popChests = function () {
+	if (Config.OpenChests) {
+		Misc.openChests(Config.ClearPath.Range);
 	}
 };
 

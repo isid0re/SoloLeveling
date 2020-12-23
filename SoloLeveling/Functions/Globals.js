@@ -436,7 +436,7 @@ var tierscore = function (item) {
 		let baseLR = currLR - olditemLR;
 		let basePR = currPR - olditemPR;
 		// if baseRes < max resists give score value upto max resists reached
-		let maxRes = 175;
+		let maxRes = me.gametype === 1 ? 175 : 125;
 		let FRlimit = Math.max(maxRes - baseFR, 0);
 		let CRlimit = Math.max(maxRes - baseCR, 0);
 		let LRlimit = Math.max(maxRes - baseLR, 0);
