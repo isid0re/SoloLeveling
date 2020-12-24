@@ -15,34 +15,16 @@ var	levelcap = [37, 63, 100][me.diff];
 
 // SoloLeveling Pickit Items
 var valuableItems = [
-	'[type] == ring && [quality] >= magic # [fcr] >= 600',
-	'[type] == amulet && [quality] >= magic # [fcr] >= 600',
-	'[type] == armor && [quality] >= rare # [fcr] >= 600',
-	'[type] == amazonspear && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == amazonjavelin && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == javelin && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == anyshield && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == voodooheads && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == primalhelm && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == orb && [quality] >= normal # [enhanceddamage] >= 600',
-	'[type] == wand && [quality] >= normal # [enhanceddamage] >= 600',
-	'[type] == staff && [quality] >= normal # [enhanceddamage] >= 600',
-	'[type] == pelt && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == helm && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == boots && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == axe && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == sword && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == bow && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == scepter && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == throwingknife && [quality] >= magic # [enhanceddamage] >= 600',
-	'([type] == handtohand || [type] == assassinclaw) && [quality] >= magic  # [enhanceddamage] >= 600',
-	'[type] == crossbow && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == club && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == mace && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == hammer && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == crossbow && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == throwingaxe && [quality] >= magic # [enhanceddamage] >= 600',
-	'[type] == knife && [quality] >= magic # [enhanceddamage] >= 600',
+	'([type] == ring || [type] == amulet) && [quality] >= magic # [fcr] >= 600',
+	'([type] == armor || [type] == boots || [type] == gloves || [type] == belt) && [quality] >= magic # [fcr] >= 600',
+	'([type] == helm || [type] == circlet || [type] == primalhelm || [type] == pelt)&& [quality] >= magic # [fcr] >= 600',
+	'([type] == anyshield || [type] == voodooheads) && [quality] >= magic # [fcr] >= 600',
+	'([type] == javelin || [type] == amazonspear || [type] == amazonjavelin) && [quality] >= magic # [fcr] >= 600',
+	'([type] == orb || [type] == wand || [type] == staff) && [quality] >= normal # [fcr] >= 600',
+	'([type] == throwingaxe || [type] == axe || [type] == mace || [type] == club || [type] == scepter || [type] == hammer) && [quality] >= magic # [fcr] >= 600',
+	'([type] == sword || [type] == knife || [type] == throwingknife) && [quality] >= magic # [fcr] >= 600',
+	'([type] == bow || [type] == crossbow) && [quality] >= magic # [fcr] >= 600',
+	'([type] == handtohand || [type] == assassinclaw) && [quality] >= magic  # [fcr] >= 600',
 ];
 
 var generalItems = [
@@ -201,6 +183,24 @@ var haveItem = function (type, flag, iName) {
 	}
 
 	return itemCHECK;
+};
+
+var indexOfMax = function (arr) {
+	if (arr.length === 0) {
+		return -1;
+	}
+
+	var max = arr[0];
+	var maxIndex = 0;
+
+	for (let index = 1; index < arr.length; index++) {
+		if (arr[index] > max) {
+			maxIndex = index;
+			max = arr[index];
+		}
+	}
+
+	return maxIndex;
 };
 
 // Dynamic Tiers

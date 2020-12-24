@@ -137,6 +137,32 @@ Item.getBodyLoc = function (item) {
 	return bodyLoc;
 };
 
+Item.autoEquipCheck = function (item) {
+	if (!Config.AutoEquip) {
+		return true;
+	}
+
+	var i,
+		tier = tierscore(item),
+		bodyLoc = this.getBodyLoc(item);
+
+	if (tier > 0 && bodyLoc) {
+		for (i = 0; i < bodyLoc.length; i += 1) {
+			// Low tier items shouldn't be kept if they can't be equipped
+			if (tier > this.getEquippedItem(bodyLoc[i]).tier && (this.canEquip(item) || !item.getFlag(0x10))) {
+				return true;
+			}
+
+			// Sell/ignore low tier items, keep high tier
+			if (item.getFlag(0x10) && tier > 0 && tier < this.getEquippedItem(bodyLoc[i]).tier) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+};
+
 //	Merc Hire and Setup
 var merc, mercId = [];
 

@@ -287,24 +287,6 @@ Town.shopItems = function () {
 		return true;
 	}
 
-	function indexOfMax (arr) {
-		if (arr.length === 0) {
-			return -1;
-		}
-
-		var max = arr[0];
-		var maxIndex = 0;
-
-		for (let index = 1; index < arr.length; index++) {
-			if (arr[index] > max) {
-				maxIndex = index;
-				max = arr[index];
-			}
-		}
-
-		return maxIndex;
-	}
-
 	var i, item, result,
 		items = [],
 		tierscoreCheck = [],
@@ -333,6 +315,7 @@ Town.shopItems = function () {
 
 	let besttierIndex = indexOfMax(tierscoreCheck);
 	let bestmercIndex = indexOfMax(mercscoreCheck);
+	print("ÿc9SoloLevelingÿc0: Evaluating " + npc.itemcount + " items.");
 
 	for (i = 0; i < items.length; i += 1) { // pickit wanted only
 		if (Pickit.checkItem(items[i])) {
@@ -879,10 +862,32 @@ Town.clearJunk = function () {
 			if ((junk[0].location === 7 || junk[0].location === 3) &&
 			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 ||
 			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 1 && junk[0].getFlag(NTIPAliasFlag["runeword"]))) &&
-				merctier <= Item.getEquippedItemMerc(mercbodyLoc).tier) {
+			merctier <= Item.getEquippedItemMerc(mercbodyLoc).tier) {
 				if (junk[0].drop()) {
 					me.overhead('cleared merc junk');
 					print("ÿc9SoloLevelingÿc0: Cleared merc junk - " + junk[0].name);
+					delay(50 + me.ping);
+				}
+			}
+		}
+
+		let rwBase = me.getItems()
+			.filter(item =>
+				item.itemType === junk[0].itemType// same item type as current
+				&& !item.getFlag(NTIPAliasFlag["ethereal"]) // only noneth runeword bases
+				&& item.getStat(194) === junk[0].getStat(194) // sockets match junk in review
+				&& [3, 7].indexOf(item.location) > -1 // locations
+			)
+			.sort((a, b) => a.getStatEx(31) - b.getStatEx(31)) // Sort on defense, low to high.
+			.last(); // select last
+
+		if (junk[0].getStat(194) > 0) {
+			if ((junk[0].location === 7 || junk[0].location === 3) &&
+				!junk[0].getFlag(NTIPAliasFlag["ethereal"]) &&
+				junk[0].itemType !== 30 && junk[0].getStatEx(31) < rwBase.getStatEx(31)) { // only drop noneth armors helms shields
+				if (junk[0].drop()) {
+					me.overhead('cleared runeword armor junk');
+					print("ÿc9SoloLevelingÿc0: Cleared runeword armor junk - " + junk[0].name);
 					delay(50 + me.ping);
 				}
 			}

@@ -15,7 +15,7 @@ NodeAction.killMonsters = function (arg) { // summoner targeting provided by pen
 		}
 	}
 
-	if ([8, 3, 38, 6, 27, 28, 33, 34, 35, 37, 38, 56, 57, 60, 45, 58, 61, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
+	if ([8, 3, 38, 6, 27, 28, 33, 56, 57, 60, 45, 58, 61, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
 		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30);
 
 		if (monList) {
