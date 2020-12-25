@@ -74,9 +74,16 @@ function SoloLeveling () {
 		NTIP.arrayLooping(generalItems);
 		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
 		NTIP.arrayLooping(valuableItems);
-		Town.heal();
-		Town.reviveMerc();
-		Misc.setupMerc();
+
+		if (me.charlvl === 1) {
+			let buckler = me.getItem(328);
+
+			if (buckler) {
+				if (buckler.location === 1) {
+					buckler.drop();
+				}
+			}
+		}
 
 		return true;
 	};
@@ -87,10 +94,6 @@ function SoloLeveling () {
 		for (k = 0; k < sequence.length; k += 1) {
 			if (!isIncluded("SoloLeveling/Scripts/" + sequence[k] + ".js")) {
 				include("SoloLeveling/Scripts/" + sequence[k] + ".js");
-			}
-
-			if (!me.inTown) {
-				Town.goToTown();
 			}
 
 			for (j = 0; j < 5; j += 1) {

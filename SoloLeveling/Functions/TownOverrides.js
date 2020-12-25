@@ -770,16 +770,12 @@ Town.clearInventory = function () {
 		) {
 			result = Pickit.checkItem(items[i]).result;
 
-			if (!Item.autoEquipCheck(items[i])) {
+			if (!Item.autoEquipCheck(items[i]) && !NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result === 1) {
 				result = 0;
 			}
 
-			if (!Item.autoEquipCheckMerc(items[i])) {
+			if (!Item.autoEquipCheckMerc(items[i]) && !NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result === 1) {
 				result = 0;
-			}
-
-			if (NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result === 1) { // don't throw pickit items if fails autoequip
-				result = 1;
 			}
 
 			switch (result) {
