@@ -42,8 +42,10 @@ Town.townTasks = function () {
 	this.heal();
 	this.identify();
 	this.clearInventory();
+	this.buyBooks();
 	this.buyPotions();
 	this.fillTome(518);
+	this.fillTome(519);
 	this.shopItems();
 	this.reviveMerc();
 	this.buyKeys();
@@ -76,7 +78,7 @@ Town.townTasks = function () {
 		Town.drinkPots();
 	}
 
-	if (me.inTown && me.area !== prevTown) {
+	if (me.inTown && prevTown && me.area !== prevTown) {
 		Pather.useWaypoint(prevTown);
 	}
 
@@ -123,13 +125,10 @@ Town.doChores = function (repair = false) {
 	this.heal();
 	this.identify();
 	this.clearInventory();
+	this.buyBooks();
 	this.buyPotions();
 	this.fillTome(518);
-
-	if (Config.FieldID) {
-		this.fillTome(519);
-	}
-
+	this.fillTome(519);
 	this.shopItems();
 	this.reviveMerc();
 	this.buyKeys();
@@ -157,12 +156,93 @@ Town.doChores = function (repair = false) {
 
 	me.cancel();
 
-	if (me.inTown && me.area !== prevTown) {
+	if (me.inTown && prevTown && me.area !== prevTown) {
 		Pather.useWaypoint(prevTown);
 	}
 
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
 	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
+
+	return true;
+};
+
+Town.buyBooks = function () {
+	if (me.gold < 450) {
+		return false;
+	}
+
+	if (me.findItem(518, 0, 3) && me.findItem(519, 0, 3)) {
+		return true;
+	}
+
+	var tome1, tome2, npc;
+
+	switch (me.area) {
+	case 1:
+		Town.move(NPC.Akara);
+		npc = getUnit(1, NPC.Akara);
+		break;
+	case 40:
+		Town.move(NPC.Lysander);
+		npc = getUnit(1, NPC.Lysander);
+		break;
+	case 75:
+		Town.move(NPC.Alkor);
+		npc = getUnit(1, NPC.Alkor);
+		break;
+	case 103:
+		Town.move(NPC.Jamella);
+		npc = getUnit(1, NPC.Jamella);
+		break;
+	case 109:
+		Town.move(NPC.Malah);
+		npc = getUnit(1, NPC.Malah);
+		break;
+	}
+
+	if (!npc || !npc.openMenu()) {
+		return false;
+	}
+
+	Misc.useMenu(0x0D44);
+
+	delay(500);
+
+	if (!me.findItem(518, 0, 3)) {
+		tome1 = npc.getItem(518);
+
+		if (tome1 && Storage.Inventory.CanFit(tome1)) {
+			try {
+				print('ÿc9SoloLevelingÿc0: bought Tome of Town Portal');
+				tome1.buy();
+			} catch (e1) {
+				print(e1);
+
+				// Couldn't buy the tome, don't spam the scrolls
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	if (!me.findItem(519, 0, 3)) {
+		tome2 = npc.getItem(519);
+
+		if (tome2 && Storage.Inventory.CanFit(tome2)) {
+			try {
+				print('ÿc9SoloLevelingÿc0: bought Tome of Identify');
+				tome2.buy();
+			} catch (e1) {
+				print(e1);
+
+				// Couldn't buy the tome, don't spam the scrolls
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
 
 	return true;
 };

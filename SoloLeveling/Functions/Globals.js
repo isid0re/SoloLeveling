@@ -9,8 +9,8 @@ var difficulty = ['Normal', 'Nightmare', 'Hell'][me.diff];
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 28, 26, 25, 0, 0, 0][me.classid];
-const respecTwo = [ 0, 85, 75, 85, 0, 0, 0][me.classid];
+const respecOne = [ 0, 28, 26, 25, 0, 24, 0][me.classid];
+const respecTwo = [ 0, 85, 75, 85, 0, 75, 0][me.classid];
 var	levelcap = [37, 63, 100][me.diff];
 
 // SoloLeveling Pickit Items
@@ -29,6 +29,7 @@ var valuableItems = [
 
 var generalItems = [
 	"[name] == tomeoftownportal",
+	"[name] == tomeofidentify",
 	"[name] == gold # [gold] >= 500",
 	"[name] == minorhealingpotion",
 	"[name] == lighthealingpotion",
@@ -299,6 +300,7 @@ var tierscore = function (item) {
 		LR: 4, // lightning resist
 		CR: 2, // cold resist
 		PR: 1, // poison resist
+		ABS: 2.5 // absorb damage (fire light magic cold)
 	};
 
 	var generalWeights = {
@@ -456,6 +458,7 @@ var tierscore = function (item) {
 		resistRating += effectiveCR * resistWeights.CR; // add coldresist
 		resistRating += effectiveLR * resistWeights.LR; // add literesist
 		resistRating += effectivePR * resistWeights.PR; // add poisonresist
+		resistRating += (item.getStatEx(142) + item.getStatEx(144) + item.getStatEx(146) + item.getStatEx(148)) * resistWeights.ABS; // add absorb damage
 
 		return resistRating;
 	};
@@ -504,6 +507,13 @@ var tierscore = function (item) {
 	tier += this.skillsScore(item);
 
 	let rwBase; // don't score runeword base armors
+	let questItem, itemsList = [521, 92, 173]; // don't score viper amulet, staff of kings, khalim's flail
+
+	for (let y = 0; y < itemsList.length; y += 1) {
+		if (item.classid === itemsList[y]) {
+			questItem = true;
+		}
+	}
 
 	for (let x = 0; x < Config.Runewords.length; x += 1) {
 		let sockets = Config.Runewords[x][0].length;
@@ -514,7 +524,7 @@ var tierscore = function (item) {
 		}
 	}
 
-	if (rwBase) {
+	if (rwBase || questItem) {
 		tier = -1;
 	}
 

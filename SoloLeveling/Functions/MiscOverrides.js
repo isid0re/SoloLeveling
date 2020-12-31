@@ -205,7 +205,7 @@ Misc.hireMerc = function () {
 	//  classorder =   ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 	let mercAuraName = ["Holy Freeze", "Holy Freeze", "Might", "Holy Freeze", "Defiance", "Blessed Aim", "Holy Freeze"][me.classid];
 	let mercAuraWanted = [114, 114, 98, 114, 104, 108, 114][me.classid];
-	let tempMercAura = 99; //prayer only one not used -- replaciing merc will bug out if changed.
+	let tempMercAura = 99; //prayer only one not used -- replacing merc will bug out if changed.
 	// mercdiff = ["Nightmare", "Nightmare", "Nightmare", "Nightmare", "Normal", "Normal", "Nightmare"][me.classid];
 	let mercDiff = [1, 1, 1, 1, 0, 0, 1][me.classid];
 	let mercAura = [[104, 99, 108], [103, 98, 114]];
@@ -232,17 +232,17 @@ Misc.hireMerc = function () {
 		return true;
 	}
 
-	if (me.gametype === 0 || !Pather.accessToAct(2) || me.diff === 2) { // don't hire if classic, no access to act 2, or if in hell
+	if (me.gametype === 0 || !Pather.accessToAct(2) || me.diff > mercDiff) { // don't hire if classic, no access to act 2, or passed merc hire difficulty
 		return true;
 	}
 
 	let mercSelected = getmercAura();
 
-	if (mercSelected === mercAuraWanted || me.diff === 0 && mercSelected === tempMercAura) {
+	if (mercSelected === mercAuraWanted || me.diff !== mercDiff && mercSelected === tempMercAura) {
 		return true;
 	}
 
-	if (me.diff !== mercDiff && me.diff === 0 && me.gold < 25000 || me.diff === mercDiff && (me.diff === 0 && me.gold < 25000 || me.gold < 100000)) {
+	if (me.diff === 0 && me.gold < 25000 || me.diff !== 0 && me.gold < 100000) {
 		print('ÿc9SoloLevelingÿc0: not enough gold to hire merc.');
 
 		return true;
@@ -320,12 +320,9 @@ Misc.setupMerc = function () {
 	var mercGear = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
+		"me.diff >= 1 && [Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
 	];
 	NTIP.arrayLooping(mercGear);
-
-	if (me.diff !== 0) {
-		NTIP.addLine("[Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)");
-	}
 
 	return true;
 };

@@ -1,9 +1,7 @@
-// Necromancer.SoloLeveling.js config file
+// Druid.SoloLeveling.js config file
 // select your build
-var finalBuild = "Summon";
-//var finalBuild = "Explosion";
-//var finalBuild = "Poison";
-//var finalBuild = "Bone";
+var finalBuild = "Wind";
+//var finalBuild = "Elemental";
 
 function LoadConfig () {
 	Scripts.UserAddon = false; // !!!YOU MUST SET THIS TO FALSE IF YOU WANT TO RUN BOSS/AREA SCRIPTS!!!
@@ -257,22 +255,14 @@ function LoadConfig () {
 	Config.AutoBuild.Verbose = true;
 	Config.AutoBuild.DebugMode = true;
 
+	// Wereform setup. Make sure you read Templates/Attacks.txt for attack skill format.
+	Config.Wereform = false; // 0 / false - don't shapeshift, 1 / "Werewolf" - change to werewolf, 2 / "Werebear" - change to werebear
+
 	// Class specific config
-	Config.Dodge = false;
-	Config.DodgeRange = 5;
-
-	Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse. Use skill number or set to 0 to disable.
-	Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse. Use skill number or set to 0 to disable.
-
-	Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0; // Explode corpses. Use skill number or 0 to disable. 74 = Corpse Explosion, 83 = Poison Explosion
-	Config.Golem = me.getSkill(75, 0) ? "Clay" : "None"; // Golem. 0 or "None" = don't summon, 1 or "Clay" = Clay Golem, 2 or "Blood" = Blood Golem, 3 or "Fire" = Fire Golem
-	Config.Skeletons = "max"; // Number of skeletons to raise. Set to "max" to auto detect, set to 0 to disable.
-	Config.SkeletonMages = "max"; // Number of skeleton mages to raise. Set to "max" to auto detect, set to 0 to disable.
-	Config.Revives = "max"; // Number of revives to raise. Set to "max" to auto detect, set to 0 to disable.
-	Config.PoisonNovaDelay = 2; // Delay between two Poison Novas in seconds.
-	Config.ActiveSummon = true; // Raise dead between each attack. If false, it will raise after clearing a spot.
-	Config.ReviveUnstackable = true; // Revive monsters that can move freely after you teleport.
-	Config.IronGolemChicken = 30; // Exit game if Iron Golem's life is less or equal to designated percent.
+	Config.SummonRaven = false;
+	Config.SummonAnimal = 0; // 0 = disabled, 1 or "Spirit Wolf" = summon spirit wolf, 2 or "Dire Wolf" = summon dire wolf, 3 or "Grizzly" = summon grizzly
+	Config.SummonSpirit = 0; // 0 = disabled, 1 / "Oak Sage", 2 / "Heart of Wolverine", 3 / "Spirit of Barbs"
+	Config.SummonVine = 0; // 0 = disabled, 1 / "Poison Creeper", 2 / "Carrion Vine", 3 / "Solar Creeper"
 
 	/*-----------------------------------------*/
 	//			DO NOT TOUCH BELOW 			   //
@@ -351,7 +341,7 @@ function LoadConfig () {
 
 		// Character Build Setup
 		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
-		var middleBuild = "Explosion"; // starts at respecOne ends when reaching respecTwo
+		var middleBuild = "Wind"; // starts at respecOne ends when reaching respecTwo
 		var chooseBuffer = me.charlvl < 5 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
 		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
 		Config.BeltColumn = beltPots;
@@ -367,17 +357,6 @@ function LoadConfig () {
 		Config.AutoBuild.Template = me.charlvl < respecOne ? startBuild : me.charlvl < respecTwo ? middleBuild : finalBuild;
 
 		if (me.gametype === 1) { //LOD game gear
-			if (!haveItem("wand", "runeword", "White")) {
-				var white = [
-					"[Name] == DolRune # # [MaxQuantity] == 1",
-					"[Name] == IoRune # # [MaxQuantity] == 1",
-					"[Name] == wand && [Quality] >= Normal && [Quality] <= Superior # [NecromancerSkills] + [poisonandboneskilltab] >= 1 && [Sockets] == 2 # [MaxQuantity] == 1"
-				];
-				NTIP.arrayLooping(white);
-				Config.Runewords.push([Runeword.White, "Wand"]);
-				Config.KeepRunewords.push("[type] == wand # [fcr] >= 20");
-			}
-
 			if (!haveItem("sword", "runeword", "Call To Arms")) {
 				var CTA = [
 					"[Name] == AmnRune # # [MaxQuantity] == 1",
@@ -394,6 +373,31 @@ function LoadConfig () {
 
 				Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
 				Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
+			}
+
+			if (!haveItem("mace", "runeword", "Heart of the Oak")) {
+				var HotO = [
+					"[Name] == ThulRune # # [MaxQuantity] == 1",
+					"[Name] == PulRune",
+					"[Name] == KoRune # # [MaxQuantity] == 1",
+					"[Name] == VexRune",
+				];
+				NTIP.arrayLooping(HotO);
+
+				if (me.getItem(635)) {
+					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+				}
+
+				if (!me.getItem(635)) {
+					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
+				}
+
+				Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
+				Config.Runewords.push([Runeword.HeartoftheOak, "Flail"]);
+				Config.KeepRunewords.push("[Type] == mace # [FCR] == 40");
 			}
 
 			if (Item.getEquippedItem(1).tier < 315) { // Lore
@@ -613,10 +617,11 @@ function LoadConfig () {
 
 		var autoequipTiers = [ // autoequip setup
 			//weapon
+			"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000", // HotO
 			"([type] == wand || [type] == sword && ([Quality] >= Magic || [flag] == runeword) || [type] == knife && [Quality] >= Magic) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//Helmet
-			"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000", // harlequin's crest
-			"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[Name] == SkySpirit && [Quality] == Unique # [PassiveFirePierce] >= 10 # [tier] == 100000", // ravenlore
+			"([type] == helm || [type] == circlet || [type] == pelt)  && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//belt
 			"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
 			"[type] == belt && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
@@ -627,15 +632,15 @@ function LoadConfig () {
 			"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
 			"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//shield
-			"([type] == shield && ([Quality] >= Magic || [flag] == runeword) || [type] == voodooheads) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"[Name] == Monarch && [Flag] != Ethereal && [flag] == runeword # [fcr] >= 35 # [tier] == 100000", //spirit shield
+			"[type] == shield && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//gloves
-			"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000",
+			"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000", //magefist
 			"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//ammy
 			"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
 			"[Type] == Amulet && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//rings
-			"[name] == ring && [quality] == unique # [maxhp] >= 40 && [magicdamagereduction] >= 12 # [tier] == 99000", // dwarfstar
 			"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
 			"[Type] == Ring && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		];
