@@ -271,3 +271,86 @@ if (me.classid === 2) { // Necromancer
 		return false;
 	};
 }
+
+if (me.classid === 5) { // druid
+	if (!isIncluded("common/Attacks/Druid.js")) {
+		include("common/Attacks/Druid.js");
+	}
+
+	ClassAttack.doCast = function (unit, timedSkill, untimedSkill) {
+		var i, walk;
+
+		// No valid skills can be found
+		if (timedSkill < 0 && untimedSkill < 0) {
+			return 2;
+		}
+
+		if (timedSkill > -1 && (!me.getState(121) || !Skill.isTimed(timedSkill))) {
+			switch (timedSkill) {
+			case 245: // Tornado
+				if (Math.round(getDistance(me, unit)) > (Skill.getRange(timedSkill) - 1) || checkCollision(me, unit, 0x4)) {
+					if (!Attack.getIntoPosition(unit, (Skill.getRange(timedSkill) - 1), 0x4)) {
+						return 0;
+					}
+				}
+
+				// Randomized x coord changes tornado path and prevents constant missing
+				if (!unit.dead) {
+					Skill.cast(timedSkill, Skill.getHand(timedSkill), unit.x + rand(-2, 2), unit.y);
+				}
+
+				return 1;
+			default:
+				if (Skill.getRange(timedSkill) < 4 && !Attack.validSpot(unit.x, unit.y)) {
+					return 0;
+				}
+
+				if (Math.round(getDistance(me, unit) - 1) > (Skill.getRange(timedSkill) - 1) || checkCollision(me, unit, 0x4)) {
+					// Allow short-distance walking for melee skills
+					walk = Skill.getRange(timedSkill) < 4 && getDistance(me, unit) < 10 && !checkCollision(me, unit, 0x1);
+
+					if (!Attack.getIntoPosition(unit, (Skill.getRange(timedSkill) - 1), 0x4, walk)) {
+						return 0;
+					}
+				}
+
+				if (!unit.dead) {
+					Skill.cast(timedSkill, Skill.getHand(timedSkill), unit);
+				}
+
+				return 1;
+			}
+		}
+
+		if (untimedSkill > -1) {
+			if (Skill.getRange(untimedSkill) < 4 && !Attack.validSpot(unit.x, unit.y)) {
+				return 0;
+			}
+
+			if (Math.round(getDistance(me, unit)) > (Skill.getRange(untimedSkill) - 1) || checkCollision(me, unit, 0x4)) {
+				// Allow short-distance walking for melee skills
+				walk = Skill.getRange(untimedSkill) < 4 && getDistance(me, unit) < 10 && !checkCollision(me, unit, 0x1);
+
+				if (!Attack.getIntoPosition(unit, (Skill.getRange(untimedSkill) - 1), 0x4, walk)) {
+					return 0;
+				}
+			}
+
+			if (!unit.dead) {
+				Skill.cast(untimedSkill, Skill.getHand(untimedSkill), unit);
+			}
+
+			return 1;
+		}
+
+		for (i = 0; i < 25; i += 1) {
+			if (!me.getState(121)) {
+				break;
+			}
+
+			delay(40);
+		}
+
+		return 1;
+	};
+}

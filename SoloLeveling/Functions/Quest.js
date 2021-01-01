@@ -215,6 +215,10 @@ var Quest = {
 			Pickit.pickItems();
 		}
 
+		if (!me.getItem(classid)) {
+			Pickit.pickItems();
+		}
+
 		return me.getItem(classid);
 	},
 

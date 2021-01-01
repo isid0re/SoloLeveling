@@ -12,14 +12,14 @@ var build = {
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
 	],
 	skills: [
-		[221, 1], //Raven
-		[227, 1], //Summon Spirit Wolf
-		[226, 1], //Oak Sage
-		[237, 1], //Summon Dire Wolf (Fenris)
-		[247, 1], //Summon Grizzly
-		[230, 1], //Arctic Blast
-		[235, 1], //Cyclone Armor
-		[240, 1], //Twister
+		[221, 1, false], //Raven
+		[227, 1, false], //Summon Spirit Wolf
+		[226, 1, false], //Oak Sage
+		[237, 1, false], //Summon Dire Wolf (Fenris)
+		[247, 1, false], //Summon Grizzly
+		[230, 1, false], //Arctic Blast
+		[235, 1, false], //Cyclone Armor
+		[240, 1, false], //Twister
 		[245, 13, false], //Tornado
 		[250, 6, false], //Hurricane
 		[235, 12, false], //Cyclone Armor
