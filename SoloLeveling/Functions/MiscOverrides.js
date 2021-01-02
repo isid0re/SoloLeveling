@@ -143,7 +143,7 @@ Item.autoEquipCheck = function (item) {
 	}
 
 	var i,
-		tier = tierscore(item),
+		tier = NTIP.GetTier(item),
 		bodyLoc = this.getBodyLoc(item);
 
 	if (tier > 0 && bodyLoc) {
@@ -152,10 +152,15 @@ Item.autoEquipCheck = function (item) {
 			if (tier > this.getEquippedItem(bodyLoc[i]).tier && (this.canEquip(item) || !item.getFlag(0x10))) {
 				return true;
 			}
+
+			// Sell/ignore low tier items, keep high tier
+			if (tier > 0 && tier < this.getEquippedItem(bodyLoc[i]).tier) {
+				return false;
+			}
 		}
 	}
 
-	return false;
+	return true;
 };
 
 //	Merc Hire and Setup
@@ -320,7 +325,7 @@ Misc.setupMerc = function () {
 	var mercGear = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"me.diff >= 1 && [Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
+		"[Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
 	];
 	NTIP.arrayLooping(mercGear);
 
