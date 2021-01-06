@@ -369,8 +369,6 @@ Town.shopItems = function () {
 
 	var i, item, result,
 		items = [],
-		tierscoreCheck = [],
-		mercscoreCheck = [],
 		npc = getInteractedNPC();
 
 	if (!npc || !npc.itemcount) {
@@ -388,20 +386,15 @@ Town.shopItems = function () {
 	do {
 		if (this.ignoredItemTypes.indexOf(item.itemType) === -1) {
 			items.push(copyUnit(item));
-			tierscoreCheck.push(tierscore(item));
-			mercscoreCheck.push(mercscore(item));
 		}
 	} while (item.getNext());
 
-	let besttierIndex = indexOfMax(tierscoreCheck);
-	let bestmercIndex = indexOfMax(mercscoreCheck);
 	print("ÿc9SoloLevelingÿc0: Evaluating " + npc.itemcount + " items.");
 
-	for (i = 0; i < items.length; i += 1) { // pickit wanted only
-		if (Pickit.checkItem(items[i])) {
-			result = Pickit.checkItem(items[i]);
-		}
+	for (i = 0; i < items.length; i += 1) {
+		result = Pickit.checkItem(items[i]);
 
+		// no tier'ed items
 		if (result.result === 1 && NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result !== 0) {
 			try {
 				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
@@ -414,31 +407,30 @@ Town.shopItems = function () {
 			}
 		}
 
-		if (Item.getBodyLoc(items[i])[0] !== undefined) {
-			if (result.result === 1 && i === besttierIndex && Item.canEquip(items[i]) && tierscore(items[i]) > Item.getEquippedItem(Item.getBodyLoc(items[i])[0]).tier) {
-				try {
-					if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
+		// tier'ed items
+		if (result.result === 1 && Item.autoEquipCheck(items[i])) {
+			try {
+				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
+					if (Item.hasTier(items[i]) &&
+					Item.getBodyLoc(items[i])[0] !== undefined && 
+					Item.canEquip(items[i]) &&
+					tierscore(items[i]) > Item.getEquippedItem(Item.getBodyLoc(items[i])[0]).tier) {
 						Misc.itemLogger("AutoEquip Shopped", items[i]);
 						Misc.logItem("AutoEquip Shopped", items[i], result.line);
 						items[i].buy();
 					}
-				} catch (e) {
-					print(e);
-				}
-			}
-		}
 
-		if (Item.getBodyLocMerc(items[i])[0] !== undefined) {
-			if (result.result === 1 && i === bestmercIndex && Item.canEquipMerc(items[i], Item.getBodyLocMerc(items[i])[0]) && Item.autoEquipCheckMerc(items[i])) {
-				try {
-					if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
+					if (Item.hasMercTier(items[i]) &&
+					Item.getBodyLocMerc(items[i])[0] !== undefined &&
+					Item.canEquipMerc(items[i], Item.getBodyLocMerc(items[i])[0]) &&
+					mercscore(items[i]) > Item.getEquippedItemMerc(Item.getBodyLocMerc(items[i])[0]).tier) {
 						Misc.itemLogger("Merc Shopped", items[i]);
 						Misc.logItem("Merc Shopped", items[i], result.line);
 						items[i].buy();
 					}
-				} catch (e) {
-					print(e);
 				}
+			} catch (e) {
+				print(e);
 			}
 		}
 
@@ -458,11 +450,10 @@ Town.unfinishedQuests = function () {
 			delay(300 + me.ping);
 		}
 
-		if (!book.interact()) {
+		if (book.interact()) {
+			print('ÿc9SoloLevelingÿc0: used Radament skill book');
+		} else {
 			clickItem(1, book);
-		}
-
-		if (book.interact() || clickItem(1, book)) {
 			print('ÿc9SoloLevelingÿc0: used Radament skill book');
 		}
 	}
@@ -486,11 +477,10 @@ Town.unfinishedQuests = function () {
 			delay(300 + me.ping);
 		}
 
-		if (!pol.interact()) {
+		if (pol.interact()) {
+			print('ÿc9SoloLevelingÿc0: used potion of life');
+		} else {
 			clickItem(1, pol);
-		}
-
-		if (pol.interact() || clickItem(1, pol)) {
 			print('ÿc9SoloLevelingÿc0: used potion of life');
 		}
 	}
@@ -550,19 +540,18 @@ Town.unfinishedQuests = function () {
 	}
 
 	// anya scroll of resistance
-	let scroll = me.getItem(646);
+	let sor = me.getItem(646);
 
-	if (scroll) {
-		if (scroll.location === 7) {
+	if (sor) {
+		if (sor.location === 7) {
 			this.openStash();
-			delay(250 + me.ping);
+			delay(300 + me.ping);
 		}
 
-		if (!scroll.interact()) {
-			clickItem(1, scroll);
-		}
-
-		if (scroll.interact() || clickItem(1, scroll)) {
+		if (sor.interact()) {
+			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
+		} else {
+			clickItem(1, sor);
 			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
 		}
 	}
@@ -746,7 +735,7 @@ Town.clearInventory = function () {
 	var i, col, result, item, beltSize,
 		items = [];
 
-	this.checkQuestItems(); // only golden bird quest for now
+	this.unfinishedQuests();
 
 	// Return potions to belt
 	item = me.getItem(-1, 0);
@@ -870,6 +859,7 @@ Town.clearInventory = function () {
 					Misc.itemLogger("Sold", items[i]);
 					items[i].sell();
 				} else {
+					print("clearInventory dropped " + items[i].name);
 					Misc.itemLogger("Dropped", items[i], "clearInventory");
 					items[i].drop();
 				}

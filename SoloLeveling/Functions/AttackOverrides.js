@@ -70,7 +70,7 @@ if (me.classid === 1) { // Sorceress
 		}
 
 		if (preattack && Config.AttackSkill[0] > 0 && Attack.checkResist(unit, Config.AttackSkill[0]) && (!me.getState(121) || !Skill.isTimed(Config.AttackSkill[0]))) {
-			if (Math.round(getDistance(me, unit)) > Skill.getRange(Config.AttackSkill[0]) || checkCollision(me, unit, 0x4)) {
+			if (Math.ceil(getDistance(me, unit)) > Skill.getRange(Config.AttackSkill[0]) || checkCollision(me, unit, 0x4)) {
 				if (!Attack.getIntoPosition(unit, Skill.getRange(Config.AttackSkill[0]), 0x4)) {
 					return 0;
 				}
@@ -288,15 +288,15 @@ if (me.classid === 5) { // druid
 		if (timedSkill > -1 && (!me.getState(121) || !Skill.isTimed(timedSkill))) {
 			switch (timedSkill) {
 			case 245: // Tornado
-				if (Math.round(getDistance(me, unit)) > (Skill.getRange(timedSkill) - 1) || checkCollision(me, unit, 0x4)) {
-					if (!Attack.getIntoPosition(unit, (Skill.getRange(timedSkill) - 1), 0x4)) {
+				if (Math.ceil(getDistance(me, unit)) > (Skill.getRange(timedSkill)) || checkCollision(me, unit, 0x4)) {
+					if (!Attack.getIntoPosition(unit, (Skill.getRange(timedSkill)), 0x4)) {
 						return 0;
 					}
 				}
 
 				// Randomized x coord changes tornado path and prevents constant missing
 				if (!unit.dead) {
-					Skill.cast(timedSkill, Skill.getHand(timedSkill), unit.x + rand(-2, 2), unit.y);
+					Skill.cast(timedSkill, Skill.getHand(timedSkill), unit.x + rand(-1, 1), unit.y);
 				}
 
 				return 1;
@@ -305,11 +305,11 @@ if (me.classid === 5) { // druid
 					return 0;
 				}
 
-				if (Math.round(getDistance(me, unit) - 1) > (Skill.getRange(timedSkill) - 1) || checkCollision(me, unit, 0x4)) {
+				if (Math.ceil(getDistance(me, unit)) > (Skill.getRange(timedSkill)) || checkCollision(me, unit, 0x4)) {
 					// Allow short-distance walking for melee skills
 					walk = Skill.getRange(timedSkill) < 4 && getDistance(me, unit) < 10 && !checkCollision(me, unit, 0x1);
 
-					if (!Attack.getIntoPosition(unit, (Skill.getRange(timedSkill) - 1), 0x4, walk)) {
+					if (!Attack.getIntoPosition(unit, (Skill.getRange(timedSkill)), 0x4, walk)) {
 						return 0;
 					}
 				}
@@ -327,11 +327,11 @@ if (me.classid === 5) { // druid
 				return 0;
 			}
 
-			if (Math.round(getDistance(me, unit)) > (Skill.getRange(untimedSkill) - 1) || checkCollision(me, unit, 0x4)) {
+			if (Math.ceil(getDistance(me, unit)) > (Skill.getRange(untimedSkill)) || checkCollision(me, unit, 0x4)) {
 				// Allow short-distance walking for melee skills
 				walk = Skill.getRange(untimedSkill) < 4 && getDistance(me, unit) < 10 && !checkCollision(me, unit, 0x1);
 
-				if (!Attack.getIntoPosition(unit, (Skill.getRange(untimedSkill) - 1), 0x4, walk)) {
+				if (!Attack.getIntoPosition(unit, (Skill.getRange(untimedSkill)), 0x4, walk)) {
 					return 0;
 				}
 			}

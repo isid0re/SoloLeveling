@@ -21,7 +21,6 @@ Misc.openChests = function (range) {
 		range = 15;
 	}
 
-	// Testing all container code
 	if (Config.OpenChests === 2) {
 		containers = [
 			"chest", "loose rock", "hidden stash", "loose boulder", "corpseonstick", "casket", "armorstand", "weaponrack", "barrel", "holeanim", "tomb2", "tomb3", "roguecorpse", "ratnest", "corpse", "goo pile", "largeurn", "urn", "chest3", "jug", "skeleton", "guardcorpse", "sarcophagus", "object2", "cocoon", "basket", "stash", "hollow log", "hungskeleton", "pillar", "skullpile", "skull pile", "jar3", "jar2", "jar1", "bonechest", "woodchestl", "woodchestr", "barrel wilderness", "burialchestr", "burialchestl", "explodingchest", "chestl", "chestr", "groundtomb", "icecavejar1", "icecavejar2", "icecavejar3", "icecavejar4", "deadperson", "deadperson2", "evilurn", "tomb1l", "tomb3l", "groundtombl"
@@ -154,7 +153,7 @@ Item.autoEquipCheck = function (item) {
 			}
 
 			// Sell/ignore low tier items, keep high tier
-			if (tier > 0 && tier < this.getEquippedItem(bodyLoc[i]).tier) {
+			if (tier > 0 && tier <= this.getEquippedItem(bodyLoc[i]).tier) {
 				return false;
 			}
 		}
@@ -325,7 +324,7 @@ Misc.setupMerc = function () {
 	var mercGear = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
+		"[Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
 	];
 	NTIP.arrayLooping(mercGear);
 
@@ -575,13 +574,14 @@ Item.autoEquipMerc = function () {
 					}
 
 					merc = getMercFix();
-					gid = items[0].gid;
+					gid = items[0].classid;
+					print(items[0].name);
 
 					if (Item.equipMerc(items[0], bodyLoc[j])) {
 						print("ÿc9SoloLevelingÿc0: equipped merc item.");
-						Misc.logItem("Merc Equipped", merc.getItem(-1, -1, gid));
 					}
 
+					Misc.logItem("Merc Equipped", merc.getItem(gid));
 					let cursorItem = getUnit(100);
 
 					if (cursorItem) {

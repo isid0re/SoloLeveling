@@ -5,7 +5,7 @@
 */
 
 function tristam () {
-	if (me.diff === 1 || Misc.checkQuest(4, 0)) {
+	if (Misc.checkQuest(4, 0)) {
 		return true;
 	}
 

@@ -74,6 +74,7 @@ function SoloLeveling () {
 		NTIP.arrayLooping(generalItems);
 		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
 		NTIP.arrayLooping(valuableItems);
+		Misc.setupMerc();
 
 		if (me.charlvl === 1) {
 			let buckler = me.getItem(328);
@@ -83,6 +84,10 @@ function SoloLeveling () {
 					buckler.drop();
 				}
 			}
+		}
+
+		if (me.hp / me.hpmax < 1) {
+			Town.heal();
 		}
 
 		return true;
@@ -114,10 +119,19 @@ function SoloLeveling () {
 	this.runsequence();
 	removeEventListener("gamepacket", Misc.gamePacket);
 
-	if (Misc.checkQuest(40, 0) || me.gametype === 0 && Misc.checkQuest(26, 0)) {
-		D2Bot.printToConsole('SoloLeveling: ' + difficulty + ' difficulty completed. Character Level: ' + me.charlvl + '. Running script again!');
-	} else {
+	if (me.diff === 0 && me.charlvl < levelcap) {
+		D2Bot.setProfile(null, null, null, "Normal");
 		D2Bot.printToConsole('SoloLeveling: run completed. Character Level: ' + me.charlvl + '. Running script again!');
+	}
+
+	if (me.diff === 0 && me.charlvl >= levelcap && (Misc.checkQuest(40, 0) || me.gametype === 0 && Misc.checkQuest(26, 0))) {
+		D2Bot.setProfile(null, null, null, "Nightmare");
+		D2Bot.printToConsole('SoloLeveling: ' + difficulty + ' difficulty completed. Character Level: ' + me.charlvl + '. Starting Nightmare!');
+	}
+
+	if (me.diff === 1 && me.charlvl >= levelcap && (Misc.checkQuest(40, 0) || me.gametype === 0 && Misc.checkQuest(26, 0))) {
+		D2Bot.setProfile(null, null, null, "Hell");
+		D2Bot.printToConsole('SoloLeveling: ' + difficulty + ' difficulty completed. Character Level: ' + me.charlvl + '. Starting Hell!');
 	}
 
 	scriptBroadcast('quit');

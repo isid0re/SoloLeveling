@@ -36,6 +36,7 @@ function anya () {
 
 	Town.goToTown();
 	Town.npcInteract("malah");
+	Town.doChores();
 	Pather.usePortal(114, me.name);
 
 	if (frozenanya) {
@@ -46,7 +47,6 @@ function anya () {
 	}
 
 	Town.goToTown();
-	Town.clearJunk();
 	Town.npcInteract("malah");
 	Town.unfinishedQuests();
 	Town.doChores();

@@ -4,7 +4,7 @@
 *	@desc		Pather.js fixes to improve functionality
 */
 
-NodeAction.killMonsters = function (arg) { // summoner targeting provided by penguins0690
+NodeAction.killMonsters = function (arg) {
 	var monList;
 
 	if (Config.Countess.KillGhosts && [21, 22, 23, 24, 25].indexOf(me.area) > -1) {
@@ -16,10 +16,24 @@ NodeAction.killMonsters = function (arg) { // summoner targeting provided by pen
 	}
 
 	if ([8, 3, 38, 6, 27, 28, 33, 56, 57, 60, 45, 58, 61, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
-		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30);
+		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30); // summoner targeting provided by penguins0690
 
 		if (monList) {
 			Attack.clearList(monList);
+		}
+	}
+
+	if ([39].indexOf(me.area) > -1) {
+		let king = getUnit(1, "The Cow King");
+		let kingPreset = getPresetUnit(me.area, 1, 773);
+
+		if (king) {
+			do {
+				if (getDistance(me.x, me.y, getRoom(kingPreset.roomx * 5 + kingPreset.x), getRoom(kingPreset.roomy * 5 + kingPreset.y)) <= 25) {
+					Town.goToTown();
+					D2Bot.printToConsole('ÿc9SoloLevelingÿc0: exit cows. Near the king');
+				}
+			} while (king.getNext());
 		}
 	}
 

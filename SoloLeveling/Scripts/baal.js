@@ -255,13 +255,6 @@ function baal () {
 	Pather.moveTo(15094, me.classid === 3 ? 5029 : 5038);
 	Pickit.pickItems();
 
-	if (me.charlvl < levelcap && (FR < checkFR || LR < checkLR || CR < checkCR)) {
-		D2Bot.printToConsole('SoloLeveling: missing requirements for next difficulty.');
-		print('ÿc9SoloLevelingÿc0: missing requirements for next difficulty.');
-
-		return true;
-	}
-
 	Pather.moveTo(15090, 5008);
 	delay(5000 + me.ping);
 	Precast.doPrecast(true);
