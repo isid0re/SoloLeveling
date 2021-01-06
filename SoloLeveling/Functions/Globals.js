@@ -11,7 +11,7 @@ var difficulty = ['Normal', 'Nightmare', 'Hell'][me.diff];
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 const respecOne = [ 0, 28, 26, 25, 0, 24, 0][me.classid];
 const respecTwo = [ 0, 85, 75, 85, 0, 75, 0][me.classid];
-var	levelcap = [37, 63, 100][me.diff];
+var	levelcap = [37, 67, 100][me.diff];
 
 // SoloLeveling Pickit Items
 var valuableItems = [
