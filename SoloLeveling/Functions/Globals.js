@@ -30,7 +30,7 @@ var valuableItems = [
 var generalItems = [
 	"[name] == tomeoftownportal",
 	"[name] == tomeofidentify",
-	"[name] == gold # [gold] >= 500",
+	"[name] == gold # [gold] >= me.charlvl * 3 * me.diff",
 	"[name] == minorhealingpotion",
 	"[name] == lighthealingpotion",
 	"[name] == healingpotion",

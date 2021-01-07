@@ -498,7 +498,7 @@ Item.autoEquipCheckMerc = function (item) {
 		return false;
 	}
 
-	let i, tier = mercscore(item), bodyLoc = Item.getBodyLocMerc(item);
+	let i, tier = NTIP.GetMercTier(item), bodyLoc = Item.getBodyLocMerc(item);
 
 	if (tier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
@@ -553,7 +553,7 @@ Item.autoEquipMerc = function () {
 	while (items.length > 0) {
 		items.sort(sortEq);
 
-		tier = mercscore(items[0]);
+		tier = NTIP.GetMercTier(items[0]);
 		bodyLoc = Item.getBodyLocMerc(items[0]);
 
 		if (tier > 0 && bodyLoc) {
