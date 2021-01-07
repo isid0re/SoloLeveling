@@ -5,7 +5,7 @@
 */
 
 function izual () {
-	if (Misc.checkQuest(25, 0) || !Pather.accessToAct(4)) {
+	if (!Pather.accessToAct(4) || Misc.checkQuest(25, 0)) {
 		return true;
 	}
 

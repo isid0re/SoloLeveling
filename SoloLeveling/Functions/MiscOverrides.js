@@ -318,7 +318,6 @@ Misc.setupMerc = function () {
 		return true;
 	}
 
-	me.overhead('Pickit: added merc items');
 	print("ÿc9SoloLevelingÿc0: merc items loaded to Pickit");
 
 	var mercGear = [

@@ -5,20 +5,10 @@
 */
 
 function baal () {
-	let FR = me.getStat(39); // fire resist
-	let LR = me.getStat(41); // lightning resist
-	let CR = me.getStat(43); // cold resist
-	let checkFR = me.diff === 0 ? 60 : 100; // cannot start next diff with negative resistances
-	let checkLR = me.diff === 0 ? 60 : 100;
-	let checkCR = me.diff === 0 ? 60 : 100;
 	Config.BossPriority = false;
 
-	if (me.gametype === 0 || !Pather.accessToAct(5)) {
+	if (me.gametype === 0 || !Pather.accessToAct(5) || !Misc.checkQuest(39, 0)) {
 		return true;
-	}
-
-	if (!Misc.checkQuest(39, 0)) { // Check Ancients Quest
-		this.ancients();
 	}
 
 	this.preattack = function () {// Start Baal
@@ -173,14 +163,14 @@ function baal () {
 	Pather.moveToExit([130, 131], true);
 	Pather.moveTo(15095, 5029);
 
-	if (getUnit(1, 691)) {
+	if (me.diff === 2 && getUnit(1, 691)) {
 		print("ÿc9SoloLevelingÿc0: Dolls found! NG.");
 		me.overhead("Dolls found! NG.");
 
 		return true;
 	}
 
-	if (getUnit(1, 641)) {
+	if (me.diff === 2 && getUnit(1, 641)) {
 		print("ÿc9SoloLevelingÿc0: Souls found! NG.");
 		me.overhead("Souls found! NG.");
 

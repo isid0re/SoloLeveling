@@ -5,7 +5,7 @@
 */
 
 function saveBarby () {
-	if (me.gametype === 0 || !Pather.accessToAct(5) || Misc.checkQuest(36, 0)) {
+	if (me.gametype === 0 || me.diff !== 0 || !Pather.accessToAct(5) || Misc.checkQuest(36, 0)) {
 		return true;
 	}
 

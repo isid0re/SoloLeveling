@@ -10,7 +10,7 @@ function summoner () {
 	}
 
 	var teleportPads = function () {
-		if (me.getSkill(54, 0)) {
+		if (me.getSkill(54, 0) || me.area !== 74) {
 
 			return true;
 		}

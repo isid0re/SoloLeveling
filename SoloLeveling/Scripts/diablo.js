@@ -44,7 +44,7 @@ function diablo () {
 
 				try {
 					if (boss && boss.hp > 0) {
-						Attack.kill(name);
+						Attack.killTarget(name);
 					}
 				} catch (e) {
 					Attack.clear(10, 0, name);

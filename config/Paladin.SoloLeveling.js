@@ -209,10 +209,10 @@ function LoadConfig () {
 	Config.PrimarySlot = 0;
 
 	// Fastmod config
-	Config.FCR = 0; // 0 - disable, 1 to 255 - set value of faster cast rate
-	Config.FHR = 0; // 0 - disable, 1 to 255 - set value of faster hit recovery
-	Config.FBR = 0; // 0 - disable, 1 to 255 - set value of faster block recovery
-	Config.IAS = 0; // 0 - disable, 1 to 255 - set value of increased attack speed
+	Config.FCR = me.getStat(105); // 0 - disable, 1 to 255 - set value of faster cast rate
+	Config.FHR = me.getStat(99); // 0 - disable, 1 to 255 - set value of faster hit recovery
+	Config.FBR = me.getStat(102); // 0 - disable, 1 to 255 - set value of faster block recovery
+	Config.IAS = me.getStat(93); // 0 - disable, 1 to 255 - set value of increased attack speed
 	Config.PacketCasting = 1; // 0 = disable, 1 = packet teleport, 2 = full packet casting.
 	Config.WaypointMenu = true;
 

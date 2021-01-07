@@ -5,7 +5,7 @@
 */
 
 function duriel () {
-	if (!Pather.accessToAct(2) || Misc.checkQuest(14, 0)) {
+	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0)) {
 		return true;
 	}
 

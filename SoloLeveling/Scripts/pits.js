@@ -5,7 +5,7 @@
 */
 
 function pits () {
-	if (me.charlvl < respecTwo) {
+	if (me.diff !== 2) {
 		return true;
 	}
 

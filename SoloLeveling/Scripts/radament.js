@@ -25,9 +25,12 @@ function radament () {
 	Pather.moveToPreset(me.area, 2, 355);
 	Attack.killTarget("Radament");
 	Pickit.pickItems();
-	Town.goToTown();
-	Town.unfinishedQuests();
-	Town.npcInteract("atma");
+
+	if (me.getItem(552)) {
+		Town.goToTown();
+		Town.unfinishedQuests();
+		Town.npcInteract("atma");
+	}
 
 	return true;
 }

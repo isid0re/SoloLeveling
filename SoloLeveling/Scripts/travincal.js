@@ -5,20 +5,8 @@
 */
 
 function travincal () {
-	if (!Pather.accessToAct(3) || me.diff === 0 && Misc.checkQuest(18, 0) || me.diff === 1 && Misc.checkQuest(18, 0)) {
+	if (!Pather.accessToAct(3) || !me.getItem(553) || !me.getItem(554) || !me.getItem(555) || Misc.checkQuest(18, 0)) {
 		return true;
-	}
-
-	if (!me.getItem(553)) {
-		this.eye();
-	}
-
-	if (!me.getItem(554)) {
-		this.heart();
-	}
-
-	if (!me.getItem(555)) {
-		this.brain();
 	}
 
 	Town.townTasks();

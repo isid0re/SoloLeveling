@@ -5,7 +5,7 @@
 */
 
 function bloodraven () {
-	if (me.diff === 0 && Misc.checkQuest(2, 0) || me.diff !== 0 && me.charlvl < respecTwo) {
+	if (me.diff === 0 && Misc.checkQuest(2, 0) || me.diff === 1) {
 		return true;
 	}
 
