@@ -576,15 +576,11 @@ Item.autoEquipMerc = function () {
 					gid = items[0].classid;
 					print(items[0].name);
 
-					if (Item.equipMerc(items[0], bodyLoc[j])) {
-						print("ÿc9SoloLevelingÿc0: equipped merc item.");
-					}
-
-					Misc.logItem("Merc Equipped", merc.getItem(gid));
 					let cursorItem = getUnit(100);
 
 					if (cursorItem) {
 						cursorItem.drop();
+						Misc.logItem("Merc Equipped", merc.getItem(gid));
 					}
 
 					break;
