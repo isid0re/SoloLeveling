@@ -412,7 +412,7 @@ Town.shopItems = function () {
 			try {
 				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
 					if (Item.hasTier(items[i]) &&
-					Item.getBodyLoc(items[i])[0] !== undefined && 
+					Item.getBodyLoc(items[i])[0] !== undefined &&
 					Item.canEquip(items[i]) &&
 					tierscore(items[i]) > Item.getEquippedItem(Item.getBodyLoc(items[i])[0]).tier) {
 						Misc.itemLogger("AutoEquip Shopped", items[i]);

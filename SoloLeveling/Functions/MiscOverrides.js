@@ -376,7 +376,7 @@ Item.equipMerc = function (item, bodyLoc) {
 		return true;
 	}
 
-	var i, cursorItem;
+	var i, cursorItem, mercenary = getMercFix();
 
 	if (item.location === 7) {
 		if (!Town.openStash()) {
@@ -386,15 +386,17 @@ Item.equipMerc = function (item, bodyLoc) {
 
 	for (i = 0; i < 3; i += 1) {
 		if (item.toCursor()) {
-			clickItem(4, bodyLoc);
-			delay(500 + me.ping * 2);
+			if (clickItem(4, bodyLoc)) {
+				delay(500 + me.ping * 2);
+				Misc.logItem("Merc Equipped", mercenary.getItem(item.classid));
+			}
 
 			if (item.bodylocation === bodyLoc) {
 				if (getCursorType() === 3) {
 					cursorItem = getUnit(100);
 
 					if (cursorItem) {
-						if (NTIP.CheckItem(cursorItem).result === 1) {
+						if (NTIP.CheckItem(cursorItem, NTIP_CheckListNoTier, true).result === 1) {
 							if (Storage.Inventory.CanFit(cursorItem)) {
 								Storage.Inventory.MoveTo(cursorItem);
 							}
@@ -572,15 +574,14 @@ Item.autoEquipMerc = function () {
 						}
 					}
 
-					merc = getMercFix();
-					gid = items[0].classid;
 					print(items[0].name);
+					this.equipMerc(items[0], bodyLoc[j]);
 
 					let cursorItem = getUnit(100);
 
 					if (cursorItem) {
 						cursorItem.drop();
-						Misc.logItem("Merc Equipped", merc.getItem(gid));
+						Misc.logItem("Merc Dropped", cursorItem);
 					}
 
 					break;
