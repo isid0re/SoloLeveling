@@ -5,32 +5,8 @@
 */
 
 function duriel () {
-	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0)) {
+	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0) || !me.getItem(91)) {
 		return true;
-	}
-
-	if (!Misc.checkQuest(10, 0) && !me.getItem(91)) {
-		if (!me.getItem(521)) {
-			for (let getAmmy = 0; getAmmy < 5; getAmmy++) {
-				try {
-					this.amulet();
-				} catch (err) {
-					print('ÿc9SoloLevelingÿc0: Failed attempt to get amulet');
-				}
-			}
-		}
-
-		if (!me.getItem(92)) {
-			for (let getStaff = 0; getStaff < 5; getStaff++) {
-				try {
-					this.staff();
-				} catch (err) {
-					print('ÿc9SoloLevelingÿc0: Failed attempt to get staff');
-				}
-			}
-		}
-
-		Quest.cubeItems(91, 92, 521);
 	}
 
 	Town.townTasks();
@@ -63,13 +39,15 @@ function duriel () {
 	Attack.killTarget("Duriel");
 	Pickit.pickItems();
 
-	if (!Misc.checkQuest(15, 0)) {
+	if (!Misc.checkQuest(15, 0) && !Misc.checkQuest(14, 3)) {
 		Quest.tyraelTomb();
 
 		if (!me.inTown) {
 			Town.goToTown();
 		}
+	}
 
+	if (!Misc.checkQuest(15, 0) && !Misc.checkQuest(14, 4)) {
 		Town.move("palace");
 		Town.npcInteract("jerhyn");
 		Pather.moveToExit(50, true);

@@ -8,10 +8,11 @@
 // Sequence Settings
 var sequence = [
 	"den", "bloodraven", "tristam", "countess", "pits", "andariel", // Act 1
-	"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
+	"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "duriel", // Act 2
 	"eye", "heart", "tome", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
 	"izual", "hellforge", "diablo", //Act 4
-	"shenk", "saveBarby", "anya", "pindle", "ancients", "baal" // Act 5
+	"shenk", "saveBarby", "anya", "pindle", "ancients", "baal", // Act 5
+	"cows" // cow runs
 ];
 
 //---------------- Do Not Touch Below ----------------\\
