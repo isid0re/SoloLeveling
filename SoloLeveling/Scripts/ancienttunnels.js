@@ -5,7 +5,7 @@
 */
 
 function ancienttunnels () {
-	if (!Pather.accessToAct(2) || me.diff !== 2 && !Pather.accessToAct(3) || me.diff === 2 && me.classid === 3) {
+	if (!Pather.accessToAct(2) || me.diff !== 2 && Pather.accessToAct(3) || me.diff === 2 && me.classid === 3) {
 		return true;
 	}
 
