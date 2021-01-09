@@ -518,7 +518,7 @@ Town.unfinishedQuests = function () {
 				Storage.Inventory.MoveTo(cursorItem);
 			}
 
-			Misc.stashQuestItem(174);
+			Quest.stashItem(174);
 			print('ÿc9SoloLevelingÿc0: removed khalims will');
 		}
 	}
@@ -734,8 +734,6 @@ Town.organizeInventory = function () {
 Town.clearInventory = function () {
 	var i, col, result, item, beltSize,
 		items = [];
-
-	this.unfinishedQuests();
 
 	// Return potions to belt
 	item = me.getItem(-1, 0);
