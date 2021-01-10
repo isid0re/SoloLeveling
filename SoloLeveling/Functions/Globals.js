@@ -507,7 +507,7 @@ var tierscore = function (item) {
 	tier += this.skillsScore(item);
 
 	let rwBase; // don't score runeword base armors
-	let questItem, itemsList = [521, 92, 173]; // don't score viper amulet, staff of kings, khalim's flail
+	let questItem, itemsList = [521, 92, 173, 174]; // don't score viper amulet, staff of kings, khalim's flail
 
 	for (let y = 0; y < itemsList.length; y += 1) {
 		if (item.classid === itemsList[y]) {
