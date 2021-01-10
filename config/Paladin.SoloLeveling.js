@@ -462,6 +462,14 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(Enigma);
 
+				if (!me.getItem(639)) {
+					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
+				}
+
+				if (!me.getItem(640)) {
+					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // ber to jah
+				}
+
 				if (me.getItem(639) && me.getItem(640)) {
 					Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
 					Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);

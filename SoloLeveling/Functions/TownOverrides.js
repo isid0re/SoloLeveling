@@ -503,7 +503,7 @@ Town.unfinishedQuests = function () {
 	//remove Khalim's Will if quest not completed and restarting run.
 	let kw = me.getItem(174);
 
-	if (kw.location === 1) {
+	if (kw) {
 		if (Item.getEquippedItem(4).classid === 174) {
 			Town.clearInventory();
 			delay(500 + me.ping * 2);

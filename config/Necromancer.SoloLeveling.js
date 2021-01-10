@@ -476,6 +476,32 @@ function LoadConfig () {
 				Config.KeepRunewords.push("[type] == armor # [fireresist] == 50");
 			}
 
+			if (!haveItem("armor", "runeword", "Enigma")) { // Enigma
+				var Enigma = [
+					"[Name] == JahRune",
+					"[Name] == IthRune # # [MaxQuantity] == 1",
+					"[Name] == BerRune",
+				];
+				NTIP.arrayLooping(Enigma);
+
+				if (!me.getItem(639)) {
+					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
+				}
+
+				if (!me.getItem(640)) {
+					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // ber to jah
+				}
+
+				if (me.getItem(639) && me.getItem(640)) {
+					Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
+					Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);
+					Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
+					Config.Runewords.push([Runeword.Enigma, "ScarabHusk", Roll.NonEth]);
+				}
+
+				Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
+			}
+
 			if (Item.getEquippedItem(5).tier < 500) { // Ancients' Pledge
 				if (!haveItem("shield", "runeword", "Ancients' Pledge") && me.diff !== 2) {
 					if (!me.getItem(618)) {

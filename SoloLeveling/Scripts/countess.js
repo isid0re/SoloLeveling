@@ -5,7 +5,7 @@
 */
 
 function countess () {
-	if (me.diff === 0 && haveItem("shield", "runeword", "Ancients' Pledge") && haveItem("armor", "runeword", "Stealth") || me.diff === 2 && me.classid === 1) {
+	if (me.gametype === 0 && Misc.checkQuest(5, 0) || me.diff === 0 && haveItem("shield", "runeword", "Ancients' Pledge") && haveItem("armor", "runeword", "Stealth") || me.diff === 2 && me.classid === 1) {
 		return true;
 	}
 
