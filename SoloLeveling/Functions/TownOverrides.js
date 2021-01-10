@@ -503,23 +503,13 @@ Town.unfinishedQuests = function () {
 	//remove Khalim's Will if quest not completed and restarting run.
 	let kw = me.getItem(174);
 
-	if (kw) {
+	if (kw.location === 1) {
 		if (Item.getEquippedItem(4).classid === 174) {
-
 			Town.clearInventory();
 			delay(500 + me.ping * 2);
-
-			clickItem(4, 4); //remove khalim's will
-			delay(500 + me.ping * 2);
-
-			let cursorItem = getUnit(100);
-
-			if (cursorItem) { // place in inventory
-				Storage.Inventory.MoveTo(cursorItem);
-			}
-
 			Quest.stashItem(174);
 			print('ÿc9SoloLevelingÿc0: removed khalims will');
+			Item.autoEquip();
 		}
 	}
 
