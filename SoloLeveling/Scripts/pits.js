@@ -5,7 +5,7 @@
 */
 
 function pits () {
-	if (me.diff !== 2) {
+	if (me.diff !== 2 && goldCheck()) {
 		return true;
 	}
 

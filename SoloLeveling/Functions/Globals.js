@@ -75,6 +75,17 @@ var questItems = [
 ];
 
 // General functions
+var goldCheck = function () {
+	let gold = me.getStat(14) + me.getStat(15);
+	let goldLimit = [10000, 50000, 100000][me.diff];
+
+	if (gold >= goldLimit) {
+		return true;
+	}
+
+	return false;
+};
+
 var movetoInventory = function (item, sorting = false) {
 	if (item.mode === 3) {
 		return false;

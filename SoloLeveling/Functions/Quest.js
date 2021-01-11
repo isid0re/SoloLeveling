@@ -85,7 +85,15 @@ var Quest = {
 		if (hstaff) {
 			if (hstaff.location === 7) {
 				Town.goToTown();
-				Storage.Inventory.MoveTo(hstaff);
+
+				if (Storage.Inventory.CanFit(hstaff)) {
+					Storage.Inventory.MoveTo(hstaff);
+				} else {
+					Town.clearJunk();
+					Town.organizeInventory();
+					Storage.Inventory.MoveTo(hstaff);
+				}
+
 				me.cancel();
 				Pather.usePortal(null, me.name);
 			}

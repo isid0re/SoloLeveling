@@ -33,10 +33,6 @@ function staff () {
 	Town.goToTown();
 	Quest.stashItem(92);
 
-	if (me.getItem(92) && me.getItem(521)) {
-		Quest.cubeItems(91, 92, 521);
-	}
-
 	return true;
 }
 

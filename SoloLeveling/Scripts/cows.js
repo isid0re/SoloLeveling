@@ -10,7 +10,7 @@ function cows () {
 			finalRooms = [],
 			indexes = [];
 
-		kingPreset = getPresetUnit(me.area, 1, 773);
+		kingPreset = getPresetUnit(39, 1, 773);
 		badRooms = getRoom(kingPreset.roomx * 5 + kingPreset.x, kingPreset.roomy * 5 + kingPreset.y).getNearby();
 
 		for (i = 0; i < badRooms.length; i += 1) {
@@ -162,7 +162,7 @@ function cows () {
 		return true;
 	};
 
-	if (me.gametype === 0 && !Misc.checkQuest(26, 0) || !Misc.checkQuest(40, 0) || !Misc.checkQuest(4, 0) || Misc.checkQuest(4, 10)) {
+	if (!Misc.checkQuest(26, 0) || me.gametype === 1 && !Misc.checkQuest(40, 0) || !Misc.checkQuest(4, 0) || Misc.checkQuest(4, 10)) {
 		return true;
 	}
 
@@ -173,6 +173,7 @@ function cows () {
 	this.getBook();
 	this.openPortal(39, 88, 518);
 	Town.doChores();
+	Town.move("stash");
 	Pather.usePortal(39);
 	Precast.doPrecast(true);
 	this.clearCowLevel();

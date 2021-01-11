@@ -5,7 +5,7 @@
 */
 
 function travincal () {
-	if (!Pather.accessToAct(3) || !me.getItem(553) || !me.getItem(554) || !me.getItem(555) || Misc.checkQuest(18, 0)) {
+	if (!Pather.accessToAct(3) || !me.getItem(553) && !me.getItem(174) || !me.getItem(554) && !me.getItem(174) || !me.getItem(555) && !me.getItem(174) || Misc.checkQuest(18, 0)) {
 		return true;
 	}
 

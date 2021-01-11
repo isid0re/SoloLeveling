@@ -5,13 +5,14 @@
 */
 
 function duriel () {
-	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0) || !me.getItem(91)) {
+	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0) || !me.getItem(92) && !me.getItem(91) || !me.getItem(521) && !me.getItem(91)) {
 		return true;
 	}
 
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting duriel');
 	me.overhead("duriel");
+	Quest.cubeItems(91, 92, 521);
 
 	if (!Pather.checkWP(46)) {
 		Pather.getWP(46);
@@ -23,11 +24,7 @@ function duriel () {
 	Pather.moveToExit(getRoom().correcttomb, true);
 	Pather.moveToPreset(me.area, 2, 152);
 	Attack.securePosition(me.x, me.y, 30, 3000, true, me.diff === 2);
-
-	if (!Misc.checkQuest(10, 0)) {
-		Quest.placeStaff();
-	}
-
+	Quest.placeStaff();
 	Town.goToTown();
 	Town.doChores();
 	Town.buyPots(10, "Thawing"); // thawing

@@ -22,7 +22,7 @@ function tome () {
 	Precast.doPrecast(true);
 
 	if (!Pather.moveToExit(94, true) || !Pather.moveToPreset(me.area, 2, 193)) {
-		print('ÿc9SoloLevelingÿc0: Failed to get LamEssen Tome');
+		print('ÿc9SoloLevelingÿc0: Failed to move to LamEssen Tome');
 	}
 
 	Quest.collectItem(548, 193);

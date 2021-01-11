@@ -5,7 +5,7 @@
 */
 
 function hellforge () {
-	if (!Pather.accessToAct(4) || Misc.checkQuest(27, 0)) {
+	if (me.gametype === 0 || !Pather.accessToAct(4) || Misc.checkQuest(27, 0)) {
 		return true;
 	}
 

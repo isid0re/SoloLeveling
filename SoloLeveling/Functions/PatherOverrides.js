@@ -31,7 +31,9 @@ NodeAction.killMonsters = function (arg) {
 			do {
 				if (getDistance(me.x, me.y, getRoom(kingPreset.roomx * 5 + kingPreset.x), getRoom(kingPreset.roomy * 5 + kingPreset.y)) <= 25) {
 					Town.goToTown();
-					D2Bot.printToConsole('ÿc9SoloLevelingÿc0: exit cows. Near the king');
+					print('ÿc9SoloLevelingÿc0: exit cows. Near the king');
+					me.overhead('Exit cows. Near the king');
+					D2Bot.printToConsole('SoloLeveling: exit cows. Near the king');
 				}
 			} while (king.getNext());
 		}

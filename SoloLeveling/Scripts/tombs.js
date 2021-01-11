@@ -5,9 +5,7 @@
 */
 
 function tombs () {
-	let tombsLimit = 21;
-
-	if (me.charlvl >= tombsLimit) {
+	if (!Pather.accessToAct(2) || me.diff !== 2 && goldCheck() || me.diff === 2) {
 		return true;
 	}
 
@@ -17,7 +15,7 @@ function tombs () {
 	let tombID = [66, 67, 68, 69, 70, 71, 72];
 
 	for (let number = 0; number < tombID.length; number += 1) {
-		if (me.charlvl >= tombsLimit) {
+		if (goldCheck()) {
 			break;
 		}
 
