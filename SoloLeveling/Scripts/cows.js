@@ -89,35 +89,6 @@ function cows () {
 		return me.getItem(88);
 	};
 
-	this.getBook = function () {
-		Town.move(NPC.Akara);
-		let npc = getUnit(1, NPC.Akara);
-
-		if (!npc || !npc.openMenu() || !Misc.useMenu(0x0D44)) {
-			print("ÿc9SoloLevelingÿc0: Failed to buy tome");
-
-			return false;
-		}
-
-		delay(500 + me.ping);
-		let book = npc.getItem(518);
-
-		if (book && Storage.Inventory.CanFit(book)) {
-			try {
-				print('ÿc9SoloLevelingÿc0: bought Tome of Town Portal');
-				book.buy();
-			} catch (e1) {
-				print("ÿc9SoloLevelingÿc0: Failed to buy tome");
-
-				return false;
-			}
-		} else {
-			return false;
-		}
-
-		return true;
-	};
-
 	this.openPortal = function (portalID, ...classIDS) {
 		if (!Town.openStash()) {
 			print('ÿc9SoloLevelingÿc0: Failed to open stash. (openPortal)');
@@ -170,7 +141,6 @@ function cows () {
 	print('ÿc9SoloLevelingÿc0: starting cows');
 	me.overhead("cows");
 	this.getLeg();
-	this.getBook();
 	this.openPortal(39, 88, 518);
 	Town.doChores();
 	Town.move("stash");
