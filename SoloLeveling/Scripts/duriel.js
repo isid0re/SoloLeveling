@@ -5,7 +5,7 @@
 */
 
 function duriel () {
-	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0) || !me.getItem(92) && !me.getItem(91) || !me.getItem(521) && !me.getItem(91)) {
+	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0) || !Misc.checkQuest(10, 0) && (!me.getItem(91) || !me.getItem(92) && !me.getItem(521))) {
 		return true;
 	}
 
