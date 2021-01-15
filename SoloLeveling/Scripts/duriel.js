@@ -5,14 +5,14 @@
 */
 
 function duriel () {
-	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0) || !Misc.checkQuest(10, 0) && (!me.getItem(91) || !me.getItem(92) && !me.getItem(521))) {
+	if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0)) {
 		return true;
 	}
 
+	Quest.preReqs();
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting duriel');
 	me.overhead("duriel");
-	Quest.cubeItems(91, 92, 521);
 
 	if (!Pather.checkWP(46)) {
 		Pather.getWP(46);

@@ -4,6 +4,62 @@
 *	@desc		Miscellaneous quest tasks for leveling
 */
 var Quest = {
+	preReqs: function () {
+		if (me.act === 2 && !Misc.checkQuest(10, 0)) { // horadric staff
+			if (!me.getItem(521)) {
+				if (!isIncluded("SoloLeveling/Scripts/amulet.js")) {
+					include("SoloLeveling/Scripts/amulet.js");
+				}
+
+				for (let getAmmy = 0; getAmmy < 5; getAmmy++) {
+					amulet();
+				}
+			}
+
+			if (!me.getItem(92)) {
+				if (!isIncluded("SoloLeveling/Scripts/staff.js")) {
+					include("SoloLeveling/Scripts/staff.js");
+				}
+
+				for (let getStaff = 0; getStaff < 5; getStaff++) {
+					staff();
+				}
+			}
+		}
+
+		if (me.act === 3 && !Misc.checkQuest(18, 0)) { // khalim's will
+			if (!me.getItem(553)) {
+				if (!isIncluded("SoloLeveling/Scripts/eye.js")) {
+					include("SoloLeveling/Scripts/eye.js");
+				}
+
+				for (let getEye = 0; getEye < 5; getEye++) {
+					eye();
+				}
+			}
+
+			if (!me.getItem(554)) {
+				if (!isIncluded("SoloLeveling/Scripts/heart.js")) {
+					include("SoloLeveling/Scripts/heart.js");
+				}
+
+				for (let getHeart = 0; getHeart < 5; getHeart++) {
+					heart();
+				}
+			}
+
+			if (!me.getItem(555)) {
+				if (!isIncluded("SoloLeveling/Scripts/brain.js")) {
+					include("SoloLeveling/Scripts/brain.js");
+				}
+
+				for (let getBrain = 0; getBrain < 5; getBrain++) {
+					brain();
+				}
+			}
+		}
+	},
+
 	cubeItems: function (outcome, ...classids) {
 		if (me.getItem(outcome) || me.act === 2 && Misc.checkQuest(10, 0) || me.act === 3 && Misc.checkQuest(18, 0)) {
 			return true;
@@ -82,26 +138,32 @@ var Quest = {
 			return false;
 		}
 
+		if (!hstaff) {
+			Town.goToTown();
+			Quest.cubeItems(91, 92, 521);
+		}
+
 		if (hstaff) {
-			if (hstaff.location === 7) {
+			if (hstaff.location !== 3) {
 				Town.goToTown();
 
 				if (Storage.Inventory.CanFit(hstaff)) {
+					if (hstaff.location === 6) {
+						Cubing.openCube();
+					}
+
 					Storage.Inventory.MoveTo(hstaff);
 				} else {
 					Town.clearJunk();
 					Town.organizeInventory();
+
+					if (hstaff.location === 6) {
+						Cubing.openCube();
+					}
+
 					Storage.Inventory.MoveTo(hstaff);
 				}
 
-				me.cancel();
-				Pather.usePortal(null, me.name);
-			}
-
-			if (hstaff.location === 6) {
-				Town.goToTown();
-				Cubing.openCube();
-				Storage.Inventory.MoveTo(hstaff);
 				me.cancel();
 				Pather.usePortal(null, me.name);
 			}
@@ -119,15 +181,6 @@ var Quest = {
 
 		hstaff.toCursor();
 		submitItem();
-		delay(750 + me.ping);
-
-		// unbug cursor
-		let item = me.findItem(-1, 0, 3);
-
-		if (item && item.toCursor()) {
-			Storage.Inventory.MoveTo(item);
-		}
-
 		delay(750 + me.ping);
 
 		return true;
@@ -219,11 +272,12 @@ var Quest = {
 			delay(100 + me.ping);
 		}
 
-		if (!Pickit.pickItem(questItem)) {
-			Pickit.pickItems();
-		}
-
-		if (!me.getItem(classid)) {
+		if (Storage.Inventory.CanFit(questItem)) {
+			Pickit.pickItem(questItem);
+		} else {
+			Town.clearJunk();
+			Town.organizeInventory();
+			Pickit.pickItem(questItem);
 			Pickit.pickItems();
 		}
 

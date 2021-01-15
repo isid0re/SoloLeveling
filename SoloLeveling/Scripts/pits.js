@@ -5,7 +5,7 @@
 */
 
 function pits () {
-	if (me.diff !== 2 && goldCheck()) {
+	if (me.diff === 0 && !Pather.accessToAct(4) || me.diff !== 2 && goldCheck()) {
 		return true;
 	}
 

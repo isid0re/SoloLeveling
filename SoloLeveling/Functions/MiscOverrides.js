@@ -183,7 +183,13 @@ Misc.gamePacket = function (bytes) {// Merc hiring and golden bird qeust
 			let jadefigurine = getUnit(4, 546);
 
 			if (jadefigurine) {
-				Pickit.pickItem(jadefigurine);
+				if (Storage.Inventory.CanFit(jadefigurine)) {
+					Pickit.pickItem(jadefigurine);
+				} else {
+					Town.clearJunk();
+					Town.organizeInventory();
+					Pickit.pickItem(jadefigurine);
+				}
 			}
 
 			if (me.getItem(546)) {
