@@ -30,7 +30,6 @@ function staff () {
 	}
 
 	Quest.collectItem(92, 356);
-	Town.goToTown();
 	Quest.stashItem(92);
 
 	return true;

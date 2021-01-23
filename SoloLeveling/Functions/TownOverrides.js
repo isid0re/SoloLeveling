@@ -36,9 +36,9 @@ Town.townTasks = function () {
 
 	Attack.weaponSwitch(Attack.getPrimarySlot());
 	this.unfinishedQuests();
+	Runewords.makeRunewords();
 	Cubing.doCubing();
 	Runewords.makeRunewords();
-	this.equipSWAP();
 	this.heal();
 	this.identify();
 	this.clearInventory();
@@ -47,11 +47,12 @@ Town.townTasks = function () {
 	this.fillTome(518);
 	this.fillTome(519);
 	this.shopItems();
-	this.reviveMerc();
 	this.buyKeys();
 	this.repair(true);
 	this.shopItems();
+	this.reviveMerc();
 	Item.autoEquip();
+	this.equipSWAP();
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.clearInventory();
@@ -119,9 +120,9 @@ Town.doChores = function (repair = false) {
 	}
 
 	Attack.weaponSwitch(Attack.getPrimarySlot());
+	Runewords.makeRunewords();
 	Cubing.doCubing();
 	Runewords.makeRunewords();
-	this.equipSWAP();
 	this.heal();
 	this.identify();
 	this.clearInventory();
@@ -130,11 +131,12 @@ Town.doChores = function (repair = false) {
 	this.fillTome(518);
 	this.fillTome(519);
 	this.shopItems();
-	this.reviveMerc();
 	this.buyKeys();
 	this.repair(repair);
 	this.shopItems();
+	this.reviveMerc();
 	Item.autoEquip();
+	this.equipSWAP();
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.clearInventory();
@@ -162,6 +164,22 @@ Town.doChores = function (repair = false) {
 
 	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
 	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
+
+	return true;
+};
+
+Town.heal = function () {
+	if (!me.inTown) {
+		this.goToTown();
+	}
+
+	if (!this.needHealing()) {
+		return true;
+	}
+
+	if (!this.initNPC("Heal", "heal")) {
+		return false;
+	}
 
 	return true;
 };
@@ -213,12 +231,13 @@ Town.buyBooks = function () {
 
 		if (tome1 && Storage.Inventory.CanFit(tome1)) {
 			try {
-				print('ÿc9SoloLevelingÿc0: bought Tome of Town Portal');
-				tome1.buy();
+				if (tome1.buy()) {
+					print('ÿc9SoloLevelingÿc0: bought Tome of Town Portal');
+					this.fillTome(518);
+				}
 			} catch (e1) {
 				print(e1);
 
-				// Couldn't buy the tome, don't spam the scrolls
 				return false;
 			}
 		} else {
@@ -231,12 +250,12 @@ Town.buyBooks = function () {
 
 		if (tome2 && Storage.Inventory.CanFit(tome2)) {
 			try {
-				print('ÿc9SoloLevelingÿc0: bought Tome of Identify');
-				tome2.buy();
-			} catch (e1) {
-				print(e1);
+				if (tome2.buy()) {
+					print('ÿc9SoloLevelingÿc0: bought Tome of Identify');
+				}
+			} catch (e3) {
+				print(e3);
 
-				// Couldn't buy the tome, don't spam the scrolls
 				return false;
 			}
 		} else {
@@ -674,6 +693,55 @@ Town.drinkPots = function () {
 	return true;
 };
 
+Town.stash = function (stashGold) {
+	if (stashGold === undefined) {
+		stashGold = true;
+	}
+
+	if (!this.needStash()) {
+		return true;
+	}
+
+	me.cancel();
+
+	var i, result, tier, bodyLoc,
+		items = Storage.Inventory.Compare(Config.Inventory);
+
+	if (items) {
+		for (i = 0; i < items.length; i += 1) {
+			if (this.canStash(items[i])) {
+				result = (Pickit.checkItem(items[i]).result > 0 && Pickit.checkItem(items[i]).result < 4) || Cubing.keepItem(items[i]) || Runewords.keepItem(items[i]) || CraftingSystem.keepItem(items[i]);
+
+				// Don't stash low tier autoequip items.
+				if (Config.AutoEquip && Pickit.checkItem(items[i]).result === 1) {
+					tier = NTIP.GetTier(items[i]);
+					bodyLoc = Item.getBodyLoc(items[i]);
+
+					if (tier > 0 && tier <= Item.getEquippedItem(bodyLoc).tier) {
+						result = false;
+					}
+				}
+
+				if (result) {
+					Misc.itemLogger("Stashed", items[i]);
+					Storage.Stash.MoveTo(items[i]);
+				}
+			}
+		}
+	}
+
+	// Stash gold
+	if (stashGold) {
+		if (me.getStat(14) >= Config.StashGold && me.getStat(15) < 25e5 && this.openStash()) {
+			gold(me.getStat(14), 3);
+			delay(1000); // allow UI to initialize
+			me.cancel();
+		}
+	}
+
+	return true;
+};
+
 Town.organizeStash = function () {
 	if (Storage.Stash.UsedSpacePercent() < 65) {
 		return true;
@@ -940,8 +1008,8 @@ Town.clearJunk = function () {
 				!junk[0].getFlag(NTIPAliasFlag["ethereal"]) &&
 				junk[0].itemType !== 30 && junk[0].getStatEx(31) < rwBase.getStatEx(31)) { // only drop noneth armors helms shields
 				if (junk[0].drop()) {
-					me.overhead('cleared runeword armor junk');
-					print("ÿc9SoloLevelingÿc0: Cleared runeword armor junk - " + junk[0].name);
+					me.overhead('cleared runeword junk');
+					print("ÿc9SoloLevelingÿc0: Cleared runeword junk - " + junk[0].name);
 					delay(50 + me.ping);
 				}
 			}
@@ -961,6 +1029,7 @@ Town.characterRespec = function () {// Akara reset for build change
 	if (me.charlvl === respecOne || me.charlvl === respecTwo) {
 		Precast.doPrecast(true);
 		Town.goToTown(1);
+		me.overhead('time to respec');
 		Town.npcInteract("akara");
 		delay(10 + me.ping * 2);
 
@@ -969,10 +1038,7 @@ Town.characterRespec = function () {// Akara reset for build change
 		}
 
 		delay(1000 + me.ping * 2);
-
 		Town.clearBelt();
-		me.overhead('time to respec');
-
 		delay(250 + me.ping);
 
 		let script = getScript("default.dbj");
@@ -1075,3 +1141,76 @@ Town.npcInteract = function (name) {
 
 	return true;
 };
+
+Town.visitTown = function (repair = false) {
+	if (me.inTown) {
+		this.doChores();
+		this.move("stash");
+
+		return true;
+	}
+
+	var preArea = me.area,
+		preAct = me.act;
+
+	this.doChores(repair);
+
+	if (me.act !== preAct) {
+		this.goToTown(preAct);
+	}
+
+	this.move("portalspot");
+
+	if (!Pather.usePortal(preArea, me.name)) { // this part is essential
+		Packet.flash(me.gid); // try resynch then use portal agian.
+
+		if (!Pather.usePortal(preArea, me.name)) {
+			throw new Error("Town.visitTown: Failed to go back from town");
+		}
+	}
+
+	if (Config.PublicMode) {
+		Pather.makePortal();
+	}
+
+	return true;
+};
+
+Town.goToTown = function (act, wpmenu) {
+	var towns = [1, 40, 75, 103, 109];
+
+	if (!me.inTown) {
+		Packet.flash(me.gid);
+
+		if (!Pather.makePortal()) {
+			throw new Error("Town.goToTown: Failed to make TP");
+		}
+
+		if (!Pather.usePortal(null, me.name)) {
+			Packet.flash(me.gid);
+
+			if (!Pather.usePortal(null, me.name)) {
+				throw new Error("Town.goToTown: Failed to take TP");
+			}
+		}
+	}
+
+	if (act === undefined) {
+		return true;
+	}
+
+	if (act < 1 || act > 5) {
+		throw new Error("Town.goToTown: Invalid act");
+	}
+
+	if (act !== me.act) {
+		try {
+			Pather.useWaypoint(towns[act - 1], wpmenu);
+		} catch (WPError) {
+			throw new Error("Town.goToTown: Failed use WP");
+		}
+	}
+
+	return true;
+};
+

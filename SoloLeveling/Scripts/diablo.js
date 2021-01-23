@@ -5,7 +5,13 @@
 */
 
 function diablo () {
-	if (!Pather.accessToAct(4)) {
+	if (Misc.checkQuest(26, 0) && !Misc.checkQuest(28, 0)) {
+		Pather.changeAct();
+
+		return true;
+	}
+
+	if (!Pather.accessToAct(4) || farmCheck(26) && Misc.checkQuest(26, 0)) {
 		return true;
 	}
 
@@ -183,14 +189,33 @@ function diablo () {
 					break;
 				}
 
+				Packet.flash(me.gid);
 				delay(100 + me.ping);
 			}
 
 			if (!seal) {
-				print("ÿc9SoloLevelingÿc0: Seal not found (id " + classid + ")");
+				print("ÿc9SoloLevelingÿc0: Seal not found. Attempting portal trick");
+				Town.goToTown();
+				delay(25);
+				Pather.usePortal(null, me.name);
+
+				for (let a = 0; a < 3; a += 1) {
+
+					if (seal) {
+						break;
+					}
+
+					Packet.flash(me.gid);
+					delay(100 + me.ping);
+				}
+
+				if (!seal) {
+					print("ÿc9SoloLevelingÿc0: Seal not found (id " + classid + ")");
+					D2Bot.printToConsole("SoloLeveling: Seal not found (id " + classid + ")");
+				}
 			}
 
-			if (seal.mode) {
+			if (seal.mode || seal === undefined) {
 				return true;
 			}
 
@@ -276,7 +301,6 @@ function diablo () {
 
 	Precast.doPrecast(true);
 	Pather.moveToExit(108, true);
-	Attack.clearLevel();
 	this.initLayout();
 	this.vizier();
 	this.seis();
@@ -302,16 +326,16 @@ function diablo () {
 		return true;
 	}
 
-	Config.MercWatch = true;
-	Town.goToTown();
-
 	if (Misc.checkQuest(28, 0)) {
 		Pather.changeAct();
 	} else {
 		Town.npcInteract("tyrael");
+		me.cancel();
 		delay(500 + me.ping);
 		Pather.useUnit(2, 566, 109);
 	}
+
+	Config.MercWatch = true;
 
 	return true;
 }

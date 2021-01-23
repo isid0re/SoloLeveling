@@ -26,7 +26,6 @@ function izual () {
 		Attack.killTarget("Izual");
 	}
 
-	Town.goToTown();
 	Town.npcInteract("tyrael");
 
 	return true;

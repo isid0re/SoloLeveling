@@ -150,16 +150,16 @@ function LoadConfig () {
 	Config.ClearInvOnStart = false;
 
 	// Potion settings
-	Config.UseHP = 75;
-	Config.UseRejuvHP = 65;
-	Config.UseMP = 15;
+	Config.UseHP = me.playertype ? 90 : 75;
+	Config.UseRejuvHP = me.playertype ? 65 : 40;
+	Config.UseMP = me.playertype ? 45 : 25;
 	Config.UseMercHP = 75;
 	Config.HPBuffer = 0;
 	Config.MPBuffer = 0;
 	Config.RejuvBuffer = 0;
 
 	// Chicken settings
-	Config.LifeChicken = 10;
+	Config.LifeChicken = me.playertype ? 60 : 10;
 	Config.ManaChicken = 0;
 	Config.MercChicken = 0;
 	Config.TownHP = 0;
@@ -172,7 +172,7 @@ function LoadConfig () {
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	Config.StashGold = me.charlvl * 100;
-	Config.LowGold = 300000;
+	Config.LowGold = me.diff === 0 ? 25000 : me.diff === 1 ? 50000 : 100000;
 
 	//AutoEquip
 	Config.AutoEquip = true;
@@ -339,7 +339,6 @@ function LoadConfig () {
 		// Character Build Setup
 		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
 		var middleBuild = "Hammerdin"; // starts at respecOne ends when reaching respecTwo
-		var playStyle = isCaster ? 'Caster' : 'Melee'; //based on final build
 		var chooseBuffer = me.charlvl < 12 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
 		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "hp", "mp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
 		Config.BeltColumn = beltPots;
@@ -503,10 +502,6 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(apShields);
 
-				Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
-				Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
-				Config.Runewords.push([Runeword.AncientsPledge, "Scutum"]);
-				Config.Runewords.push([Runeword.AncientsPledge, "Dragon Shield"]);
 				Config.Runewords.push([Runeword.AncientsPledge, "Targe"]);
 				Config.Runewords.push([Runeword.AncientsPledge, "Rondache"]);
 				Config.Runewords.push([Runeword.AncientsPledge, "Heraldic Shield"]);
@@ -516,6 +511,10 @@ function LoadConfig () {
 				Config.Runewords.push([Runeword.AncientsPledge, "Protector Shield"]);
 				Config.Runewords.push([Runeword.AncientsPledge, "Gilded Shield"]);
 				Config.Runewords.push([Runeword.AncientsPledge, "Sacred Targe"]);
+				Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
+				Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
+				Config.Runewords.push([Runeword.AncientsPledge, "Scutum"]);
+				Config.Runewords.push([Runeword.AncientsPledge, "Dragon Shield"]);
 
 				Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
 			}
@@ -571,17 +570,24 @@ function LoadConfig () {
 							Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
 							Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
 						}
+
+						NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword || [Name] == LongSword) && [flag] != ethereal && [Quality] == Normal && [Level] >= 26 && [Level] <= 40 # [Sockets] == 0 # [MaxQuantity] == 1");
+
+						Config.Recipes.push([Recipe.Socket.Weapon, "Crystal Sword", Roll.NonEth]);
+						Config.Recipes.push([Recipe.Socket.Weapon, "Broad Sword", Roll.NonEth]);
+						Config.Recipes.push([Recipe.Socket.Weapon, "Long Sword", Roll.NonEth]);
 					}
 
-					NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword) && [flag] != ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+					NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword || [Name] == LongSword) && [flag] != ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
 					Config.Runewords.push([Runeword.Spirit, "Crystal Sword"]);
 					Config.Runewords.push([Runeword.Spirit, "Broad Sword"]);
+					Config.Runewords.push([Runeword.Spirit, "Long Sword"]);
 
 					Config.KeepRunewords.push("[type] == sword # [fcr] >= 25 && [maxmana] >= 89");
 				}
 
 				if (Item.getEquippedItem(5).tier < 1482) { // Spirit shield
-					if (!haveItem("shield", "runeword", "Spirit") && me.diff !== 2) {
+					if (!haveItem("auricshields", "runeword", "Spirit") && me.diff !== 2) {
 						var SpiritShield = [
 							"[Name] == TalRune # # [MaxQuantity] == 1",
 							"[Name] == ThulRune # # [MaxQuantity] == 1",
@@ -635,8 +641,8 @@ function LoadConfig () {
 			}
 		}
 
-		switch (playStyle) { // finalbuilld autoequip setuip
-		case 'Melee':
+		switch (finalBuild) { // finalbuilld autoequip setuip
+		case 'Smiter':
 			if (!haveItem("mace", "runeword", "Black") && me.charlvl >= respecTwo) {
 				var Black = [
 					"[Name] == ThulRune # # [MaxQuantity] == 1",
@@ -675,7 +681,7 @@ function LoadConfig () {
 			NTIP.arrayLooping(finalMELEE);
 
 			break;
-		case 'Caster':
+		case 'Hammerdin':
 			if (!haveItem("mace", "runeword", "Heart of the Oak")) {
 				var HotO = [
 					"[Name] == ThulRune # # [MaxQuantity] == 1",

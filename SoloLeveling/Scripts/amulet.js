@@ -31,7 +31,6 @@ function amulet () {
 
 	Pather.moveTo(15045, 14051);
 	Quest.collectItem(521, 149);
-	Town.goToTown();
 	Town.npcInteract("drognan");
 	Quest.stashItem(521);
 

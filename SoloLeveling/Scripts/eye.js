@@ -25,7 +25,6 @@ function eye () {
 		print('ÿc9SoloLevelingÿc0: Failed to get the eye');
 	}
 
-	Town.goToTown();
 	Town.doChores();
 	Town.buyPots(10, "Antidote"); // antidote
 	Town.drinkPots();
@@ -33,7 +32,6 @@ function eye () {
 	Pather.moveToPreset(me.area, 2, 407);
 	Attack.clear(0x7);
 	Quest.collectItem(553, 407);
-	Town.goToTown();
 	Quest.stashItem(553);
 
 	return true;

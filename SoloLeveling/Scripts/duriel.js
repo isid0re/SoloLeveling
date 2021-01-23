@@ -25,7 +25,6 @@ function duriel () {
 	Pather.moveToPreset(me.area, 2, 152);
 	Attack.securePosition(me.x, me.y, 30, 3000, true, me.diff === 2);
 	Quest.placeStaff();
-	Town.goToTown();
 	Town.doChores();
 	Town.buyPots(10, "Thawing"); // thawing
 	Town.drinkPots();
@@ -38,20 +37,12 @@ function duriel () {
 
 	if (!Misc.checkQuest(15, 0) && !Misc.checkQuest(14, 3)) {
 		Quest.tyraelTomb();
-
-		if (!me.inTown) {
-			Town.goToTown();
-		}
 	}
 
 	if (!Misc.checkQuest(15, 0) && !Misc.checkQuest(14, 4)) {
 		Town.move("palace");
 		Town.npcInteract("jerhyn");
 		Pather.moveToExit(50, true);
-
-		if (!me.inTown) {
-			Town.goToTown();
-		}
 	}
 
 	Pather.changeAct();

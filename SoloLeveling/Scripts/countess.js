@@ -5,7 +5,7 @@
 */
 
 function countess () {
-	if (me.gametype === 0 && Misc.checkQuest(5, 0) || me.diff === 0 && haveItem("shield", "runeword", "Ancients' Pledge") && haveItem("armor", "runeword", "Stealth") || me.diff === 2 && me.classid === 1) {
+	if (me.gametype === 0 && Misc.checkQuest(5, 0) || runesCheck()) {
 		return true;
 	}
 
@@ -20,9 +20,18 @@ function countess () {
 	}
 
 	Precast.doPrecast(true);
+	let floors = [20, 21, 22, 23, 24, 25];
 
 	try {
-		Pather.moveToExit([20, 21, 22, 23, 24, 25], true);
+		if (me.charlvl < 12) {
+			for (let i = 0; i < floors.length; i += 1) {
+				Pather.moveToExit(floors[i], true);
+				Attack.clear(0x7);
+			}
+		} else {
+			Pather.moveToExit(floors, true);
+		}
+
 		Pather.moveToPreset(me.area, 2, 580);
 		Attack.clear(20, 0, getLocaleString(2875));
 	} catch (err) {

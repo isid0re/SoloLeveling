@@ -5,7 +5,7 @@
 */
 
 function lowerkurast () {
-	if (!Pather.accessToAct(3) || me.diff !== 2 && goldCheck()) {
+	if (!Pather.accessToAct(3) || farmCheck(22) || me.diff !== 2 && goldCheck()) {
 		return true;
 	}
 

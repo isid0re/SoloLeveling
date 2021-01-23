@@ -87,11 +87,11 @@ function summoner () {
 	teleportPads();
 
 	try {
-		Pather.moveToPreset(me.area, 2, 357, -3, -3);
+		Pather.moveToPreset(74, 2, 357, -3, -3);
 	} catch (err) {
 		print('ÿc9SoloLevelingÿc0: Failed to reach Summoner. Retry');
 
-		if (!Pather.moveToPreset(me.area, 2, 357, -3, -3)) {
+		if (!Pather.moveToPreset(74, 2, 357, -3, -3)) {
 			print('ÿc9SoloLevelingÿc0: Failed to reach summoner');
 
 			return false;

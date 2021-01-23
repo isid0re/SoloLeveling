@@ -152,16 +152,16 @@ function LoadConfig () {
 	Config.ClearInvOnStart = false;
 
 	// Potion settings
-	Config.UseHP = 75;
-	Config.UseRejuvHP = 65;
-	Config.UseMP = 15;
+	Config.UseHP = me.playertype ? 90 : 75;
+	Config.UseRejuvHP = me.playertype ? 65 : 40;
+	Config.UseMP = me.playertype ? 45 : 25;
 	Config.UseMercHP = 75;
 	Config.HPBuffer = 0;
 	Config.MPBuffer = 0;
 	Config.RejuvBuffer = 0;
 
 	// Chicken settings
-	Config.LifeChicken = 10;
+	Config.LifeChicken = me.playertype ? 60 : 10;
 	Config.ManaChicken = 0;
 	Config.MercChicken = 0;
 	Config.TownHP = 0;
@@ -174,7 +174,7 @@ function LoadConfig () {
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	Config.StashGold = me.charlvl * 100;
-	Config.LowGold = 300000;
+	Config.LowGold = me.diff === 0 ? 25000 : me.diff === 1 ? 50000 : 100000;
 
 	//AutoEquip
 	Config.AutoEquip = true;
@@ -578,9 +578,15 @@ function LoadConfig () {
 						NTIP.arrayLooping(SpiritSword);
 
 						if (!me.getItem(620)) { //Amn Rune
+							Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 							Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
 							Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
 						}
+
+						NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword) && [flag] != ethereal && [Quality] == Normal && [Level] >= 26 && [Level] <= 40 # [Sockets] == 0 # [MaxQuantity] == 1");
+
+						Config.Recipes.push([Recipe.Socket.Weapon, "Crystal Sword", Roll.NonEth]);
+						Config.Recipes.push([Recipe.Socket.Weapon, "Broad Sword", Roll.NonEth]);
 					}
 
 					NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword) && [flag] != ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");

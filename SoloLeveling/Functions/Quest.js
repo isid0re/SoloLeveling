@@ -75,7 +75,7 @@ var Quest = {
 			me.overhead('cubing flail');
 		}
 
-		Town.clearInventory();
+		Town.doChores();
 		Town.openStash();
 
 		if (me.findItems(-1, -1, 6)) {
@@ -109,11 +109,7 @@ var Quest = {
 
 				if (wantedItem) {
 					Storage.Inventory.MoveTo(wantedItem);
-
-					if (Storage.Stash.CanFit(wantedItem)) {
-						Storage.Stash.MoveTo(wantedItem);
-						me.cancel();
-					}
+					me.cancel();
 
 					break;
 				}
@@ -139,13 +135,14 @@ var Quest = {
 		}
 
 		if (!hstaff) {
-			Town.goToTown();
 			Quest.cubeItems(91, 92, 521);
 		}
 
 		if (hstaff) {
 			if (hstaff.location !== 3) {
-				Town.goToTown();
+				if (!me.inTown) {
+					Town.goToTown();
+				}
 
 				if (Storage.Inventory.CanFit(hstaff)) {
 					if (hstaff.location === 6) {
@@ -286,6 +283,7 @@ var Quest = {
 
 	equipItem: function (item, loc) {
 		let newitem = me.getItem(item);
+		me.cancel();
 
 		if (newitem) {
 			if (newitem.location === 7) {

@@ -27,7 +27,6 @@ function brain () {
 
 	Attack.clear(0x7);
 	Quest.collectItem(555, 406);
-	Town.goToTown();
 	Quest.stashItem(555);
 
 	return true;

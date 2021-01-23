@@ -88,7 +88,6 @@ function ancients () {
 		MercChicken: 0
 	};
 
-	Town.goToTown();
 	Town.townTasks();
 	me.overhead('updated settings');
 	Object.assign(Config, updateConfig);

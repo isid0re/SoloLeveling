@@ -52,7 +52,6 @@ function saveBarby () {
 		delay(1500 + me.ping);
 	}
 
-	Town.goToTown();
 	Town.npcInteract("qual_kehk");
 
 	return true;

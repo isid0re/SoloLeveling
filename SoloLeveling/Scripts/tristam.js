@@ -32,7 +32,6 @@ function tristam () {
 		}
 
 		if (me.getItem(524)) {
-			Town.goToTown();
 			Town.npcInteract("akara");
 		}
 	}

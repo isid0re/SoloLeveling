@@ -10,9 +10,10 @@ var build = {
 	usefulskills: [40, 49], // frozen armor, lightning
 	stats: [
 		["strength", 15],
-		["vitality", 70],
+		["vitality", 25],
+		["energy", 50],
+		["vitality", 50],
 		["strength", 35],
-		["energy", 85],
 		["vitality", "all"]
 	],
 	skills: [

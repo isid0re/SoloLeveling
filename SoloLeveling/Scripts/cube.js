@@ -24,7 +24,6 @@ function cube () {
 	Pather.moveToPreset(me.area, 2, 354);
 	Attack.securePosition(me.x, me.y, 30, 3000, true);
 	Quest.collectItem(549, 354);
-	Town.goToTown();
 	Quest.stashItem(549);
 
 	return true;

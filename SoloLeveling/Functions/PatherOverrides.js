@@ -232,7 +232,97 @@ Pather.changeAct = function () {
 		me.cancel();
 	}
 
-	delay(2500 + me.ping * 2);
+	let i, tick = getTickCount(), targetAct = prevAct + 1;
+
+	for (i = 0; i < 12; i += 1) {
+		while (getTickCount() - tick < Math.max(Math.round((i + 1) * 1000 / (i / 5 + 1)), me.ping * 2)) {
+			if (me.act === targetAct) {
+				delay(100);
+
+				return true;
+			}
+
+			delay(10);
+		}
+	}
 
 	return true;
+};
+
+Pather.useUnit = function (type, id, targetArea) {
+	var i, tick, unit, coord,
+		preArea = me.area;
+
+	for (i = 0; i < 5; i += 1) {
+		unit = getUnit(type, id);
+
+		if (unit) {
+			break;
+		}
+
+		delay(200);
+	}
+
+	if (!unit) {
+		print("ÿc9SoloLevelingÿc0: Unit not found. Attempting portal trick");
+		Town.goToTown();
+		Pather.usePortal(null, me.name);
+
+		for (i = 0; i < 5; i += 1) {
+			unit = getUnit(type, id);
+
+			if (unit) {
+				break;
+			}
+
+			delay(200);
+		}
+
+		if (!unit) {
+			throw new Error("useUnit: Unit not found. ID: " + id);
+		}
+	}
+
+	for (i = 0; i < 3; i += 1) {
+		if (getDistance(me, unit) > 5) {
+			this.moveToUnit(unit);
+		}
+
+		if (type === 2 && unit.mode === 0) {
+			if ((me.area === 83 && targetArea === 100 && me.getQuest(21, 0) !== 1) || (me.area === 120 && targetArea === 128 && me.getQuest(39, 0) !== 1)) {
+				throw new Error("useUnit: Incomplete quest.");
+			}
+
+			if (me.area === 92) {
+				this.openUnit(2, 367);
+			} else {
+				this.openUnit(2, id);
+			}
+		}
+
+		delay(300);
+
+		if (type === 5) {
+			Misc.click(0, 0, unit);
+		} else {
+			sendPacket(1, 0x13, 4, unit.type, 4, unit.gid);
+		}
+
+		tick = getTickCount();
+
+		while (getTickCount() - tick < 3000) {
+			if ((!targetArea && me.area !== preArea) || me.area === targetArea) {
+				delay(100);
+
+				return true;
+			}
+
+			delay(10);
+		}
+
+		coord = CollMap.getRandCoordinate(me.x, -1, 1, me.y, -1, 1, 3);
+		this.moveTo(coord.x, coord.y);
+	}
+
+	return targetArea ? me.area === targetArea : me.area !== preArea;
 };

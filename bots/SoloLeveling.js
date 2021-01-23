@@ -88,6 +88,7 @@ function SoloLeveling () {
 
 		if (me.hp / me.hpmax < 1) {
 			Town.heal();
+			me.cancel();
 		}
 
 		return true;

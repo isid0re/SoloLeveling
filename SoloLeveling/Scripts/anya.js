@@ -34,7 +34,6 @@ function anya () {
 		me.cancel();
 	}
 
-	Town.goToTown();
 	Town.npcInteract("malah");
 	Town.doChores();
 	Pather.usePortal(114, me.name);
@@ -46,7 +45,6 @@ function anya () {
 		}
 	}
 
-	Town.goToTown();
 	Town.npcInteract("malah");
 	Town.unfinishedQuests();
 	Town.doChores();

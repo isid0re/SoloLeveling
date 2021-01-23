@@ -5,7 +5,7 @@
 */
 
 function travincal () {
-	if (!Pather.accessToAct(3) || Misc.checkQuest(18, 0)) {
+	if (!Pather.accessToAct(3) || me.diff === 0 && me.charlvl > 24 || me.diff !== 0 && Misc.checkQuest(18, 0)) {
 		return true;
 	}
 
@@ -30,20 +30,13 @@ function travincal () {
 	Attack.killTarget("Ismail Vilehand");
 	Pickit.pickItems();
 
+	if (!Pather.moveToPreset(83, 2, 404)) { // go to orb
+		print('ÿc9SoloLevelingÿc0: Failed to move to compelling orb');
+	}
+
+	Attack.clear(10); // clear area around orb
+
 	if (!Misc.checkQuest(18, 0)) { // khalim's will quest not complete
-		Pather.moveToUnit(council);
-		Pickit.pickItems();
-
-		if (!Pather.moveToPreset(83, 2, 404)) { // go to orb
-			print('ÿc9SoloLevelingÿc0: Failed to move to compelling orb');
-		}
-
-		Attack.clear(10); // clear area around orb
-
-		if (!me.inTown) { // go to town
-			Town.goToTown();
-		}
-
 		if (!me.getItem(174) && me.getItem(173)) { // cube flail to will
 			Quest.cubeItems(174, 553, 554, 555, 173);
 			delay(250 + me.ping);
@@ -58,11 +51,6 @@ function travincal () {
 
 		Quest.smashSomething(404); // smash orb
 		Item.autoEquip(); // equip previous weapon
-
-		if (!me.inTown) { // go to town
-			Town.goToTown();
-		}
-
 		Town.doChores();
 
 		if (!Pather.usePortal(83, me.name)) { // return to Trav

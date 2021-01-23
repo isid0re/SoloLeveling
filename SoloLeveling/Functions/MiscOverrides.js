@@ -252,7 +252,7 @@ Misc.hireMerc = function () {
 		return true;
 	}
 
-	if (me.diff === 0 && me.gold < 25000 || me.diff !== 0 && me.gold < 100000) {
+	if (me.diff === 0 && me.gold < 10000 || me.diff !== 0 && me.gold < 100000) {
 		print('ÿc9SoloLevelingÿc0: not enough gold to hire merc.');
 
 		return true;
@@ -291,7 +291,6 @@ Misc.hireMerc = function () {
 			if (me.diff !== mercDiff && me.diff === 0) {
 				if (merc.getSkill(tempMercAura, 1)) {
 					print('ÿc9SoloLevelingÿc0: prayer merc hired.');
-					NTIP.addLine("[Type] == Polearm &&  ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)");
 
 					break;
 				}
@@ -329,7 +328,7 @@ Misc.setupMerc = function () {
 	var mercGear = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
+		"[Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) && [Level] >= 20 # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
 	];
 	NTIP.arrayLooping(mercGear);
 

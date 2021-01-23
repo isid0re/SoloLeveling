@@ -5,7 +5,7 @@
 */
 
 function andariel () {
-	if (me.diff === 0 && Misc.checkQuest(7, 0)) {
+	if (farmCheck(7) && Misc.checkQuest(7, 0)) {
 		return true;
 	}
 
@@ -27,7 +27,6 @@ function andariel () {
 
 	Precast.doPrecast(true);
 	Pather.moveToExit([36, 37], true);
-	Town.goToTown();
 	Town.doChores();
 	Town.buyPots(10, "Antidote"); // antidote
 	Town.drinkPots();

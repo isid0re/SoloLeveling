@@ -7,7 +7,7 @@
 function baal () {
 	Config.BossPriority = false;
 
-	if (me.gametype === 0 || !Pather.accessToAct(5) || !Misc.checkQuest(39, 0)) {
+	if (me.gametype === 0 || !Pather.accessToAct(5) || !Misc.checkQuest(39, 0) || farmCheck(40) && Misc.checkQuest(40, 0)) {
 		return true;
 	}
 
@@ -261,6 +261,7 @@ function baal () {
 		print("ÿc9SoloLevelingÿc0: Couldn't access portal.");
 	}
 
+	Config.BossPriority = true;
 	Pather.moveTo(15134, 5923);
 	Attack.killTarget(544); // Baal
 	Pickit.pickItems();

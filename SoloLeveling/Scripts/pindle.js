@@ -5,7 +5,7 @@
 */
 
 function pindle () {
-	if (me.gametype === 0 || !Pather.accessToAct(5) || !Misc.checkQuest(37, 0) || me.diff !== 2 && goldCheck()) {
+	if (me.gametype === 0 || !Pather.accessToAct(5) || farmCheck(37) || me.diff !== 2 && goldCheck()) {
 		return true;
 	}
 

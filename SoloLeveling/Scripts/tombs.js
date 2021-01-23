@@ -50,7 +50,6 @@ function tombs () {
 
 			Attack.clear(50);
 			Pickit.pickItems();
-			Town.goToTown();
 			Town.doChores();
 		}
 	}

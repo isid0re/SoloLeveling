@@ -5,7 +5,7 @@
 */
 
 function hellforge () {
-	if (me.gametype === 0 || !Pather.accessToAct(4) || Misc.checkQuest(27, 0)) {
+	if (me.gametype === 0 || me.diff === 0 || !Pather.accessToAct(4) || Misc.checkQuest(27, 0)) {
 		return true;
 	}
 
@@ -31,10 +31,6 @@ function hellforge () {
 		Attack.clear(20, 0, getLocaleString(1067)); // Hephasto The Armorer
 	} catch (err) {
 		print('ÿc9SoloLevelingÿc0: Failed to kill Hephasto');
-	}
-
-	if (!me.inTown) { // go to town
-		Town.goToTown();
 	}
 
 	Town.doChores();
@@ -63,11 +59,6 @@ function hellforge () {
 	Item.autoEquip();
 	delay(2500 + me.ping);
 	Pickit.pickItems();
-
-	if (!me.inTown) { // go to town
-		Town.goToTown();
-	}
-
 	Town.npcInteract("cain");
 
 	return true;

@@ -5,13 +5,12 @@
 */
 
 function bloodraven () {
-	if (me.diff === 0 && Misc.checkQuest(2, 0) || me.diff === 1) {
+	if (me.diff === 0 && Misc.checkQuest(2, 0) || me.diff !== 0 && farmCheck(2)) {
 		return true;
 	}
 
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting blood raven');
-	me.overhead("blood raven");
 
 	if (!Pather.checkWP(3)) {
 		Pather.getWP(3);
@@ -20,12 +19,14 @@ function bloodraven () {
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToExit(17, true);
-	Pather.moveToPreset(17, 1, 805);
-	Attack.killTarget("Blood Raven");
-	Pickit.pickItems();
 
 	if (me.diff === 0) {
+		me.overhead("blood raven");
+		Attack.clear(0x7);
+		Pather.moveToExit(17, true);
+		Pather.moveToPreset(17, 1, 805);
+		Attack.killTarget("Blood Raven");
+		Pickit.pickItems();
 		Town.npcInteract("kashya");
 
 		return true;

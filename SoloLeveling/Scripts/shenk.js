@@ -5,7 +5,7 @@
 */
 
 function shenk () {
-	if (me.gametype === 0 || !Pather.accessToAct(5) || (me.diff === 0 || me.diff === 1) && Misc.checkQuest(35, 1)) {
+	if (me.gametype === 0 || !Pather.accessToAct(5) || farmCheck(35)) {
 		return true;
 	}
 

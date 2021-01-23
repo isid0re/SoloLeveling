@@ -11,7 +11,7 @@ var difficulty = ['Normal', 'Nightmare', 'Hell'][me.diff];
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 const respecOne = [ 0, 28, 26, 25, 0, 24, 0][me.classid];
 const respecTwo = [ 0, 85, 75, 85, 0, 75, 0][me.classid];
-var	levelcap = [37, 67, 100][me.diff];
+var	levelcap = [35, 65, 100][me.diff];
 
 // SoloLeveling Pickit Items
 var valuableItems = [
@@ -84,6 +84,109 @@ var goldCheck = function () {
 	}
 
 	return false;
+};
+
+var runesCheck = function () {
+	let haveRunes = false;
+
+	switch (me.diff) {
+	case 0: //normal
+		//have items
+		if (haveItem("shield", "runeword", "Ancients' Pledge") || haveItem("auricshields", "runeword", "Ancients' Pledge")) {
+			haveRunes = true;
+		}
+
+		//have runes for "Ancients' Pledge"
+		if (me.getItem("ralrune") && me.getItem("ortrune") && me.getItem("talrune")) {
+			haveRunes = true;
+		}
+
+		break;
+	case 1: //nightmare
+		//have items
+		if (haveItem("helm", "runeword", "Lore") && (me.classid !== 3 && haveItem("sword", "runeword", "Spirit") || me.classid === 3 && haveItem("sword", "runeword", "Spirit") && haveItem("auricshields", "runeword", "Spirit"))) {
+			haveRunes = true;
+		}
+
+		//have runes for "Spirit" and "Lore"
+		if (me.getItem("talrune") && me.getItem("thulrune") && me.getItem("ortrune") && me.getItem("amnrune") && me.getItem("solrune")) {
+			haveRunes = true;
+		}
+
+		break;
+	case 2: //hell
+		if (!Misc.checkQuest(40, 0)) {
+			haveRunes = true;
+		}
+
+		break;
+	}
+
+	return haveRunes;
+};
+
+var farmCheck = function (quest) {
+	let dontfarm = true;
+
+	if (me.gametype === 0 && Misc.checkQuest(26, 0) || Misc.checkQuest(40, 0)) {
+		switch (quest) {
+		case 2: //maus
+			if (me.diff === 2) {
+				dontfarm = false;
+			}
+
+			break;
+		case 4: //cows
+			dontfarm = false;
+			break;
+		case 6: //pits
+			if (me.diff === 2) {
+				dontfarm = false;
+			}
+
+			break;
+		case 7: //andy
+			if (me.gametype === 1 && me.diff === 1 || me.diff === 2) {
+				dontfarm = false;
+			}
+
+			break;
+		case 15: //ancient tunnels
+			if (me.diff === 0 && !Pather.accessToAct(3) || me.diff === 2 && me.classid !== 3) {
+				dontfarm = false;
+			}
+
+			break;
+		case 22: //lower kurast
+			if (me.diff === 2) {
+				dontfarm = false;
+			}
+
+			break;
+		case 23: //mephisto
+			if (me.diff !== 0) {
+				dontfarm = false;
+			}
+
+			break;
+		case 26: //diablo
+			dontfarm = false;
+
+			break;
+		case 35: // shenk
+		case 37: // pindle
+			if (me.diff === 2) {
+				dontfarm = false;
+			}
+
+			break;
+		case 40: //baal
+			dontfarm = false;
+			break;
+		}
+	}
+
+	return dontfarm;
 };
 
 var movetoInventory = function (item, sorting = false) {
@@ -320,6 +423,7 @@ var tierscore = function (item) {
 		FHR: 3, // faster hit recovery
 		DEF: 0.05, // defense
 		ICB: 2, // increased chance to block
+		BELTSLOTS: 1, //belt potion storage
 		// base stats
 		HP:	2,
 		MANA:	0.8,
@@ -404,10 +508,19 @@ var tierscore = function (item) {
 			frwRating = item.getStatEx(96) * generalWeights.FRW;
 		}
 
+		// belt slots
+		let beltRating = 0,
+			isBelt = item.itemType === 19; // check if belt
+
+		if (isBelt) {
+			beltRating = Storage.BeltSize() * 4 * generalWeights.BELTSLOTS; // rows * columns * weight
+		}
+
 		//start generalRating
 		let generalRating = 0;
 		generalRating += cbfRating; // add cannot be frozen
 		generalRating += frwRating; // add faster run walk
+		generalRating += beltRating; // add belt slots
 		generalRating += item.getStatEx(99) * generalWeights.FHR; // add faster hit recovery
 		generalRating += item.getStatEx(31) * generalWeights.DEF; //	add Defense
 		generalRating += (item.getStatEx(20) + item.getStatEx(102)) * generalWeights.ICB; //add increased chance to block
@@ -436,9 +549,10 @@ var tierscore = function (item) {
 		let bodyloc = itembodyloc[0]; // extract bodyloc from array
 		// get item resists stats from olditem equipped on body location
 		let equippedItems = me.getItems()
-			.filter(item => [1].indexOf(item.location) > -1 ) // limit search to equipped body parts
-			.sort((a, b) => a.location - b.location); // Sort on body, low to high.
-		let oldItem = equippedItems[bodyloc];
+			.filter(item =>
+				item.bodylocation === bodyloc // filter equipped items to body location
+				&& [1].indexOf(item.location) > -1); // limit search to equipped body parts
+		let oldItem = equippedItems[0]; // extract oldItem from array
 		let olditemFR = oldItem !== undefined ? oldItem.getStatEx(39) : 0; // equipped fire resist
 		let olditemCR = oldItem !== undefined ? oldItem.getStatEx(43) : 0; // equipped cold resist
 		let olditemLR = oldItem !== undefined ? oldItem.getStatEx(41) : 0; // equipped lite resist

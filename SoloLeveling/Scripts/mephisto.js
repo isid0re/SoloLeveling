@@ -5,7 +5,7 @@
 */
 
 function mephisto () {
-	if (!Pather.accessToAct(3) || !Misc.checkQuest(18, 0) || me.diff === 0 && Misc.checkQuest(23, 0)) {
+	if (!Pather.accessToAct(3) || !Misc.checkQuest(18, 0) || farmCheck(23) && Misc.checkQuest(23, 0)) {
 		return true;
 	}
 
@@ -21,7 +21,6 @@ function mephisto () {
 
 	Precast.doPrecast(true);
 	Pather.moveToExit(102, true);
-	Town.goToTown();
 	Town.doChores();
 	Town.buyPots(10, "Thawing"); // thawing
 	Town.drinkPots();

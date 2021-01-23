@@ -27,7 +27,6 @@ function heart () {
 
 	Attack.clear(0x7); // clear level
 	Quest.collectItem(554, 405);
-	Town.goToTown();
 	Quest.stashItem(554);
 
 	return true;

@@ -90,6 +90,10 @@ function cows () {
 	};
 
 	this.openPortal = function (portalID, ...classIDS) {
+		if (me.area !== 1) {
+			Town.goToTown(1);
+		}
+
 		if (!Town.openStash()) {
 			print('ÿc9SoloLevelingÿc0: Failed to open stash. (openPortal)');
 		}
@@ -133,16 +137,18 @@ function cows () {
 		return true;
 	};
 
-	if (!Misc.checkQuest(26, 0) || me.gametype === 1 && !Misc.checkQuest(40, 0) || !Misc.checkQuest(4, 0) || Misc.checkQuest(4, 10)) {
+	if (farmCheck(4) || Misc.checkQuest(4, 10)) {
 		return true;
 	}
 
+	NTIP.addLine("[Name] == wirt'sleg");
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting cows');
 	me.overhead("cows");
 	this.getLeg();
-	this.openPortal(39, 88, 518);
 	Town.doChores();
+	this.openPortal(39, 88, 518);
+	Town.buyBooks();
 	Town.move("stash");
 	Pather.usePortal(39);
 	Precast.doPrecast(true);

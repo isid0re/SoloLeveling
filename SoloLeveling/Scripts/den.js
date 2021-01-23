@@ -25,7 +25,7 @@ function den () {
 			Pather.makePortal();
 		}
 
-		if (me.classid !== 3 && me.charlvl < 3) {
+		if (me.charlvl < 3) {
 			Attack.clearLevel();
 		}
 
@@ -45,6 +45,7 @@ function den () {
 
 	if (!me.getItem(518)) {
 		Pather.moveToExit([2, 3], true);
+		Pather.getWP(3);
 		Pather.useWaypoint(1);
 	} else {
 		Town.goToTown();

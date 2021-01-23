@@ -26,7 +26,6 @@ function tome () {
 	}
 
 	Quest.collectItem(548, 193);
-	Town.goToTown();
 	Town.unfinishedQuests();
 
 	return true;
