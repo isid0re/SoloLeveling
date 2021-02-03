@@ -37,11 +37,14 @@ C		Classic
 NL/L		NonLadder/Ladder
 ```
 3. The profile Info Tag box will need to have the final build selection for the character type chosen. Please refer to the respective Class.Sololeveling.js config file for build options.
-4. Ensure the Difficulty is set to HIGHEST.
-5. Use the D2BotSoloLevelingEntry.dbj entry script.
-6. Click apply.
-7. Run the Bot.
-8. Enjoy.
+4. Account Name: leave blank if you want it to create a random name (later saved in Data/profile.json) OR use your existing account
+5. Account Password: leave blank if you want it to create a random password (later saved in Data/profile.json) OR use your existing account
+6. Character Name: leave blank if you want it to create a random character name OR use a specific character name (script will error if name is taken)
+7. Ensure the Difficulty is set to HIGHEST.
+8. Use the D2BotSoloLevelingEntry.dbj entry script.
+9. Click apply.
+10. Run the Bot.
+11. Enjoy.
 
 ### Contributing
 
