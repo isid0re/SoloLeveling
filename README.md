@@ -29,7 +29,7 @@ This script is designed to be plug and play with [blizzhackers/kolbot](https://g
 
 ### Usage
 1. After installation create your profile in the Kolbot D2Bot profile manager. The profile name will decide on the type of character to be made.
-1a. The profile needs to adhere to the following format PREFIX-SUFFIX: (for example, a hardcore classic ladder sorceress will be HCCL-SORC or a softcore expansion nonladder hammerdin will be SCNL-PAL)
+1a. The profile needs to adhere to the following format PREFIX-SUFFIX: (for example, a hardcore classic ladder sorceress will be `HCCL-SORC` or a softcore expansion nonladder hammerdin will be `SCNL-PAL`).
 ```
 	Profile Prefix Options	Explaination		Profile Suffix Options
 	HC/SC		 	Hardcore/SoftCore	ZON, SORC, NECRO, PAL, BARB, DRUID, SIN
