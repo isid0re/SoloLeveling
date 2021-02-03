@@ -70,6 +70,7 @@ include("torchsystem.js");
 include("common/misc.js");
 include("common/util.js");
 include("common/pather.js");
+include("SoloLeveling/Tools/Playtime.js");
 
 if (!FileTools.exists("data/" + me.profile + ".json")) {
 	DataFile.create();
@@ -240,7 +241,7 @@ function locationTimeout (time, location) {
 	while (getLocation() === location && endtime > getTickCount()) {
 		delay(500);
 	}
-
+	Playtime.recordPlaytime();
 	return (getLocation() !== location);
 }
 
@@ -352,6 +353,9 @@ function main () {
 	}
 
 	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
+	var wasInGame = false;
+	
+	Playtime.track(false);
 
 	while (true) {
 		while (me.ingame) { // returns true before actually in game so we can't only use this check
@@ -365,6 +369,13 @@ function main () {
 					ingame = true;
 					DataFile.updateStats("runs", gameCount);
 					DataFile.updateStats("ingameTick");
+				}
+
+				Playtime.recordPlaytime();
+
+				if (!wasInGame) {
+					Playtime.track(true);
+					wasInGame = true;
 				}
 
 				myExp = Math.max(0, Experience.progress());
@@ -382,8 +393,15 @@ function main () {
 			delay(1000);
 		}
 
+		if (wasInGame) {
+			Playtime.recordPlaytime();
+			Playtime.track(false);
+			wasInGame = false;
+		}
+
 		isUp = "no";
 
+		Playtime.recordPlaytime();
 		locationAction(getLocation());
 		delay(1000);
 	}
