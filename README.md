@@ -15,7 +15,7 @@ An automated leveling script for all Diablo 2 softcore expansion characters usin
 This script is designed to be plug and play with [blizzhackers/kolbot](https://github.com/blizzhackers/kolbot) after you've installed Kolbot per it's installation instructions. If you are downloading Kolbot from the discord link use the "New Development" link.
 
 1. Download SoloLeveling.zip
-2. Extract and copy all files into the ```libs``` folder.
+2. Extract and copy both the `libs` folder and `D2BotSoloLevelingEntry.dbj` into the `kolbot` folder.
 3. A proper installation will have the following folders and files added to the `libs` directory.
 ```	
 	bots\				sololeveling.js
@@ -25,25 +25,22 @@ This script is designed to be plug and play with [blizzhackers/kolbot](https://g
 	configs\Builds\ 		[the autobuild templates for the bot builds]
 	configs\ 			[the various class config files for the bots]
 ```
+4. A proper installation will have the `D2BotSoloLevelingEntry.dbj` in the same location as the `D2BotLead.dbj` entry script.
 
 ### Usage
-1. Select the character config file for the class you want to build.
-2. Save a copy of this config file with your new characters name. For example,
+1. After installation create your profile in the Kolbot D2Bot profile manager. The profile name will decide on the type of character to be made.
+1a. The profile needs to adhere to the following format PREFIX-SUFFIX: (for example, a hardcore classic ladder sorceress will be HCCL-SORC or a softcore expansion nonladder hammerdin will be SCNL-PAL)
 ```
-Paladin.SoloLeveling.js >> Paladin.YourCharacterNameGoesHere.js
+	Profile Prefix Options	Explaination		Profile Suffix Options
+	HC/SC		 	Hardcore/SoftCore	ZON, SORC, NECRO, PAL, BARB, DRUID, SIN
+	C			Classic	
+	NL/L			NonLadder/Ladder
 ```
-3. Select the finalbuild you want to have by removing the // lines. The following example shows the finalbuild selected will be a Hammerdin:  
-```
-Scripts.SoloLeveling = true; // *** Leveling Script  ***
-	var finalBuild = "Hammerdin";
-	//var finalBuild = "Smiter";
-	//var finalBuild = "Zealot";
-``` 
-4. Add a profile in D2Bot as you normally would using the character name as spelled in the selected config file.
-5. Ensure the Difficulty is set to HIGHEST.
-6. Use the D2BotLead.dbj entry script.
-7. Click apply.
-8. Run the Bot. 
+1b. The profile Info Tag box will need to have the final build selection for the character type chosen. Please refer to the respective Class.Sololeveling.js config file for build options.
+2. Ensure the Difficulty is set to HIGHEST.
+3. Use the D2BotSoloLevelingEntry.dbj entry script.
+4. Click apply.
+5. Run the Bot. 
 
 ### Contributing
 
