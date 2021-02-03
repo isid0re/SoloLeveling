@@ -646,67 +646,7 @@ var SoloLevelingHooks = {
 };
 
 function main() {
-	/*include("json2.js");
-	include("NTItemParser.dbl");
-	include("OOG.js");
-	include("AutoMule.js");
-	include("Gambling.js");
-	include("TorchSystem.js");
-	include("MuleLogger.js");
-	include("common/Attack.js");
-	include("common/Cubing.js");
-	include("common/CollMap.js");
-	include("common/Config.js");
-	include("common/Loader.js");
-	include("common/misc.js");
-	include("common/util.js");
-	include("common/Pickit.js");
-	include("common/Pather.js");
-	include("common/Precast.js");
-	include("common/Prototypes.js");
-	include("common/Runewords.js");
-	include("common/Storage.js");
-	include("common/Town.js");*/
-	//print("load overlay helper");
-	//load("libs/SoloLeveling/Tools/OverlayHelper.js");
+	
 	print("SoloLeveling Overlay Thread Loaded.");
 
-	this.ee = [];
-
-	this.clear = function () {
-		while(this.ee.length > 0){
-			this.ee.shift().remove();
-		}
-	};
-
-	this.keyEvent = function (key){
-		switch(key){
-			case 219:
-				this.ee.push(new Text("SoloLeveling by Isid0re", 394, 525, 1, 0, 2));
-				this.ee.push(new Text("Overlay by theBGuy", 394, 535, 1, 0, 2));
-				break;
-			case 221:
-				this.clear();
-				break;
-		}
-	};
-
-	addEventListener("keyup", this.keyEvent);
-	
-	var i,
-		hideFlags = [0x09, 0x0C, 0x0D, 0x01, 0x02, 0x0F, 0x18, 0x19, 0x1A, 0x21];
-
-	this.myAct = me.act;
-
-	//Config.init(true);
-
-	/*while (true) {
-		SoloLevelingHooks.update();
-		if(me.act !== myAct){
-			SoloLevelingHooks.flush();
-			myAct = me.act;
-		}
-		
-		delay(200);
-	}*/
 }
