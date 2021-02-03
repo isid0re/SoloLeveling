@@ -22,36 +22,36 @@ var SoloLevelingHooks = {
 					if(me.diff === 0){
 						return me.getStat(39) + me.getStat(40);
 					}else if(me.diff === 1){
-						return me.getStat(39) + me.getStat(40) - me.gametype === 0 ? 20 : 40;
+						return me.getStat(39) + me.getStat(40) - (me.gametype === 0 ? 20 : 40);
 					}else{
-						return me.getStat(39) + me.getStat(40) - me.gametype === 0 ? 50 : 100;
+						return me.getStat(39) + me.getStat(40) - (me.gametype === 0 ? 50 : 100);
 					}
 					break;
 				case "cold":
 					if(me.diff === 0){
 						return me.getStat(43) + me.getStat(44);
 					}else if(me.diff === 1){
-						return me.getStat(43) + me.getStat(44) - me.gametype === 0 ? 20 : 40;
+						return me.getStat(43) + me.getStat(44) - (me.gametype === 0 ? 20 : 40);
 					}else{
-						return me.getStat(43) + me.getStat(44) - me.gametype === 0 ? 50 : 100;
+						return me.getStat(43) + me.getStat(44) - (me.gametype === 0 ? 50 : 100);
 					}
 					break;
 				case "light":
 					if(me.diff === 0){
 						return me.getStat(41) + me.getStat(42);
 					}else if(me.diff === 1){
-						return me.getStat(41) + me.getStat(42) - me.gametype === 0 ? 20 : 40;
+						return me.getStat(41) + me.getStat(42) - (me.gametype === 0 ? 20 : 40);
 					}else{
-						return me.getStat(41) + me.getStat(42) - me.gametype === 0 ? 50 : 100;
+						return me.getStat(41) + me.getStat(42) - (me.gametype === 0 ? 50 : 100);
 					}
 					break;
 				case "poison":
 					if(me.diff === 0){
 						return me.getStat(45) + me.getStat(46);
 					}else if(me.diff === 1){
-						return me.getStat(45) + me.getStat(46) - me.gametype === 0 ? 20 : 40;
+						return me.getStat(45) + me.getStat(46) - (me.gametype === 0 ? 20 : 40);
 					}else{
-						return me.getStat(45) + me.getStat(46) - me.gametype === 0 ? 50 : 100;
+						return me.getStat(45) + me.getStat(46) - (me.gametype === 0 ? 50 : 100);
 					}
 					break;
 				default:
