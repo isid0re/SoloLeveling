@@ -29,18 +29,19 @@ This script is designed to be plug and play with [blizzhackers/kolbot](https://g
 
 ### Usage
 1. After installation create your profile in the Kolbot D2Bot profile manager. The profile name will decide on the type of character to be made.
-1a. The profile needs to adhere to the following format PREFIX-SUFFIX: (for example, a hardcore classic ladder sorceress will be `HCCL-SORC` or a softcore expansion nonladder hammerdin will be `SCNL-PAL`).
+2. The profile needs to adhere to the following format PREFIX-SUFFIX: (for example, a hardcore classic ladder sorceress will be `HCCL-SORC` or a softcore expansion nonladder hammerdin will be `SCNL-PAL`).
 ```
 Prefix		Description		Suffix						Description
 HC/SC		Hardcore/SoftCore	ZON, SORC, NECRO, PAL, BARB, DRUID, SIN		Abbreviated character class names
 C		Classic	
 NL/L		NonLadder/Ladder
 ```
-1b. The profile Info Tag box will need to have the final build selection for the character type chosen. Please refer to the respective Class.Sololeveling.js config file for build options.
-2. Ensure the Difficulty is set to HIGHEST.
-3. Use the D2BotSoloLevelingEntry.dbj entry script.
-4. Click apply.
-5. Run the Bot. 
+3. The profile Info Tag box will need to have the final build selection for the character type chosen. Please refer to the respective Class.Sololeveling.js config file for build options.
+4. Ensure the Difficulty is set to HIGHEST.
+5. Use the D2BotSoloLevelingEntry.dbj entry script.
+6. Click apply.
+7. Run the Bot.
+8. Enjoy.
 
 ### Contributing
 
