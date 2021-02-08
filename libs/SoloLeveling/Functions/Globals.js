@@ -9,13 +9,13 @@ if (!isIncluded("OOG.js")) {
 
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
-var difficulty = ['Normal', 'Nightmare', 'Hell'][me.diff];
+var difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 const respecOne = [ 0, 28, 26, 25, 0, 24, 0][me.classid];
 const respecTwo = [ 0, 85, 75, 85, 0, 75, 0][me.classid];
-var	levelcap = [[35, "Nightmare"], [65, "Hell"], [100, "Hell"]][me.diff];
+var	levelcap = [35, 65, 100][me.diff];
 
 // SoloLeveling Pickit Items
 var valuableItems = [
@@ -90,6 +90,44 @@ var goldCheck = function () {
 	me.overhead('low gold');
 
 	return false;
+};
+
+var resCheck = function () {
+	let resStatus,
+		resPenalty = me.gametype === 0 ? [0, 20, 50, 50][me.diff + 1] : [ 0, 40, 100, 100][me.diff + 1],
+		frRes = me.getStat(39) - resPenalty,
+		crRes = me.getStat(41) - resPenalty,
+		lrRes = me.getStat(43) - resPenalty;
+
+	if ((frRes >= 0) && (lrRes >= 0) && (crRes >= 0)) {
+		resStatus = true;
+	} else {
+		resStatus = false;
+	}
+
+	return {
+		resistance: resStatus,
+		FR: frRes,
+		CR: crRes,
+		LR: lrRes,
+	};
+};
+
+var nextDifficulty = function (levelcap) {
+	let diffShift = 0;
+	let lowRes = !resCheck().resistance;
+	let lvlReq = me.charlvl >= levelcap ? true : false;
+
+	if (lvlReq && !lowRes) {
+		let diffShift = me.diff + 1;
+		D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + difficulty[diffShift]);
+	} else if (lvlReq && lowRes) {
+		D2Bot.printToConsole('SoloLeveling: ' + difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + resCheck().FR + ' | CR: ' + resCheck().CR + ' | LR: ' + resCheck().LR);
+	}
+
+	let nextDiff = difficulty[diffShift];
+
+	return nextDiff;
 };
 
 var runesCheck = function () {
