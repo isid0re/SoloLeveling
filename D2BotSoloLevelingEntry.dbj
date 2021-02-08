@@ -70,6 +70,7 @@ include("torchsystem.js");
 include("common/misc.js");
 include("common/util.js");
 include("common/pather.js");
+include("sololeveling/functions/namegen.js");
 include("SoloLeveling/Tools/Playtime.js");
 include("SoloLeveling/Tools/OOGOverrides.js");
 
@@ -216,7 +217,7 @@ function ReceiveCopyData (mode, msg) {
 		}
 
 		if (setUp.charName === "") {
-			setUp.charName = randomString(12, false);
+			setUp.charName = NameGen();
 			D2Bot.setProfile(null, null, setUp.charName);
 		}
 
@@ -339,6 +340,11 @@ function main () {
 	while (!gameInfo) {
 		D2Bot.requestGameInfo();
 		delay(500);
+	}
+
+	if (DataFile.getStats().setDifficulty) {
+		gameInfo.difficulty = DataFile.getStats().setDifficulty;
+		D2Bot.setProfile(null, null, null, gameInfo.difficulty);
 	}
 
 	if (gameInfo.error) {
@@ -658,6 +664,11 @@ function locationAction (location) {
 			D2Bot.updateRuns();
 		}
 
+		if (DataFile.getStats().setDifficulty) {
+			gameInfo.difficulty = DataFile.getStats().setDifficulty;
+			D2Bot.setProfile(null, null, null, gameInfo.difficulty);
+		}
+
 		ControlAction.createGame((gameInfo.gameName === "Name" ? randomString(null, true) : gameInfo.gameName + gameCount), (gameInfo.gamePass === "Password" ? randomString(null, true) : gameInfo.gamePass), gameInfo.difficulty, StarterConfig.CreateGameDelay * 1000);
 
 		lastGameStatus = "pending";
@@ -708,6 +719,11 @@ function locationAction (location) {
 							D2Bot.setProfile(setUp.account, setUp.password);
 							DataFile.updateStats("AcctName", setUp.account);
 							DataFile.updateStats("AcctPswd", setUp.password);
+						}else {
+							setUp.account = "";
+							setUp.password = "";
+							D2Bot.setProfile(setUp.account, setUp.password);
+							D2Bot.restart(true);
 						}
 					}
 				}
@@ -741,7 +757,7 @@ function locationAction (location) {
 			switch (string) {
 			case getLocaleString(5232): // illegal characters
 			case getLocaleString(5233): // disallowed words
-				D2Bot.stop(); // stop or delete json and regenerate info?
+				D2Bot.stop();
 
 				break;
 			case getLocaleString(5207):
@@ -754,9 +770,7 @@ function locationAction (location) {
 			case getLocaleString(5208):
 				D2Bot.updateStatus("Invalid Account");
 				D2Bot.printToConsole("Invalid Account");
-				setUp.account = randomString(12, true);
-				setUp.password = randomString(12, true);
-				D2Bot.setProfile(setUp.account, setUp.password);
+				D2Bot.stop();
 
 				break;
 			case getLocaleString(11059): //	A character named '%s' already exists in this Realm.

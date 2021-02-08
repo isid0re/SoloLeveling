@@ -95,9 +95,13 @@ function SoloLeveling () {
 	};
 
 	this.runsequence = function () {
-		let j, k;
+		let j, k,
+			setDifficulty = nextDifficulty();
 
 		for (k = 0; k < sequence.length; k += 1) {
+			DataFile.updateStats("setDifficulty", setDifficulty);
+			D2Bot.setProfile(null, null, null, setDifficulty);
+
 			if (!completedTask(sequence[k][1])) {
 				if (!isIncluded("SoloLeveling/Scripts/" + sequence[k][0] + ".js")) {
 					include("SoloLeveling/Scripts/" + sequence[k][0] + ".js");
@@ -115,18 +119,6 @@ function SoloLeveling () {
 			}
 		}
 	};
-
-	if (me.diff === 0 && me.charlvl < levelcap[0]) {
-		D2Bot.setProfile(null, null, null, "Normal");
-	}
-
-	if (me.charlvl >= levelcap[0] && ( me.gametype === 1 && Misc.checkQuest(40, 0) || me.gametype === 0 && Misc.checkQuest(26, 0))) {
-		D2Bot.setProfile(null, null, null, levelcap[1]);
-	}
-
-	if (me.diff === 2) {
-		D2Bot.setProfile(null, null, null, "Hell");
-	}
 
 	// Start Running Script
 	this.setup();
