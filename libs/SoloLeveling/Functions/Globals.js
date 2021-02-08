@@ -113,13 +113,13 @@ var resCheck = function () {
 	};
 };
 
-var nextDifficulty = function (levelcap) {
-	let diffShift = 0;
+var nextDifficulty = function () {
+	let diffShift = me.diff;
 	let lowRes = !resCheck().resistance;
 	let lvlReq = me.charlvl >= levelcap ? true : false;
 
 	if (lvlReq && !lowRes) {
-		let diffShift = me.diff + 1;
+		diffShift = me.diff + 1;
 		D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + difficulty[diffShift]);
 	} else if (lvlReq && lowRes) {
 		D2Bot.printToConsole('SoloLeveling: ' + difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + resCheck().FR + ' | CR: ' + resCheck().CR + ' | LR: ' + resCheck().LR);
