@@ -185,7 +185,8 @@ var Performance = {
 				break;
 			case "nonquestavg":
 				obj[diff][name].AVG += value //Want to know average time
-				obj[diff][name].Average = this.formatTime(obj[diff][name].AVG);	//Format it so its easily readable
+				obj[diff][name].TotalTime = this.formatTime(obj[diff][name].AVG);	//Format it so its easily readable
+				obj[diff][name].Average = this.formatTime((obj[diff][name].AVG)/obj[diff][name].TotalAttempts);	//Format it so its easily readable
 				break;
 			default:
 				obj[statArr[i]] = value;
