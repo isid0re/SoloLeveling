@@ -9,6 +9,11 @@ function pits () {
 	print('ÿc9SoloLevelingÿc0: starting pits');
 	me.overhead("pits");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("pits", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(6)) {
 		Pather.getWP(6);
 	} else {
@@ -29,6 +34,11 @@ function pits () {
 
 	Attack.clearLevel();
 	Misc.openChestsInArea(16);
+
+	if(shouldLog){
+		Performance.updateStats("pits", "nonquestavg", getTickCount() - tick);
+		Performance.updateStats("pits", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

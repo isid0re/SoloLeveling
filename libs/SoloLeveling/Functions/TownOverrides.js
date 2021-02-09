@@ -4,6 +4,10 @@
 *	@desc		Town.js fixes and custom tasks to improve functionality
 */
 
+if (!isIncluded("common/Town.js")) {
+	include("common/Town.js");
+}
+
 Town.townTasks = function () {
 	if (!me.inTown) {
 		Town.goToTown();

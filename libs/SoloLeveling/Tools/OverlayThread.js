@@ -339,12 +339,13 @@ var SoloLevelingHooks = {
 		*/
 
 		add: function (name) {
+			var resfix = me.screensize ? 0 : -120;
 			switch (name) {
 			
 			case "level":
 				this.hooks.push({
 					name: "level",
-					hook: new Text("Level : " + me.charlvl, 10, 200, 0/*color*/, 1/*font*/, 0/*align*/)
+					hook: new Text("Level : " + me.charlvl, 10, 200 + resfix, 0/*color*/, 1/*font*/, 0/*align*/)
 				});
 				
 				break;
@@ -602,8 +603,6 @@ var SoloLevelingHooks = {
 				
 				break;
 			}
-
-			
 			
 		},
 

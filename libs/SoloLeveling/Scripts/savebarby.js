@@ -12,6 +12,11 @@ function saveBarby () {
 	print('ÿc9SoloLevelingÿc0: starting barbies');
 	me.overhead("barbies");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("saveBarby", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(111)) {
 		Pather.getWP(111);
 	} else {
@@ -49,6 +54,11 @@ function saveBarby () {
 	}
 
 	Town.npcInteract("qual_kehk");
+
+	if(Misc.checkQuest(36,0) && shouldLog){
+		Performance.updateStats("saveBarby", "TotalTime");
+		Performance.updateStats("saveBarby", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

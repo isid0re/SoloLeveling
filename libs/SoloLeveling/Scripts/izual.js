@@ -9,6 +9,11 @@ function izual () {
 	print('ÿc9SoloLevelingÿc0: starting izual');
 	me.overhead("izual");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("izual", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(106)) {
 		Pather.getWP(106);
 	} else {
@@ -23,6 +28,11 @@ function izual () {
 	}
 
 	Town.npcInteract("tyrael");
+
+	if(Misc.checkQuest(25,0) && shouldLog){
+		Performance.updateStats("izual", "TotalTime");
+		Performance.updateStats("izual", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

@@ -9,6 +9,11 @@ function tome () {
 	print('ÿc9SoloLevelingÿc0: starting tome');
 	me.overhead("tome");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("tome", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(80)) {
 		Pather.getWP(80);
 	} else {
@@ -23,6 +28,11 @@ function tome () {
 
 	Quest.collectItem(548, 193);
 	Town.unfinishedQuests();
+
+	if(Misc.checkQuest(17,0) && shouldLog){
+		Performance.updateStats("tome", "TotalTime");
+		Performance.updateStats("tome", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

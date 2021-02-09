@@ -9,6 +9,11 @@ function tristam () {
 	print('ÿc9SoloLevelingÿc0: starting tristam');
 	me.overhead("tristam");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("tristam", "TotalAttempts");	
+	}
+
 	if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 		if (!me.getItem(524)) {
 			if (!Pather.checkWP(5)) {
@@ -69,7 +74,12 @@ function tristam () {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
 		}
 
-		Misc.openChest(gibbet);
+		if(Misc.openChest(gibbet)){
+			if(shouldLog){
+				Performance.updateStats("tristam", "TotalTime");
+				Performance.updateStats("tristam", "checkTimes", getTickCount() - tick);
+			}
+		}
 	}
 
 	if (me.diff === 0) {

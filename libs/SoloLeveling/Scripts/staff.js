@@ -13,6 +13,11 @@ function staff () {
 	print('ÿc9SoloLevelingÿc0: starting staff');
 	me.overhead("staff");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("staff", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(43)) {
 		Pather.getWP(43);
 	} else {
@@ -26,8 +31,13 @@ function staff () {
 	}
 
 	Quest.collectItem(92, 356);
+
+	if(me.getItem(92) && shouldLog){
+		Performance.updateStats("staff", "TotalTime");
+		Performance.updateStats("staff", "checkTimes", getTickCount() - tick);
+	}
+
 	Quest.stashItem(92);
 
 	return true;
 }
-

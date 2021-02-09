@@ -73,6 +73,11 @@ function summoner () {
 	print('ÿc9SoloLevelingÿc0: starting summoner');
 	me.overhead("summoner");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("summoner", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(74)) {
 		Pather.getWP(74);
 	} else {
@@ -119,6 +124,17 @@ function summoner () {
 		Pather.useWaypoint(40);
 	} else {
 		Pather.useWaypoint(40);
+	}
+
+	if(!me.inTown){
+		Town.goToTown();	//Just making sure
+	}
+
+	Town.npcInteract("cain"); //Finish the quest
+
+	if(Misc.checkQuest(13,0) && shouldLog){
+		Performance.updateStats("summoner", "TotalTime");
+		Performance.updateStats("summoner", "checkTimes", getTickCount() - tick);
 	}
 
 	return true;

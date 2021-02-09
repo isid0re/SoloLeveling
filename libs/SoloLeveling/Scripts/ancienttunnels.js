@@ -9,6 +9,11 @@ function ancienttunnels () {
 	print('ÿc9SoloLevelingÿc0: starting ancient tunnels');
 	me.overhead("ancient tunnels");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("ancienttunnels", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(44)) {
 		Pather.getWP(44);
 	} else {
@@ -36,6 +41,11 @@ function ancienttunnels () {
 	}
 
 	Attack.clearLevel();
+
+	if(shouldLog){
+		Performance.updateStats("ancienttunnels", "checkTimes", getTickCount() - tick);
+		Performance.updateStats("ancienttunnels", "nonquestavg", getTickCount() - tick);	
+	}
 
 	return true;
 }

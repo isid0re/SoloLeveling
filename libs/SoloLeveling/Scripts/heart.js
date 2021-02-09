@@ -9,6 +9,11 @@ function heart () {
 	print('ÿc9SoloLevelingÿc0: starting heart');
 	me.overhead("heart");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("heart", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(80)) {
 		Pather.getWP(80);
 	} else {
@@ -23,6 +28,12 @@ function heart () {
 
 	Attack.clear(0x7); // clear level
 	Quest.collectItem(554, 405);
+
+	if(me.getItem(554) && shouldLog){
+		Performance.updateStats("heart", "TotalTime");
+		Performance.updateStats("heart", "checkTimes", getTickCount() - tick);
+	}
+
 	Quest.stashItem(554);
 
 	return true;

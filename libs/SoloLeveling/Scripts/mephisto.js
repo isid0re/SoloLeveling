@@ -9,6 +9,18 @@ function mephisto () {
 	print('ÿc9SoloLevelingÿc0: starting mephisto');
 	me.overhead("mephisto");
 
+	let tick = getTickCount();
+	var forQuest = false;
+	if(shouldLog){
+		if(!Misc.checkQuest(22,0)){
+			forQuest = true;
+			Performance.updateStats("mephisto", "TotalAttempts");
+		}else{
+			forQuest = false;
+			Performance.updateStats("mephistoMF", "TotalAttempts");
+		}	
+	}
+
 	if (!Pather.checkWP(101)) {
 		Pather.getWP(101);
 	} else {
@@ -33,6 +45,16 @@ function mephisto () {
 	Pather.moveTo(17581, 8070);
 	delay(250 + me.ping * 2);
 	Pather.usePortal(null);
+
+	if(shouldLog){
+		if(Misc.checkQuest(22,0) && forQuest){
+			Performance.updateStats("mephisto", "TotalTime");
+			Performance.updateStats("mephisto", "checkTimes", getTickCount() - tick);
+		}else{
+			Performance.updateStats("mephistoMF", "checkTimes", getTickCount() - tick);
+			Performance.updateStats("mephistoMF", "nonquestavg", getTickCount() - tick);
+		}	
+	}
 
 	return true;
 }

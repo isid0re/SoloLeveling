@@ -149,6 +149,16 @@ function baal () {
 	print('ÿc9SoloLevelingÿc0: starting baal');
 	me.overhead("baal");
 
+	let tick = getTickCount();
+	var forQuest = false;
+	if(!Misc.checkQuest(40, 0)){
+		forQuest = true;
+		Performance.updateStats("baal", "TotalAttempts");
+	}else{
+		forQuest = false;
+		Performance.updateStats("baalMF", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(129)) {
 		Pather.getWP(129);
 	} else {
@@ -260,6 +270,19 @@ function baal () {
 	Config.BossPriority = true;
 	Pather.moveTo(15134, 5923);
 	Attack.killTarget(544); // Baal
+
+	if(shouldLog){
+		if(Misc.checkQuest(40,0) && forQuest){
+			Performance.updateStats("baal", "TotalTime");
+			Performance.updateStats("baal", "checkTimes", getTickCount() - tick);
+		}else{
+			if(!forQuest){
+				Performance.updateStats("baalMF", "nonquestavg", getTickCount() - tick);
+				Performance.updateStats("baalMF", "checkTimes", getTickCount() - tick);
+			}
+		}	
+	}
+
 	Pickit.pickItems();
 
 	return true;

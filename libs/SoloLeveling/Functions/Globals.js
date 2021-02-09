@@ -10,6 +10,7 @@ if (!isIncluded("OOG.js")) {
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
+const shouldLog = true;	//Default should be false for people who aren't interested in these values
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
@@ -78,6 +79,23 @@ var questItems = [
 	"[Name] == ScrollofResistance",
 ];
 
+//Include function - theBGuy
+var includeSoloLeveling = function() {
+	var folders = ["Functions"];
+	folders.forEach( (folder) => {
+		var files = dopen("libs/SoloLeveling/"+folder+"/").getFiles();
+		files.forEach( (file) => {
+			if (file.indexOf(".js") !== -1) {
+				if (!isIncluded("SoloLeveling/"+folder+"/"+file)){
+					if (!include("SoloLeveling/"+folder+"/"+file)){
+						throw new Error("Failed to include " + "SoloLeveling/"+folder+"/"+file);
+					}
+				}
+			}
+		});
+	});
+};
+
 // General functions
 var goldCheck = function () {
 	let gold = me.getStat(14) + me.getStat(15);
@@ -113,13 +131,13 @@ var resCheck = function () {
 	};
 };
 
-var nextDifficulty = function (levelcap) {
-	let diffShift = 0;
+var nextDifficulty = function () {
+	let diffShift = me.diff;
 	let lowRes = !resCheck().resistance;
 	let lvlReq = me.charlvl >= levelcap ? true : false;
 
 	if (lvlReq && !lowRes) {
-		let diffShift = me.diff + 1;
+		diffShift = me.diff + 1;
 		D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + difficulty[diffShift]);
 	} else if (lvlReq && lowRes) {
 		D2Bot.printToConsole('SoloLeveling: ' + difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + resCheck().FR + ' | CR: ' + resCheck().CR + ' | LR: ' + resCheck().LR);
@@ -532,6 +550,8 @@ var mercscore = function (item) {
 		IAS: 3.5,
 		MINDMG:	3, // min damage
 		MAXDMG: 3, // max damage
+		SECMINDMG:	3, // min damage
+		SECMAXDMG: 3, // max damage
 		ELEDMG: 2, // elemental damage
 		AR:	0.5, // attack rating
 		CB: 3, // crushing blow
@@ -556,6 +576,8 @@ var mercscore = function (item) {
 	mercRating += item.getStatEx(93) * mercWeights.IAS; // add IAS
 	mercRating += item.getStatEx(21) * mercWeights.MINDMG; // add MIN damage
 	mercRating += item.getStatEx(22) * mercWeights.MAXDMG; // add MAX damage
+	mercRating += item.getStatEx(23) * mercWeights.SECMINDMG; // add MIN damage	//Note: two-handed weapons i.e spears, polearms, ect use secondary min + max damage. Keeping regular min + max for a1 merc
+	mercRating += item.getStatEx(24) * mercWeights.SECMAXDMG; // add MAX damage	//Note: two-handed weapons i.e spears, polearms, ect use secondary min + max damage. Keeping regular min + max for a1 merc
 	mercRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55)) * mercWeights.ELEDMG; // add elemental damage
 	mercRating += item.getStatEx(19) * mercWeights.AR; // add AR
 	mercRating += item.getStatEx(136) * mercWeights.CB; // add crushing blow
@@ -620,6 +642,8 @@ var tierscore = function (item) {
 		// Attack
 		MINDMG:	0, // min damage
 		MAXDMG: 0, // max damage
+		SECMINDMG:	0, // 2nd min damage
+		SECMAXDMG: 0, // 2nd max damage	 
 		ELEDMG: 0, // elemental damage
 		AR:	0, // attack rating
 		CB: 0, // crushing blow
@@ -638,6 +662,8 @@ var tierscore = function (item) {
 		// Attack
 		MINDMG:	3, // min damage
 		MAXDMG: 3, // max damage
+		SECMINDMG:	3, // 2nd min damage
+		SECMAXDMG: 3, // 2nd max damage	 
 		ELEDMG: 2, // elemental damage
 		AR:	0.5, // attack rating
 		CB: 3, // crushing blow
@@ -778,6 +804,8 @@ var tierscore = function (item) {
 		buildRating += item.getStatEx(93) * buildWeights.IAS; // add IAS
 		buildRating += item.getStatEx(21) * buildWeights.MINDMG; // add MIN damage
 		buildRating += item.getStatEx(22) * buildWeights.MAXDMG; // add MAX damage
+		buildRating += item.getStatEx(23) * buildWeights.SECMINDMG; // add MIN damage
+		buildRating += item.getStatEx(24) * buildWeights.SECMAXDMG; // add MAX damage
 		buildRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55) + item.getStatEx(57) + item.getStatEx(58)) * buildWeights.ELEDMG; // add elemental damage
 		buildRating += item.getStatEx(19) * buildWeights.AR; // add AR
 		buildRating += item.getStatEx(60) * buildWeights.LL; // add LL

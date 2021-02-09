@@ -8,6 +8,11 @@ function den () {
 	print('ÿc9SoloLevelingÿc0: starting den');
 	me.overhead("den");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("den", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(3)) {
 		Pather.moveToExit([2, 8], false, true);
 
@@ -48,6 +53,11 @@ function den () {
 	}
 
 	Town.npcInteract("akara");
+
+	if(Misc.checkQuest(1,0) && shouldLog){
+		Performance.updateStats("den", "TotalTime");
+		Performance.updateStats("den", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

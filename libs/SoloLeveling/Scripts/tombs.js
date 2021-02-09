@@ -10,6 +10,11 @@ function tombs () {
 	me.overhead("tombs");
 	let tombID = [66, 67, 68, 69, 70, 71, 72];
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("tombs", "TotalAttempts");	
+	}
+
 	for (let number = 0; number < tombID.length; number += 1) {
 		if (goldCheck()) {
 			break;
@@ -48,6 +53,11 @@ function tombs () {
 			Pickit.pickItems();
 			Town.doChores();
 		}
+	}
+
+	if(shouldLog){
+		Performance.updateStats("tombs", "checkTimes", getTickCount() - tick);
+		Performance.updateStats("tombs", "nonquestavg", getTickCount() - tick);	
 	}
 
 	return true;

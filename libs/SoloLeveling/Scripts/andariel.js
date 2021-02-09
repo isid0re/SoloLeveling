@@ -15,6 +15,18 @@ function andariel () {
 		return true;
 	}
 
+	var forQuest = false;
+	let tick = getTickCount();
+	if(shouldLog){
+		if(!Misc.checkQuest(7, 0)){
+			forQuest = true;	
+			Performance.updateStats("andariel", "TotalAttempts");
+		}else{
+			forQuest = false;
+			Performance.updateStats("andarielMF", "TotalAttempts");
+		}	
+	}
+
 	if (!Pather.checkWP(35)) {
 		Pather.getWP(35);
 	} else {
@@ -41,7 +53,16 @@ function andariel () {
 	Config.MercWatch = true;
 
 	if (!Misc.checkQuest(7, 0)) {
+		if(shouldLog){
+			Performance.updateStats("andariel", "TotalTime");
+			Performance.updateStats("andariel", "checkTimes", getTickCount() - tick);
+		}
 		Pather.changeAct();
+	} else{
+		if(shouldLog){
+			Performance.updateStats("andarielMF", "nonquestavg", getTickCount() - tick);
+			Performance.updateStats("andarielMF", "checkTimes", getTickCount() - tick);
+		}
 	}
 
 	return true;

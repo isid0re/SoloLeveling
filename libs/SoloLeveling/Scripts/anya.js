@@ -9,6 +9,11 @@ function anya () {
 	print('ÿc9SoloLevelingÿc0: starting anya');
 	me.overhead("anya");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("anya", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(113)) {
 		Pather.getWP(113);
 	} else {
@@ -45,6 +50,11 @@ function anya () {
 	Town.unfinishedQuests();
 	Town.doChores();
 	Town.npcInteract("anya");
+
+	if(Misc.checkQuest(37, 0) && shouldLog){
+		Performance.updateStats("anya", "TotalTime");
+		Performance.updateStats("anya", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

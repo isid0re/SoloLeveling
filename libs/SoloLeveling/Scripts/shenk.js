@@ -9,6 +9,18 @@ function shenk () {
 	print('ÿc9SoloLevelingÿc0: starting shenk');
 	me.overhead("shenk");
 
+	var forQuest;
+	let tick = getTickCount();
+	if(shouldLog){
+		if(!Misc.checkQuest(35,1)){
+			forQuest = true;		
+			Performance.updateStats("shenk", "TotalAttempts");
+		}else{
+			Performance.updateStats("shenkMF", "TotalAttempts");
+			forQuest = false;
+		}	
+	}
+
 	if (!Pather.checkWP(111)) {
 		Pather.getWP(111);
 	} else {
@@ -23,6 +35,18 @@ function shenk () {
 	}
 
 	Pickit.pickItems();
+
+	if(forQuest && shouldLog){
+		if(Misc.checkQuest(35,13)){	//13 is just killed shenk
+			Performance.updateStats("shenk", "TotalTime");
+			Performance.updateStats("shenk", "checkTimes", getTickCount() - tick);
+		}	
+	} else {
+		if(shouldLog){
+			Performance.updateStats("shenkMF", "checkTimes", getTickCount() - tick);
+			Performance.updateStats("shenkMF", "nonquestavg", getTickCount() - tick);
+		}
+	}
 
 	return true;
 }

@@ -107,10 +107,9 @@ ControlAction.makeCharacter = function (info) {
 			break;
 		}
 
-		if (me.ingame) { // Singleplayer loop break fix.
+		if(me.ingame){
 			break;
 		}
-		
 		delay(500);
 	}
 

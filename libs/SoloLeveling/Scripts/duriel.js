@@ -11,6 +11,11 @@ function duriel () {
 	print('ÿc9SoloLevelingÿc0: starting duriel');
 	me.overhead("duriel");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("duriel", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(46)) {
 		Pather.getWP(46);
 	} else {
@@ -44,6 +49,11 @@ function duriel () {
 
 	Pather.changeAct();
 	Config.MercWatch = true;
+
+	if(Misc.checkQuest(15,0) && shouldLog){
+		Performance.updateStats("duriel", "TotalTime");
+		Performance.updateStats("duriel", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

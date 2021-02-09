@@ -9,6 +9,16 @@ function countess () {
 	print('ÿc9SoloLevelingÿc0: starting countess');
 	me.overhead("countess");
 
+	var forQuest = false;
+	let tick = getTickCount();
+	if(!Misc.checkQuest(5, 0)){
+		forQuest = true;
+		Performance.updateStats("countess", "TotalAttempts");
+	}else{
+		forQuest = false;
+		Performance.updateStats("countessMF", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(6)) {
 		Pather.getWP(6);
 	} else {
@@ -35,6 +45,13 @@ function countess () {
 	}
 
 	Pickit.pickItems();
+
+	if(shouldLog){
+		if(!forQuest){
+			Performance.updateStats("countessMF", "nonquestavg", getTickCount() - tick);
+			Performance.updateStats("countessMF", "checkTimes", getTickCount() - tick);
+		}	
+	}
 
 	return true;
 }

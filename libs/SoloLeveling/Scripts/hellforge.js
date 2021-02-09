@@ -11,6 +11,11 @@ function hellforge () {
 	print('ÿc9SoloLevelingÿc0: starting hellforge');
 	me.overhead("hellforge");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("hellforge", "TotalAttempts");	
+	}
+
 	if (!Pather.checkWP(107)) {
 		Pather.getWP(107);
 	} else {
@@ -56,6 +61,11 @@ function hellforge () {
 	delay(2500 + me.ping);
 	Pickit.pickItems();
 	Town.npcInteract("cain");
+
+	if(Misc.checkQuest(27,0) && shouldLog){
+		Performance.updateStats("hellforge", "TotalTime");
+		Performance.updateStats("hellforge", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

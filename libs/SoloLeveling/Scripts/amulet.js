@@ -9,6 +9,11 @@ function amulet () {
 	print('ÿc9SoloLevelingÿc0: starting amulet');
 	me.overhead("amulet");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("amulet", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(44)) {
 		Pather.getWP(44);
 	} else {
@@ -28,6 +33,12 @@ function amulet () {
 	Pather.moveTo(15045, 14051);
 	Quest.collectItem(521, 149);
 	Town.npcInteract("drognan");
+
+	if(Misc.checkQuest(11,0) && shouldLog){
+		Performance.updateStats("amulet", "TotalTime");
+		Performance.updateStats("amulet", "checkTimes", getTickCount() - tick);
+	}
+
 	Quest.stashItem(521);
 
 	return true;

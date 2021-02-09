@@ -9,6 +9,11 @@ function radament () {
 	print('ÿc9SoloLevelingÿc0: starting radament');
 	me.overhead("radament");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("radament", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(48)) {
 		Pather.getWP(48);
 	} else {
@@ -22,6 +27,11 @@ function radament () {
 	Pickit.pickItems();
 	Town.npcInteract("atma");
 	Town.unfinishedQuests();
+
+	if(Misc.checkQuest(9,0) && shouldLog){
+		Performance.updateStats("radament", "TotalTime");
+		Performance.updateStats("radament", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

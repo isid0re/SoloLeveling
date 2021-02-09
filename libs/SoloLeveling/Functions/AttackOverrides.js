@@ -4,6 +4,10 @@
 *	@desc		Attack.js fixes to improve functionality
 */
 
+if (!isIncluded("common/Attack.js")) {
+	include("common/Attack.js");
+}
+
 Attack.killTarget = function (name) {
 	let target;
 

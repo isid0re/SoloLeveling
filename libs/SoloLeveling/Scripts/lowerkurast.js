@@ -9,6 +9,11 @@ function lowerkurast () {
 	print('ÿc9SoloLevelingÿc0: starting lower kurast');
 	me.overhead("lower kurast");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("lowerkurast", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(79)) {
 		Pather.getWP(79);
 	} else {
@@ -17,6 +22,11 @@ function lowerkurast () {
 
 	Precast.doPrecast(true);
 	Misc.openChestsInArea(79);
+
+	if(shouldLog){
+		Performance.updateStats("lowerkurast", "checkTimes", getTickCount() - tick);
+		Performance.updateStats("lowerkurast", "nonquestavg", getTickCount() - tick);
+	}
 
 	return true;
 }

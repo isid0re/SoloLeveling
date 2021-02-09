@@ -16,52 +16,14 @@ var sequence = [
 
 //---------------- Do Not Touch Below ----------------\\
 
-if (!isIncluded("common/Attack.js")) {
-	include("common/Attack.js");
-}
+if (!isIncluded("SoloLeveling/Functions/globals.js")) { include("SoloLeveling/Functions/globals.js"); };
+if (!isIncluded("SoloLeveling/Tools/Playtime.js")) { include("SoloLeveling/Tools/Playtime.js"); };
+if (!isIncluded("SoloLeveling/Tools/Performance.js")) { include("SoloLeveling/Tools/Performance.js"); };
 
-if (!isIncluded("SoloLeveling/Functions/AttackOverrides.js")) {
-	include("SoloLeveling/Functions/AttackOverrides.js");
-}
+includeSoloLeveling();
 
-if (!isIncluded("common/Town.js")) {
-	include("common/Town.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/TownOverrides.js")) {
-	include("SoloLeveling/Functions/TownOverrides.js");
-}
-
-if (!isIncluded("common/Pather.js")) {
-	include("common/Pather.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/PatherOverrides.js")) {
-	include("SoloLeveling/Functions/PatherOverrides.js");
-}
-
-if (!isIncluded("common/Misc.js")) {
-	include("common/Misc.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/MiscOverrides.js")) {
-	include("SoloLeveling/Functions/MiscOverrides.js");
-}
-
-if (!isIncluded("NTItemParser.dbl")) {
-	include("NTItemParser.dbl");
-}
-
-if (!isIncluded("SoloLeveling/Functions/NTIPOverrides.js")) {
-	include("SoloLeveling/Functions/NTIPOverrides.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/Globals.js")) {
-	include("SoloLeveling/Functions/Globals.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/Quest.js")) {
-	include("SoloLeveling/Functions/Quest.js");
+if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && shouldLog) {
+	Performance.set();;
 }
 
 function SoloLeveling () {

@@ -145,6 +145,12 @@ function cows () {
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting cows');
 	me.overhead("cows");
+
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("cows", "TotalAttempts");	
+	}
+
 	this.getLeg();
 	Town.doChores();
 	this.openPortal(39, 88, 518);
@@ -153,6 +159,11 @@ function cows () {
 	Pather.usePortal(39);
 	Precast.doPrecast(true);
 	this.clearCowLevel();
+
+	if(shouldLog){
+		Performance.updateStats("cows", "nonquestavg", getTickCount() - tick);
+		Performance.updateStats("cows", "checkTimes", getTickCount() - tick);
+	}
 
 	return true;
 }

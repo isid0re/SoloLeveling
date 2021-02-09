@@ -15,6 +15,18 @@ function diablo () {
 		Town.npcInteract("tyrael");
 	}
 
+	let tick = getTickCount();
+	var forQuest = false;
+	if(shouldLog){
+		if(!Misc.checkQuest(26, 0)){
+			forQuest = true;
+			Performance.updateStats("diablo", "TotalAttempts");
+		}else{
+			forQuest = false;
+			Performance.updateStats("diabloMF", "TotalAttempts");
+		}	
+	}
+
 	this.getLayout = function (seal, value) {// Start Diablo Quest
 		let sealPreset = getPresetUnit(108, 2, seal);
 
@@ -316,6 +328,19 @@ function diablo () {
 	}
 
 	Attack.killTarget(243); //diablo
+
+	if(shouldLog){
+		if(Misc.checkQuest(26,0) && forQuest){
+			Performance.updateStats("diablo", "TotalTime");
+			Performance.updateStats("diablo", "checkTimes", getTickCount() - tick);
+		}else{
+			if(!forQuest){
+				Performance.updateStats("diabloMF", "nonquestavg", getTickCount() - tick);
+				Performance.updateStats("diabloMF", "checkTimes", getTickCount() - tick);
+			}
+		}	
+	}
+	
 	Pickit.pickItems();
 
 	if (me.gametype === 0) {

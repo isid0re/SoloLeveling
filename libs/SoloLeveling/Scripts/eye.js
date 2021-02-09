@@ -9,6 +9,11 @@ function eye () {
 	print('ÿc9SoloLevelingÿc0: starting eye');
 	me.overhead("eye");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("eye", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(76)) {
 		Pather.getWP(76);
 	} else {
@@ -28,6 +33,12 @@ function eye () {
 	Pather.moveToPreset(me.area, 2, 407);
 	Attack.clear(0x7);
 	Quest.collectItem(553, 407);
+
+	if(me.getItem(553) && shouldLog){
+		Performance.updateStats("eye", "TotalTime");
+		Performance.updateStats("eye", "checkTimes", getTickCount() - tick);
+	}
+	
 	Quest.stashItem(553);
 
 	return true;

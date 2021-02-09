@@ -70,12 +70,17 @@ include("torchsystem.js");
 include("common/misc.js");
 include("common/util.js");
 include("common/pather.js");
-include("sololeveling/functions/namegen.js");
+include("sololeveling/Tools/namegen.js");
+include("SoloLeveling/Tools/Performance.js");
 include("SoloLeveling/Tools/Playtime.js");
 include("SoloLeveling/Tools/OOGOverrides.js");
 
 if (!FileTools.exists("data/" + me.profile + ".json")) {
 	DataFile.create();
+}
+
+if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
+	Playtime.create();
 }
 
 var gameInfo, gameStart, ingame, chatActionsDone, pingQuit, myExp, myGold, resPenalty, frRes, crRes, lrRes, prRes, areaName, diffName,
@@ -723,7 +728,7 @@ function locationAction (location) {
 							setUp.account = "";
 							setUp.password = "";
 							D2Bot.setProfile(setUp.account, setUp.password);
-							D2Bot.restart(true);
+							D2Bot.restart(true);	
 						}
 					}
 				}

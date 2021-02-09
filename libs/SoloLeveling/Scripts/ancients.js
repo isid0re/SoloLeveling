@@ -61,6 +61,11 @@ function ancients () {
 	print('ÿc9SoloLevelingÿc0: starting ancients');
 	me.overhead("ancients");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("ancients", "TotalAttempts");
+	}
+
 	if (!Pather.checkWP(118)) {
 		Pather.getWP(118);
 	} else {
@@ -122,6 +127,11 @@ function ancients () {
 	me.overhead('restored settings');
 	Object.assign(Config, tempConfig);
 	Precast.doPrecast(true);
+
+	if(Misc.checkQuest(39,0) && shouldLog){
+		Performance.updateStats("ancients", "TotalTime");
+		Performance.updateStats("ancients", "checkTimes", getTickCount() - tick);
+	}
 
 	try {
 		Pather.moveToExit([128, 129], true);

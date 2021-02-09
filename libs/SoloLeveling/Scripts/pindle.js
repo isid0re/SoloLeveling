@@ -9,6 +9,11 @@ function pindle () {
 	print('ÿc9SoloLevelingÿc0: starting pindle');
 	me.overhead("Pindle");
 
+	let tick = getTickCount();
+	if(shouldLog){
+		Performance.updateStats("pindle", "TotalAttempts");	
+	}
+
 	if (!Pather.getPortal(121)) {
 		Town.npcInteract("anya");
 	}
@@ -21,6 +26,11 @@ function pindle () {
 	Pather.moveTo(10058, 13234);
 	Attack.killTarget(getLocaleString(22497)); // pindleskin
 	Pickit.pickItems();
+
+	if(shouldLog){
+		Performance.updateStats("pindle", "checkTimes", getTickCount() - tick);
+		Performance.updateStats("pindle", "nonquestavg", getTickCount() - tick);	
+	}
 
 	return true;
 }

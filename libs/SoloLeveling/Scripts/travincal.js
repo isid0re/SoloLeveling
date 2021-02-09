@@ -10,6 +10,18 @@ function travincal () {
 	print('ÿc9SoloLevelingÿc0: starting travincal');
 	me.overhead("travincal");
 
+	var forQuest = false;
+	let tick = getTickCount();
+	if(shouldLog){
+		if(!Misc.checkQuest(21, 0)){
+			forQuest = true;	
+			Performance.updateStats("travincal", "TotalAttempts");
+		}else{
+			forQuest = false;
+			Performance.updateStats("travincalMF", "TotalAttempts");
+		}	
+	}
+
 	if (!Pather.checkWP(83)) {
 		Pather.getWP(83);
 	} else {
@@ -45,7 +57,12 @@ function travincal () {
 			print("ÿc9SoloLevelingÿc0: Failed to go back to Travincal and smash orb");
 		}
 
-		Quest.smashSomething(404); // smash orb
+		if(Quest.smashSomething(404)){	// smash orb. Ties logging to just if the orb is smashed
+			if(forQuest && shouldLog){
+				Performance.updateStats("travincal", "TotalTime");
+				Performance.updateStats("travincal", "checkTimes", getTickCount() - tick);	
+			}
+		}
 		Item.autoEquip(); // equip previous weapon
 		Town.doChores();
 
@@ -61,6 +78,11 @@ function travincal () {
 		if (!Pather.checkWP(101)) {
 			Pather.getWP(101);
 		}
+	}
+
+	if(!forQuest && shouldLog){
+		Performance.updateStats("travincalMF", "checkTimes", getTickCount() - tick);	
+		Performance.updateStats("travincalMF", "nonquestavg", getTickCount() - tick);	
 	}
 
 	return true;

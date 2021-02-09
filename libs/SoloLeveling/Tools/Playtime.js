@@ -1,9 +1,14 @@
 /**
 *	@filename	Playtime.js
-*	@author		Adpist
+*	@author		theBGuy
 *	@desc		Playtime recording
 *	@credits	Adpist
 */
+
+if (!isIncluded("SoloLeveling/Functions/MiscOverrides.js")) { include("SoloLeveling/Functions/MiscOverrides.js"); };
+if (!isIncluded("SoloLeveling/Tools/Performance.js")) { include("SoloLeveling/Tools/Performance.js"); };
+
+const path = "libs/SoloLeveling/Data/" + me.profile + ".json";
 
 var Playtime = {
 	lastTick: 0,
@@ -38,11 +43,90 @@ var Playtime = {
 		}
 		return str;
 	},
-	
+
+	create: function() {
+		var obj, string;
+
+		obj = {
+			name: "",
+		};
+
+		string = JSON.stringify(obj, null, 2);
+
+		Misc.fileAction(path, 1, string);
+
+		return obj;
+	},
+
+	getObj: function () {
+		var obj, string;
+
+		if (!FileTools.exists(path)) {
+			this.create();
+		}
+
+		//string = FileTools.readText("data/" + me.profile + ".json");
+		string = Misc.fileAction(path, 0);
+
+		while(!obj){
+			try {
+				obj = JSON.parse(string);
+			} catch (e) {
+				// If we failed return false, will figure out later what happened
+				Misc.errorReport(e, "Playtime");
+			}
+		}
+
+		return obj;
+	},
+
+	getStats: function () {
+		var obj = this.getObj();
+
+		return Misc.clone(obj);
+	},
+
+	updateStats: function (arg, value) {
+		while (me.ingame && !me.gameReady) {
+			delay(100);
+		}
+
+		var i, obj, string,
+			statArr = [];
+
+		if (typeof arg === "object") {
+			statArr = arg.slice();
+		}
+
+		if (typeof arg === "string") {
+			statArr.push(arg);
+		}
+
+		obj = this.getObj();
+
+		for (i = 0; i < statArr.length; i += 1) {
+			switch (statArr[i]) {
+			case "name":
+				obj.name = me.name;
+
+				break;
+			default:
+				obj[statArr[i]] = value;
+
+				break;
+			}
+		}
+
+		string = JSON.stringify(obj, null, 2);
+
+		//FileTools.writeText("data/" + me.profile + ".json", string);
+		Misc.fileAction(path, 1, string);
+	},
+
 	getInGameTime: function() {
 		var playtime = 0;
-		if (!!DataFile.getStats().playtime) {
-			var recordedPlaytime = JSON.parse(DataFile.getStats().playtime);
+		if (!!this.getStats().playtime) {
+			var recordedPlaytime = JSON.parse(this.getStats().playtime);
 			if (recordedPlaytime.hasOwnProperty("ingame") ){
 				playtime = recordedPlaytime.ingame;
 			}
@@ -52,8 +136,8 @@ var Playtime = {
 	
 	getOutOfGameTime: function() {
 		var playtime = 0;
-		if (!!DataFile.getStats().playtime){
-			var recordedPlaytime = JSON.parse(DataFile.getStats().playtime);
+		if (!!this.getStats().playtime){
+			var recordedPlaytime = JSON.parse(this.getStats().playtime);
 			if (recordedPlaytime.hasOwnProperty("oog") ){
 				playtime = recordedPlaytime.oog;
 			}
@@ -63,14 +147,14 @@ var Playtime = {
 	
 	getTotalTime: function() {
 		var playtime = 0;
-		if (!!DataFile.getStats().playtime) {
-			var recordedPlaytime = JSON.parse(DataFile.getStats().playtime);
+		if (!!this.getStats().playtime) {
+			var recordedPlaytime = JSON.parse(this.getStats().playtime);
 			if (recordedPlaytime.hasOwnProperty("ingame") ){
 				playtime += recordedPlaytime.ingame;
 			}
 		}
-		if (!!DataFile.getStats().playtime){
-			var recordedPlaytime = JSON.parse(DataFile.getStats().playtime);
+		if (!!this.getStats().playtime){
+			var recordedPlaytime = JSON.parse(this.getStats().playtime);
 			if (recordedPlaytime.hasOwnProperty("oog") ){
 				playtime += recordedPlaytime.oog;
 			}
@@ -88,8 +172,8 @@ var Playtime = {
 		var oogPlaytime = 0, ingamePlaytime = 0;
 		
 		if (dt >= this.updateFrequency ) {
-			if (!!DataFile.getStats().playtime) {
-				var recordedPlaytime = JSON.parse(DataFile.getStats().playtime);
+			if (!!this.getStats().playtime) {
+				var recordedPlaytime = JSON.parse(this.getStats().playtime);
 				if (recordedPlaytime.hasOwnProperty("oog")) {
 					oogPlaytime = recordedPlaytime.oog;
 				}
@@ -105,7 +189,9 @@ var Playtime = {
 			}
 			
 			this.lastTick = newTick;
-			DataFile.updateStats("playtime", JSON.stringify({oog: oogPlaytime, ingame: ingamePlaytime}));
+
+			this.updateStats("playtime", JSON.stringify({oog: oogPlaytime, ingame: ingamePlaytime}));
 		}
-	}
+	},
+
 };
