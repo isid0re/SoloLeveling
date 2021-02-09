@@ -10,7 +10,7 @@ if (!isIncluded("OOG.js")) {
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
-const shouldLog = true;	//Default should be false for people who aren't interested in these values
+const shouldLog = false;	//Default should be false for people who aren't interested in these values
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
