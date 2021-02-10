@@ -32,7 +32,7 @@ var NameGen = function () {
 		"Southern", "Sour", "Spatial", "Special", "Splendid", "Staunch", "Singing", "Stern", "Stunning", "Subtle", "Sullen", "Superb", "Superior",
 		"Surly", "Sweet", "Strong", "Smart", "Short", "Skinny", "Stupid", "Salty", "Soft", "Smooth", "Sharp", "Sneaky", "Stinky", "Tactful", "Tainted",
 		"Temperate", "Temperate", "Tenacious", "Terrible", "Terrific", "Testy", "Tolerant", "Towering", "Toxic", "Tropical", "True", "Truthful", "Tasty",
-		"Tricky", "Ultimate", "Ultimate", "Uncivil", "Uncouth", "Unethical", "Unfair", "Unique", "United", "Unity", "Unrefined", "Unsavory", "Unworthy",
+		"Tricky", "Ultimate", "Ultimate", "Uncivil", "Uncouth", "Unethical", "Unfair", "Unique", "United", "Unfit", "Unrefined", "Unsavory", "Unworthy",
 		"Uplifting", "Upright", "Uprooted", "Valiant", "Veracious", "Versatile", "Vicious", "Vigilant", "Vigilant", "Vigorous", "Vile", "Virtuous",
 		"Visible", "Vivacious", "Vocal", "Volatile", "Violent", "Violet", "Void", "Weak", "West", "White", "Willful", "Wet", "Warm", "Wary", "Watchful",
 		"Weeping", "Wicked", "Wild", "Willing", "Winning", "Winsome", "Wise", "Wistful", "Witty", "Woeful", "Wonderful", "Worldwide", "Wretched",
@@ -51,7 +51,7 @@ var NameGen = function () {
 		"mist", "day", "night", "falcon", "blood", "poison", "lily", "inferno", "kiss", "lotus", "giant", "monarch", "lord", "autumn", "spring",
 		"summer", "winter", "paragon", "vulture", "condor", "coil", "chain", "spell", "dove", "peach", "petal", "droplet", "eruption", "heaven", "fog",
 		"boa", "needle", "shield", "rock", "turtle", "ghost", "death", "cobra", "bane", "princess", "king", "fingers", "toes", "hand", "foot", "ear",
-		"eye", "skull", "cat", "dog", "pig", "cow", "snake", "horse", "rabbit", "goat", "wolf", "sheep", "duck", "eagle", "crab", "baboon", "basilisk",
+		"eye", "skull", "cat", "dog", "pig", "piggy", "cow", "snake", "horse", "rabbit", "goat", "wolf", "sheep", "duck", "eagle", "crab", "baboon", "basilisk",
 		"fox", "badger", "beetle", "butterfly", "shark", "clownfish", "crane", "cicada", "dingo", "elephant", "jackal", "jaguar", "lion", "mandrill",
 		"lungfish", "heart", "spleen", "liver", "guts", "brains", "bones", "chocolate", "candy", "surprise", "cheese", "furball", "salami", "beef",
 		"supreme", "taco", "burger", "hotdog", "carrot", "onion", "fungus", "brick", "rock", "banana", "killer", "demon", "angel", "saint", "bamboo",
@@ -61,7 +61,7 @@ var NameGen = function () {
 	];
 
 	let random1 = Math.floor(Math.random() * (adjectives.length + 1));
-	let list2Limit = 13 - adjectives[random1].length;
+	let list2Limit = 16 - adjectives[random1].length;
 	let list2 = nouns.filter(function (element) {
 		return element.length < list2Limit;
 	});

@@ -322,8 +322,6 @@ var Quest = {
 
 		delay(750 + me.ping);
 
-		Pickit.pickItems();
-
 		return true;
 	},
 

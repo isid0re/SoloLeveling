@@ -532,6 +532,22 @@ Town.unfinishedQuests = function () {
 		}
 	}
 
+	// drop wirts leg at startup to avoid selling and d/c
+	let leg = me.getItem(88);
+
+	if (leg) {
+		Town.goToTown(1);
+
+		if (length.location === 7) {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(leg);
+			delay(300 + me.ping);
+			me.cancel();
+		}
+
+		leg.drop();
+	}
+
 	// drop hellforge hammer at startup to avoid selling and d/c
 	let hammer = me.getItem(90);
 

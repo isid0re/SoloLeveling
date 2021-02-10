@@ -19,7 +19,7 @@ function tristam () {
 
 			Precast.doPrecast(true);
 
-			if (!Pather.moveToPreset(me.area, 2, 30, 5, 5)) {
+			if (!Pather.moveToPreset(5, 2, 30, 5, 5)) {
 				print("ÿc9SoloLevelingÿc0: Failed to move to Tree of Inifuss");
 			}
 
@@ -39,8 +39,9 @@ function tristam () {
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToPreset(me.area, 2, 17, 0, 0, false, true);
+	Pather.moveToPreset(4, 2, 17, 0, 0, false, true);
 	Attack.clear(15, 0x7);
+	Pather.moveToPreset(4, 2, 17, 0, 0, false, true);
 
 	if (me.getItem(525)) {
 		let stone;

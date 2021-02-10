@@ -13,8 +13,8 @@ var difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 28, 26, 25, 0, 24, 0][me.classid];
-const respecTwo = [ 0, 85, 75, 85, 0, 75, 0][me.classid];
+const respecOne = [ 0, 28, 26, 25, 0, 24, 30][me.classid];
+const respecTwo = [ 0, 85, 75, 85, 0, 75, 100][me.classid];
 var	levelcap = [35, 65, 100][me.diff];
 
 // SoloLeveling Pickit Items
@@ -117,12 +117,15 @@ var nextDifficulty = function () {
 	let diffShift = me.diff;
 	let lowRes = !resCheck().resistance;
 	let lvlReq = me.charlvl >= levelcap ? true : false;
+	let diffCompleted = me.gametype === 1 && Misc.checkQuest(40, 0) ? true : me.gametype === 0 && Misc.checkQuest(26, 0) ? true : false;
 
-	if (lvlReq && !lowRes) {
-		diffShift = me.diff + 1;
-		D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + difficulty[diffShift]);
-	} else if (lvlReq && lowRes) {
-		D2Bot.printToConsole('SoloLeveling: ' + difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + resCheck().FR + ' | CR: ' + resCheck().CR + ' | LR: ' + resCheck().LR);
+	if (diffCompleted) {
+		if (lvlReq && !lowRes) {
+			diffShift = me.diff + 1;
+			D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + difficulty[diffShift]);
+		} else if (lvlReq && lowRes) {
+			D2Bot.printToConsole('SoloLeveling: ' + difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + resCheck().FR + ' | CR: ' + resCheck().CR + ' | LR: ' + resCheck().LR);
+		}
 	}
 
 	let nextDiff = difficulty[diffShift];
