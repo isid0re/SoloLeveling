@@ -16,56 +16,30 @@ var sequence = [
 
 //---------------- Do Not Touch Below ----------------\\
 
-if (!isIncluded("common/Attack.js")) {
-	include("common/Attack.js");
-}
+if (!isIncluded("SoloLeveling/Functions/globals.js")) { include("SoloLeveling/Functions/globals.js"); };
+if (!isIncluded("SoloLeveling/Tools/Playtime.js")) { include("SoloLeveling/Tools/Playtime.js"); };
+if (!isIncluded("SoloLeveling/Tools/Performance.js")) { include("SoloLeveling/Tools/Performance.js"); };
+if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) { include("SoloLeveling/Tools/OOGOverrides.js"); };
 
-if (!isIncluded("SoloLeveling/Functions/AttackOverrides.js")) {
-	include("SoloLeveling/Functions/AttackOverrides.js");
-}
+includeSoloLeveling();
 
-if (!isIncluded("common/Town.js")) {
-	include("common/Town.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/TownOverrides.js")) {
-	include("SoloLeveling/Functions/TownOverrides.js");
-}
-
-if (!isIncluded("common/Pather.js")) {
-	include("common/Pather.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/PatherOverrides.js")) {
-	include("SoloLeveling/Functions/PatherOverrides.js");
-}
-
-if (!isIncluded("common/Misc.js")) {
-	include("common/Misc.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/MiscOverrides.js")) {
-	include("SoloLeveling/Functions/MiscOverrides.js");
-}
-
-if (!isIncluded("NTItemParser.dbl")) {
-	include("NTItemParser.dbl");
-}
-
-if (!isIncluded("SoloLeveling/Functions/NTIPOverrides.js")) {
-	include("SoloLeveling/Functions/NTIPOverrides.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/Globals.js")) {
-	include("SoloLeveling/Functions/Globals.js");
-}
-
-if (!isIncluded("SoloLeveling/Functions/Quest.js")) {
-	include("SoloLeveling/Functions/Quest.js");
+if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && shouldLog) {
+	Performance.set();;
 }
 
 function SoloLeveling () {
 	this.setup = function () {
+		//New Stuff
+		if(shouldLog || useOverlay){
+			let script1 = getScript("tools/ToolsThread.js");        
+			if ((script1 && script1.running)) {
+				script1.stop();
+			}
+			load("libs/SoloLeveling/Tools/ToolsThread.js");
+			if(shouldLog){
+				Playtime.updateStats("checkvalues");	
+			}
+		}
 		print('ÿc9SoloLevelingÿc0: start run');
 		me.overhead('starting run');
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
@@ -95,8 +69,9 @@ function SoloLeveling () {
 	};
 
 	this.runsequence = function () {
-		let j, k,
+		let j, k, forQuest = false,
 			setDifficulty = nextDifficulty();
+		var nonQuests = ["pits","ancienttunnels","tombs","lowerkurast","pindle","cows"];
 
 		for (k = 0; k < sequence.length; k += 1) {
 			DataFile.updateStats("setDifficulty", setDifficulty);
@@ -108,7 +83,42 @@ function SoloLeveling () {
 				}
 
 				for (j = 0; j < 5; j += 1) {
+					let tick = getTickCount();
+										
+					if(shouldLog){
+						Playtime.updateStats("setvalues", sequence[k][0]);
+						if(isForQuest(sequence[k][0])){
+							Performance.updateStats(sequence[k][0], "TotalAttempts");
+							forQuest = true;
+						}else{
+							if(nonQuests.indexOf(sequence[k][0]) > -1){
+								Performance.updateStats(sequence[k][0], "TotalAttempts");
+							}else{
+								Playtime.updateStats("setvalues", sequence[k][0] + "MF");
+								Performance.updateStats(sequence[k][0] + "MF", "TotalAttempts");
+							}
+						}	
+					}
+
 					if (this[sequence[k][0]]()) {
+
+						if(shouldLog){
+							if(forQuest){
+								if(isQuestFinished(sequence[k][0])){
+									Performance.updateStats(sequence[k][0], "TotalTime");	
+								}
+								Performance.updateStats(sequence[k][0], "checkTimes", getTickCount() - tick);
+							}else{
+								if(nonQuests.indexOf(sequence[k][0]) > -1){
+									Performance.updateStats(sequence[k][0], "nonquestTotalTime", getTickCount() - tick);
+									Performance.updateStats(sequence[k][0], "checkTimes", getTickCount() - tick);
+								}else{
+									Performance.updateStats(sequence[k][0] + "MF", "nonquestTotalTime", getTickCount() - tick);
+									Performance.updateStats(sequence[k][0] + "MF", "checkTimes", getTickCount() - tick);
+								}
+							}	
+						}
+						
 						break;
 					}
 				}

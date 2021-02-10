@@ -7,6 +7,10 @@ if (!isIncluded("OOG.js")) {
 	include("OOG.js");
 }
 
+//Configurable Settings
+const shouldLog = false;		//Default should be false for people who aren't interested in these values
+const useOverlay = false;	//Default should be false for people who aren't interested in having the overlay
+
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
@@ -77,6 +81,23 @@ var questItems = [
 	"[Name] == Khalim'sWill",
 	"[Name] == ScrollofResistance",
 ];
+
+//Include function - theBGuy
+var includeSoloLeveling = function() {
+	var folders = ["Functions"];
+	folders.forEach( (folder) => {
+		var files = dopen("libs/SoloLeveling/"+folder+"/").getFiles();
+		files.forEach( (file) => {
+			if (file.indexOf(".js") !== -1) {
+				if (!isIncluded("SoloLeveling/"+folder+"/"+file)){
+					if (!include("SoloLeveling/"+folder+"/"+file)){
+						throw new Error("Failed to include " + "SoloLeveling/"+folder+"/"+file);
+					}
+				}
+			}
+		});
+	});
+};
 
 // General functions
 var goldCheck = function () {
@@ -372,6 +393,398 @@ var completedTask = function (taskID) {
 	}
 
 	return dontQuest;
+};
+
+var isForQuest = function (name) {
+	let forQuest = false;
+
+	switch (name) {
+	case "den": //den
+		if (!Misc.checkQuest(1, 0)) { 
+			forQuest = true;
+		}
+		break;
+	case "bloodraven": //bloodaraven
+		if (!Misc.checkQuest(2, 0)) { 
+			forQuest = true;
+		}
+		break;
+	case "tristam": //tristam
+		if (!Misc.checkQuest(4, 0)) { 
+			forQuest = true;
+		}
+		break;
+	case "countess": //countess
+		if (!Misc.checkQuest(5, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "andariel": //andy
+		if (!Misc.checkQuest(6, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "cube": //cube
+		if (!me.getItem(549)) {
+			forQuest = true;
+		}
+		break;
+	case "radament": //radament
+		if (!Misc.checkQuest(9, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "staff": //staff
+		if (!me.getItem(92)) {
+			forQuest = true;
+		}
+		break;
+	case "amulet": //ammy
+		if (!Misc.checkQuest(11,0)) { 
+			forQuest = true;
+		}
+		break;
+	case "summoner": //summoner
+		if (!Misc.checkQuest(13, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "duriel": //duriel
+		if (!Misc.checkQuest(14, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "eye": // eye
+		if (!me.getItem(553)) {
+			forQuest = true;
+		}
+		break;
+	case "tome": // tome
+		if (!Misc.checkQuest(17, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "heart": //heart
+		if (!me.getItem(554)) {
+			forQuest = true;
+		}
+		break;
+	case "brain": //brain
+		if (!me.getItem(555)) {
+			forQuest = true;
+		}
+		break;	
+	case "travincal": //travincal
+		if (!Misc.checkQuest(21, 0) && !Misc.checkQuest(22,0)) {
+			forQuest = true;
+		}
+		break;
+	case "mephisto": //mephisto
+		if (!Misc.checkQuest(22,0)) {
+			forQuest = true;
+		}
+		break;
+	case "izual": // izzy
+		if (!Misc.checkQuest(25, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "diablo": //diablo
+		if (!Misc.checkQuest(26, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "hellforge": // hellforge
+		if (!Misc.checkQuest(27, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "shenk": // shenk
+		if (!Misc.checkQuest(35,1) || !Misc.checkQuest(35,13)) {
+			forQuest = true;
+		}
+		break;
+	case "saveBarby": //barbies
+		if (!Misc.checkQuest(36, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "anya": //anya
+		if (!Misc.checkQuest(37, 0)) {
+			forQuest = true;
+		}
+		break;	
+	case "ancients": //ancients
+		if (!Misc.checkQuest(39, 0)) {
+			forQuest = true;
+		}
+		break;
+	case "baal": //baal
+		if (!Misc.checkQuest(40, 0)) {
+			forQuest = true;
+		}
+		break;
+	default:	
+		forQuest = false;
+		break;
+	}
+
+	return forQuest;
+};
+
+//Checks if quest is finished. Tries to talk to specific NPCs to try and finish the quest if not
+var isQuestFinished = function (name) {
+	let questFinished = false;
+
+	switch (name) {
+	case "den": //den
+		if (Misc.checkQuest(1, 0)) { 
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(1);
+			}
+			Town.npcInteract("akara"); //Try and finish quest
+			if (Misc.checkQuest(1, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "bloodraven": //bloodaraven
+		if (Misc.checkQuest(2, 0)) { 
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(1);
+			}
+			Town.npcInteract("kashya"); //Try and finish quest
+			if (Misc.checkQuest(2, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "tristam": //tristam
+		if (Misc.checkQuest(4, 0)) { 
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(1);
+			}
+			Town.npcInteract("akara"); //Try and finish quest
+			if (Misc.checkQuest(4, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "countess": //countess
+		if (Misc.checkQuest(5, 0)) {
+			questFinished = true;
+		}
+		break;
+	case "andariel": //andy
+		if (Misc.checkQuest(6, 0)) {
+			questFinished = true;
+		}
+		break;
+	case "cube": //cube
+		if (me.getItem(549)) {
+			questFinished = true;
+		}
+		break;
+	case "radament": //radament
+		if (Misc.checkQuest(9, 0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(2);
+			}
+			Town.npcInteract("atma"); //Try and finish quest
+			if (Misc.checkQuest(9, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "staff": //staff
+		if (me.getItem(92)) {
+			questFinished = true;
+		}
+		break;
+	case "amulet": //ammy
+		if (Misc.checkQuest(11,0)) { 
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(2);
+			}
+			Town.npcInteract("drognan"); //Try and finish quest
+			if (Misc.checkQuest(9, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "summoner": //summoner
+		if (Misc.checkQuest(13, 0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(2);
+			}
+			Town.npcInteract("drognan"); //Try and finish quest
+			if (Misc.checkQuest(9, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "duriel": //duriel
+		if (Misc.checkQuest(14, 0)) {
+			questFinished = true;
+		}
+		break;
+	case "eye": // eye
+		if (me.getItem(553)) {
+			questFinished = true;
+		}
+		break;
+	case "tome": // tome
+		if (Misc.checkQuest(17, 0)) {
+			questFinished = true;
+		}
+		break;
+	case "heart": //heart
+		if (me.getItem(554)) {
+			questFinished = true;
+		}
+		break;
+	case "brain": //brain
+		if (me.getItem(555)) {
+			questFinished = true;
+		}
+		break;	
+	case "travincal": //travincal
+		if (Misc.checkQuest(21, 0) || Misc.checkQuest(22,0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(3);
+			}
+			Town.npcInteract("cain"); //Try and finish quest
+			if (Misc.checkQuest(21, 0) || Misc.checkQuest(22,0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "mephisto": //mephisto
+		if (Misc.checkQuest(22,0)) {
+			questFinished = true;
+		}
+		break;
+	case "izual": // izzy
+		if (Misc.checkQuest(25, 0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(4);
+			}
+			Town.npcInteract("tyrael"); //Try and finish quest
+			if (Misc.checkQuest(25, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "diablo": //diablo
+		if (Misc.checkQuest(26, 0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(4);
+			}
+			Town.npcInteract("tyrael"); //Try and finish quest
+			if (Misc.checkQuest(26, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "hellforge": // hellforge
+		if (Misc.checkQuest(27, 0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(4);
+			}
+			Town.npcInteract("cain"); //Try and finish quest
+			if (Misc.checkQuest(26, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "shenk": // shenk
+		if (Misc.checkQuest(35,1) || Misc.checkQuest(35,13)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(5);
+			}
+			Town.npcInteract("larzuk"); //Try and finish quest
+			if (Misc.checkQuest(35,1) || Misc.checkQuest(35,13)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "saveBarby": //barbies
+		if (Misc.checkQuest(36, 0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(5);
+			}
+			Town.npcInteract("qual_kehk"); //Try and finish quest
+			if (Misc.checkQuest(36, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	case "anya": //anya
+		if (Misc.checkQuest(37, 0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(5);
+			}
+			Town.npcInteract("malah"); //Try and finish quest
+			if (Misc.checkQuest(37, 0)) { //Check again
+				questFinished = true;
+				break;
+			}
+			Town.npcInteract("anya"); //Try and finish quest
+			if (Misc.checkQuest(37, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;	
+	case "ancients": //ancients
+		if (Misc.checkQuest(39, 0)) {
+			questFinished = true;
+		}
+		break;
+	case "baal": //baal
+		if (Misc.checkQuest(40, 0)) {
+			questFinished = true;
+		}else{
+			if(!me.inTown){
+				Town.goToTown(5);
+			}
+			Town.npcInteract("malah"); //Try and finish quest
+			if (Misc.checkQuest(40, 0)) { //Check again
+				questFinished = true;
+			}
+		}
+		break;
+	default:	
+		questFinished = false;
+		break;
+	}
+
+	return questFinished;
 };
 
 var movetoInventory = function (item, sorting = false) {

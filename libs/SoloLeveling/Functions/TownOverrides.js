@@ -1129,6 +1129,11 @@ Town.npcInteract = function (name) {
 		npc = getUnit(1, NPC.Cain);
 
 		break;
+	case "larzuk":
+		Town.move(NPC.Larzuk);
+		npc = getUnit(1, NPC.Larzuk);
+
+		break;
 	case "qual_kehk":
 		Town.move(NPC.Qual_Kehk);
 		npc = getUnit(1, NPC.Qual_Kehk);
