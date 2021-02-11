@@ -655,7 +655,7 @@ function LoadConfig () {
 		var autoequipTiers = [ // autoequip setup
 			//weapon
 			"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000", // HotO
-			"([type] == wand || [type] == sword && ([Quality] >= Magic || [flag] == runeword) || [type] == knife && [Quality] >= Magic) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			"([type] == wand || [type] == sword && ([Quality] >= Magic || [flag] == runeword) || [type] == knife && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 			//Helmet
 			"[Name] == SkySpirit && [Quality] == Unique # [PassiveFirePierce] >= 10 # [tier] == 100000", // ravenlore
 			"([type] == helm || [type] == circlet || [type] == pelt)  && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",

@@ -116,13 +116,16 @@ Item.getBodyLoc = function (item) {
 	case 42: //
 	case 43: //
 	case 44: //
-	case 67: // Handtohand (Assasin Claw)
 	case 68: //
 	case 85: //
 	case 86: //
 	case 87: //
-	case 88: //
 		bodyLoc = 4;
+
+		break;
+	case 67: // Handtohand (Assasin Claw)
+	case 88: //
+		bodyLoc = [4, 5];
 
 		break;
 	default:

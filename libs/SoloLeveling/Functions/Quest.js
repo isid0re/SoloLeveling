@@ -61,7 +61,7 @@ var Quest = {
 	},
 
 	cubeItems: function (outcome, ...classids) {
-		if (me.getItem(outcome) || me.act === 2 && Misc.checkQuest(10, 0) || me.act === 3 && Misc.checkQuest(18, 0)) {
+		if (me.getItem(outcome) || outcome === 91 && Misc.checkQuest(10, 0) || outcome === 174 && Misc.checkQuest(18, 0)) {
 			return true;
 		}
 
@@ -71,7 +71,7 @@ var Quest = {
 
 		if (outcome === 91) {
 			me.overhead('cubing staff');
-		} else {
+		} else if (outcome === 174) {
 			me.overhead('cubing flail');
 		}
 

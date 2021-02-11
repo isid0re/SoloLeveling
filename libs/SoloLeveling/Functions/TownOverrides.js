@@ -55,7 +55,6 @@ Town.townTasks = function () {
 	this.equipSWAP();
 	Misc.hireMerc();
 	Misc.equipMerc();
-	this.clearInventory();
 	this.gamble();
 	Town.stash();
 	this.clearJunk();
@@ -139,7 +138,6 @@ Town.doChores = function (repair = false) {
 	this.equipSWAP();
 	Misc.hireMerc();
 	Misc.equipMerc();
-	this.clearInventory();
 	this.gamble();
 	this.stash();
 	this.clearJunk();

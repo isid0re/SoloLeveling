@@ -10,13 +10,11 @@ var build = {
 	usefulskills: [261, 263], // charged bolt sentry, weapon block
 	stats: [
 		["strength", 47],
-		["dexterity", 27],
+		["dexterity", 46],
 		["vitality", 166],
-		["dexterity", 39],
 		["strength", 61],
 		["vitality", 241],
 		["strength", 79],
-		["vitality", 330],
 		["dexterity", 79],
 		["vitality", "all"]
 	],
