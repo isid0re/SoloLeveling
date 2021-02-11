@@ -54,32 +54,58 @@ function main() {
 	Runewords.init();
 	Cubing.init();
 
-	if(!!Scripts.SoloLeveling && useOverlay){
-		if(Scripts.SoloLeveling === true && useOverlay){
-			include("SoloLeveling/Tools/OverlayThread.js");
+	if(useOverlay){
+		include("SoloLeveling/Tools/OverlayThread.js");
 
-			this.ee = [];
+		var sayings = ["Oh no :( ", "gonna chicken?", "no bueno", "little low?"];
 
-			this.clear = function () {
-				while(this.ee.length > 0){
-					this.ee.shift().remove();
-				}
-			};
+		this.ee = [];
+		this.life = [];
 
-			this.soloEvent = function (key){
-				switch(key){
-					case 219:
+		this.clear = function () {
+			while(this.ee.length > 0){
+				this.ee.shift().remove();
+			}
+		};
+
+		this.lifeSaying = function () {
+			if(this.life.length < 1){
+				let text = Math.floor(Math.random() * sayings.length);
+				if(me.screensize === 0){
+					this.life.push(new Text(sayings[text], 42, 433, 1/*color*/, 6/*font*/, 0/*align*/));		
+				}else{
+					this.life.push(new Text(sayings[text], 46, 554, 1/*color*/, 6/*font*/, 0/*align*/));
+				}	
+			}				
+		};
+
+		this.clearlife = function () {
+			while(this.life.length > 0){
+				this.life.shift().remove();
+			}
+			this.said = false;
+		};
+		//Fav fonts - 3(really big), 4 thin, 5 thick funny, 6 small
+
+		this.soloEvent = function (key){
+			switch(key){
+				case 219:
+					if(me.screensize === 0){
+						this.ee.push(new Text("SoloLeveling by Isid0re", 402, 411, 1, 0, 2));
+						this.ee.push(new Text("Overlay by theBGuy", 402, 421, 1, 0, 2));
+					}else{
 						this.ee.push(new Text("SoloLeveling by Isid0re", 394, 525, 1, 0, 2));
-						this.ee.push(new Text("Overlay by theBGuy", 394, 535, 1, 0, 2));
-						break;
-					case 221:
-						this.clear();
-						break;
-				}
-			};
+						this.ee.push(new Text("Overlay by theBGuy", 394, 535, 1, 0, 2));	
+					}
 
-			addEventListener("keyup", this.soloEvent);
-		}
+					break;
+				case 221:
+					this.clear();
+					break;
+			}
+		};
+
+		addEventListener("keyup", this.soloEvent);
 	}
 
 	for (i = 0; i < 5; i += 1) {
@@ -645,14 +671,19 @@ function main() {
 	// Start
 	while (true) {
 		if(isIncluded("SoloLeveling/Tools/OverlayThread.js") && useOverlay){
-			if(Scripts.SoloLeveling === true){
+			if(useOverlay){
 				SoloLevelingHooks.update();
 				if(me.act !== myAct){
 					SoloLevelingHooks.flush();
 					myAct = me.act;
 				}
-			}
-			
+				if(me.hp <= Math.floor(me.hpmax * 25 / 100)){
+					this.lifeSaying();
+					if(me.hp > Math.floor(me.hpmax * 25 / 100)){
+						this.clearlife();
+					}
+				}
+			}	
 		}
 		try {
 			if (me.gameReady && !me.inTown) {

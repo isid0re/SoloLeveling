@@ -4,6 +4,10 @@
 *	@desc		Misc.js fixes to improve functionality and Merc Hiring/Autoequip
 */
 
+if (!isIncluded("common/Misc.js")) {
+	include("common/Misc.js");
+}
+
 Misc.checkQuest = function (id, state) {
 	sendPacket(1, 0x40);
 	delay(500 + me.ping);

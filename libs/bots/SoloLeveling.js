@@ -35,11 +35,14 @@ function SoloLeveling () {
 			if ((script1 && script1.running)) {
 				script1.stop();
 			}
-			load("libs/SoloLeveling/Tools/ToolsThread.js");
+			if(!script1.running){
+				load("libs/SoloLeveling/Tools/ToolsThread.js");	
+			}
 			if(shouldLog){
 				Playtime.updateStats("checkvalues");	
 			}
 		}
+		
 		print('ÿc9SoloLevelingÿc0: start run');
 		me.overhead('starting run');
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");

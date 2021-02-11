@@ -4,6 +4,10 @@
 *	@desc		NTIPItemParser fixes to improve functionality and custom looping for performance
 */
 
+if (!isIncluded("NTItemParser.dbl")) {
+	include("NTItemParser.dbl");
+}
+
 var NTIP_CheckListNoTier = [];
 
 NTIP.addLine = function (itemString) {

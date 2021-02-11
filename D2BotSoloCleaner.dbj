@@ -39,7 +39,6 @@ var AccountsToClean = {
 			"MyAcc1/tempPass/useast": ["soloSorc"],
 			"null/null/singleplayer": ["solobarb"],
 		Enter your lines under here*/
-			"null/null/singleplayer": ["pallya", "sorca"],
 		
 };
 	
@@ -49,7 +48,6 @@ var profiles = [
 		"SCL-ZON123",
 		"hcnl-pal123",
 	Enter your lines under here*/
-	"scnl-pal1"
 ];
 
 function moveFiles() {
