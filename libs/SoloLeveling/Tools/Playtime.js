@@ -1,6 +1,6 @@
 /**
 *	@filename	Playtime.js
-*	@author		Adpist, modified by theBGuy for SoloLeveling
+*	@author		theBGuy
 *	@desc		Playtime recording
 *	@credits	Adpist
 */
