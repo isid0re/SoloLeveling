@@ -89,9 +89,9 @@ var Playtime = {
 	},
 
 	updateStats: function (arg, value) {
-		while (me.ingame && !me.gameReady) {
+		/*while (me.ingame && !me.gameReady) {
 			delay(100);
-		}
+		}*/
 
 		var i, obj, string,
 			statArr = [];
