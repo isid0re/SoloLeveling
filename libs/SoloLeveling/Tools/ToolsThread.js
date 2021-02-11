@@ -83,7 +83,6 @@ function main() {
 			while(this.life.length > 0){
 				this.life.shift().remove();
 			}
-			this.said = false;
 		};
 		//Fav fonts - 3(really big), 4 thin, 5 thick funny, 6 small
 
@@ -679,9 +678,9 @@ function main() {
 				}
 				if(me.hp <= Math.floor(me.hpmax * 25 / 100)){
 					this.lifeSaying();
-					if(me.hp > Math.floor(me.hpmax * 25 / 100)){
-						this.clearlife();
-					}
+				}
+				if(me.hp > Math.floor(me.hpmax * 25 / 100) && this.life.length > 0){
+					this.clearlife();
 				}
 			}	
 		}
