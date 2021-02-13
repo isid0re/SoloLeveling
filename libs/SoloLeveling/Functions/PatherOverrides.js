@@ -4,6 +4,10 @@
 *	@desc		Pather.js fixes to improve functionality
 */
 
+if (!isIncluded("common/Pather.js")) {
+	include("common/Pather.js");
+}
+
 NodeAction.killMonsters = function (arg) {
 	var monList;
 
