@@ -86,7 +86,7 @@ var Performance = {
 			obj[diffs[i]] = {};
 
 			for (let j = 0; j < files.length; j++) {
-				obj[diffs[i]][files[j]] = {TotalTime: 0, TotalAttempts: 0, ShortestAttempt: 0, LongestAttempt: 0, Average: 0, lvl: 0, TT: 0, SA: 0, LA: 0, AVG: 0};
+				obj[diffs[i]][files[j]] = {QuestCompleted: 0, TotalTime: 0, TotalAttempts: 0, ShortestAttempt: 0, LongestAttempt: 0, Average: 0, lvl: 0, TT: 0, SA: 0, LA: 0, AVG: 0};
 			}
 
 		}
