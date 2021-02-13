@@ -331,7 +331,8 @@ Misc.setupMerc = function () {
 	var mercGear = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) && [Level] >= 20 # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
+		"[Type] == Polearm && ([Quality] >= rare || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
+		"me.diff !== 2 && [Type] == Polearm && [Quality] >= Magic && [Level] >= 22 # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
 	];
 	NTIP.arrayLooping(mercGear);
 

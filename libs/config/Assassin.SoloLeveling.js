@@ -272,6 +272,8 @@ function LoadConfig () {
 	Config.UseCloakofShadows = !!me.getSkill(264, 0); // Set to true to use Cloak of Shadows while fighting. Useful for blinding regular monsters/minions.
 	Config.AggressiveCloak = false; // Move into Cloak range or cast if already close
 
+	Config.Dodge = !!me.getSkill(271, 0); // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
+	Config.DodgeRange = 10; // Distance to keep from monsters.
 
 	/*-----------------------------------------*/
 	//			DO NOT TOUCH BELOW 			   //

@@ -96,8 +96,8 @@ var resCheck = function () {
 	let resStatus,
 		resPenalty = me.gametype === 0 ? [0, 20, 50, 50][me.diff + 1] : [ 0, 40, 100, 100][me.diff + 1],
 		frRes = me.getStat(39) - resPenalty,
-		crRes = me.getStat(41) - resPenalty,
-		lrRes = me.getStat(43) - resPenalty;
+		lrRes = me.getStat(41) - resPenalty,
+		crRes = me.getStat(43) - resPenalty;
 
 	if ((frRes >= 0) && (lrRes >= 0) && (crRes >= 0)) {
 		resStatus = true;
@@ -125,6 +125,11 @@ var nextDifficulty = function () {
 			D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + difficulty[diffShift]);
 		} else if (lvlReq && lowRes) {
 			D2Bot.printToConsole('SoloLeveling: ' + difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + resCheck().FR + ' | CR: ' + resCheck().CR + ' | LR: ' + resCheck().LR);
+
+			if (me.charlvl >= levelcap + 5) {
+				diffShift = me.diff + 1;
+				D2Bot.printToConsole('SoloLeveling: Over leveled. Starting: ' + difficulty[diffShift]);
+			}
 		}
 	}
 

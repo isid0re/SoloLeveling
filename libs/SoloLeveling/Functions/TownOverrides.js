@@ -536,7 +536,7 @@ Town.unfinishedQuests = function () {
 	if (leg) {
 		Town.goToTown(1);
 
-		if (length.location === 7) {
+		if (leg.location === 7) {
 			Town.move('stash');
 			Storage.Inventory.MoveTo(leg);
 			delay(300 + me.ping);
