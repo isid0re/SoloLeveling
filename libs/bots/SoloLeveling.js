@@ -129,10 +129,10 @@ function SoloLeveling () {
 								Performance.updateStats(sequence[k][0], "checkTimes", getTickCount() - tick);
 							} else {
 								if (nonQuests.indexOf(sequence[k][0]) > -1) {
-									Performance.updateStats(sequence[k][0], "nonquestTotalTime", getTickCount() - tick);
+									Performance.updateStats(sequence[k][0], "TotalTime", getTickCount() - tick);
 									Performance.updateStats(sequence[k][0], "checkTimes", getTickCount() - tick);
 								} else {
-									Performance.updateStats(sequence[k][0] + "MF", "nonquestTotalTime", getTickCount() - tick);
+									Performance.updateStats(sequence[k][0] + "MF", "TotalTime", getTickCount() - tick);
 									Performance.updateStats(sequence[k][0] + "MF", "checkTimes", getTickCount() - tick);
 								}
 							}
