@@ -187,14 +187,14 @@ ControlAction.makeCharacter = function (info) {
 				break;
 			}
 
-				// coords:
-				// zon: 100, 280
-				// barb: 400, 280
-				// necro: 300, 290
-				// sin: 200, 280
-				// paladin: 521 260
-				// sorc: 620, 270
-				// druid: 700, 280
+			// coords:
+			// zon: 100, 280
+			// barb: 400, 280
+			// necro: 300, 290
+			// sin: 200, 280
+			// paladin: 521 260
+			// sorc: 620, 270
+			// druid: 700, 280
 
 			getControl().click(clickCoords[0], clickCoords[1]);
 			delay(500);
@@ -236,7 +236,7 @@ ControlAction.makeCharacter = function (info) {
 		if (me.ingame) { // Singleplayer loop break fix.
 			break;
 		}
-		
+
 		delay(500);
 	}
 

@@ -29,12 +29,17 @@ include("common/Runewords.js");
 include("common/Storage.js");
 include("common/Town.js");
 
-if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) { include("SoloLeveling/Tools/OOGOverrides.js"); };
-if (!isIncluded("SoloLeveling/Functions/globals.js")) { include("SoloLeveling/Functions/globals.js"); };
+if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) {
+	include("SoloLeveling/Tools/OOGOverrides.js");
+}
 
-const sdk = require('../../libs/modules/sdk')
+if (!isIncluded("SoloLeveling/Functions/globals.js")) {
+	include("SoloLeveling/Functions/globals.js");
+}
 
-function main() {
+const sdk = require('../../libs/modules/sdk');
+
+function main () {
 	var i, mercHP, ironGolem, tick, merc,
 		debugInfo = {area: 0, currScript: "no entry"},
 		pingTimer = [],
@@ -54,7 +59,7 @@ function main() {
 	Runewords.init();
 	Cubing.init();
 
-	if(useOverlay){
+	if (useOverlay) {
 		include("SoloLeveling/Tools/OverlayThread.js");
 
 		var sayings = ["Oh no :( ", "gonna chicken?", "no bueno", "little low?"];
@@ -63,44 +68,45 @@ function main() {
 		this.life = [];
 
 		this.clear = function () {
-			while(this.ee.length > 0){
+			while (this.ee.length > 0) {
 				this.ee.shift().remove();
 			}
 		};
 
 		this.lifeSaying = function () {
-			if(this.life.length < 1){
+			if (this.life.length < 1) {
 				let text = Math.floor(Math.random() * sayings.length);
-				if(me.screensize === 0){
-					this.life.push(new Text(sayings[text], 42, 433, 1/*color*/, 6/*font*/, 0/*align*/));		
-				}else{
+
+				if (me.screensize === 0) {
+					this.life.push(new Text(sayings[text], 42, 433, 1/*color*/, 6/*font*/, 0/*align*/));
+				} else {
 					this.life.push(new Text(sayings[text], 46, 554, 1/*color*/, 6/*font*/, 0/*align*/));
-				}	
-			}				
+				}
+			}
 		};
 
 		this.clearlife = function () {
-			while(this.life.length > 0){
+			while (this.life.length > 0) {
 				this.life.shift().remove();
 			}
 		};
 		//Fav fonts - 3(really big), 4 thin, 5 thick funny, 6 small
 
-		this.soloEvent = function (key){
-			switch(key){
-				case 219:
-					if(me.screensize === 0){
-						this.ee.push(new Text("SoloLeveling by Isid0re", 402, 411, 1, 0, 2));
-						this.ee.push(new Text("Overlay by theBGuy", 402, 421, 1, 0, 2));
-					}else{
-						this.ee.push(new Text("SoloLeveling by Isid0re", 394, 525, 1, 0, 2));
-						this.ee.push(new Text("Overlay by theBGuy", 394, 535, 1, 0, 2));	
-					}
+		this.soloEvent = function (key) {
+			switch (key) {
+			case 219:
+				if (me.screensize === 0) {
+					this.ee.push(new Text("SoloLeveling by Isid0re", 402, 411, 1, 0, 2));
+					this.ee.push(new Text("Overlay by theBGuy", 402, 421, 1, 0, 2));
+				} else {
+					this.ee.push(new Text("SoloLeveling by Isid0re", 394, 525, 1, 0, 2));
+					this.ee.push(new Text("Overlay by theBGuy", 394, 535, 1, 0, 2));
+				}
 
-					break;
-				case 221:
-					this.clear();
-					break;
+				break;
+			case 221:
+				this.clear();
+				break;
 			}
 		};
 
@@ -122,20 +128,20 @@ function main() {
 			return false;
 		}
 
-		var i;
+		var m;
 
-		for (i = 0; i < Config.PingQuit.length; i += 1) {
-			if (Config.PingQuit[i].Ping > 0) {
-				if (me.ping >= Config.PingQuit[i].Ping) {
+		for (m = 0; m < Config.PingQuit.length; m += 1) {
+			if (Config.PingQuit[m].Ping > 0) {
+				if (me.ping >= Config.PingQuit[m].Ping) {
 					me.overhead("High Ping");
 
-					if (pingTimer[i] === undefined || pingTimer[i] === 0) {
-						pingTimer[i] = getTickCount();
+					if (pingTimer[m] === undefined || pingTimer[m] === 0) {
+						pingTimer[m] = getTickCount();
 					}
 
-					if (getTickCount() - pingTimer[i] >= Config.PingQuit[i].Duration * 1000) {
+					if (getTickCount() - pingTimer[m] >= Config.PingQuit[m].Duration * 1000) {
 						if (print) {
-							D2Bot.printToConsole("High ping (" + me.ping + "/" + Config.PingQuit[i].Ping + ") - leaving game.", 9);
+							D2Bot.printToConsole("High ping (" + me.ping + "/" + Config.PingQuit[m].Ping + ") - leaving game.", 9);
 						}
 
 						scriptBroadcast("pingquit");
@@ -143,7 +149,7 @@ function main() {
 						return true;
 					}
 				} else {
-					pingTimer[i] = 0;
+					pingTimer[m] = 0;
 				}
 			}
 		}
@@ -152,12 +158,12 @@ function main() {
 	};
 
 	this.initQuitList = function () {
-		var i, string, obj,
+		var j, string, obj,
 			temp = [];
 
-		for (i = 0; i < Config.QuitList.length; i += 1) {
-			if (FileTools.exists("data/" + Config.QuitList[i] + ".json")) {
-				string = Misc.fileAction("data/" + Config.QuitList[i] + ".json", 0);
+		for (j = 0; j < Config.QuitList.length; j += 1) {
+			if (FileTools.exists("data/" + Config.QuitList[j] + ".json")) {
+				string = Misc.fileAction("data/" + Config.QuitList[j] + ".json", 0);
 
 				if (string) {
 					obj = JSON.parse(string);
@@ -173,7 +179,7 @@ function main() {
 	};
 
 	this.getPotion = function (pottype, type) {
-		var i,
+		var k,
 			items = me.getItems();
 
 		if (!items || items.length === 0) {
@@ -185,15 +191,15 @@ function main() {
 			return b.classid - a.classid;
 		});
 
-		for (i = 0; i < items.length; i += 1) {
-			if (type < 3 && items[i].mode === 0 && items[i].location === 3 && items[i].itemType === pottype) {
+		for (k = 0; k < items.length; k += 1) {
+			if (type < 3 && items[k].mode === 0 && items[k].location === 3 && items[k].itemType === pottype) {
 				print("ÿc2Drinking potion from inventory.");
 
-				return copyUnit(items[i]);
+				return copyUnit(items[k]);
 			}
 
-			if (items[i].mode === 2 && items[i].itemType === pottype) {
-				return copyUnit(items[i]);
+			if (items[k].mode === 2 && items[k].itemType === pottype) {
+				return copyUnit(items[k]);
 			}
 		}
 
@@ -201,24 +207,24 @@ function main() {
 	};
 
 	this.togglePause = function () {
-		var i,	script,
+		var l,	script,
 			scripts = ["default.dbj", "tools/townchicken.js", "tools/antihostile.js", "tools/party.js", "tools/rushthread.js"];
 
-		for (i = 0; i < scripts.length; i += 1) {
-			script = getScript(scripts[i]);
+		for (l = 0; l < scripts.length; l += 1) {
+			script = getScript(scripts[l]);
 
 			if (script) {
 				if (script.running) {
-					if (i === 0) { // default.dbj
+					if (l === 0) { // default.dbj
 						print("ÿc1Pausing.");
 					}
 
 					// don't pause townchicken during clone walk
-					if (scripts[i] !== "tools/townchicken.js" || !cloneWalked) {
+					if (scripts[l] !== "tools/townchicken.js" || !cloneWalked) {
 						script.pause();
 					}
 				} else {
-					if (i === 0) { // default.dbj
+					if (l === 0) { // default.dbj
 						print("ÿc2Resuming.");
 					}
 
@@ -390,15 +396,15 @@ function main() {
 	};
 
 	this.getNearestPreset = function () {
-		var i, unit, dist, id;
+		var n, unit, dist, id;
 
 		unit = getPresetUnits(me.area);
 		dist = 99;
 
-		for (i = 0; i < unit.length; i += 1) {
-			if (getDistance(me, unit[i].roomx * 5 + unit[i].x, unit[i].roomy * 5 + unit[i].y) < dist) {
-				dist = getDistance(me, unit[i].roomx * 5 + unit[i].x, unit[i].roomy * 5 + unit[i].y);
-				id = unit[i].type + " " + unit[i].id;
+		for (n = 0; n < unit.length; n += 1) {
+			if (getDistance(me, unit[n].roomx * 5 + unit[n].x, unit[n].roomy * 5 + unit[n].y) < dist) {
+				dist = getDistance(me, unit[n].roomx * 5 + unit[n].x, unit[n].roomy * 5 + unit[n].y);
+				id = unit[n].type + " " + unit[n].id;
 			}
 		}
 
@@ -411,29 +417,42 @@ function main() {
 		var realFBR = unit.getStat(sdk.stats.Fasterblockrate);
 		var realFHR = unit.getStat(sdk.stats.Fastergethitrate);
 		// me.getStat(105) will return real FCR from gear + Config.FCR from char cfg
-		if (unit == me)
-		{
-		        realFCR -= Config.FCR;
-		        realIAS -= Config.IAS;
-		        realFBR -= Config.FBR;
-		        realFHR -= Config.FHR;
+
+		if (unit === me) {
+			realFCR -= Config.FCR;
+			realIAS -= Config.IAS;
+			realFBR -= Config.FBR;
+			realFHR -= Config.FHR;
 		}
+
 		var maxHellFireRes = 75 + unit.getStat(sdk.stats.Maxfireresist);
 		var hellFireRes = unit.getStat(sdk.stats.Fireresist) - 100;
-		if (hellFireRes > maxHellFireRes)
-		        hellFireRes = maxHellFireRes;
+
+		if (hellFireRes > maxHellFireRes) {
+			hellFireRes = maxHellFireRes;
+		}
+
 		var maxHellColdRes = 75 + unit.getStat(sdk.stats.Maxcoldresist);
 		var hellColdRes = unit.getStat(sdk.stats.Coldresist) - 100;
-		if (hellColdRes > maxHellColdRes)
-		        hellColdRes = maxHellColdRes;
+
+		if (hellColdRes > maxHellColdRes) {
+			hellColdRes = maxHellColdRes;
+		}
+
 		var maxHellLightRes = 75 + unit.getStat(sdk.stats.Maxlightresist);
 		var hellLightRes = unit.getStat(sdk.stats.Lightresist) - 100;
-		if (hellLightRes > maxHellLightRes)
-		        hellLightRes = maxHellLightRes;
+
+		if (hellLightRes > maxHellLightRes) {
+			hellLightRes = maxHellLightRes;
+		}
+
 		var maxHellPoisonRes = 75 + unit.getStat(sdk.stats.Maxpoisonresist);
 		var hellPoisonRes = unit.getStat(sdk.stats.Poisonresist) - 100;
-		if (hellPoisonRes > maxHellPoisonRes)
-		        hellPoisonRes = maxHellPoisonRes;
+
+		if (hellPoisonRes > maxHellPoisonRes) {
+			hellPoisonRes = maxHellPoisonRes;
+		}
+
 		var str = "ÿc4MF: ÿc0" + unit.getStat(sdk.stats.Magicbonus) + "ÿc4 GF: ÿc0" + unit.getStat(sdk.stats.Goldbonus) +
 		"ÿc1 FR: ÿc0" + unit.getStat(sdk.stats.Fireresist) + "ÿc1 Max FR: ÿc0" + unit.getStat(sdk.stats.Maxfireresist) +
 		"ÿc3 CR: ÿc0" + unit.getStat(sdk.stats.Coldresist) + "ÿc3 Max CR: ÿc0" + unit.getStat(sdk.stats.Maxcoldresist) +
@@ -478,10 +497,12 @@ function main() {
 		case 107: // Numpad +
 			showConsole();
 
-			var merc = me.getMerc();
+			merc = me.getMerc();
 			print(this.getStatsString(me));
-			if (merc)
+
+			if (merc) {
 				print("Merc stats:\n" + this.getStatsString(merc));
+			}
 
 			break;
 		case 101: // numpad 5
@@ -506,7 +527,7 @@ function main() {
 		case 109: // Numpad -
 			//Misc.spy(me.name);
 			me.overhead("did this work");
-			
+
 			break;
 		case 110: // decimal point
 			say("/fps");
@@ -529,11 +550,13 @@ function main() {
 		case 0x01: // "%Name1(%Name2) dropped due to errors."
 		case 0x03: // "%Name1(%Name2) left our world. Diablo's minions weaken."
 			if ((typeof Config.QuitList === "string" && Config.QuitList.toLowerCase() === "any") ||
-					(Config.QuitList instanceof Array && Config.QuitList.indexOf(name1) > -1)) {
+					(Config.QuitList instanceof Array && Config.QuitList.indexOf (name1) > -1)) {
 				print(name1 + (mode === 0 ? " timed out" : " left"));
 
 				if (typeof Config.QuitListDelay !== "undefined" && typeof quitListDelayTime === "undefined" && Config.QuitListDelay.length > 0) {
-					Config.QuitListDelay.sort(function(a, b){return a-b});
+					Config.QuitListDelay.sort(function (a, b) {
+						return a - b;
+					});
 					quitListDelayTime = getTickCount() + rand(Config.QuitListDelay[0] * 1e3, Config.QuitListDelay[1] * 1e3);
 				} else {
 					quitListDelayTime = getTickCount();
@@ -662,28 +685,33 @@ function main() {
 	var myAct = me.act;
 
 	//Double Safeguard to stop the base toolsthread
-	let script1 = getScript("tools/ToolsThread.js");        
-	if ((script1 && script1.running)) {
-		script1.stop();
+	let origToolsThread = getScript("tools/ToolsThread.js");
+
+	if ((origToolsThread && origToolsThread.running)) {
+		origToolsThread.stop();
 	}
 
 	// Start
 	while (true) {
-		if(isIncluded("SoloLeveling/Tools/OverlayThread.js") && useOverlay){
-			if(useOverlay){
+		if (isIncluded("SoloLeveling/Tools/OverlayThread.js") && useOverlay) {
+			if (useOverlay) {
 				SoloLevelingHooks.update();
-				if(me.act !== myAct){
+
+				if (me.act !== myAct) {
 					SoloLevelingHooks.flush();
 					myAct = me.act;
 				}
-				if(me.hp <= Math.floor(me.hpmax * 25 / 100)){
+
+				if (me.hp <= Math.floor(me.hpmax * 25 / 100)) {
 					this.lifeSaying();
 				}
-				if(me.hp > Math.floor(me.hpmax * 25 / 100) && this.life.length > 0){
+
+				if (me.hp > Math.floor(me.hpmax * 25 / 100) && this.life.length > 0) {
 					this.clearlife();
 				}
-			}	
+			}
 		}
+
 		try {
 			if (me.gameReady && !me.inTown) {
 				if (Config.UseHP > 0 && me.hp < Math.floor(me.hpmax * Config.UseHP / 100)) {

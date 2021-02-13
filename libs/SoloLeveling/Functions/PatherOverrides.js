@@ -249,80 +249,150 @@ Pather.changeAct = function () {
 	return true;
 };
 
-Pather.useUnit = function (type, id, targetArea) {
-	var i, tick, unit, coord,
-		preArea = me.area;
-
-	for (i = 0; i < 5; i += 1) {
-		unit = getUnit(type, id);
-
-		if (unit) {
-			break;
-		}
-
-		delay(200);
+Pather.moveTo = function (x, y, retry, clearPath, pop) {
+	if (me.dead) { // Abort if dead
+		return false;
 	}
 
-	if (!unit) {
-		print("ÿc9SoloLevelingÿc0: Unit not found. Attempting portal trick");
-		Town.goToTown();
-		Pather.usePortal(null, me.name);
+	var i, path, adjustedNode, cleared, useTeleport,
+		node = {x: x, y: y},
+		fail = 0;
 
-		for (i = 0; i < 5; i += 1) {
-			unit = getUnit(type, id);
-
-			if (unit) {
-				break;
-			}
-
-			delay(200);
-		}
-
-		if (!unit) {
-			throw new Error("useUnit: Unit not found. ID: " + id);
+	for (i = 0; i < this.cancelFlags.length; i += 1) {
+		if (getUIFlag(this.cancelFlags[i])) {
+			me.cancel();
 		}
 	}
 
-	for (i = 0; i < 3; i += 1) {
-		if (getDistance(me, unit) > 5) {
-			this.moveToUnit(unit);
+	if (getDistance(me, x, y) < 2) {
+		return true;
+	}
+
+	if (x === undefined || y === undefined) {
+		throw new Error("moveTo: Function must be called with at least 2 arguments.");
+	}
+
+	if (typeof x !== "number" || typeof y !== "number") {
+		throw new Error("moveTo: Coords must be numbers");
+	}
+
+	if (retry === undefined) {
+		retry = 15;
+	}
+
+	if (clearPath === undefined) {
+		clearPath = false;
+	}
+
+	if (pop === undefined) {
+		pop = false;
+	}
+
+	useTeleport = this.useTeleport();
+	path = getPath(me.area, x, y, me.x, me.y, useTeleport ? 1 : 0, useTeleport ? ([62, 63, 64].indexOf(me.area) > -1 ? 30 : this.teleDistance) : this.walkDistance);
+
+	if (!path) {
+		throw new Error("moveTo: Failed to generate path.");
+	}
+
+	path.reverse();
+
+	if (pop) {
+		path.pop();
+	}
+
+	PathDebug.drawPath(path);
+
+	if (useTeleport && Config.TeleSwitch && path.length > 5) {
+		Attack.weaponSwitch(Attack.getPrimarySlot() ^ 1);
+	}
+
+	while (path.length > 0) {
+		if (me.dead) { // Abort if dead
+			return false;
 		}
 
-		if (type === 2 && unit.mode === 0) {
-			if ((me.area === 83 && targetArea === 100 && me.getQuest(21, 0) !== 1) || (me.area === 120 && targetArea === 128 && me.getQuest(39, 0) !== 1)) {
-				throw new Error("useUnit: Incomplete quest.");
+		for (i = 0; i < this.cancelFlags.length; i += 1) {
+			if (getUIFlag(this.cancelFlags[i])) {
+				me.cancel();
+			}
+		}
+
+		node = path.shift();
+
+		if (getDistance(me, node) > 2) {
+			if ([62, 63, 64].indexOf(me.area) > -1) {
+				adjustedNode = this.getNearestWalkable(node.x, node.y, 15, 3, 0x1 | 0x4 | 0x800 | 0x1000);
+
+				if (adjustedNode) {
+					node.x = adjustedNode[0];
+					node.y = adjustedNode[1];
+				}
 			}
 
-			if (me.area === 92) {
-				this.openUnit(2, 367);
+			if (useTeleport ? this.teleportTo(node.x, node.y) : this.walkTo(node.x, node.y, (fail > 0 || me.inTown) ? 2 : 4)) {
+				if (!me.inTown) {
+					if (this.recursion) {
+						this.recursion = false;
+
+						NodeAction.go({clearPath: clearPath});
+
+						if (getDistance(me, node.x, node.y) > 5) {
+							this.moveTo(node.x, node.y);
+						}
+
+						this.recursion = true;
+					}
+
+					Misc.townCheck();
+				}
 			} else {
-				this.openUnit(2, id);
+				if (fail > 0 && !useTeleport && !me.inTown) {
+					if (!cleared) {
+						Attack.clear(5);
+
+						cleared = true;
+					}
+
+					if (fail > 1 && me.getSkill(143, 1)) {
+						Skill.cast(143, 0, node.x, node.y);
+					}
+				}
+
+				path = getPath(me.area, x, y, me.x, me.y, useTeleport ? 1 : 0, useTeleport ? rand(25, 35) : rand(10, 15));
+				fail += 1;
+
+				if (!path) {
+					throw new Error("moveTo: Failed to generate path.");
+				}
+
+				path.reverse();
+				PathDebug.drawPath(path);
+
+				if (pop) {
+					path.pop();
+				}
+
+				print("move retry " + fail);
+
+				if (fail > 0) {
+					Packet.flash(me.gid);
+
+					if (fail >= retry) {
+						break;
+					}
+				}
 			}
 		}
 
-		delay(300);
-
-		if (type === 5) {
-			Misc.click(0, 0, unit);
-		} else {
-			sendPacket(1, 0x13, 4, unit.type, 4, unit.gid);
-		}
-
-		tick = getTickCount();
-
-		while (getTickCount() - tick < 3000) {
-			if ((!targetArea && me.area !== preArea) || me.area === targetArea) {
-				delay(100);
-
-				return true;
-			}
-
-			delay(10);
-		}
-
-		coord = CollMap.getRandCoordinate(me.x, -1, 1, me.y, -1, 1, 3);
-		this.moveTo(coord.x, coord.y);
+		delay(5);
 	}
 
-	return targetArea ? me.area === targetArea : me.area !== preArea;
+	if (useTeleport && Config.TeleSwitch) {
+		Attack.weaponSwitch(Attack.getPrimarySlot());
+	}
+
+	PathDebug.removeHooks();
+
+	return getDistance(me, node.x, node.y) < 5;
 };
