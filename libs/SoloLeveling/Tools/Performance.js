@@ -86,7 +86,7 @@ var Performance = {
 			obj[diffs[i]] = {};
 
 			for (let j = 0; j < files.length; j++) {
-				obj[diffs[i]][files[j]] = {TotalTime: 0, TotalAttempts: 0, ShortestAttempt: 0, LongestAttempt: 0, Average: 0, lvl: 0, TT: 0, SA: 0, LA: 0, AVG: 0};
+				obj[diffs[i]][files[j]] = {QuestCompleted: 0, TotalTime: 0, TotalAttempts: 0, ShortestAttempt: 0, LongestAttempt: 0, Average: 0, lvl: 0, TT: 0, SA: 0, LA: 0, AVG: 0};
 			}
 
 		}
@@ -165,7 +165,7 @@ var Performance = {
 
 		for (i = 0; i < statArr.length; i += 1) {
 			switch (statArr[i]) {
-			case "TotalTime":
+			case "QuestCompleted":
 
 				if (!!Playtime.getStats().playtime) {
 					var recordedPlaytime = JSON.parse(Playtime.getStats().playtime);
@@ -178,7 +178,7 @@ var Performance = {
 					tt = this.formatTime(tt);
 				}
 
-				obj[diff][name].TotalTime = tt;
+				obj[diff][name].QuestCompleted = tt;
 				obj[diff][name].TT = uftt;
 				obj[diff][name].lvl = me.charlvl; //Want to know the charlvl that the bot accomplished a task.
 
@@ -207,10 +207,8 @@ var Performance = {
 
 				obj[diff][name].AVG += value; //Want to know average time
 				obj[diff][name].Average = this.formatTime((obj[diff][name].AVG) / obj[diff][name].TotalAttempts);	//Format it so its easily readable
-
-				break;
-			case "nonquestTotalTime":
 				obj[diff][name].TotalTime = this.formatTime(obj[diff][name].AVG);	//Format it so its easily readable
+
 				break;
 			default:
 				obj[statArr[i]] = value;
