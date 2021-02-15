@@ -22,7 +22,7 @@ var StarterConfig = {
 	PleaseWaitTimeout: 100, // Seconds to wait before cancelling the 'Please Wait...' screen
 	WaitInLineTimeout: 12000, // Seconds to wait before cancelling the 'Waiting in Line...' screen
 	GameDoesNotExistTimeout: 600, // Seconds to wait before cancelling the 'Game does not exist.' screen
-	DelayBeforeLogin: rand(1, 10),	// Seconds to wait before logging in
+	DelayBeforeLogin: rand(5, 25),	// Seconds to wait before logging in
 	VersionErrorDelay: rand(5,30)	// Seconds to wait after 'unable to identify version' message
 };
 
