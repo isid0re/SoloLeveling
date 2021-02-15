@@ -82,7 +82,7 @@ if (!FileTools.exists("data/" + me.profile + ".json")) {
 }
 
 if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
-	ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
+	ControlAction.timeoutDelay("Data-File Init Delay", StarterConfig.DelayBeforeLogin * 1e3);
 	Playtime.create();
 }
 
