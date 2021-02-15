@@ -5,7 +5,7 @@
 */
 var Quest = {
 	preReqs: function () {
-		if (me.act === 2 && !Misc.checkQuest(10, 0)) { // horadric staff
+		if (me.act === 2 && !Misc.checkQuest(10, 0) && !me.getItem(91)) { // horadric staff
 			if (!me.getItem(521)) {
 				if (!isIncluded("SoloLeveling/Scripts/amulet.js")) {
 					include("SoloLeveling/Scripts/amulet.js");
@@ -27,7 +27,7 @@ var Quest = {
 			}
 		}
 
-		if (me.act === 3 && !Misc.checkQuest(18, 0)) { // khalim's will
+		if (me.act === 3 && !Misc.checkQuest(18, 0) && !me.getItem(174)) { // khalim's will
 			if (!me.getItem(553)) {
 				if (!isIncluded("SoloLeveling/Scripts/eye.js")) {
 					include("SoloLeveling/Scripts/eye.js");

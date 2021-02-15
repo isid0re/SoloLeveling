@@ -49,7 +49,7 @@ function main () {
 		canQuit = true,
 		timerLastDrink = [];
 
-	print("ÿc3Start Custom ToolsThread script");
+	print("ÿc9SoloLevelingÿc3: Start Custom ToolsThread script");
 	D2Bot.init();
 	Config.init(false);
 	Pickit.init(false);
@@ -525,8 +525,10 @@ function main () {
 
 			break;
 		case 109: // Numpad -
-			//Misc.spy(me.name);
-			me.overhead("did this work");
+			D2Bot.printToConsole('getTier: ' + NTIP.GetTier(getUnit(101)));
+			D2Bot.printToConsole('tierscore: ' + tierscore(getUnit(101)));
+			D2Bot.printToConsole('getMercTier: ' + NTIP.GetMercTier(getUnit(101)));
+			D2Bot.printToConsole('mercscore: ' + mercscore(getUnit(101)));
 
 			break;
 		case 110: // decimal point

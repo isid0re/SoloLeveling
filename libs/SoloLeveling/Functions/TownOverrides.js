@@ -60,6 +60,7 @@ Town.townTasks = function () {
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.gamble();
+	this.clearInventory();
 	Town.stash();
 	this.clearJunk();
 	this.organizeStash();
@@ -143,6 +144,7 @@ Town.doChores = function (repair = false) {
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.gamble();
+	this.clearInventory();
 	this.stash();
 	this.clearJunk();
 	this.clearScrolls();
@@ -913,11 +915,11 @@ Town.clearInventory = function () {
 		) {
 			result = Pickit.checkItem(items[i]).result;
 
-			if (!Item.autoEquipCheck(items[i]) && !NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result === 1) {
+			if (!Item.autoEquipCheck(items[i]) && !NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result) {
 				result = 0;
 			}
 
-			if (!Item.autoEquipCheckMerc(items[i]) && !NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result === 1) {
+			if (!Item.autoEquipCheckMerc(items[i]) && !NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result) {
 				result = 0;
 			}
 
@@ -927,6 +929,8 @@ Town.clearInventory = function () {
 					me.cancel();
 					delay(200);
 				}
+
+				this.initNPC("Shop", "clearInventory");
 
 				if (getUIFlag(0xC) || (Config.PacketShopping && getInteractedNPC() && getInteractedNPC().itemcount > 0)) { // Might as well sell the item if already in shop
 					print("clearInventory sell " + items[i].name);
