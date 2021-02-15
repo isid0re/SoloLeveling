@@ -217,6 +217,7 @@ function ReceiveCopyData (mode, msg) {
 		} else {
 			D2Bot.updateStatus('Please update InfoTag in profile config. Missing the finalBuild selection.');
 			D2Bot.printToConsole('Please update InfoTag in profile config. Missing the finalBuild selection.');
+			D2Bot.stop();
 
 			break;
 		}
@@ -349,6 +350,7 @@ function main () {
 	}
 
 	if (DataFile.getStats().setDifficulty) {
+		delay(rand(5, 25));
 		gameInfo.difficulty = DataFile.getStats().setDifficulty;
 		D2Bot.setProfile(null, null, null, gameInfo.difficulty);
 	}
@@ -640,6 +642,7 @@ function locationAction (location) {
 
 		break;
 	case 4: // Create Game
+		delay(rand(5, 25));
 		D2Bot.updateStatus("Creating Game");
 
 		control = getControl(1, 657, 342, 27, 20);
@@ -710,6 +713,7 @@ function locationAction (location) {
 			if (battlenet) { // make battlenet accounts/characters
 				if (setUp.account !== "") { // existing account
 					try {
+						delay(rand(5, 25));
 						login(me.profile);
 					} catch (error) {
 						if (!ControlAction.findCharacter(setUp)) { // make char if not found
@@ -735,6 +739,7 @@ function locationAction (location) {
 				}
 			} else { // SP/TCP  characters
 				try {
+					delay(rand(5, 25));
 					login(me.profile);
 				} catch (err) {
 					if (!ControlAction.findCharacter(setUp)) { // make char if not found

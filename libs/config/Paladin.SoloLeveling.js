@@ -286,68 +286,14 @@ function LoadConfig () {
 			include("bots/SoloLeveling.js");
 		}
 
-		this.configBelt = function () {
-			let numColumns = Math.max(1, Storage.BeltSize() - 1);
-
-			for (let i = 0; i < Config.BeltColumn.length; i++) {
-				if (Config.BeltColumn[i] === "rv") {
-					Config.MinColumn[i] = 0;
-				} else {
-					Config.MinColumn[i] = numColumns;
-				}
-			}
-		};
-
-		var specPush = function (specType) {
-			function getBuildTemplate () {
-				let buildType;
-
-				if (me.charlvl < respecOne) {
-					buildType = startBuild;
-				}
-
-				if (me.charlvl >= respecOne && me.charlvl < respecTwo) {
-					buildType = middleBuild;
-				}
-
-				if (me.charlvl >= respecTwo) {
-					buildType = finalBuild;
-				}
-
-				let build = buildType + "Build" ;
-				let classname = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-				let template = "SoloLeveling/BuildFiles/" + classname + "." + build + ".js";
-
-				return template.toLowerCase();
-			}
-
-			var template = getBuildTemplate();
-
-			if (!include(template)) {
-				throw new Error("Failed to include template: " + template);
-			}
-
-			let specCheck = [];
-
-			switch (specType) {
-			case "skills":
-				specCheck = JSON.parse(JSON.stringify(build.skills));	//push skills value from template file
-				break;
-			case "stats":
-				specCheck = JSON.parse(JSON.stringify(build.stats)); //push stats value from template file
-				break;
-			}
-
-			return specCheck;
-		};
-
 		// Character Build Setup
-		var startBuild = "Start"; // build ends when reaching respecOne (set in SoloLeveling.js)
-		var middleBuild = "Hammerdin"; // starts at respecOne ends when reaching respecTwo
 		var chooseBuffer = me.charlvl < 12 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
 		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "hp", "mp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
 		Config.BeltColumn = beltPots;
-		this.configBelt();
+		Config.MinColumn[0] = Config.BeltColumn[0] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
+		Config.MinColumn[1] = Config.BeltColumn[1] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
+		Config.MinColumn[2] = Config.BeltColumn[2] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
+		Config.MinColumn[3] = Config.BeltColumn[3] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 		var bufferHP = [13, 3, 3, 0][chooseBuffer];
 		var bufferMP = [0, 6, 6, 0][chooseBuffer];
 		var bufferRV = [0, 4, 4, 4][chooseBuffer];
@@ -356,9 +302,123 @@ function LoadConfig () {
 		Config.RejuvBuffer = bufferRV;
 		Config.AutoSkill.Build = specPush("skills");
 		Config.AutoStat.Build = specPush("stats");
-		Config.AutoBuild.Template = me.charlvl < respecOne ? startBuild : me.charlvl < respecTwo ? middleBuild : finalBuild;
+		Config.AutoBuild.Template = getBuild();
+
+		var autoequipTiers = [ // dynamic tiers autoequip setup
+			//weapon
+			"([Type] == Scepter || [Type] == Mace && [Quality] >= Magic || [Type] == Sword && ([Quality] >= Magic || [flag] == runeword) || [Type] == knife && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			//Helmet
+			"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			//belt
+			"[type] == belt && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			//boots
+			"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			//armor
+			"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			//shield
+			"([type] == shield || [type] == auricshields) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			//gloves
+			"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			//ammy
+			"[Type] == Amulet && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+			//rings
+			"[Type] == Ring && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		];
+		NTIP.arrayLooping(autoequipTiers);
 
 		if (me.gametype === 1) { //LOD game gear
+			switch (finalBuild) { // finalbuilld autoequip setuip
+			case 'Smiter':
+				var finalMELEE = [
+					//weapon
+					"[Type] == mace && [flag] == runeword # [ias] == 15 && [itemcrushingblow] == 40 # [tier] == 100000", //Black
+					//helmet
+					"[name] == wingedhelm && [quality] == set && [flag] != ethereal # [fhr] >= 30 # [tier] == 100000", // gface
+					//belt
+					"[name] == warbelt && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160  # [tier] == 100000", //tgods
+					//boots
+					"[name] == lightplatedboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 50 # [tier] == 100000", //goblin toes
+					//armor
+					"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
+					//shield
+					"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal  # [EnhancedDefense] >= 185 # [tier] == 100000", //hoz
+					//gloves
+					"[name] == vampirebonegloves && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 100 && [strength] >= 12 && [lifeleech] >= 9  # [tier] == 100000", // drac's
+					//ammy
+					"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 100000", //highlords
+					//rings
+					"[type] == ring && [quality] == unique # [tohit] >= 180 && [dexterity] >= 15 # [tier] == 99000", // ravenfrost
+					"[type] == ring && [quality] == unique # [lifeleech] >= 3 && [maxstamina] == 50 # [tier] == 100000", // bul-kathos' wedding band
+				];
+				NTIP.arrayLooping(finalMELEE);
+
+				if (!haveItem("mace", "runeword", "Black") && me.charlvl >= respecTwo) {
+					var Black = [
+						"[Name] == ThulRune # # [MaxQuantity] == 1",
+						"[Name] == IoRune # # [MaxQuantity] == 1",
+						"[Name] == NefRune # # [MaxQuantity] == 1",
+						"([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+					];
+					NTIP.arrayLooping(Black);
+
+					Config.Runewords.push([Runeword.Black, "Flail"]);
+					Config.Runewords.push([Runeword.Black, "Knout"]);
+					Config.KeepRunewords.push("[Type] == mace # [ias] == 15 && [itemcrushingblow] == 40");
+				}
+
+				break;
+			case 'Hammerdin':
+				var finalCASTER = [
+					//weapon
+					"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000", // HotO
+					//helmet -- shako
+					"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000", // harlequin's crest
+					//belt
+					"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
+					//boots -- using War Traveler's
+					"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 50 # [tier] == 100000", //war traveler
+					//armor -- using Enigma
+					"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
+					//shield -- using HoZ
+					"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal # [EnhancedDefense] >= 185 # [tier] == 100000", //hoz
+					//gloves -- using Magefist
+					"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000",
+					//ammy
+					"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
+					//rings
+					"[name] == ring && [quality] == unique # [maxhp] >= 40 && [magicdamagereduction] >= 12 # [tier] == 99000", // dwarfstar
+					"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
+				];
+				NTIP.arrayLooping(finalCASTER);
+
+				if (!haveItem("mace", "runeword", "Heart of the Oak")) {
+					var HotO = [
+						"[Name] == ThulRune # # [MaxQuantity] == 1",
+						"[Name] == PulRune",
+						"[Name] == KoRune # # [MaxQuantity] == 1",
+						"[Name] == VexRune",
+					];
+					NTIP.arrayLooping(HotO);
+
+					if (me.getItem(635)) {
+						NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+					}
+
+					if (!me.getItem(635)) {
+						Config.Recipes.push([Recipe.Rune, "Um Rune"]);
+						Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
+						Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
+						Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
+					}
+
+					Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
+					Config.Runewords.push([Runeword.HeartoftheOak, "Flail"]);
+					Config.KeepRunewords.push("[Type] == mace # [FCR] == 40");
+				}
+
+				break;
+			}
+
 			if (!haveItem("sword", "runeword", "Call To Arms")) {
 				var CTA = [
 					"[Name] == AmnRune # # [MaxQuantity] == 1",
@@ -645,119 +705,5 @@ function LoadConfig () {
 				Config.KeepRunewords.push("[type] == polearm # [meditationaura] >= 12");
 			}
 		}
-
-		switch (finalBuild) { // finalbuilld autoequip setuip
-		case 'Smiter':
-			if (!haveItem("mace", "runeword", "Black") && me.charlvl >= respecTwo) {
-				var Black = [
-					"[Name] == ThulRune # # [MaxQuantity] == 1",
-					"[Name] == IoRune # # [MaxQuantity] == 1",
-					"[Name] == NefRune # # [MaxQuantity] == 1",
-					"([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(Black);
-
-				Config.Runewords.push([Runeword.Black, "Flail"]);
-				Config.Runewords.push([Runeword.Black, "Knout"]);
-				Config.KeepRunewords.push("[Type] == mace # [ias] == 15 && [itemcrushingblow] == 40");
-			}
-
-			var finalMELEE = [
-				//weapon
-				"[Type] == mace && [flag] == runeword # [ias] == 15 && [itemcrushingblow] == 40 # [tier] == 100000", //Black
-				//helmet
-				"[name] == wingedhelm && [quality] == set && [flag] != ethereal # [fhr] >= 30 # [tier] == 100000", // gface
-				//belt
-				"[name] == warbelt && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160  # [tier] == 100000", //tgods
-				//boots
-				"[name] == lightplatedboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 50 # [tier] == 100000", //goblin toes
-				//armor
-				"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
-				//shield
-				"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal  # [EnhancedDefense] >= 185 # [tier] == 100000", //hoz
-				//gloves
-				"[name] == vampirebonegloves && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 100 && [strength] >= 12 && [lifeleech] >= 9  # [tier] == 100000", // drac's
-				//ammy
-				"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 100000", //highlords
-				//rings
-				"[type] == ring && [quality] == unique # [tohit] >= 180 && [dexterity] >= 15 # [tier] == 99000", // ravenfrost
-				"[type] == ring && [quality] == unique # [lifeleech] >= 3 && [maxstamina] == 50 # [tier] == 100000", // bul-kathos' wedding band
-			];
-			NTIP.arrayLooping(finalMELEE);
-
-			break;
-		case 'Hammerdin':
-			if (!haveItem("mace", "runeword", "Heart of the Oak")) {
-				var HotO = [
-					"[Name] == ThulRune # # [MaxQuantity] == 1",
-					"[Name] == PulRune",
-					"[Name] == KoRune # # [MaxQuantity] == 1",
-					"[Name] == VexRune",
-				];
-				NTIP.arrayLooping(HotO);
-
-				if (me.getItem(635)) {
-					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
-				}
-
-				if (!me.getItem(635)) {
-					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
-				}
-
-				Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
-				Config.Runewords.push([Runeword.HeartoftheOak, "Flail"]);
-				Config.KeepRunewords.push("[Type] == mace # [FCR] == 40");
-			}
-
-			var finalCASTER = [
-				//weapon
-				"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000", // HotO
-				//helmet -- shako
-				"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000", // harlequin's crest
-				//belt
-				"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
-				//boots -- using War Traveler's
-				"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 50 # [tier] == 100000", //war traveler
-				//armor -- using Enigma
-				"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
-				//shield -- using HoZ
-				"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal # [EnhancedDefense] >= 185 # [tier] == 100000", //hoz
-				//gloves -- using Magefist
-				"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000",
-				//ammy
-				"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
-				//rings
-				"[name] == ring && [quality] == unique # [maxhp] >= 40 && [magicdamagereduction] >= 12 # [tier] == 99000", // dwarfstar
-				"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
-			];
-			NTIP.arrayLooping(finalCASTER);
-
-			break;
-		}
-
-		var autoequipTiers = [ // dynamic tiers autoequip setup
-			//weapon
-			"([Type] == Scepter || [Type] == Mace && [Quality] >= Magic || [Type] == Sword && ([Quality] >= Magic || [flag] == runeword) || [Type] == knife && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-			//Helmet
-			"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-			//belt
-			"[type] == belt && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-			//boots
-			"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-			//armor
-			"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-			//shield
-			"([type] == shield || [type] == auricshields) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-			//gloves
-			"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-			//ammy
-			"[Type] == Amulet && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-			//rings
-			"[Type] == Ring && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-		];
-		NTIP.arrayLooping(autoequipTiers);
 	}
 }

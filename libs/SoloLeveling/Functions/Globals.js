@@ -8,16 +8,17 @@ if (!isIncluded("OOG.js")) {
 }
 
 //Configurable Settings for Overlay and Performance tracking
-const shouldLog = false;	//Default should be false for people who aren't interested in these values
+const shouldLog = false;	//Default should be false for people who aren't interested in performance statistics
 const useOverlay = false;	//Default should be false for people who aren't interested in having the overlay
 
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
+var middleBuild = ["Javazon", "BlizzBaller", "Explosion", "Hammerdin", "WhirlWind", "Wind", "Trapsin"][me.classid];
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 28, 26, 25, 0, 24, 30][me.classid];
+const respecOne = [ 0, 30, 26, 25, 0, 24, 30][me.classid];
 const respecTwo = [ 0, 85, 75, 85, 0, 75, 100][me.classid];
 var	levelcap = [35, 65, 100][me.diff];
 
@@ -1002,6 +1003,54 @@ var indexOfMax = function (arr) {
 	return maxIndex;
 };
 
+var getBuild = function () {
+	let buildType;
+
+	if (me.charlvl < respecOne) {
+		buildType = "Start";
+	}
+
+	if (me.charlvl >= respecOne && me.charlvl < respecTwo) {
+		buildType = middleBuild;
+	}
+
+	if (me.charlvl >= respecTwo) {
+		buildType = finalBuild;
+	}
+
+	return buildType;
+};
+
+var specPush = function (specType) {
+	function getBuildTemplate () {
+		let buildType = getBuild();
+		let build = buildType + "Build" ;
+		let classname = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
+		let template = "SoloLeveling/BuildFiles/" + classname + "." + build + ".js";
+
+		return template.toLowerCase();
+	}
+
+	var template = getBuildTemplate();
+
+	if (!include(template)) {
+		throw new Error("Failed to include template: " + template);
+	}
+
+	let specCheck = [];
+
+	switch (specType) {
+	case "skills":
+		specCheck = JSON.parse(JSON.stringify(build.skills));	//push skills value from template file
+		break;
+	case "stats":
+		specCheck = JSON.parse(JSON.stringify(build.stats)); //push stats value from template file
+		break;
+	}
+
+	return specCheck;
+};
+
 // Dynamic Tiers
 var buildCheck = function () {
 	function getBuildTemplate () {
@@ -1045,9 +1094,9 @@ var mercscore = function (item) {
 		FHR: 3, // faster hit recovery
 		DEF: 0.05, // defense
 		HP:	2,
-		STR:	1.5,
-		DEX:	1.5,
-		ALL:	180, // + all skills
+		STR: 1.5,
+		DEX: 1.5,
+		ALL: 180, // + all skills
 		FR: 3.5, // fire resist
 		LR: 4, // lightning resist
 		CR: 2, // cold resist
@@ -1114,15 +1163,15 @@ var tierscore = function (item) {
 		BELTSLOTS: 1.25, //belt potion storage
 		// base stats
 		HP:	1.75,
-		MANA:	0.8,
-		STR:	1.5,
-		DEX:	1.5,
+		MANA: 0.8,
+		STR: 1.5,
+		DEX: 1.5,
 	};
 
 	var casterWeights = {
 		//breakpoint stats
-		FCR:	3.5,
-		IAS:	0,
+		FCR: 3.5,
+		IAS: 0,
 		// Attack
 		MINDMG:	0, // min damage
 		MAXDMG: 0, // max damage
@@ -1160,8 +1209,8 @@ var tierscore = function (item) {
 	};
 
 	var skillsWeights = {
-		ALL:	180, // + all skills
-		CLASS:	175, // + class tab
+		ALL: 180, // + all skills
+		CLASS: 175, // + class tab
 		TAB: 100, // + skill tab
 		WANTED: 30, // + wanted key skills
 		USEFUL: 20 // + wanted supportive skills
