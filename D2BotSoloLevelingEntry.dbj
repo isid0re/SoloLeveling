@@ -82,7 +82,7 @@ if (!FileTools.exists("data/" + me.profile + ".json")) {
 }
 
 if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
-	ControlAction.timeoutDelay("Data-File Init Delay", StarterConfig.DelayBeforeLogin * 1e3);
+	ControlAction.timeoutDelay("Performance Data File Init Delay", StarterConfig.DelayBeforeLogin * 1e3);
 	Playtime.create();
 }
 
@@ -344,6 +344,7 @@ function main () {
 	if (setUp.charName === "") {
 		setUp.charName = NameGen();
 		D2Bot.setProfile(null, null, setUp.charName);
+		delay(500);
 	}
 
 
@@ -353,9 +354,9 @@ function main () {
 	}
 
 	if (DataFile.getStats().setDifficulty) {
-		delay(rand(5, 25));
 		gameInfo.difficulty = DataFile.getStats().setDifficulty;
 		D2Bot.setProfile(null, null, null, gameInfo.difficulty);
+		delay(200);
 	}
 
 	if (gameInfo.error) {
@@ -374,8 +375,6 @@ function main () {
 	var wasInGame = false;
 	
 	Playtime.track(false);
-	
-	ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 
 	while (true) {
 		while (me.ingame) { // returns true before actually in game so we can't only use this check
@@ -669,6 +668,12 @@ function locationAction (location) {
 			delay(500);
 		}
 
+		if (DataFile.getStats().setDifficulty) {
+			gameInfo.difficulty = DataFile.getStats().setDifficulty;
+			D2Bot.setProfile(null, null, null, gameInfo.difficulty);
+			delay(200);
+		}
+
 		// FTJ handler
 		if (lastGameStatus === "pending") {
 			isUp = "no";
@@ -678,11 +683,6 @@ function locationAction (location) {
 			D2Bot.updateRuns();
 		}
 		
-		if (DataFile.getStats().setDifficulty) {
-			gameInfo.difficulty = DataFile.getStats().setDifficulty;
-			D2Bot.setProfile(null, null, null, gameInfo.difficulty);
-		}
-
 		ControlAction.createGame((gameInfo.gameName === "Name" ? randomString(null, true) : gameInfo.gameName + gameCount), (gameInfo.gamePass === "Password" ? randomString(null, true) : gameInfo.gamePass), gameInfo.difficulty, StarterConfig.CreateGameDelay * 1000);
 
 		lastGameStatus = "pending";
@@ -699,7 +699,6 @@ function locationAction (location) {
 		break;
 	case 8: // Main Menu
 	case 9: // Login
-	case 12: // Character Select
 	case 18: // D2 Splash
 		// Single Player screen fix
 		if (getLocation() === 12 && !getControl(4, 626, 100, 151, 44)) {
@@ -718,7 +717,7 @@ function locationAction (location) {
 			if (battlenet) { // make battlenet accounts/characters
 				if (setUp.account !== "") { // existing account
 					try {
-						delay(rand(5, 25));
+						ControlAction.timeoutDelay("Battle.Net Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 						login(me.profile);
 					} catch (error) {
 						if (!ControlAction.findCharacter(setUp)) { // make char if not found
@@ -729,11 +728,14 @@ function locationAction (location) {
 					if (setUp.account === "") { // make char if not found
 						setUp.account = randomString(12, true);
 						setUp.password = randomString(12, true);
+						ControlAction.timeoutDelay("Battle.Net Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 
 						if (ControlAction.makeAccount(setUp)) {
 							D2Bot.setProfile(setUp.account, setUp.password);
 							DataFile.updateStats("AcctName", setUp.account);
 							DataFile.updateStats("AcctPswd", setUp.password);
+
+							break;
 						} else {
 							setUp.account = "";
 							setUp.password = "";
@@ -997,6 +999,7 @@ function locationAction (location) {
 		}
 
 		break;
+	case 12: // Character Select
 	case 23: // Character Select - Connecting
 	case 42: // Empty character screen
 		string = "";
