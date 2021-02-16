@@ -21,7 +21,9 @@ var StarterConfig = {
 	ConnectingTimeout: 20, // Seconds to wait before cancelling the 'Connecting...' screen
 	PleaseWaitTimeout: 100, // Seconds to wait before cancelling the 'Please Wait...' screen
 	WaitInLineTimeout: 12000, // Seconds to wait before cancelling the 'Waiting in Line...' screen
-	GameDoesNotExistTimeout: 600 // Seconds to wait before cancelling the 'Game does not exist.' screen
+	GameDoesNotExistTimeout: 600, // Seconds to wait before cancelling the 'Game does not exist.' screen
+	DelayBeforeLogin: rand(5, 25),	// Seconds to wait before logging in
+	VersionErrorDelay: rand(5,30)	// Seconds to wait after 'unable to identify version' message
 };
 
 var ChannelConfig = {
@@ -80,6 +82,7 @@ if (!FileTools.exists("data/" + me.profile + ".json")) {
 }
 
 if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
+	ControlAction.timeoutDelay("Data-File Init Delay", StarterConfig.DelayBeforeLogin * 1e3);
 	Playtime.create();
 }
 
@@ -371,6 +374,8 @@ function main () {
 	var wasInGame = false;
 	
 	Playtime.track(false);
+	
+	ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 
 	while (true) {
 		while (me.ingame) { // returns true before actually in game so we can't only use this check
@@ -642,7 +647,7 @@ function locationAction (location) {
 
 		break;
 	case 4: // Create Game
-		delay(rand(5, 25));
+		ControlAction.timeoutDelay("Create Game Delay", StarterConfig.DelayBeforeLogin * 1e3);
 		D2Bot.updateStatus("Creating Game");
 
 		control = getControl(1, 657, 342, 27, 20);
@@ -739,7 +744,7 @@ function locationAction (location) {
 				}
 			} else { // SP/TCP  characters
 				try {
-					delay(rand(5, 25));
+					ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 					login(me.profile);
 				} catch (err) {
 					if (!ControlAction.findCharacter(setUp)) { // make char if not found
