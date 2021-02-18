@@ -18,9 +18,56 @@ var difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 30, 26, 25, 0, 24, 30][me.classid];
-const respecTwo = [ 0, 85, 75, 85, 0, 75, 100][me.classid];
-var	levelcap = [35, 65, 100][me.diff];
+const respecOne = [ 0, 28, 26, 25, 24, 24, 30][me.classid];
+
+const respecTwoCheck = function () {
+	let respecTwo = 100;
+
+	switch(finalBuild) {
+	case "Javazon":
+		respecTwo = Attack.checkInfinity() ? me.charlvl : 100;
+        break;
+    case "LightSorc":
+		respecTwo = Attack.checkInfinity() ? me.charlvl : 100;
+        break;  
+    case "Meteorb":
+    case "Blizzard":
+    case "BlizzBaller":
+    case "Blova":
+		respecTwo = (Item.getEquippedItem(1).tier + Item.getEquippedItem(2).tier +
+					Item.getEquippedItem(3).tier + Item.getEquippedItem(4).tier) >= 400000 ? me.charlvl : 100;	//Tal ammy, belt, armor, and wep
+        break;
+    case "Bone":
+    case "Explosion":
+    case "Poison":
+    case "Summon":
+    	respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+        break;
+    case "Hammerdin":
+    	respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+        break;
+    case "Smiter":
+    	respecTwo = haveItem("weapon", "runeword", "Grief") ? me.charlvl : 100;
+        break;
+    case "Frenzy":
+    	respecTwo = haveItem("weapon", "runeword", "Grief") && haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+        break;
+    case "Windy":
+    	respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+        break;
+    case "Wolf":
+    	respecTwo = haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+        break;
+    case "Trapsin":
+    	respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+        break;
+	}
+
+	return respecTwo;
+};
+
+//Difficulty Settings
+const levelcap = [35, 65, 100][me.diff];
 
 // SoloLeveling Pickit Items
 var valuableItems = [
@@ -1003,6 +1050,47 @@ var indexOfMax = function (arr) {
 	return maxIndex;
 };
 
+var getMiddleBuild = function () {
+	let midBuild;
+
+	switch(finalBuild) {
+	case "Javazon":
+		midBuild = "Light";
+        break;
+    case "LightSorc":
+    case "Meteorb":
+    case "Blizzard":
+    case "BlizzBaller":
+    case "Blova":
+		midBuild = "BlizzBaller";
+        break;
+    case "Bone":
+    case "Explosion":
+    case "Poison":
+    case "Summon":
+    	midBuild = "Explosion";
+        break;
+    case "Hammerdin":
+    case "Smiter":
+    	midBuild = "MidHammer";
+        break;
+    case "Frenzy":
+    	midBuild = "MidFrenzy"
+        break;
+    case "Windy":
+    	midBuild = "MidWindy"
+        break;
+    case "Wolf":
+    	midBuild = "MidWolf"
+        break;
+    case "Trapsin":
+    	midBuild = "MidTrapSin";
+        break;
+	}
+
+	return midBuild;
+};
+
 var getBuild = function () {
 	let buildType;
 
@@ -1010,11 +1098,11 @@ var getBuild = function () {
 		buildType = "Start";
 	}
 
-	if (me.charlvl >= respecOne && me.charlvl < respecTwo) {
-		buildType = middleBuild;
+	if (me.charlvl >= respecOne && me.charlvl < respecTwoCheck()) {
+		buildType = getMiddleBuild();
 	}
 
-	if (me.charlvl >= respecTwo) {
+	if (me.charlvl >= respecTwoCheck()) {
 		buildType = finalBuild;
 	}
 
