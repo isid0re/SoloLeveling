@@ -16,6 +16,9 @@ var finalBuild = DataFile.getStats().finalBuild;
 var middleBuild = ["Javazon", "BlizzBaller", "Explosion", "Hammerdin", "WhirlWind", "Wind", "Trapsin"][me.classid];
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
 
+//Difficulty Settings
+const levelcap = [35, 65, 100][me.diff];
+
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 const respecOne = [ 0, 28, 26, 25, 24, 24, 30][me.classid];
@@ -26,48 +29,45 @@ const respecTwoCheck = function () {
 	switch(finalBuild) {
 	case "Javazon":
 		respecTwo = Attack.checkInfinity() ? me.charlvl : 100;
-        break;
-    case "LightSorc":
+		break;
+	case "LightSorc":
 		respecTwo = Attack.checkInfinity() ? me.charlvl : 100;
-        break;  
-    case "Meteorb":
-    case "Blizzard":
-    case "BlizzBaller":
-    case "Blova":
+		break;  
+	case "Meteorb":
+	case "Blizzard":
+	case "BlizzBaller":
+	case "Blova":
 		respecTwo = (Item.getEquippedItem(1).tier + Item.getEquippedItem(2).tier +
-					Item.getEquippedItem(3).tier + Item.getEquippedItem(4).tier) >= 400000 ? me.charlvl : 100;	//Tal ammy, belt, armor, and wep
-        break;
-    case "Bone":
-    case "Explosion":
-    case "Poison":
-    case "Summon":
-    	respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
-        break;
-    case "Hammerdin":
-    	respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
-        break;
-    case "Smiter":
-    	respecTwo = haveItem("weapon", "runeword", "Grief") ? me.charlvl : 100;
-        break;
-    case "Frenzy":
-    	respecTwo = haveItem("weapon", "runeword", "Grief") && haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
-        break;
-    case "Windy":
-    	respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
-        break;
-    case "Wolf":
-    	respecTwo = haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
-        break;
-    case "Trapsin":
-    	respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
-        break;
+			Item.getEquippedItem(3).tier + Item.getEquippedItem(4).tier) >= 400000 ? me.charlvl : 100;	//Tal ammy, belt, armor, and wep
+		break;
+	case "Bone":
+	case "Explosion":
+	case "Poison":
+	case "Summon":
+		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+		break;
+	case "Hammerdin":
+		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+		break;
+	case "Smiter":
+		respecTwo = haveItem("weapon", "runeword", "Grief") ? me.charlvl : 100;
+		break;
+	case "Frenzy":
+		respecTwo = haveItem("weapon", "runeword", "Grief") && haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+		break;
+	case "Windy":
+		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+		break;
+	case "Wolf":
+		respecTwo = haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+		break;
+	case "Trapsin":
+		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+		break;
 	}
 
 	return respecTwo;
 };
-
-//Difficulty Settings
-const levelcap = [35, 65, 100][me.diff];
 
 // SoloLeveling Pickit Items
 var valuableItems = [
@@ -1057,35 +1057,35 @@ var getMiddleBuild = function () {
 	case "Javazon":
 		midBuild = "Light";
         break;
-    case "LightSorc":
-    case "Meteorb":
-    case "Blizzard":
-    case "BlizzBaller":
-    case "Blova":
+	case "LightSorc":
+	case "Meteorb":
+	case "Blizzard":
+	case "BlizzBaller":
+	case "Blova":
 		midBuild = "BlizzBaller";
-        break;
-    case "Bone":
-    case "Explosion":
-    case "Poison":
-    case "Summon":
-    	midBuild = "Explosion";
-        break;
-    case "Hammerdin":
-    case "Smiter":
-    	midBuild = "MidHammer";
-        break;
-    case "Frenzy":
-    	midBuild = "MidFrenzy"
-        break;
-    case "Windy":
-    	midBuild = "MidWindy"
-        break;
-    case "Wolf":
-    	midBuild = "MidWolf"
-        break;
-    case "Trapsin":
-    	midBuild = "MidTrapSin";
-        break;
+		break;
+	case "Bone":
+	case "Explosion":
+	case "Poison":
+	case "Summon":
+		midBuild = "Explosion";
+		break;
+	case "Hammerdin":
+	case "Smiter":
+		midBuild = "MidHammer";
+		break;
+	case "Frenzy":
+		midBuild = "MidFrenzy"
+		break;
+	case "Windy":
+		midBuild = "MidWindy"
+		break;
+	case "Wolf":
+		midBuild = "MidWolf"
+		break;
+	case "Trapsin":
+		midBuild = "MidTrapSin";
+		break;
 	}
 
 	return midBuild;
