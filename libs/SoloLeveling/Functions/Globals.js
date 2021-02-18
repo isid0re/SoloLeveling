@@ -16,6 +16,9 @@ var finalBuild = DataFile.getStats().finalBuild;
 var middleBuild = ["Javazon", "BlizzBaller", "Explosion", "Hammerdin", "WhirlWind", "Wind", "Trapsin"][me.classid];
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
 
+//Difficulty Settings
+const levelcap = [35, 65, 100][me.diff];
+
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
 const respecOne = [ 0, 28, 26, 25, 24, 24, 30][me.classid];
@@ -65,9 +68,6 @@ const respecTwoCheck = function () {
 
 	return respecTwo;
 };
-
-//Difficulty Settings
-const levelcap = [35, 65, 100][me.diff];
 
 // SoloLeveling Pickit Items
 var valuableItems = [
