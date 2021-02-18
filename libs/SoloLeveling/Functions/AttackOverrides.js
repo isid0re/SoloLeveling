@@ -9,10 +9,14 @@ if (!isIncluded("common/Attack.js")) {
 }
 
 Attack.killTarget = function (name) {
-	var target,	errorInfo = "", attackCount = 0;
+	var target,	attackCount = 0;
 
 	for (let i = 0; !target && i < 5; i += 1) {
 		target = getUnit(1, name);
+
+		if (target) {
+			break;
+		}
 
 		delay(200);
 	}
@@ -32,7 +36,17 @@ Attack.killTarget = function (name) {
 	}
 
 	while (attackCount < Config.MaxAttackCount) {
-		Misc.townCheck();
+		if (Misc.townCheck()) {
+			for (let i = 0; !target && i < 5; i += 1) {
+				target = getUnit(1, name);
+
+				if (target) {
+					break;
+				}
+
+				delay(200);
+			}
+		}
 
 		if (!target || !copyUnit(target).x) { // Check if unit got invalidated, happens if necro raises a skeleton from the boss's corpse.
 			target = getUnit(1, name);
@@ -54,17 +68,15 @@ Attack.killTarget = function (name) {
 			Pather.moveTo(target.x, me.y < target.y ? target.y + 15 : target.y - 15);
 		}
 
-		if (!ClassAttack.doAttack(target, attackCount % 15 === 0)) {
-			errorInfo = " (Attack.killTarget() failed)";
-
-			break;
-		}
-
 		attackCount += 1;
 		ClassAttack.afterAttack();
+
+		if ( !target || !copyUnit(target).x || target.dead) {
+			break;
+		}
 	}
 
-	if (!target || !copyUnit(target).x) {
+	if ( !target || !copyUnit(target).x || target.dead) {
 		Pickit.pickItems();
 	}
 

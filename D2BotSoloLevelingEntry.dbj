@@ -79,11 +79,12 @@ include("SoloLeveling/Tools/OOGOverrides.js");
 
 if (!FileTools.exists("data/" + me.profile + ".json")) {
 	DataFile.create();
+	ControlAction.timeoutDelay("DataFile Creation Delay", StarterConfig.DelayBeforeLogin * 1e3);
 }
 
 if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
-	ControlAction.timeoutDelay("SoloLeveling Playtime Initialization Delay", StarterConfig.DelayBeforeLogin * 1e3);
 	Playtime.create();
+	ControlAction.timeoutDelay("SoloLeveling Playtime Initialization Delay", StarterConfig.DelayBeforeLogin * 1e3);
 }
 
 var gameInfo, gameStart, ingame, chatActionsDone, pingQuit, myExp, myGold, resPenalty, frRes, crRes, lrRes, prRes, areaName, diffName,
@@ -709,8 +710,14 @@ function locationAction (location) {
 					try {
 						login(me.profile);
 					} catch (error) {
-						if (!ControlAction.findCharacter(setUp)) { // make char if not found
-							ControlAction.makeCharacter(setUp);
+						if (DataFile.getStats().AcctPswd) {
+							setUp.account = DataFile.getStats().AcctName;
+							setUp.password = DataFile.getStats().AcctPswd;
+
+							if (!ControlAction.loginAccount(setUp)) { // random character login from stored info
+								D2Bot.printToConsole('Error logging in. please update your profile settings and start again');
+								D2Bot.stop();
+							}
 						}
 					}
 				} else { // new account
@@ -774,8 +781,8 @@ function locationAction (location) {
 
 				break;
 			case getLocaleString(5208): // Invalid account
-			case getLocaleString(5239): //	An account name already exists
-			case getLocaleString(5249): //	Unable to create account
+			case getLocaleString(5239): // An account name already exists
+			case getLocaleString(5249): // Unable to create account
 				D2Bot.updateStatus("Invalid Account Name");
 				D2Bot.printToConsole("Invalid Account Name");
 				setUp.account = "";
@@ -789,6 +796,7 @@ function locationAction (location) {
 				D2Bot.printToConsole("Character Name exists. Making new Name");
 				setUp.charName = randomString(12, false);
 				D2Bot.setProfile(null, null, setUp.charName);
+				ControlAction.click(6, 351, 337, 96, 32);
 
 				break;
 			case getLocaleString(5202): // cd key intended for another product

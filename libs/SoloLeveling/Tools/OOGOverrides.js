@@ -283,12 +283,13 @@ ControlAction.findCharacter = function (info) {
 ControlAction.makeAccount = function (info) {
 	me.blockMouse = true;
 
-	var realms = {
-		"uswest": 0,
-		"useast": 1,
-		"asia": 2,
-		"europe": 3
-	};
+	var tick,
+		realms = {
+			"uswest": 0,
+			"useast": 1,
+			"asia": 2,
+			"europe": 3
+		};
 
 	while (getLocation() !== 42) {// cycle until in empty char screen
 		switch (getLocation()) {
