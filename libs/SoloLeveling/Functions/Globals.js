@@ -13,7 +13,6 @@ const useOverlay = false;	//Default should be false for people who aren't intere
 
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
-var middleBuild = ["Javazon", "BlizzBaller", "Explosion", "Hammerdin", "WhirlWind", "Wind", "Trapsin"][me.classid];
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 //Difficulty Settings
@@ -28,20 +27,17 @@ const respecTwoCheck = function () {
 
 	switch(finalBuild) {
 	case "Javazon":
-		respecTwo = Attack.checkInfinity() ? me.charlvl : 100;
-		break;
 	case "LightSorc":
+	case "Blova":		
 		respecTwo = Attack.checkInfinity() ? me.charlvl : 100;
 		break;  
 	case "Meteorb":
 	case "Blizzard":
 	case "BlizzBaller":
-	case "Blova":
 		respecTwo = (Item.getEquippedItem(1).tier + Item.getEquippedItem(2).tier +
 			Item.getEquippedItem(3).tier + Item.getEquippedItem(4).tier) >= 400000 ? me.charlvl : 100;	//Tal ammy, belt, armor, and wep
 		break;
 	case "Bone":
-	case "Explosion":
 	case "Poison":
 	case "Summon":
 		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
@@ -1050,47 +1046,6 @@ var indexOfMax = function (arr) {
 	return maxIndex;
 };
 
-var getMiddleBuild = function () {
-	let midBuild;
-
-	switch(finalBuild) {
-	case "Javazon":
-		midBuild = "Light";
-        break;
-	case "LightSorc":
-	case "Meteorb":
-	case "Blizzard":
-	case "BlizzBaller":
-	case "Blova":
-		midBuild = "BlizzBaller";
-		break;
-	case "Bone":
-	case "Explosion":
-	case "Poison":
-	case "Summon":
-		midBuild = "Explosion";
-		break;
-	case "Hammerdin":
-	case "Smiter":
-		midBuild = "MidHammer";
-		break;
-	case "Frenzy":
-		midBuild = "MidFrenzy"
-		break;
-	case "Windy":
-		midBuild = "MidWindy"
-		break;
-	case "Wolf":
-		midBuild = "MidWolf"
-		break;
-	case "Trapsin":
-		midBuild = "MidTrapSin";
-		break;
-	}
-
-	return midBuild;
-};
-
 var getBuild = function () {
 	let buildType;
 
@@ -1099,7 +1054,7 @@ var getBuild = function () {
 	}
 
 	if (me.charlvl >= respecOne && me.charlvl < respecTwoCheck()) {
-		buildType = getMiddleBuild();
+		buildType = "Middle";
 	}
 
 	if (me.charlvl >= respecTwoCheck()) {
