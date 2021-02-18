@@ -150,7 +150,7 @@ var Playtime = {
 	getInGameTime: function () {
 		var playtime = 0;
 
-		if (this.getStats().playtime) {
+		if (!!this.getStats().playtime) {
 			var recordedPlaytime = JSON.parse(this.getStats().playtime);
 
 			if (recordedPlaytime.hasOwnProperty("ingame") ) {
@@ -164,7 +164,7 @@ var Playtime = {
 	getOutOfGameTime: function () {
 		var playtime = 0;
 
-		if (this.getStats().playtime) {
+		if (!!this.getStats().playtime) {
 			var recordedPlaytime = JSON.parse(this.getStats().playtime);
 
 			if (recordedPlaytime.hasOwnProperty("oog")) {
@@ -178,7 +178,7 @@ var Playtime = {
 	getTotalTime: function () {
 		var playtime = 0;
 
-		if (this.getStats().playtime) {
+		if (!!this.getStats().playtime) {
 			var recordedPlaytime = JSON.parse(this.getStats().playtime);
 
 			if (recordedPlaytime.hasOwnProperty("ingame") ) {
@@ -186,7 +186,7 @@ var Playtime = {
 			}
 		}
 
-		if (this.getStats().playtime) {
+		if (!!this.getStats().playtime) {
 			var recordedPlaytime = JSON.parse(this.getStats().playtime);
 
 			if (recordedPlaytime.hasOwnProperty("oog")) {
@@ -207,7 +207,7 @@ var Playtime = {
 		var oogPlaytime = 0, ingamePlaytime = 0;
 
 		if (dt >= this.updateFrequency ) {
-			if (this.getStats().playtime) {
+			if (!!this.getStats().playtime) {
 				var recordedPlaytime = JSON.parse(this.getStats().playtime);
 
 				if (recordedPlaytime.hasOwnProperty("oog")) {
