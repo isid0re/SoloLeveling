@@ -52,12 +52,13 @@ var profiles = [
 
 function moveFiles() {
 	if(!profiles.length){
-		D2Bot.printToConsole("No profiles entered. Exiting moveFiles. Moving on to characters");
+		D2Bot.printToConsole("SoloCleaner: No profiles entered. Exiting moveFiles. Moving on to characters", 6);
+		return;
 	}
 
 	var charClass, charType;
 	var path, folder;
-	for(let i = 0; i < profiles.length; i++){
+	for(let i = 0; i < profiles.length; i++) {
 		let buildCheck = profiles[i].toUpperCase();
 		buildCheck = profiles[i].split("-"); // SCL-ZON123
 		
@@ -101,8 +102,8 @@ function moveFiles() {
 			charClass = "assassin";
 			break;
 		default:
-			D2Bot.printToConsole("Didn't get charClass");
-		break;
+			D2Bot.printToConsole("SoloCleaner: Didn't get charClass.", 6);
+			return;
 		}
 
 		if(StarterConfig.SaveFiles) {
@@ -155,9 +156,15 @@ function moveFiles() {
 			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".json");
 		}
 		
-		D2Bot.printToConsole("Done Cleaning Files");
-	}
+		if(StarterConfig.SaveFiles) {
+			D2Bot.printToConsole("SoloCleaner: Files saved to -> libs/SoloLeveling/Data/" + charType + "/" + charClass, 6);
+		}
+
+		D2Bot.printToConsole("SoloCleaner: Cleaned files for -> " + profiles[i], 6);
 		
+	}
+
+	D2Bot.printToConsole("SoloCleaner: Done cleaning files", 6);	
 };
 
 /* Generate accounts to entirely clean ("all") 
@@ -210,6 +217,7 @@ function parseInfo() {
 			chars.push(["all"]);
 		}
 	}
+
 }
 
 function ReceiveCopyData(mode, msg) {
@@ -379,7 +387,7 @@ function main() {
 
 	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
 
-	if(StarterConfig.DataCleaner){
+	if(StarterConfig.DataCleaner) {
 		moveFiles();
 	}
 
@@ -419,7 +427,7 @@ MainSwitch:
 	case 18: // D2 Splash
 		if (!accounts.length) {
 			FileTools.remove("logs/AccountCleaner.json");
-			D2Bot.printToConsole("Done cleaning accounts !");
+			D2Bot.printToConsole("SoloCleaner: Done cleaning accounts !", 6);
 			D2Bot.stop(me.profile, true);
 
 			break;
@@ -458,7 +466,7 @@ MainSwitch:
 		charList = chars[0];
 		obj.currAcc = currAcc[0];
 
-		D2Bot.printToConsole("Cleaning account " + currAcc[0] + " ; char list : " + charList);
+		D2Bot.printToConsole("SoloCleaner: Cleaning account " + currAcc[0] + " ; char list : " + charList, 6);
 		FileTools.writeText("logs/AccountCleaner.json", JSON.stringify(obj));
 		if(currAcc[2] === "singleplayer"){
 			ControlAction.click(2,0,599,800,600);
