@@ -51,7 +51,7 @@ const respecTwoCheck = function () {
 	case "Frenzy":
 		respecTwo = haveItem("weapon", "runeword", "Grief") && haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
 		break;
-	case "Windy":
+	case "Wind":
 		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
 		break;
 	case "Wolf":
@@ -1054,7 +1054,7 @@ var getBuild = function () {
 	}
 
 	if (me.charlvl >= respecOne && me.charlvl < respecTwoCheck()) {
-		buildType = "Middle";
+		buildType = "Leveling";
 	}
 
 	if (me.charlvl >= respecTwoCheck()) {
