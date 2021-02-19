@@ -6,7 +6,7 @@
 */
 
 var StarterConfig = {
-	DataCleaner:		true,	// Clean assiociated data files
+	DataCleaner:		true,	// Clean data files associated with running SoloLeveling. A must, if using Performance.js or the Overlay system and wish to use profile over.
 	SaveFiles:			false,	// Save important files to new folder. Must set to true if running Performance.js
 	DelayBetweenAccounts: rand(10,25), //Seconds to wait before cleaning next account
 	SwitchKeyDelay: 0, // Seconds to wait before switching a used/banned key or after realm down
@@ -58,6 +58,7 @@ function moveFiles() {
 
 	var charClass, charType;
 	var path, folder;
+
 	for(let i = 0; i < profiles.length; i++) {
 		let buildCheck = profiles[i].toUpperCase();
 		buildCheck = profiles[i].split("-"); // SCL-ZON123
