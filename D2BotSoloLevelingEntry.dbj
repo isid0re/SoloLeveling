@@ -365,6 +365,8 @@ function main () {
 
 		ControlAction.timeoutDelay("Crash Delay", StarterConfig.CrashDelay * 1e3);
 		D2Bot.updateRuns();
+		D2Bot.printToConsole("SoloLeveling: Restarting for refresh instance");
+		D2Bot.restart();
 	}
 
 	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
@@ -401,7 +403,10 @@ function main () {
 				prRes = Math.min(75, me.getStat(45) - resPenalty);
 				areaName = Pather.getAreaName(me.area);
 				diffName = ['Normal', 'Nightmare', 'Hell'][me.diff];
-				D2Bot.updateStatus("Lvl: " + me.charlvl + " (" + myExp + "%) | Diff: " + diffName + " | Area: " + areaName + " | Gold: " + myGold + " | FR: " + frRes + " | CR: " + crRes + " | LR: " + lrRes + " | PR: " + prRes + " " + timer(gameStart));
+
+				if (me.ingame) {
+					D2Bot.updateStatus("Lvl: " + me.charlvl + " (" + myExp + "%) | Diff: " + diffName + " | Area: " + areaName + " | Gold: " + myGold + " | FR: " + frRes + " | CR: " + crRes + " | LR: " + lrRes + " | PR: " + prRes + " " + timer(gameStart));
+				}
 			}
 
 			delay(1000);
@@ -796,6 +801,7 @@ function locationAction (location) {
 				D2Bot.printToConsole("Character Name exists. Making new Name");
 				setUp.charName = randomString(12, false);
 				D2Bot.setProfile(null, null, setUp.charName);
+				delay(500);
 				ControlAction.click(6, 351, 337, 96, 32);
 
 				break;

@@ -224,6 +224,11 @@ ControlAction.makeCharacter = function (info) {
 
 			break;
 		case 30: // char name exists (text box 4, 268, 320, 264, 120)
+			D2Bot.updateStatus("Character Name exists. Making new Name");
+			D2Bot.printToConsole("Character Name exists. Making new Name");
+			info.charName = NameGen();
+			D2Bot.setProfile(null, null, info.charName);
+			delay(500);
 			ControlAction.click(6, 351, 337, 96, 32);
 			ControlAction.click(6, 33, 572, 128, 35);
 
