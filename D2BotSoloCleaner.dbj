@@ -103,7 +103,7 @@ function moveFiles() {
 			charClass = "assassin";
 			break;
 		default:
-			D2Bot.printToConsole("SoloCleaner: Didn't get charClass.", 6);
+			D2Bot.printToConsole("SoloCleaner: Failed to get charClass. Please check that your profile was entered correctly.", 6);
 			return;
 		}
 
