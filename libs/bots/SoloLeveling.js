@@ -123,7 +123,7 @@ function SoloLeveling () {
 						if (shouldLog) {
 							if (forQuest) {
 								if (isQuestFinished(sequence[k][0])) {
-									Performance.updateStats(sequence[k][0], "TotalTime");
+									Performance.updateStats(sequence[k][0], "QuestCompleted");
 								}
 
 								Performance.updateStats(sequence[k][0], "checkTimes", getTickCount() - tick);
