@@ -206,8 +206,8 @@ function ReceiveCopyData (mode, msg) {
 			setUp.charClass = "assassin";
 			break;
 		default:
-			D2Bot.updateStatus('Please update profile name in profile config. Example: "HCL-ZON" will make a hardcore ladder amazon');
-			D2Bot.printToConsole('Please update profile name in profile config. Example: "HCL-ZON" will make a hardcore ladder amazon');
+			D2Bot.updateStatus('Please update profile name. Example: "HCCNL-PAL" will make a Hardcore Classic NonLadder Paladin', 9);
+			D2Bot.printToConsole('Please update profile name. Example: "HCCNL-PAL" will make a Hardcore Classic NonLadder Paladin', 9);
 			D2Bot.stop();
 
 			break;
@@ -218,10 +218,23 @@ function ReceiveCopyData (mode, msg) {
 			D2Bot.setProfile(null, null, null, null, null, setUp.tag);
 			DataFile.updateStats("finalBuild", setUp.tag);
 		} else {
-			D2Bot.updateStatus('Please update InfoTag in profile config. Missing the finalBuild selection.');
-			D2Bot.printToConsole('Please update InfoTag in profile config. Missing the finalBuild selection.');
+			D2Bot.updateStatus('Please update profile InfoTag. Missing the finalBuild.', 9);
+			D2Bot.printToConsole('Please update profile InfoTag. Missing the finalBuild.', 9);
 			D2Bot.stop();
 
+			break;
+		}
+
+		switch(setUp.charClass) {
+		case "druid":
+		case "assassin":
+			if (!setUp.expansion) {
+				D2Bot.printToConsole("Error in profile name. Expansion characters cannot be made in classic", 9);
+				D2Bot.stop();
+			}
+			
+			break;
+		default:
 			break;
 		}
 
@@ -338,18 +351,6 @@ function main () {
 	D2Bot.init();
 	load("tools/heartbeat.js");
 
-	while (!setUp) {
-		D2Bot.getProfile();
-		delay(500);
-	}
-
-	if (setUp.charName === "") {
-		setUp.charName = NameGen();
-		D2Bot.setProfile(null, null, setUp.charName);
-		delay(500);
-	}
-
-
 	while (!gameInfo) {
 		D2Bot.requestGameInfo();
 		delay(500);
@@ -370,6 +371,18 @@ function main () {
 	}
 
 	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
+
+	while (!setUp) {
+		D2Bot.getProfile();
+		delay(500);
+	}
+
+	if (setUp.charName === "") {
+		setUp.charName = NameGen();
+		D2Bot.setProfile(null, null, setUp.charName);
+		delay(500);
+	}
+
 	var wasInGame = false;
 	Playtime.track(false);
 
