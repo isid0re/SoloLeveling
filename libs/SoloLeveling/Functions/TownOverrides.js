@@ -1048,7 +1048,7 @@ Town.characterRespec = function () {// Akara reset for build change
 		return true;
 	}
 
-	if (me.charlvl === respecOne || me.charlvl === respecTwo) {
+	if (me.charlvl === respecOne || me.charlvl === respecTwoCheck()) {
 		Precast.doPrecast(true);
 		Town.goToTown(1);
 		me.overhead('time to respec');

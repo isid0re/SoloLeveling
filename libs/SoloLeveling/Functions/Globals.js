@@ -13,14 +13,57 @@ const useOverlay = false;	//Default should be false for people who aren't intere
 
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
-var middleBuild = ["Javazon", "BlizzBaller", "Explosion", "Hammerdin", "WhirlWind", "Wind", "Trapsin"][me.classid];
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
+
+//Difficulty Settings
+const levelcap = [35, 65, 100][me.diff];
 
 // Character Respecialization Variables
 // ClassLevel = ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid];
-const respecOne = [ 0, 30, 26, 25, 0, 24, 30][me.classid];
-const respecTwo = [ 0, 85, 75, 85, 0, 75, 100][me.classid];
-var	levelcap = [35, 65, 100][me.diff];
+const respecOne = [ 0, 28, 26, 25, 24, 24, 30][me.classid];
+
+const respecTwoCheck = function () {
+	let respecTwo = 100;
+
+	switch(finalBuild) {
+	case "Javazon":
+	case "LightSorc":
+	case "Blova":		
+		respecTwo = Attack.checkInfinity() ? me.charlvl : 100;
+		break;  
+	case "Meteorb":
+	case "Blizzard":
+	case "BlizzBaller":
+		respecTwo = (Item.getEquippedItem(1).tier + Item.getEquippedItem(2).tier +
+			Item.getEquippedItem(3).tier + Item.getEquippedItem(4).tier) >= 400000 ? me.charlvl : 100;	//Tal ammy, belt, armor, and wep
+		break;
+	case "Bone":
+	case "Poison":
+	case "Summon":
+		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+		break;
+	case "Hammerdin":
+		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+		break;
+	case "Smiter":
+		respecTwo = haveItem("weapon", "runeword", "Grief") ? me.charlvl : 100;
+		break;
+	case "Frenzy":
+		respecTwo = haveItem("weapon", "runeword", "Grief") && haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+		break;
+	case "Wind":
+		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+		break;
+	case "Wolf":
+		respecTwo = haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+		break;
+	case "Trapsin":
+		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+		break;
+	}
+
+	return respecTwo;
+};
 
 // SoloLeveling Pickit Items
 var valuableItems = [
@@ -1010,11 +1053,11 @@ var getBuild = function () {
 		buildType = "Start";
 	}
 
-	if (me.charlvl >= respecOne && me.charlvl < respecTwo) {
-		buildType = middleBuild;
+	if (me.charlvl >= respecOne && me.charlvl < respecTwoCheck()) {
+		buildType = "Leveling";
 	}
 
-	if (me.charlvl >= respecTwo) {
+	if (me.charlvl >= respecTwoCheck()) {
 		buildType = finalBuild;
 	}
 
