@@ -12,7 +12,7 @@ var StarterConfig = {
 	AnnounceGames: false, // Default value
 	AfterGameMessage: "", // Default message after a finished game. Can be an array of messages
 	SwitchKeyDelay: 300, // Seconds to wait before switching a used/banned key or after realm down
-	CrashDelay: 30, // Seconds to wait after a d2 window crash
+	CrashDelay: 10, // Seconds to wait after a d2 window crash
 	FTJDelay: 300, // Seconds to wait after failing to create a game
 	RealmDownDelay: 3, // Minutes to wait after getting Realm Down message
 	UnableToConnectDelay: 5, // Minutes to wait after Unable To Connect message
@@ -79,10 +79,11 @@ include("SoloLeveling/Tools/OOGOverrides.js");
 
 if (!FileTools.exists("data/" + me.profile + ".json")) {
 	DataFile.create();
+	delay(Math.floor(rand(1, 25)));
 }
 
 if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
-	ControlAction.timeoutDelay("SoloLeveling Playtime Initialization Delay", StarterConfig.DelayBeforeLogin * 1e3);
+	delay(Math.floor(rand(5, 25)));
 	Playtime.create();
 }
 
