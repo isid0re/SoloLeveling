@@ -25,12 +25,12 @@ const respecOne = [ 0, 28, 26, 25, 24, 24, 30][me.classid];
 const respecTwoCheck = function () {
 	let respecTwo = 100;
 
-	switch(finalBuild) {
+	switch (finalBuild) {
 	case "Javazon":
 	case "LightSorc":
-	case "Blova":		
+	case "Blova":
 		respecTwo = Attack.checkInfinity() ? me.charlvl : 100;
-		break;  
+		break;
 	case "Meteorb":
 	case "Blizzard":
 	case "BlizzBaller":
@@ -40,9 +40,9 @@ const respecTwoCheck = function () {
 	case "Bone":
 	case "Poison":
 	case "Summon":
-		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
-		break;
 	case "Hammerdin":
+	case "Wind":
+	case "Trapsin":
 		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
 		break;
 	case "Smiter":
@@ -51,14 +51,8 @@ const respecTwoCheck = function () {
 	case "Frenzy":
 		respecTwo = haveItem("weapon", "runeword", "Grief") && haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
 		break;
-	case "Wind":
-		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
-		break;
 	case "Wolf":
 		respecTwo = haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
-		break;
-	case "Trapsin":
-		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
 		break;
 	}
 

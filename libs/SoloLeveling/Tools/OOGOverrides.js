@@ -1,6 +1,6 @@
 /*
 *	@filename	OOGOverrides.js
-*	@author		theBGuy
+*	@author		theBGuy, isid0re
 *	@desc		OOG.js fixes to improve functionality
 */
 
@@ -156,6 +156,10 @@ ControlAction.makeCharacter = function (info) {
 			this.click(6, 33, 528, 168, 60);
 
 			break;
+		case 25:
+			D2Bot.restart(); // single player error on finding character
+
+			break;
 		case 29: // select character
 			switch (info.charClass) {
 			case "barbarian":
@@ -208,6 +212,16 @@ ControlAction.makeCharacter = function (info) {
 				this.setText(1, 318, 510, 157, 16, info.charName);
 
 				if (!info.expansion) {
+					switch (info.charClass) {
+					case "druid":
+					case "assassin":
+						D2Bot.printToConsole("Error in profile name. Expansion characters cannot be made in classic", 9);
+						D2Bot.stop();
+
+					default:
+						break;
+					}
+
 					this.click(6, 319, 540, 15, 16);
 				}
 
