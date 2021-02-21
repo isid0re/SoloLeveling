@@ -23,7 +23,7 @@ var StarterConfig = {
 	WaitInLineTimeout: 12000, // Seconds to wait before cancelling the 'Waiting in Line...' screen
 	GameDoesNotExistTimeout: 600, // Seconds to wait before cancelling the 'Game does not exist.' screen
 	DelayBeforeLogin: rand(5, 25),	// Seconds to wait before logging in
-	VersionErrorDelay: rand(5,30)	// Seconds to wait after 'unable to identify version' message
+	VersionErrorDelay: rand(5, 30)	// Seconds to wait after 'unable to identify version' message
 };
 
 var ChannelConfig = {
@@ -79,11 +79,12 @@ include("SoloLeveling/Tools/OOGOverrides.js");
 
 if (!FileTools.exists("data/" + me.profile + ".json")) {
 	DataFile.create();
+	ControlAction.timeoutDelay("DataFile Creation Delay", StarterConfig.DelayBeforeLogin * 1e3);
 }
 
 if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
-	ControlAction.timeoutDelay("Data-File Init Delay", StarterConfig.DelayBeforeLogin * 1e3);
 	Playtime.create();
+	ControlAction.timeoutDelay("SoloLeveling Playtime Initialization Delay", StarterConfig.DelayBeforeLogin * 1e3);
 }
 
 var gameInfo, gameStart, ingame, chatActionsDone, pingQuit, myExp, myGold, resPenalty, frRes, crRes, lrRes, prRes, areaName, diffName,
@@ -98,8 +99,6 @@ var gameInfo, gameStart, ingame, chatActionsDone, pingQuit, myExp, myGold, resPe
 		afterMsg: "",
 		announce: false
 	};
-
-
 
 function sayMsg (string) {
 	if (!useChat) {
@@ -209,6 +208,7 @@ function ReceiveCopyData (mode, msg) {
 		default:
 			D2Bot.updateStatus('Please update profile name in profile config. Example: "HCL-ZON" will make a hardcore ladder amazon');
 			D2Bot.printToConsole('Please update profile name in profile config. Example: "HCL-ZON" will make a hardcore ladder amazon');
+			D2Bot.stop();
 
 			break;
 		}
@@ -247,7 +247,9 @@ function locationTimeout (time, location) {
 	while (getLocation() === location && endtime > getTickCount()) {
 		delay(500);
 	}
+
 	Playtime.recordPlaytime();
+
 	return (getLocation() !== location);
 }
 
@@ -344,18 +346,13 @@ function main () {
 	if (setUp.charName === "") {
 		setUp.charName = NameGen();
 		D2Bot.setProfile(null, null, setUp.charName);
+		delay(500);
 	}
 
 
 	while (!gameInfo) {
 		D2Bot.requestGameInfo();
 		delay(500);
-	}
-
-	if (DataFile.getStats().setDifficulty) {
-		delay(rand(5, 25));
-		gameInfo.difficulty = DataFile.getStats().setDifficulty;
-		D2Bot.setProfile(null, null, null, gameInfo.difficulty);
 	}
 
 	if (gameInfo.error) {
@@ -372,10 +369,7 @@ function main () {
 
 	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
 	var wasInGame = false;
-	
 	Playtime.track(false);
-	
-	ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 
 	while (true) {
 		while (me.ingame) { // returns true before actually in game so we can't only use this check
@@ -420,7 +414,6 @@ function main () {
 		}
 
 		isUp = "no";
-
 		Playtime.recordPlaytime();
 		locationAction(getLocation());
 		delay(1000);
@@ -472,8 +465,6 @@ function locationAction (location) {
 		}
 
 		if (ingame) {
-			//D2Bot.store(JSON.stringify({currScript: "none", area: "out of game"}));
-
 			if (AutoMule.outOfGameCheck() || TorchSystem.outOfGameCheck() || Gambling.outOfGameCheck() || CraftingSystem.outOfGameCheck()) {
 				break;
 			}
@@ -669,6 +660,12 @@ function locationAction (location) {
 			delay(500);
 		}
 
+		if (DataFile.getStats().setDifficulty) {
+			gameInfo.difficulty = DataFile.getStats().setDifficulty;
+			D2Bot.setProfile(null, null, null, gameInfo.difficulty);
+			delay(200);
+		}
+
 		// FTJ handler
 		if (lastGameStatus === "pending") {
 			isUp = "no";
@@ -677,16 +674,9 @@ function locationAction (location) {
 			ControlAction.timeoutDelay("FTJ delay", StarterConfig.FTJDelay * 1e3);
 			D2Bot.updateRuns();
 		}
-		
-		if (DataFile.getStats().setDifficulty) {
-			gameInfo.difficulty = DataFile.getStats().setDifficulty;
-			D2Bot.setProfile(null, null, null, gameInfo.difficulty);
-		}
 
 		ControlAction.createGame((gameInfo.gameName === "Name" ? randomString(null, true) : gameInfo.gameName + gameCount), (gameInfo.gamePass === "Password" ? randomString(null, true) : gameInfo.gamePass), gameInfo.difficulty, StarterConfig.CreateGameDelay * 1000);
-
 		lastGameStatus = "pending";
-
 		setNextGame();
 		locationTimeout(10000, location);
 
@@ -699,7 +689,6 @@ function locationAction (location) {
 		break;
 	case 8: // Main Menu
 	case 9: // Login
-	case 12: // Character Select
 	case 18: // D2 Splash
 		// Single Player screen fix
 		if (getLocation() === 12 && !getControl(4, 626, 100, 151, 44)) {
@@ -712,28 +701,37 @@ function locationAction (location) {
 			ControlAction.click(6, 33, 572, 128, 35);
 		}
 
+		ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 		D2Bot.updateStatus("Logging In");
 
 		try {
 			if (battlenet) { // make battlenet accounts/characters
 				if (setUp.account !== "") { // existing account
 					try {
-						delay(rand(5, 25));
 						login(me.profile);
 					} catch (error) {
-						if (!ControlAction.findCharacter(setUp)) { // make char if not found
-							ControlAction.makeCharacter(setUp);
+						if (DataFile.getStats().AcctPswd) {
+							setUp.account = DataFile.getStats().AcctName;
+							setUp.password = DataFile.getStats().AcctPswd;
+
+							if (!ControlAction.loginAccount(setUp)) { // random character login from stored info
+								D2Bot.printToConsole('Error logging in. please update your profile settings and start again');
+								D2Bot.stop();
+							}
 						}
 					}
 				} else { // new account
 					if (setUp.account === "") { // make char if not found
 						setUp.account = randomString(12, true);
 						setUp.password = randomString(12, true);
+						ControlAction.timeoutDelay("Generating Random Account Information", StarterConfig.DelayBeforeLogin * 1e3);
 
 						if (ControlAction.makeAccount(setUp)) {
 							D2Bot.setProfile(setUp.account, setUp.password);
 							DataFile.updateStats("AcctName", setUp.account);
 							DataFile.updateStats("AcctPswd", setUp.password);
+
+							break;
 						} else {
 							setUp.account = "";
 							setUp.password = "";
@@ -744,7 +742,6 @@ function locationAction (location) {
 				}
 			} else { // SP/TCP  characters
 				try {
-					ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 					login(me.profile);
 				} catch (err) {
 					if (!ControlAction.findCharacter(setUp)) { // make char if not found
@@ -784,7 +781,8 @@ function locationAction (location) {
 
 				break;
 			case getLocaleString(5208): // Invalid account
-			case getLocaleString(5239): //	An account name already exists
+			case getLocaleString(5239): // An account name already exists
+			case getLocaleString(5249): // Unable to create account
 				D2Bot.updateStatus("Invalid Account Name");
 				D2Bot.printToConsole("Invalid Account Name");
 				setUp.account = "";
@@ -798,6 +796,7 @@ function locationAction (location) {
 				D2Bot.printToConsole("Character Name exists. Making new Name");
 				setUp.charName = randomString(12, false);
 				D2Bot.setProfile(null, null, setUp.charName);
+				ControlAction.click(6, 351, 337, 96, 32);
 
 				break;
 			case getLocaleString(5202): // cd key intended for another product
@@ -870,7 +869,7 @@ function locationAction (location) {
 	case 11: // Unable To Connect
 		D2Bot.updateStatus("Unable To Connect");
 
-		if (connectFailRetry < 2) {	// vita
+		if (connectFailRetry < 2) {
 			connectFailRetry += 1;
 			ControlAction.click(6, 335, 450, 128, 35);
 
@@ -997,7 +996,9 @@ function locationAction (location) {
 		}
 
 		break;
+	case 12: // Character Select
 	case 23: // Character Select - Connecting
+	case 29: // fix for unhandled location crashes at char creation
 	case 42: // Empty character screen
 		string = "";
 		text = ControlAction.getText(4, 45, 318, 531, 140);

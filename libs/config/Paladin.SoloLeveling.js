@@ -546,7 +546,7 @@ function LoadConfig () {
 
 			if (Item.getEquippedItem(5).tier < 500) { // Ancients' Pledge
 				if (!haveItem("shield", "runeword", "Ancients' Pledge") && me.diff !== 2) {
-					if (!me.getItem(618)&& me.diff === 0) {
+					if (!me.getItem(618) && me.diff === 0) {
 						Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 					}
 
@@ -559,8 +559,7 @@ function LoadConfig () {
 				}
 
 				var apShields = [
-					"me.diff < 1 && [Name] == LargeShield && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-					"me.diff <= 1 && [Name] == KiteShield && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+					"me.diff <= 1 && ([Name] == LargeShield || [Name] == KiteShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 					"([Name] == DragonShield || [Name] == Scutum) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 					"me.diff <= 1 && ([Name] == Targe || [Name] == Rondache || [Name] == HeraldicShield ||[Name] == AerinShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 					"([Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge || [Name] == GrimShield) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",

@@ -9,16 +9,16 @@ if (!isIncluded("common/Attack.js")) {
 }
 
 Attack.killTarget = function (name) {
-	let target;
+	var target,	attackCount = 0;
 
-	for (let i = 0; i < 3; i += 1) {
+	for (let i = 0; !target && i < 5; i += 1) {
 		target = getUnit(1, name);
 
 		if (target) {
 			break;
 		}
 
-		delay(300 + me.ping);
+		delay(200);
 	}
 
 	if (!target) {
@@ -35,22 +35,52 @@ Attack.killTarget = function (name) {
 		return true;
 	}
 
-	for (let h = 0; h < Config.MaxAttackCount; h += 1) {
-		ClassAttack.doAttack(target);
+	while (attackCount < Config.MaxAttackCount) {
+		if (Misc.townCheck()) {
+			for (let i = 0; !target && i < 5; i += 1) {
+				target = getUnit(1, name);
 
-		if (!target || target.dead || target.hp === 0) {
+				if (target) {
+					break;
+				}
 
-			break;
+				delay(200);
+			}
+		}
+
+		if (!target || !copyUnit(target).x) { // Check if unit got invalidated, happens if necro raises a skeleton from the boss's corpse.
+			target = getUnit(1, name);
+
+			if (!target) {
+				break;
+			}
+		}
+
+		if (Config.Dodge && me.hp * 100 / me.hpmax <= Config.DodgeHP) {
+			this.deploy(target, Config.DodgeRange, 5, 9);
+		}
+
+		if (attackCount > 0 && attackCount % 15 === 0 && Skill.getRange(Config.AttackSkill[1]) < 4) {
+			Packet.flash(me.gid);
 		}
 
 		if (me.classid === 1 && me.getSkill(54, 0) && getDistance(me, target) <= 10) {
 			Pather.moveTo(target.x, me.y < target.y ? target.y + 15 : target.y - 15);
 		}
+
+		attackCount += 1;
+		ClassAttack.afterAttack();
+
+		if ( !target || !copyUnit(target).x || target.dead) {
+			break;
+		}
 	}
 
-	Pickit.pickItems();
+	if ( !target || !copyUnit(target).x || target.dead) {
+		Pickit.pickItems();
+	}
 
-	return target.dead;
+	return true;
 };
 
 Attack.openChests = function () { // don't open chests when attacking
