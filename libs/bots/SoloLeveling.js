@@ -65,7 +65,6 @@ function SoloLeveling () {
 		NTIP.arrayLooping(generalItems);
 		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
 		NTIP.arrayLooping(valuableItems);
-		Misc.setupMerc();
 
 		if (me.charlvl === 1) {
 			let buckler = me.getItem(328);

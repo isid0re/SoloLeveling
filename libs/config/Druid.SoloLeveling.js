@@ -339,13 +339,13 @@ function LoadConfig () {
 		];
 		NTIP.arrayLooping(autoequipTiers);
 
-		var mercGear = [
+		var autoequipmercTiers = [
 			"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 			"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 			"[Type] == Polearm && ([Quality] >= rare || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 			"me.diff !== 2 && [Type] == Polearm && [Quality] >= Magic && [Level] >= 22 # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
 		];
-		NTIP.arrayLooping(mercGear);
+		NTIP.arrayLooping(autoequipmercTiers);
 
 		if (me.gametype === 1) { //LOD game gear
 			if (!haveItem("sword", "runeword", "Call To Arms")) {
