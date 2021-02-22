@@ -313,32 +313,9 @@ Misc.hireMerc = function () {
 		print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
 	}
 
-	Misc.setupMerc();
 	Misc.equipMerc();
 	Pickit.pickItems(); // safetycheck for merc items on ground
 	Misc.equipMerc();
-
-	return true;
-};
-
-Misc.setupMerc = function () {
-	if (me.gametype === 0) {
-		return true;
-	}
-
-	if (!getMercFix()) {
-		return true;
-	}
-
-	print("ÿc9SoloLevelingÿc0: merc items loaded to Pickit");
-
-	var mercGear = [
-		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[Type] == Polearm && ([Quality] >= rare || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"me.diff !== 2 && [Type] == Polearm && [Quality] >= Magic && [Level] >= 22 # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)"
-	];
-	NTIP.arrayLooping(mercGear);
 
 	return true;
 };
