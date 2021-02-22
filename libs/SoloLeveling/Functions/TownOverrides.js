@@ -8,6 +8,21 @@ if (!isIncluded("common/Town.js")) {
 	include("common/Town.js");
 }
 
+//Removed Missle Potions for easy gold
+Town.ignoredItemTypes = [ // Items that won't be stashed
+	5, // Arrows
+	6, // Bolts
+	18, // Book (Tome)
+	22, // Scroll
+	41, // Key
+	76, // Healing Potion
+	77, // Mana Potion
+	78, // Rejuvenation Potion
+	79, // Stamina Potion
+	80, // Antidote Potion
+	81 // Thawing Potion
+];
+
 Town.townTasks = function () {
 	if (!me.inTown) {
 		Town.goToTown();
