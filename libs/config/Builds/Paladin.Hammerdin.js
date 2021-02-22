@@ -1,4 +1,4 @@
-//	/d2bs/kolbot/libs/config/Builds/Paladin.Smiter.js
+//	/d2bs/kolbot/libs/config/Builds/Paladin.Hammerdin.js
 
 /**
 *

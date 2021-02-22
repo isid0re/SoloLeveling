@@ -72,23 +72,23 @@ include("torchsystem.js");
 include("common/misc.js");
 include("common/util.js");
 include("common/pather.js");
-include("sololeveling/Tools/namegen.js");
+include("sololeveling/Tools/NameGen.js");
 include("SoloLeveling/Tools/Performance.js");
 include("SoloLeveling/Tools/Playtime.js");
 include("SoloLeveling/Tools/OOGOverrides.js");
 
 if (!FileTools.exists("data/" + me.profile + ".json")) {
 	DataFile.create();
-	ControlAction.timeoutDelay("DataFile Creation Delay", StarterConfig.DelayBeforeLogin * 1e3);
+	delay(Math.floor(rand(1, 25)));
 }
 
 if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
+	delay(Math.floor(rand(5, 25)));
 	Playtime.create();
-	ControlAction.timeoutDelay("SoloLeveling Playtime Initialization Delay", StarterConfig.DelayBeforeLogin * 1e3);
 }
 
 var gameInfo, gameStart, ingame, chatActionsDone, pingQuit, myExp, myGold, resPenalty, frRes, crRes, lrRes, prRes, areaName, diffName,
-	handle, useChat, firstLogin, connectFail, setUp, buildCheck, deadCheck, connectFailRetry,
+	handle, useChat, firstLogin, connectFail, setUp, deadCheck, connectFailRetry,
 	battlenet = Profile().type === 2 ? true : false,
 	gameCount = DataFile.getStats().runs + 1,
 	lastGameStatus = "ready",
@@ -109,7 +109,7 @@ function sayMsg (string) {
 }
 
 function ReceiveCopyData (mode, msg) {
-	var obj;
+	var buildCheck, obj;
 
 	switch (msg) {
 	case "Handle":
@@ -120,7 +120,7 @@ function ReceiveCopyData (mode, msg) {
 
 	switch (mode) {
 	case 2: // Game info
-		print("Recieved Game Info");
+		print("Received Game Info");
 
 		gameInfo = JSON.parse(msg);
 
@@ -148,7 +148,7 @@ function ReceiveCopyData (mode, msg) {
 		}
 
 		break;
-	case 0xf124: // Cached info retreival
+	case 0xf124: // Cached info retrieval
 		if (msg !== "null") {
 			gameInfo.crashInfo = JSON.parse(msg);
 		}
@@ -206,8 +206,8 @@ function ReceiveCopyData (mode, msg) {
 			setUp.charClass = "assassin";
 			break;
 		default:
-			D2Bot.updateStatus('Please update profile name in profile config. Example: "HCL-ZON" will make a hardcore ladder amazon');
-			D2Bot.printToConsole('Please update profile name in profile config. Example: "HCL-ZON" will make a hardcore ladder amazon');
+			D2Bot.updateStatus('Please update profile name. Example: "HCCNL-PAL" will make a Hardcore Classic NonLadder Paladin');
+			D2Bot.printToConsole('Please update profile name. Example: "HCCNL-PAL" will make a Hardcore Classic NonLadder Paladin', 6);
 			D2Bot.stop();
 
 			break;
@@ -218,8 +218,8 @@ function ReceiveCopyData (mode, msg) {
 			D2Bot.setProfile(null, null, null, null, null, setUp.tag);
 			DataFile.updateStats("finalBuild", setUp.tag);
 		} else {
-			D2Bot.updateStatus('Please update InfoTag in profile config. Missing the finalBuild selection.');
-			D2Bot.printToConsole('Please update InfoTag in profile config. Missing the finalBuild selection.');
+			D2Bot.updateStatus('Please update profile InfoTag. Missing the finalBuild.');
+			D2Bot.printToConsole('Please update profile InfoTag. Missing the finalBuild.', 6);
 			D2Bot.stop();
 
 			break;
@@ -324,102 +324,6 @@ function randomString (len, useNumbers = false) {
 	return rval;
 }
 
-function main () {
-	debugLog(me.profile);
-	addEventListener('copydata', ReceiveCopyData);
-	addEventListener('scriptmsg', ScriptMsgEvent);
-
-	while (!handle) {
-		delay(100);
-	}
-
-	DataFile.updateStats("handle", handle);
-	delay(500);
-	D2Bot.init();
-	load("tools/heartbeat.js");
-
-	while (!setUp) {
-		D2Bot.getProfile();
-		delay(500);
-	}
-
-	if (setUp.charName === "") {
-		setUp.charName = NameGen();
-		D2Bot.setProfile(null, null, setUp.charName);
-		delay(500);
-	}
-
-
-	while (!gameInfo) {
-		D2Bot.requestGameInfo();
-		delay(500);
-	}
-
-	if (gameInfo.error) {
-		delay(200);
-
-		if (DataFile.getStats().debugInfo) {
-			gameInfo.crashInfo = DataFile.getStats().debugInfo;
-			D2Bot.printToConsole("Crash Info: Script: " + JSON.parse(gameInfo.crashInfo).currScript + " Area: " + JSON.parse(gameInfo.crashInfo).area, 10);
-		}
-
-		ControlAction.timeoutDelay("Crash Delay", StarterConfig.CrashDelay * 1e3);
-		D2Bot.updateRuns();
-	}
-
-	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
-	var wasInGame = false;
-	Playtime.track(false);
-
-	while (true) {
-		while (me.ingame) { // returns true before actually in game so we can't only use this check
-			if (me.gameReady) { // returns false when switching acts so we can't use while
-				isUp = "yes";
-
-				if (!ingame) {
-					gameStart = getTickCount();
-					print("Updating Status");
-					lastGameStatus = "ingame";
-					ingame = true;
-					DataFile.updateStats("runs", gameCount);
-					DataFile.updateStats("ingameTick");
-				}
-
-				Playtime.recordPlaytime();
-
-				if (!wasInGame) {
-					Playtime.track(true);
-					wasInGame = true;
-				}
-
-				myExp = Math.max(0, Experience.progress());
-				myGold = me.getStat(14) + me.getStat(15);
-				resPenalty = me.gametype === 0 ? [ 0, 20, 50][me.diff] : [ 0, 40, 100][me.diff];
-				frRes = Math.min(75, me.getStat(39) - resPenalty);
-				crRes = Math.min(75, me.getStat(41) - resPenalty);
-				lrRes = Math.min(75, me.getStat(43) - resPenalty);
-				prRes = Math.min(75, me.getStat(45) - resPenalty);
-				areaName = Pather.getAreaName(me.area);
-				diffName = ['Normal', 'Nightmare', 'Hell'][me.diff];
-				D2Bot.updateStatus("Lvl: " + me.charlvl + " (" + myExp + "%) | Diff: " + diffName + " | Area: " + areaName + " | Gold: " + myGold + " | FR: " + frRes + " | CR: " + crRes + " | LR: " + lrRes + " | PR: " + prRes + " " + timer(gameStart));
-			}
-
-			delay(1000);
-		}
-
-		if (wasInGame) {
-			Playtime.recordPlaytime();
-			Playtime.track(false);
-			wasInGame = false;
-		}
-
-		isUp = "no";
-		Playtime.recordPlaytime();
-		locationAction(getLocation());
-		delay(1000);
-	}
-}
-
 function locationAction (location) {
 	var i, control, string, text;
 
@@ -469,7 +373,6 @@ function locationAction (location) {
 				break;
 			}
 
-			print("updating runs");
 			D2Bot.updateRuns();
 
 			gameCount += 1;
@@ -714,8 +617,8 @@ function locationAction (location) {
 							setUp.account = DataFile.getStats().AcctName;
 							setUp.password = DataFile.getStats().AcctPswd;
 
-							if (!ControlAction.loginAccount(setUp)) { // random character login from stored info
-								D2Bot.printToConsole('Error logging in. please update your profile settings and start again');
+							if (!ControlAction.loginAccount(setUp)) { // generated account login from stored datafile info
+								D2Bot.printToConsole('SoloLeveling: Error logging in. please update your profile settings and start again', 6);
 								D2Bot.stop();
 							}
 						}
@@ -789,14 +692,6 @@ function locationAction (location) {
 				setUp.password = "";
 				D2Bot.setProfile(setUp.account, setUp.password);
 				D2Bot.restart(true);
-
-				break;
-			case getLocaleString(11059): //	A character named '%s' already exists in this Realm.
-				D2Bot.updateStatus("Character Name exists. Making new Name");
-				D2Bot.printToConsole("Character Name exists. Making new Name");
-				setUp.charName = randomString(12, false);
-				D2Bot.setProfile(null, null, setUp.charName);
-				ControlAction.click(6, 351, 337, 96, 32);
 
 				break;
 			case getLocaleString(5202): // cd key intended for another product
@@ -1140,5 +1035,100 @@ function locationAction (location) {
 		}
 
 		break;
+	}
+}
+
+function main () {
+	debugLog(me.profile);
+	addEventListener('copydata', ReceiveCopyData);
+	addEventListener('scriptmsg', ScriptMsgEvent);
+
+	while (!handle) {
+		delay(100);
+	}
+
+	DataFile.updateStats("handle", handle);
+	delay(500);
+	D2Bot.init();
+	load("tools/heartbeat.js");
+
+	while (!gameInfo) {
+		D2Bot.requestGameInfo();
+		delay(500);
+	}
+
+	if (gameInfo.error) {
+		delay(200);
+		ControlAction.timeoutDelay("Crash Delay", StarterConfig.CrashDelay * 1e3);
+		D2Bot.updateRuns();
+		D2Bot.restart();
+	}
+
+	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
+
+	while (!setUp) {
+		D2Bot.getProfile();
+		print("Getting Profile");
+		delay(500);
+	}
+
+	if (setUp.charName === "") {
+		setUp.charName = NameGen();
+		D2Bot.setProfile(null, null, setUp.charName);
+		print("Generating Character Name");
+		delay(500);
+	}
+
+	var wasInGame = false;
+	Playtime.track(false);
+
+	while (true) {
+		while (me.ingame) { // returns true before actually in game so we can't only use this check
+			if (me.gameReady) { // returns false when switching acts so we can't use while
+				isUp = "yes";
+
+				if (!ingame) {
+					gameStart = getTickCount();
+					lastGameStatus = "ingame";
+					ingame = true;
+					DataFile.updateStats("runs", gameCount);
+					DataFile.updateStats("ingameTick");
+				}
+
+				Playtime.recordPlaytime();
+
+				if (!wasInGame) {
+					Playtime.track(true);
+					wasInGame = true;
+				}
+
+				myExp = Math.max(0, Experience.progress());
+				myGold = me.getStat(14) + me.getStat(15);
+				resPenalty = me.gametype === 0 ? [ 0, 20, 50][me.diff] : [ 0, 40, 100][me.diff];
+				frRes = Math.min(75, me.getStat(39) - resPenalty);
+				crRes = Math.min(75, me.getStat(41) - resPenalty);
+				lrRes = Math.min(75, me.getStat(43) - resPenalty);
+				prRes = Math.min(75, me.getStat(45) - resPenalty);
+				areaName = Pather.getAreaName(me.area);
+				diffName = ['Normal', 'Nightmare', 'Hell'][me.diff];
+
+				if (me.ingame) {
+					D2Bot.updateStatus("Lvl: " + me.charlvl + " (" + myExp + "%) | Diff: " + diffName + " | Area: " + areaName + " | Gold: " + myGold + " | FR: " + frRes + " | CR: " + crRes + " | LR: " + lrRes + " | PR: " + prRes + " " + timer(gameStart));
+				}
+			}
+
+			delay(1000);
+		}
+
+		if (wasInGame) {
+			Playtime.recordPlaytime();
+			Playtime.track(false);
+			wasInGame = false;
+		}
+
+		isUp = "no";
+		Playtime.recordPlaytime();
+		locationAction(getLocation());
+		delay(1000);
 	}
 }

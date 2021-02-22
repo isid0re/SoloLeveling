@@ -64,6 +64,10 @@ Attack.killTarget = function (name) {
 			Packet.flash(me.gid);
 		}
 
+		if (!ClassAttack.doAttack(target, attackCount % 15 === 0)) {
+			Packet.flash(me.gid);
+		}
+
 		if (me.classid === 1 && me.getSkill(54, 0) && getDistance(me, target) <= 10) {
 			Pather.moveTo(target.x, me.y < target.y ? target.y + 15 : target.y - 15);
 		}

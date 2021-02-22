@@ -5,7 +5,6 @@ Necromancer.SoloLeveling.js config file
 	2. Select the Bots profile
 	3. In the info tag box enter one of the following choices:
 		Bone
-		Explosion
 		Poison
 		Summon
 	4. Save the profile and start
@@ -300,6 +299,7 @@ function LoadConfig () {
 		}
 
 		// Character Build Setup
+		var respecTwo = respecTwoCheck();
 		var chooseBuffer = me.charlvl < 5 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
 		var beltPots = [["hp", "hp", "hp", "hp"], ["hp", "hp", "mp", "mp"], ["hp", "hp", "mp", "mp"], ["hp", "mp", "mp", "rv"]][chooseBuffer];
 		Config.BeltColumn = beltPots;
