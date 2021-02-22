@@ -169,6 +169,86 @@ Item.autoEquipCheck = function (item) {
 	return true;
 };
 
+Item.autoEquip = function () {
+	if (!Config.AutoEquip) {
+		return true;
+	}
+
+	var i, j, tier, bodyLoc, tome, gid,
+		items = me.findItems(-1, 0);
+
+	if (!items) {
+		return false;
+	}
+
+	function sortEq(a, b) {
+		if (Item.canEquip(a)) {
+			return -1;
+		}
+
+		if (Item.canEquip(b)) {
+			return 1;
+		}
+
+		return 0;
+	}
+
+	me.cancel();
+
+	// Remove items without tier
+	for (i = 0; i < items.length; i += 1) {
+		if (NTIP.GetTier(items[i]) === 0) {
+			items.splice(i, 1);
+
+			i -= 1;
+		}
+	}
+
+	while (items.length > 0) {
+		items.sort(sortEq);
+
+		tier = NTIP.GetTier(items[0]);
+		bodyLoc = this.getBodyLoc(items[0]);
+
+		if (tier > 0 && bodyLoc) {
+			for (j = 0; j < bodyLoc.length; j += 1) {
+				if ([3, 7].indexOf(items[0].location) > -1 && tier > this.getEquippedItem(bodyLoc[j]).tier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
+					if (!items[0].getFlag(0x10)) { // unid
+						tome = me.findItem(519, 0, 3);
+
+						if (tome && tome.getStat(70) > 0) {
+							if (items[0].location === 7) {
+								Town.openStash();
+							}
+
+							Town.identifyItem(items[0], tome);
+						}
+					}
+
+					gid = items[0].gid;
+
+					print(items[0].name);
+
+					if (this.equip(items[0], bodyLoc[j])) {
+						Misc.logItem("Equipped", me.getItem(-1, -1, gid));
+						
+						if(logEquipped) {
+							MuleLogger.logEquippedItems();
+						}
+						
+					}
+
+					break;
+				}
+			}
+		}
+
+		items.shift();
+	}
+
+	return true;
+};
+
 //	Merc Hire and Setup
 var merc, mercId = [];
 
@@ -421,6 +501,10 @@ Item.equipMerc = function (item, bodyLoc) {
 							cursorItem.drop();
 						}
 					}
+				}
+
+				if(logEquipped) {
+					MuleLogger.logEquippedItems();
 				}
 
 				return true;

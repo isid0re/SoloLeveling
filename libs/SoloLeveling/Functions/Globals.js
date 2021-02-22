@@ -10,6 +10,7 @@ if (!isIncluded("OOG.js")) {
 //Configurable Settings for Overlay and Performance tracking
 const shouldLog = false;	//Default should be false for people who aren't interested in performance statistics
 const useOverlay = false;	//Default should be false for people who aren't interested in having the overlay
+const logEquipped = false;	//Default should be false for people who arne't interested in having equipped items viewable from D2Bot# charviewer tab
 
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
@@ -1204,6 +1205,7 @@ var tierscore = function (item) {
 		DEF: 0.05, // defense
 		ICB: 2, // increased chance to block
 		BELTSLOTS: 1.25, //belt potion storage
+		MF: 1, //Magic Find
 		// base stats
 		HP:	1.75,
 		MANA: 0.8,
@@ -1300,11 +1302,20 @@ var tierscore = function (item) {
 			beltRating = Storage.BeltSize() * 4 * generalWeights.BELTSLOTS; // rows * columns * weight
 		}
 
+		//Magic Find
+		let mfRating = 0,
+			needMF = me.getStat(80) < 50;
+
+		if(needMF) {
+			mfRating = item.getStatEx(80) * generalWeights.MF;
+		}
+
 		//start generalRating
 		let generalRating = 0;
 		generalRating += cbfRating; // add cannot be frozen
 		generalRating += frwRating; // add faster run walk
 		generalRating += beltRating; // add belt slots
+		generalRating += mfRating; // add magic find
 		generalRating += item.getStatEx(99) * generalWeights.FHR; // add faster hit recovery
 		generalRating += item.getStatEx(31) * generalWeights.DEF; //	add Defense
 		generalRating += (item.getStatEx(20) + item.getStatEx(102)) * generalWeights.ICB; //add increased chance to block

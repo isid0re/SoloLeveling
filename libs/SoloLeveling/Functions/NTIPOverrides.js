@@ -9,6 +9,7 @@ if (!isIncluded("NTItemParser.dbl")) {
 }
 
 var NTIP_CheckListNoTier = [];
+var NTIP_QuestItems = [87,88,89,90,91,92,173,174,521,524,525,545,546,547,548,549,552,553,554,555];
 
 NTIP.addLine = function (itemString) {
 	let info = {
