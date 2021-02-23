@@ -58,6 +58,7 @@ Town.townTasks = function () {
 	Runewords.makeRunewords();
 	Cubing.doCubing();
 	Runewords.makeRunewords();
+	this.equipSWAP();
 	this.heal();
 	this.identify();
 	this.clearInventory();
@@ -71,7 +72,6 @@ Town.townTasks = function () {
 	this.shopItems();
 	this.reviveMerc();
 	Item.autoEquip();
-	this.equipSWAP();
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.gamble();
@@ -141,6 +141,7 @@ Town.doChores = function (repair = false) {
 	Runewords.makeRunewords();
 	Cubing.doCubing();
 	Runewords.makeRunewords();
+	this.equipSWAP();
 	this.heal();
 	this.identify();
 	this.clearInventory();
@@ -154,7 +155,6 @@ Town.doChores = function (repair = false) {
 	this.shopItems();
 	this.reviveMerc();
 	Item.autoEquip();
-	this.equipSWAP();
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.gamble();

@@ -175,10 +175,10 @@ MuleLogger.logEquippedItems = function () {
 
 	}
 
-	charClass = [".Amazon", ".Sorceress", ".Necromancer", ".Paladin", ".Barbarian", ".Druid", ".Assassin"][me.classid];
+	charClass = ["amazon.", "sorceress.", "necromancer.", "paladin.", "barbarian.", "druid.", "assassin."][me.classid];
 
 	// hcl = hardcore class ladder
 	// sen = softcore expan nonladder
-	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + me.name + charClass + "." + ( me.playertype ? "h" : "s" ) + (me.gametype ? "e" : "c" ) + ( me.ladder > 0 ? "l" : "n" ) + ".txt", finalString);
+	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + charClass + me.name + "." + ( me.playertype ? "h" : "s" ) + (me.gametype ? "e" : "c" ) + ( me.ladder > 0 ? "l" : "n" ) + ".txt", finalString);
 	print("Item logging done.");
 };

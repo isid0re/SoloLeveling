@@ -520,7 +520,12 @@ function main () {
 
 			break;
 		case 102: // Numpad 6
-			MuleLogger.logChar();
+			if (logEquipped) {
+				MuleLogger.logEquippedItems();
+			} else {
+				MuleLogger.logChar();
+			}
+
 			me.overhead("Logged char: " + me.name);
 
 			break;
