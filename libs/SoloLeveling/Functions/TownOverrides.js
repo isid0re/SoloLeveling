@@ -165,8 +165,9 @@ Town.doChores = function (repair = false) {
 	Town.organizeInventory();
 	this.characterRespec();
 
-	if(me.classid !== 4 && !Precast.checkCTA())	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
+	if (me.classid !== 4 && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
 		Precast.doPrecast(false);
+	}
 
 	for (i = 0; i < cancelFlags.length; i += 1) {
 		if (getUIFlag(cancelFlags[i])) {
@@ -1272,7 +1273,7 @@ Town.reviveMerc = function () {
 		return false;
 	}
 
-MainLoop:
+	MainLoop:
 	for (i = 0; i < 3; i += 1) {
 		dialog = getDialogLines();
 

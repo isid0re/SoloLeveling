@@ -1238,7 +1238,7 @@ var tierscore = function (item) {
 		SECMAXDMG: 3, // secondary max damage
 		ELEDMG: 2, // elemental damage
 		AR:	0.5, // attack rating
-		CB: 3, // crushing blow
+		CB: 5, // crushing blow
 		// leaching
 		LL: 1.5, //lifeleach
 		ML:	1.5, //manaleach
@@ -1296,20 +1296,12 @@ var tierscore = function (item) {
 			beltRating = Storage.BeltSize() * 4 * generalWeights.BELTSLOTS; // rows * columns * weight
 		}
 
-		//Magic Find
-		let mfRating = 0,
-			needMF = me.getStat(80) < 50;
-
-		if(needMF) {
-			mfRating = item.getStatEx(80) * generalWeights.MF;
-		}
-
 		//start generalRating
 		let generalRating = 0;
 		generalRating += cbfRating; // add cannot be frozen
 		generalRating += frwRating; // add faster run walk
 		generalRating += beltRating; // add belt slots
-		generalRating += mfRating; // add magic find
+		generalRating += item.getStatEx(80) * generalWeights.MF; // add magic find
 		generalRating += item.getStatEx(99) * generalWeights.FHR; // add faster hit recovery
 		generalRating += item.getStatEx(31) * generalWeights.DEF; //	add Defense
 		generalRating += (item.getStatEx(20) + item.getStatEx(102)) * generalWeights.ICB; //add increased chance to block

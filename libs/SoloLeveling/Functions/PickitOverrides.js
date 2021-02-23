@@ -9,12 +9,12 @@ if (!isIncluded("common/Pickit.js")) {
 }
 
 if (!isIncluded("SoloLeveling/Functions/NTIPOverrides.js")) {
-	include("SoloLeveling/Functions/NTIPOverrides.js"); 
-};
+	include("SoloLeveling/Functions/NTIPOverrides.js");
+}
 
 if (!isIncluded("SoloLeveling/Functions/MiscOverrides.js")) {
-	include("SoloLeveling/Functions/MiscOverrides.js"); 
-};
+	include("SoloLeveling/Functions/MiscOverrides.js");
+}
 
 if (!isIncluded("bots/SoloLeveling.js")) {
 	include("bots/SoloLeveling.js");
@@ -55,7 +55,7 @@ Pickit.checkItem = function (unit) {
 		return {
 			result: -1,
 			line: null
-		};			
+		};
 	}
 
 	if ((NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && unit.getFlag(0x10)) {
@@ -65,13 +65,14 @@ Pickit.checkItem = function (unit) {
 				line: "Equip char tier: " + NTIP.GetTier(unit)
 			};
 		}
+
 		if (Item.autoEquipCheckMerc(unit)) {
 			return {
 				result: 1,
 				line: "Equip merc tier: " + NTIP.GetMercTier(unit)
 			};
 		}
-		//print("\xFFc4Checking " + Pickit.itemColor(unit) + unit.name + " \xFFc0 vs no Tier pickit.");
+
 		return NTIP.CheckItem(unit, NTIP_CheckListNoTier, true);
 	}
 
@@ -87,114 +88,114 @@ Pickit.checkItem = function (unit) {
 		}
 
 		if ((unit.getItemCost(1) / (unit.sizex * unit.sizey) >= 10)) {
-            return {
-                result: 4,
-                line: null
-            };
-        }
+			return {
+				result: 4,
+				line: null
+			};
+		}
 	}
 
 	return rval;
 };
 
 // Add range parameter
-Pickit.pickItems = function (range=Config.PickRange) {
-    var status, item, canFit,
-        needMule = false,
-        pickList = [];
+Pickit.pickItems = function (range = Config.PickRange) {
+	var status, item, canFit,
+		needMule = false,
+		pickList = [];
 
-    Town.clearBelt();
+	Town.clearBelt();
 
-    if (me.dead) {
-        return false;
-    }
+	if (me.dead) {
+		return false;
+	}
 
-    while (!me.idle) {
-        delay(40);
-    }
+	while (!me.idle) {
+		delay(40);
+	}
 
-    item = getUnit(4);
+	item = getUnit(4);
 
-    if (item) {
-        do {
-            if ((item.mode === 3 || item.mode === 5) && getDistance(me, item) <= range) {
-                pickList.push(copyUnit(item));
-            }
-        } while (item.getNext());
-    }
+	if (item) {
+		do {
+			if ((item.mode === 3 || item.mode === 5) && getDistance(me, item) <= range) {
+				pickList.push(copyUnit(item));
+			}
+		} while (item.getNext());
+	}
 
-    while (pickList.length > 0) {
-        if (me.dead) {
-            return false;
-        }
+	while (pickList.length > 0) {
+		if (me.dead) {
+			return false;
+		}
 
-        pickList.sort(Pickit.sortItems);
+		pickList.sort(Pickit.sortItems);
 
-        // Check if the item unit is still valid and if it's on ground or being dropped
-        if (copyUnit(pickList[0]).x !== undefined && (pickList[0].mode === 3 || pickList[0].mode === 5) &&
+		// Check if the item unit is still valid and if it's on ground or being dropped
+		if (copyUnit(pickList[0]).x !== undefined && (pickList[0].mode === 3 || pickList[0].mode === 5) &&
             (Pather.useTeleport || me.inTown || !checkCollision(me, pickList[0], 0x1))) { // Don't pick items behind walls/obstacles when walking
-            // Check if the item should be picked
-            status = Pickit.checkItem(pickList[0]);
+			// Check if the item should be picked
+			status = Pickit.checkItem(pickList[0]);
 
-            //  && Item.autoEquipCheck(pickList[0]) pbp
+			//  && Item.autoEquipCheck(pickList[0]) pbp
 
-            if (status.result && Pickit.canPick(pickList[0])) {
-                // Override canFit for scrolls, potions and gold
-                canFit = Storage.Inventory.CanFit(pickList[0]) || [4, 22, 76, 77, 78].indexOf(pickList[0].itemType) > -1;
+			if (status.result && Pickit.canPick(pickList[0])) {
+				// Override canFit for scrolls, potions and gold
+				canFit = Storage.Inventory.CanFit(pickList[0]) || [4, 22, 76, 77, 78].indexOf(pickList[0].itemType) > -1;
 
-                // Try to make room with FieldID
-                if (!canFit && Config.FieldID && Town.fieldID()) {
-                    canFit = Storage.Inventory.CanFit(pickList[0]) || [4, 22, 76, 77, 78].indexOf(pickList[0].itemType) > -1;
-                }
+				// Try to make room with FieldID
+				if (!canFit && Config.FieldID && Town.fieldID()) {
+					canFit = Storage.Inventory.CanFit(pickList[0]) || [4, 22, 76, 77, 78].indexOf(pickList[0].itemType) > -1;
+				}
 
-                // Try to make room by selling items in town
-                if (!canFit) {
-                    // Check if any of the current inventory items can be stashed or need to be identified and eventually sold to make room
-                    if (Pickit.canMakeRoom()) {
-                        print("\xFFc7Trying to make room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
+				// Try to make room by selling items in town
+				if (!canFit) {
+					// Check if any of the current inventory items can be stashed or need to be identified and eventually sold to make room
+					if (Pickit.canMakeRoom()) {
+						print("\xFFc7Trying to make room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
 
-                        // Go to town and do town chores
-                        if (Town.visitTown()) {
-                            // Recursive check after going to town. We need to remake item list because gids can change.
-                            // Called only if room can be made so it shouldn't error out or block anything.
+						// Go to town and do town chores
+						if (Town.visitTown()) {
+							// Recursive check after going to town. We need to remake item list because gids can change.
+							// Called only if room can be made so it shouldn't error out or block anything.
 
-                            return Pickit.pickItems();
-                        }
+							return Pickit.pickItems();
+						}
 
-                        // Town visit failed - abort
-                        print("\xFFc7Not enough room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
+						// Town visit failed - abort
+						print("\xFFc7Not enough room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
 
-                        return false;
-                    }
+						return false;
+					}
 
-                    // Can't make room - trigger automule
-                    Misc.itemLogger("No room for", pickList[0]);
-                    print("\xFFc7Not enough room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
+					// Can't make room - trigger automule
+					Misc.itemLogger("No room for", pickList[0]);
+					print("\xFFc7Not enough room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
 
-                    needMule = true;
-                }
+					needMule = true;
+				}
 
-                // Item can fit - pick it up
-                if (canFit) {
-                    Pickit.pickItem(pickList[0], status.result, status.line);
-                }
-            }
-        }
+				// Item can fit - pick it up
+				if (canFit) {
+					Pickit.pickItem(pickList[0], status.result, status.line);
+				}
+			}
+		}
 
-        pickList.shift();
-    }
+		pickList.shift();
+	}
 
-    // Quit current game and transfer the items to mule
-    if (needMule && AutoMule.getInfo() && AutoMule.getInfo().hasOwnProperty("muleInfo") && AutoMule.getMuleItems().length > 0) {
-        scriptBroadcast("mule");
-        scriptBroadcast("quit");
-    }
+	// Quit current game and transfer the items to mule
+	if (needMule && AutoMule.getInfo() && AutoMule.getInfo().hasOwnProperty("muleInfo") && AutoMule.getMuleItems().length > 0) {
+		scriptBroadcast("mule");
+		scriptBroadcast("quit");
+	}
 
-    return true;
+	return true;
 };
 
 Pickit.pickItem = function (unit, status, keptLine) {
-	function ItemStats(unit) {
+	function ItemStats (unit) {
 		this.ilvl = unit.ilvl;
 		this.type = unit.itemType;
 		this.classid = unit.classid;
@@ -230,7 +231,7 @@ Pickit.pickItem = function (unit, status, keptLine) {
 
 	stats = new ItemStats(item);
 
-MainLoop:
+	MainLoop:
 	for (i = 0; i < 3; i += 1) {
 		if (!getUnit(4, -1, -1, gid)) {
 			break MainLoop;

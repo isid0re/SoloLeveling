@@ -10,11 +10,11 @@ if (!isIncluded("MuleLogger.js")) {
 
 if (!isIncluded("SoloLeveling/Functions/NTIPOverrides.js")) {
 	include("SoloLeveling/Functions/NTIPOverrides.js");
-};
+}
 
-if (!isIncluded("SoloLeveling/Functions/MiscOverrides.js")) { 
-	include("SoloLeveling/Functions/MiscOverrides.js"); 
-};
+if (!isIncluded("SoloLeveling/Functions/MiscOverrides.js")) {
+	include("SoloLeveling/Functions/MiscOverrides.js");
+}
 
 MuleLogger.getItemDesc = function (unit, logIlvl) {
 	var i, desc, index,
@@ -24,18 +24,18 @@ MuleLogger.getItemDesc = function (unit, logIlvl) {
 		logIlvl = this.LogItemLevel;
 	}
 
-	try{
+	try {
 		//Try a few times, sometimes it fails
-		for(let i = 0; i < 5; i++) {
+		for (let u = 0; u < 5; u++) {
 			desc = unit.description.split("\n");
 
-			if(desc) {
+			if (desc) {
 				break;
 			}
 
-			delay(250 + me.ping*2);
+			delay(250 + me.ping * 2);
 		}
-	}catch(e) {
+	} catch (e) {
 		print("Failed to get description of " + unit.fname);	//This isn't a fatal error just log and move on
 
 		return false;
@@ -71,13 +71,13 @@ MuleLogger.getItemDesc = function (unit, logIlvl) {
 	desc = desc.reverse().join("\\n");
 
 	return desc;
-}
+};
 
 MuleLogger.logEquippedItems = function () {
 	while (!me.gameReady) {
 		delay(100);
 	}
-	
+
 	var i, folder, string, parsedItem,
 		items = me.getItems(),
 		realm = me.realm || "Single Player",
@@ -106,7 +106,7 @@ MuleLogger.logEquippedItems = function () {
 		return;
 	}
 
-	function itemSort(a, b) {
+	function itemSort (a, b) {
 		return b.itemType - a.itemType;
 	}
 
@@ -128,7 +128,7 @@ MuleLogger.logEquippedItems = function () {
 				parsedItem.title += " (equipped)";
 			}
 
-			if(NTIP.GetTier(items[i]) > 0) {
+			if (NTIP.GetTier(items[i]) > 0) {
 				parsedItem.header += "\n(Tier: " + NTIP.GetTier(items[i]) + ")";
 			}
 
@@ -143,12 +143,12 @@ MuleLogger.logEquippedItems = function () {
 			string = JSON.stringify(parsedItem);
 			finalString += (string + "\n");
 		}
-		
+
 	}
 
 	if (Config.UseMerc) {
 		for (i = 0; i < 3; i += 1) {
-			merc = me.getMerc();
+			merc = getMercFix();
 
 			if (merc) {
 				break;
@@ -164,7 +164,7 @@ MuleLogger.logEquippedItems = function () {
 				parsedItem = this.logItem(items[i]);
 				parsedItem.title += " (merc)";
 
-				if(NTIP.GetMercTier(items[i]) > 0){
+				if (NTIP.GetMercTier(items[i]) > 0) {
 					parsedItem.header += "(MercTier: " + NTIP.GetMercTier(items[i]) + ")\n";
 				}
 
@@ -175,29 +175,7 @@ MuleLogger.logEquippedItems = function () {
 
 	}
 
-	switch(me.classid) {
-	case 0:
-		charClass = " Amazon";
-		break;
-	case 1:
-		charClass = " Sorceress";
-		break;
-	case 2:
-		charClass = " Necromancer";
-		break;
-	case 3:
-		charClass = " Paladin";
-		break;
-	case 4:
-		charClass = " Barbarian";
-		break;
-	case 5:
-		charClass = " Druid";
-		break;
-	case 6:
-		charClass = " Assassin";
-		break;
-	}
+	charClass = [".Amazon", ".Sorceress", ".Necromancer", ".Paladin", ".Barbarian", ".Druid", ".Assassin"][me.classid];
 
 	// hcl = hardcore class ladder
 	// sen = softcore expan nonladder

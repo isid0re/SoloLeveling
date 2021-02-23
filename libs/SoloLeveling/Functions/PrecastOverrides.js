@@ -189,7 +189,7 @@ Precast.doPrecast = function (force) {
 			this.precastCTA(force);
 		}
 
-		if(!!Config.Wereform) {
+		if (!!Config.Wereform) {
 			Misc.shapeShift(Config.Wereform);
 		}
 
@@ -289,29 +289,29 @@ Precast.summon = function (skillId) {
 		rv = true;
 		let coord = CollMap.getRandCoordinate(me.x, -3, 3, me.y, -3, 3);	//Keeps bots from getting stuck trying to summon
 
-		if(coord){
+		if (coord) {
 			Skill.cast(skillId, 0, coord.x, coord.y);
-		}else{
+		} else {
 			Skill.cast(skillId, 0, me.x, me.y);
 		}
-		
-		if(Skill.getManaCost(skillId) > me.mp){
+
+		if (Skill.getManaCost(skillId) > me.mp) {
 			delay(1000);
-			retry++;	
+			retry++;
 		}
 
-		if(retry > count * 2){
-			if(me.inTown){
+		if (retry > count * 2) {
+			if (me.inTown) {
 				Town.heal();
 				delay(1000 + me.ping);
 				let coord = CollMap.getRandCoordinate(me.x, -5, 5, me.y, -5, 5);	//Keeps bots from getting stuck trying to summon
 				Pather.moveTo(coord.x, coord.y);
 
-			}else{
+			} else {
 				let coord = CollMap.getRandCoordinate(me.x, -5, 5, me.y, -5, 5);	//Keeps bots from getting stuck trying to summon
-				Pather.moveTo(coord.x, coord.y);	
+				Pather.moveTo(coord.x, coord.y);
 			}
-			
+
 			retry = 0;
 		}
 	}

@@ -266,7 +266,8 @@ ControlAction.makeCharacter = function (info) {
 };
 
 ControlAction.findCharacter = function (info) {
-	var control, text, tick;
+	var control, text, tick,
+		count = 0;
 
 	tick = getTickCount();
 
@@ -282,17 +283,42 @@ ControlAction.findCharacter = function (info) {
 		D2Bot.restart();
 	}
 
-	if (getLocation() === 12) {
+	// start from beginning of the char list
+	sendKey(0x24);
+
+	while (getLocation() === 12 && count < 24) {
 		control = getControl(4, 37, 178, 200, 92);
 
 		if (control) {
 			do {
 				text = control.getText();
 
-				if (text instanceof Array && typeof text[1] === "string" && text[1] === info.charName) {
-					return true;
+				if (text instanceof Array && typeof text[1] === "string") {
+					count++;
+
+					if (text[1].toLowerCase() === info.charName.toLowerCase()) {
+						return true;
+					}
 				}
-			} while (control.getNext());
+			} while (count < 24 && control.getNext());
+		}
+
+		if (count === 8 || count === 16) { // check for additional characters up to 24
+			control = getControl(4, 237, 457, 72, 93);
+
+			if (control) {
+				me.blockMouse = true;
+
+				control.click();
+				sendKey(0x28);
+				sendKey(0x28);
+				sendKey(0x28);
+				sendKey(0x28);
+
+				me.blockMouse = false;
+			}
+		} else { // no further check necessary
+			break;
 		}
 	}
 
