@@ -8,6 +8,21 @@ if (!isIncluded("common/Town.js")) {
 	include("common/Town.js");
 }
 
+//Removed Missle Potions for easy gold
+Town.ignoredItemTypes = [ // Items that won't be stashed
+	5, // Arrows
+	6, // Bolts
+	18, // Book (Tome)
+	22, // Scroll
+	41, // Key
+	76, // Healing Potion
+	77, // Mana Potion
+	78, // Rejuvenation Potion
+	79, // Stamina Potion
+	80, // Antidote Potion
+	81 // Thawing Potion
+];
+
 Town.townTasks = function () {
 	if (!me.inTown) {
 		Town.goToTown();
@@ -60,7 +75,6 @@ Town.townTasks = function () {
 	Misc.hireMerc();
 	Misc.equipMerc();
 	this.gamble();
-	this.clearInventory();
 	Town.stash();
 	this.clearJunk();
 	this.organizeStash();
@@ -150,6 +164,9 @@ Town.doChores = function (repair = false) {
 	this.clearScrolls();
 	Town.organizeInventory();
 	this.characterRespec();
+
+	if(me.classid !== 4 && !Precast.checkCTA())	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
+		Precast.doPrecast(false);
 
 	for (i = 0; i < cancelFlags.length; i += 1) {
 		if (getUIFlag(cancelFlags[i])) {
@@ -915,12 +932,8 @@ Town.clearInventory = function () {
 		) {
 			result = Pickit.checkItem(items[i]).result;
 
-			if (!Item.autoEquipCheck(items[i]) && !NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result) {
-				result = 0;
-			}
-
-			if (!Item.autoEquipCheckMerc(items[i]) && !NTIP.CheckItem(items[i], NTIP_CheckListNoTier, true).result) {
-				result = 0;
+			if (!items[i].getFlag(0x10)) {
+				result = -1;
 			}
 
 			switch (result) {
@@ -1241,3 +1254,63 @@ Town.goToTown = function (act, wpmenu) {
 	return true;
 };
 
+Town.reviveMerc = function () {
+	if (!this.needMerc()) {
+		return true;
+	}
+
+	// avoid Aheara
+	if (me.act === 3) {
+		this.goToTown(2);
+	}
+
+	var i, tick, dialog, lines,
+		preArea = me.area,
+		npc = this.initNPC("Merc", "reviveMerc");
+
+	if (!npc) {
+		return false;
+	}
+
+MainLoop:
+	for (i = 0; i < 3; i += 1) {
+		dialog = getDialogLines();
+
+		for (lines = 0; lines < dialog.length; lines += 1) {
+			if (dialog[lines].text.match(":", "gi")) {
+				dialog[lines].handler();
+				delay(Math.max(750, me.ping * 2));
+			}
+
+			// "You do not have enough gold for that."
+			if (dialog[lines].text.match(getLocaleString(3362), "gi")) {
+				return false;
+			}
+		}
+
+		while (getTickCount() - tick < 2000) {
+			if (!!me.getMerc()) {
+				delay(Math.max(750, me.ping * 2));
+
+				break MainLoop;
+			}
+
+			delay(200);
+		}
+	}
+
+	Attack.checkInfinity();
+
+	if (!!me.getMerc()) {
+		if (Config.MercWatch && (me.classid === 4 || Precast.checkCTA())) { // Cast BO on merc so he doesn't just die again. Only Do this is you are a barb or actually have a cta. Otherwise its just a waste of time.
+			print("MercWatch precast");
+			Pather.useWaypoint("random");
+			Precast.doPrecast(true);
+			Pather.useWaypoint(preArea);
+		}
+
+		return true;
+	}
+
+	return false;
+};
