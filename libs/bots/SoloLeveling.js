@@ -42,10 +42,15 @@ function SoloLeveling () {
 	this.setup = function () {
 		//New Stuff
 		if (shouldLog || useOverlay) {
+			while (me.ingame && !me.gameReady) {
+				delay(100);
+			}
+
 			let origToolsThread = getScript("tools/ToolsThread.js");
 
 			if (origToolsThread && origToolsThread.running) {
 				origToolsThread.stop();
+				delay(rand(200,500) + me.ping);
 			}
 
 			if (!origToolsThread.running) {

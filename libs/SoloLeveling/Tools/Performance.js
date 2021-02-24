@@ -96,8 +96,15 @@ var Performance = {
 		Misc.fileAction(Path, 1, string);
 	},
 
+	delete: function () {
+		FileTools.copy(Path, "libs/SoloLeveling/Performance/" + me.profile + "Corrupted" + ".json");
+		FileTools.remove("libs/SoloLeveling/Performance/" + me.profile + ".json");
+		D2Bot.printToConsole("Performance: Generating a new file, old one became corrupted");
+		this.set();
+	},
+
 	getObj: function () {
-		var obj, string;
+		var obj, string, failCount = 0;
 
 		if (!FileTools.exists(Path)) {
 			this.create();
@@ -106,17 +113,28 @@ var Performance = {
 		//string = FileTools.readText("data/" + me.profile + ".json");
 		string = Misc.fileAction(Path, 0);
 
-		while (!obj) {
+		for (let i = 0; i < 10; i++) {
 			try {
 				obj = JSON.parse(string);
 			} catch (e) {
-				// If we failed return false, will figure out later what happened
-				Misc.errorReport(e, "Performance");
+				failCount++;
+
+				if(failCount === 10) {
+					Misc.errorReport(e, "Performance");
+					this.delete();
+					delay(1000);
+					failCount = 0;
+					
+				}
+				
 			}
+
+			if (obj)
+				break;
 
 			delay(500);
 		}
-
+		
 		return obj;
 	},
 

@@ -123,7 +123,7 @@ var Playtime = {
 
 				break;
 			case "checkvalues":
-				if (me.charlvl === 1) {
+				if (me.charlvl === 1 || obj.script === "") {
 
 					break;
 				}
