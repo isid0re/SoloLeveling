@@ -147,6 +147,10 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 
 						delay(10 + me.ping);
 					}
+
+					if (i === 2) {
+						Packet.flash(me.gid);
+					}
 				}
 			}
 		} while (door.getNext());

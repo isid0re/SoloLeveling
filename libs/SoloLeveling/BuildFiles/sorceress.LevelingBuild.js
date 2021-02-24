@@ -1,6 +1,6 @@
 /**
- *    @filename   Sorceress.BlizzardBuild.js
- *    @desc      Sorceress blizzard build for after respecOne
+ *    @filename   Sorceress.BlizzballerBuild.js
+ *    @desc      Sorceress blizzballer build for after respecOne
  */
 
 var build = {
