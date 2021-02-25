@@ -40,28 +40,6 @@ if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") &
 
 function SoloLeveling () {
 	this.setup = function () {
-		//New Stuff
-		if (shouldLog || useOverlay) {
-			while (me.ingame && !me.gameReady) {
-				delay(100);
-			}
-
-			let origToolsThread = getScript("tools/ToolsThread.js");
-
-			if (origToolsThread && origToolsThread.running) {
-				origToolsThread.stop();
-				delay(rand(200,500) + me.ping);
-			}
-
-			if (!origToolsThread.running) {
-				load("libs/SoloLeveling/Tools/ToolsThread.js");
-			}
-
-			if (shouldLog) {
-				Playtime.updateStats("checkvalues");
-			}
-		}
-
 		print('ÿc9SoloLevelingÿc0: start run');
 		me.overhead('starting run');
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
@@ -84,6 +62,28 @@ function SoloLeveling () {
 		if (me.hp / me.hpmax < 1) {
 			Town.heal();
 			me.cancel();
+		}
+
+		//New Stuff
+		if (shouldLog || useOverlay) {
+			while (me.ingame && !me.gameReady) {
+				delay(100);
+			}
+
+			let origToolsThread = getScript("tools/ToolsThread.js");
+
+			if (origToolsThread && origToolsThread.running) {
+				origToolsThread.stop();
+				delay(rand(200,500) + me.ping);
+			}
+
+			if (!origToolsThread.running) {
+				load("libs/SoloLeveling/Tools/ToolsThread.js");
+			}
+
+			if (shouldLog) {
+				Playtime.updateStats("checkvalues");
+			}
 		}
 
 		return true;

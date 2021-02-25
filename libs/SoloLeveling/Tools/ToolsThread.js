@@ -49,6 +49,15 @@ function main () {
 		canQuit = true,
 		timerLastDrink = [];
 
+	//Double Safeguard to stop the base toolsthread
+	let origToolsThread = getScript("tools/ToolsThread.js");
+
+	if(!!origToolsThread) {
+		if (origToolsThread.running) {
+			origToolsThread.stop();
+		}
+	}
+
 	print("ÿc9SoloLevelingÿc3: Start Custom ToolsThread script");
 	D2Bot.init();
 	Config.init(false);
@@ -690,13 +699,6 @@ function main () {
 	}
 
 	var myAct = me.act;
-
-	//Double Safeguard to stop the base toolsthread
-	let origToolsThread = getScript("tools/ToolsThread.js");
-
-	if ((origToolsThread && origToolsThread.running)) {
-		origToolsThread.stop();
-	}
 
 	// Start
 	while (true) {
