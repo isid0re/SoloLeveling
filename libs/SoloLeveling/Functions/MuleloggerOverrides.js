@@ -370,6 +370,6 @@ MuleLogger.logEquippedItems = function () {
 
 	// hcl = hardcore class ladder
 	// sen = softcore expan nonladder
-	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + charClass + me.name + "." + ( me.playertype ? "h" : "s" ) + (me.gametype ? "e" : "c" ) + ( me.ladder > 0 ? "l" : "n" ) + ".txt", finalString);
+	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + charClass + me.profile + "." + me.name + "." + ( me.playertype ? "h" : "s" ) + (me.gametype ? "e" : "c" ) + ( me.ladder > 0 ? "l" : "n" ) + ".txt", finalString);
 	print("Item logging done.");
 };
