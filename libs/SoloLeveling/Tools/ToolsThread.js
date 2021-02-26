@@ -68,7 +68,7 @@ function main () {
 	Runewords.init();
 	Cubing.init();
 
-	if (useOverlay) {
+	if (SoloSettings.useOverlay) {
 		include("SoloLeveling/Tools/OverlayThread.js");
 
 		var sayings = ["Oh no :( ", "gonna chicken?", "no bueno", "little low?"];
@@ -702,7 +702,7 @@ function main () {
 
 	// Start
 	while (true) {
-		if (isIncluded("SoloLeveling/Tools/OverlayThread.js") && useOverlay) {
+		if (isIncluded("SoloLeveling/Tools/OverlayThread.js") && SoloSettings.useOverlay) {
 			if (useOverlay) {
 				SoloLevelingHooks.update();
 
