@@ -97,10 +97,10 @@ var Performance = {
 	},
 
 	delete: function () {
-		FileTools.copy(Path, "libs/SoloLeveling/Performance/" + me.profile + "Corrupted" + ".json");
+		FileTools.copy("libs/SoloLeveling/Performance/" + me.profile + ".json", "libs/SoloLeveling/Performance/" + me.profile + "Corrupted" + ".json");
 		delay(100 + me.ping);
 		FileTools.remove("libs/SoloLeveling/Performance/" + me.profile + ".json");
-		delay(100 + me.ping);
+		delay(500 + me.ping);
 		D2Bot.printToConsole("Performance: Generating a new file, old one became corrupted");
 		this.set();
 	},
