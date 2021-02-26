@@ -69,6 +69,14 @@ var Playtime = {
 		return obj;
 	},
 
+	delete: function () {
+		FileTools.copy(Path, "libs/SoloLeveling/Data/" + me.profile + "Corrupted" + ".json");
+		delay(100 + me.ping);
+		FileTools.remove("libs/SoloLeveling/Data/" + me.profile + ".json");
+		delay(100 + me.ping);
+		D2Bot.printToConsole("Playtime: Generating a new file, old one became corrupted");
+	},
+
 	getObj: function () {
 		var obj, string;
 
@@ -77,15 +85,15 @@ var Playtime = {
 		}
 
 		//string = FileTools.readText("data/" + me.profile + ".json");
-		string = Misc.fileAction(path, 0);
+		string = Misc.fileAction(Path, 0);
 
-		while (!obj) {
-			try {
-				obj = JSON.parse(string);
-			} catch (e) {
-				// If we failed return false, will figure out later what happened
-				Misc.errorReport(e, "Playtime");
-			}
+		try {
+			obj = JSON.parse(string);
+		} catch (e) {
+			// If we failed, file might be corrupted, so create a new one
+			Misc.errorReport(e, "Playtime");
+			this.delete();
+			obj = this.create();
 		}
 
 		return obj;
