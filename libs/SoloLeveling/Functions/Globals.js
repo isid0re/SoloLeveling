@@ -7,11 +7,6 @@ if (!isIncluded("OOG.js")) {
 	include("OOG.js");
 }
 
-//Configurable Settings for Overlay and Performance tracking
-const shouldLog = false;	//Default should be false for people who aren't interested in performance statistics
-const useOverlay = false;	//Default should be false for people who aren't interested in having the overlay
-const logEquipped = false;	//Default should be false for people who arne't interested in having equipped items viewable from D2Bot# charviewer tab
-
 // general settings
 var finalBuild = DataFile.getStats().finalBuild;
 var difficulty = ['Normal', 'Nightmare', 'Hell'];
