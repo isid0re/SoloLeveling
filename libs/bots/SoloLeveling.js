@@ -34,7 +34,7 @@ if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) {
 
 includeSoloLeveling();
 
-if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && shouldLog) {
+if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && SoloSettings.shouldLog) {
 	Performance.set();
 }
 
@@ -65,7 +65,7 @@ function SoloLeveling () {
 		}
 
 		//New Stuff
-		if (shouldLog || useOverlay) {
+		if (SoloSettings.shouldLog || SoloSettings.useOverlay) {
 			while (me.ingame && !me.gameReady) {
 				delay(100);
 			}
@@ -107,7 +107,7 @@ function SoloLeveling () {
 				for (j = 0; j < 5; j += 1) {
 					let tick = getTickCount();
 
-					if (shouldLog) {
+					if (SoloSettings.shouldLog) {
 						Playtime.updateStats("setvalues", sequence[k][0]);
 
 						if (isForQuest(sequence[k][0])) {
@@ -125,7 +125,7 @@ function SoloLeveling () {
 
 					if (this[sequence[k][0]]()) {
 
-						if (shouldLog) {
+						if (SoloSettings.shouldLog) {
 							if (forQuest) {
 								if (isQuestFinished(sequence[k][0])) {
 									Performance.updateStats(sequence[k][0], "QuestCompleted");
