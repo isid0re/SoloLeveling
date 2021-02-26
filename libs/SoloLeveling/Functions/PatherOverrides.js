@@ -71,7 +71,7 @@ NodeAction.popChests = function () {
 
 		if (well) {
 			do {
-				if (getDistance(me, well) <= Config.ClearPath.Range || Pather.moveToUnit(well, 3, 0)) {
+				if (getDistance(me, well) <= 5 || Pather.moveToUnit(well, 3, 0)) {
 					for (let w = 0; w < 3; w++) {
 						Misc.click(0, 0, well);
 						delay(25 + me.ping);
@@ -416,4 +416,77 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 	PathDebug.removeHooks();
 
 	return getDistance(me, node.x, node.y) < 5;
+};
+
+Pather.makePortal = function (use) {
+	if (me.inTown) {
+		return true;
+	}
+
+	var i, portal, oldPortal, oldGid, tick, tpTome, tpScroll;
+
+	for (i = 0; i < 5; i += 1) {
+		if (me.dead) {
+			break;
+		}
+
+		tpScroll = me.findItem("tsc", 0, 3);
+		tpTome = me.findItem("tbk", 0, 3);
+
+		if (!tpTome && !tpScroll) {
+			return false;
+		}
+
+		if ((tpTome && !tpTome.getStat(70)) && !tpScroll) {
+			return false;
+		}
+
+		oldPortal = getUnit(2, "portal");
+
+		if (oldPortal) {
+			do {
+				if (oldPortal.getParent() === me.name) {
+					oldGid = oldPortal.gid;
+
+					break;
+				}
+			} while (oldPortal.getNext());
+		}
+
+		if (!tpTome) {
+			tpScroll.interact();
+		} else {
+			tpTome.interact();
+		}
+
+		tick = getTickCount();
+
+		MainLoop:
+		while (getTickCount() - tick < Math.max(500 + i * 100, me.ping * 2 + 100)) {
+			portal = getUnit(2, "portal");
+
+			if (portal) {
+				do {
+					if (portal.getParent() === me.name && portal.gid !== oldGid) {
+						if (use) {
+							if (Pather.usePortal(null, null, copyUnit(portal))) {
+								return true;
+							}
+
+							break MainLoop; // don't spam usePortal
+						} else {
+							return copyUnit(portal);
+						}
+					}
+				} while (portal.getNext());
+			}
+
+			delay(10);
+		}
+
+		Packet.flash(me.gid);
+		delay(200 + me.ping);
+	}
+
+	return false;
 };

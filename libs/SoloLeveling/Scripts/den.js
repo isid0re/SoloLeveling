@@ -9,22 +9,14 @@ function den () {
 	me.overhead("den");
 
 	if (!Pather.checkWP(3)) {
-		Pather.moveToExit([2, 8], false, true);
-
-		if (!me.getItem(518)) {
-			let tp = me.getItem(529);
-
-			if (tp) {
-				clickItem(1, tp);
-			}
-		} else {
-			Pather.makePortal();
-		}
+		Pather.moveToExit(2, true);
 
 		if (me.charlvl < 3) {
 			Attack.clearLevel();
 		}
 
+		Pather.moveToExit(8, false, true);
+		Pather.makePortal();
 		Pather.getWP(3);
 		Pather.useWaypoint(1);
 	}

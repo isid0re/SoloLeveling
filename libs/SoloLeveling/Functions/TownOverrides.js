@@ -207,15 +207,11 @@ Town.heal = function () {
 };
 
 Town.buyBooks = function () {
-	if (me.gold < 450) {
-		return false;
-	}
-
 	if (me.findItem(518, 0, 3) && me.findItem(519, 0, 3)) {
 		return true;
 	}
 
-	var tome1, tome2, npc;
+	var tpBook, tpScroll, idBook, npc;
 
 	switch (me.area) {
 	case 1:
@@ -249,11 +245,12 @@ Town.buyBooks = function () {
 	delay(500);
 
 	if (!me.findItem(518, 0, 3)) {
-		tome1 = npc.getItem(518);
+		tpBook = npc.getItem(518);
+		tpScroll = npc.getItem(529);
 
-		if (tome1 && Storage.Inventory.CanFit(tome1)) {
+		if (tpBook && me.getStat(14) + me.getStat(15) >= tpBook.getItemCost(0) && Storage.Inventory.CanFit(tpBook)) {
 			try {
-				if (tome1.buy()) {
+				if (tpBook.buy()) {
 					print('ÿc9SoloLevelingÿc0: bought Tome of Town Portal');
 					this.fillTome(518);
 				}
@@ -263,16 +260,26 @@ Town.buyBooks = function () {
 				return false;
 			}
 		} else {
-			return false;
+			if (tpScroll && me.getStat(14) + me.getStat(15) >= tpScroll.getItemCost(0) && Storage.Inventory.CanFit(tpScroll)) {
+				try {
+					if (tpScroll.buy()) {
+						print('ÿc9SoloLevelingÿc0: bought Scroll of Town Portal');
+					}
+				} catch (e1) {
+					print(e1);
+
+					return false;
+				}
+			}
 		}
 	}
 
 	if (!me.findItem(519, 0, 3)) {
-		tome2 = npc.getItem(519);
+		idBook = npc.getItem(519);
 
-		if (tome2 && Storage.Inventory.CanFit(tome2)) {
+		if (idBook && Storage.Inventory.CanFit(idBook)) {
 			try {
-				if (tome2.buy()) {
+				if (idBook.buy()) {
 					print('ÿc9SoloLevelingÿc0: bought Tome of Identify');
 				}
 			} catch (e3) {
@@ -925,6 +932,9 @@ Town.clearInventory = function () {
 			items[i].classid !== 174 && // Khalim's Will
 			items[i].classid !== 644 && // Malah's Potion
 			items[i].classid !== 646 && // Scroll of Resistance
+			(items[i].classid !== 603 && items[i].quality !== 7) && // Anni
+			(items[i].classid !== 604 && items[i].quality !== 7) && // Torch
+			(items[i].classid !== 605 && items[i].quality !== 7) && // Gheeds
 			(items[i].code !== 529 || !!me.findItem(518, 0, 3)) && // Don't throw scrolls if no tome is found (obsolete code?)
 			(items[i].code !== 530 || !!me.findItem(519, 0, 3)) && // Don't throw scrolls if no tome is found (obsolete code?)
 			!Cubing.keepItem(items[i]) && // Don't throw cubing ingredients

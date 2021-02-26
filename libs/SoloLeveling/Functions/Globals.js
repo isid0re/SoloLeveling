@@ -143,7 +143,7 @@ var goldCheck = function () {
 	let gold = me.getStat(14) + me.getStat(15);
 	let goldLimit = [10000, 50000, 100000][me.diff];
 
-	if (gold >= goldLimit) {
+	if (me.diff === 0 && !Pather.accessToAct(2) || gold >= goldLimit) {
 		return true;
 	}
 
@@ -1236,7 +1236,7 @@ var tierscore = function (item) {
 		MAXDMG: 3, // max damage
 		SECMINDMG: 3, // secondary min damage
 		SECMAXDMG: 3, // secondary max damage
-		ELEDMG: 2, // elemental damage
+		ELEDMG: 1, // elemental damage
 		AR:	0.5, // attack rating
 		CB: 5, // crushing blow
 		// leaching
@@ -1415,7 +1415,7 @@ var tierscore = function (item) {
 	tier += this.skillsScore(item);
 
 	let rwBase; // don't score runeword base armors
-	let questItem, itemsList = [521, 92, 173, 174]; // don't score viper amulet, staff of kings, khalim's flail
+	let questItem, itemsList = [521, 92, 173, 174, 90]; // don't score viper amulet, staff of kings, khalim's flail, hellforge hammer
 
 	for (let y = 0; y < itemsList.length; y += 1) {
 		if (item.classid === itemsList[y]) {
