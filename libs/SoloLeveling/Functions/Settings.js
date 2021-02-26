@@ -43,8 +43,8 @@
 };*/
 
 const SoloSettings = {
-	//shouldLog: logBasedOnClass(),	//Default should be false for people who aren't interested in performance statistics
-	//useOverlay: logBasedOnClass(),	//Default should be false for people who aren't interested in having the overlay
+	//shouldLog: logBasedOnClass(),		// Uncomment this to use above function
+	//useOverlay: logBasedOnClass(),	// Uncomment this to use above function
 	shouldLog: false,	//Default should be false for people who aren't interested in performance statistics
 	useOverlay: false,	//Default should be false for people who aren't interested in having the overlay
 	logEquipped: false,	//Default should be false for people who arne't interested in having equipped items viewable from D2Bot# charviewer tab
@@ -54,6 +54,6 @@ const SoloSettings = {
 		logItems: false,
 		logExperience: false,
 		debugScripts: false,
-	}
+	},
 
 };

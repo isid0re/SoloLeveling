@@ -186,16 +186,8 @@ function LoadConfig () {
 	// Pickit config.
 	Config.PickRange = me.diff === 0 ? 20 : 40;
 	Config.FastPick = true;
-	Config.ItemInfo = true;
 	Config.CainID.Enable = false;
 	Config.FieldID = false;
-
-	// Manager Item Log Screen
-	Config.LogKeys = true;
-	Config.LogOrgans = true;
-	Config.LogMiddleRunes = true;
-	Config.LogHighRunes = true;
-	Config.ShowCubingInfo = true;
 
 	// General config
 	Config.MinGameTime = 400;
@@ -203,7 +195,6 @@ function LoadConfig () {
 	Config.MiniShopBot = true;
 	Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
 	Config.TownCheck = me.findItem("tbk", 0, 3);
-	Config.LogExperience = false; // Print experience statistics in the manager.
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
 	Config.OpenChests = me.diff === 2 ? 2 : true;
@@ -258,8 +249,6 @@ function LoadConfig () {
 
 	//AutoBuild
 	Config.AutoBuild.Enabled = true;
-	Config.AutoBuild.Verbose = true;
-	Config.AutoBuild.DebugMode = true;
 
 	// Class specific config
 	Config.Dodge = false;
@@ -297,6 +286,19 @@ function LoadConfig () {
 		if (!isIncluded("bots/SoloLeveling.js")) {
 			include("bots/SoloLeveling.js");
 		}
+
+		//Debugging
+		Config.ItemInfo = SoloSettings.debugging.logItems; 				// Log stashed, skipped (due to no space) or sold items.
+		Config.LogExperience = SoloSettings.debugging.logExperience; 	// Print experience statistics in the manager.
+		Config.AutoBuild.Verbose = SoloSettings.debugging.verbose;		// Allows script to print messages in console
+		Config.AutoBuild.DebugMode = SoloSettings.debugging.verbose;	// logs activity to /logs/AutoBuild.CharacterName._MM_DD_YYYY.log
+
+		// Manager Item Log Screen
+		Config.LogKeys = true;
+		Config.LogOrgans = true;
+		Config.LogMiddleRunes = true;
+		Config.LogHighRunes = true;
+		Config.ShowCubingInfo = true;
 
 		// Character Build Setup
 		var respecTwo = respecTwoCheck();
