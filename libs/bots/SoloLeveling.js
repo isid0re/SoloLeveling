@@ -92,12 +92,13 @@ function SoloLeveling () {
 	this.runsequence = function () {
 		let j, k, forQuest = false,
 			setDifficulty = nextDifficulty();
+
+		DataFile.updateStats("setDifficulty", setDifficulty);
+		D2Bot.setProfile(null, null, null, setDifficulty);
+
 		var nonQuests = ["pits", "ancienttunnels", "tombs", "lowerkurast", "pindle", "cows"];
 
 		for (k = 0; k < sequence.length; k += 1) {
-			DataFile.updateStats("setDifficulty", setDifficulty);
-			D2Bot.setProfile(null, null, null, setDifficulty);
-
 			if (!completedTask(sequence[k][1])) {
 				if (!isIncluded("SoloLeveling/Scripts/" + sequence[k][0] + ".js")) {
 					include("SoloLeveling/Scripts/" + sequence[k][0] + ".js");
