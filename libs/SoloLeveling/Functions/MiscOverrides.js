@@ -232,7 +232,7 @@ Item.autoEquip = function () {
 					if (this.equip(items[0], bodyLoc[j])) {
 						Misc.logItem("Equipped", me.getItem(-1, -1, gid));
 						
-						if(logEquipped) {
+						if (SoloSettings.logEquipped) {
 							MuleLogger.logEquippedItems();
 						}
 						
@@ -480,7 +480,7 @@ Item.equipMerc = function (item, bodyLoc) {
 					}
 				}
 
-				if(logEquipped) {
+				if (SoloSettings.logEquipped) {
 					MuleLogger.logEquippedItems();
 				}
 
