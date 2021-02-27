@@ -703,7 +703,7 @@ function main () {
 	// Start
 	while (true) {
 		if (isIncluded("SoloLeveling/Tools/OverlayThread.js") && SoloSettings.useOverlay) {
-			if (useOverlay) {
+			if (SoloSettings.useOverlay) {
 				SoloLevelingHooks.update();
 
 				if (me.act !== myAct) {
