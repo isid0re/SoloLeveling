@@ -60,6 +60,8 @@ var Playtime = {
 			chickens: 0,
 			script: "",
 			tick: 0,
+			oog: 0,
+			ingame: 0,
 		};
 
 		string = JSON.stringify(obj, null, 2);
@@ -71,7 +73,7 @@ var Playtime = {
 
 	delete: function () {
 		FileTools.copy("libs/SoloLeveling/Data/" + me.profile + ".json", "libs/SoloLeveling/Data/" + me.profile + "Corrupted" + ".json");
-		delay(100 + me.ping);
+		delay(500 + me.ping);
 		FileTools.remove("libs/SoloLeveling/Data/" + me.profile + ".json");
 		delay(500 + me.ping);
 		D2Bot.printToConsole("Playtime: Generating a new file, old one became corrupted");
@@ -158,10 +160,10 @@ var Playtime = {
 	getInGameTime: function () {
 		var playtime = 0;
 
-		if (!!this.getStats().playtime) {
-			var recordedPlaytime = JSON.parse(this.getStats().playtime);
+		let recordedPlaytime = this.getObj();
 
-			if (recordedPlaytime.hasOwnProperty("ingame") ) {
+		if (recordedPlaytime) {
+			if (recordedPlaytime.ingame) {
 				playtime = recordedPlaytime.ingame;
 			}
 		}
@@ -172,10 +174,10 @@ var Playtime = {
 	getOutOfGameTime: function () {
 		var playtime = 0;
 
-		if (!!this.getStats().playtime) {
-			var recordedPlaytime = JSON.parse(this.getStats().playtime);
+		let recordedPlaytime = this.getObj();
 
-			if (recordedPlaytime.hasOwnProperty("oog")) {
+		if (recordedPlaytime) {
+			if (recordedPlaytime.oog) {
 				playtime = recordedPlaytime.oog;
 			}
 		}
@@ -186,18 +188,16 @@ var Playtime = {
 	getTotalTime: function () {
 		var playtime = 0;
 
-		if (!!this.getStats().playtime) {
-			var recordedPlaytime = JSON.parse(this.getStats().playtime);
+		let recordedPlaytime = this.getObj();
 
-			if (recordedPlaytime.hasOwnProperty("ingame") ) {
+		if (recordedPlaytime) {
+			if (recordedPlaytime.ingame) {
 				playtime += recordedPlaytime.ingame;
 			}
 		}
 
-		if (!!this.getStats().playtime) {
-			var recordedPlaytime = JSON.parse(this.getStats().playtime);
-
-			if (recordedPlaytime.hasOwnProperty("oog")) {
+		if (recordedPlaytime) {
+			if (recordedPlaytime.oog) {
 				playtime += recordedPlaytime.oog;
 			}
 		}
@@ -215,14 +215,15 @@ var Playtime = {
 		var oogPlaytime = 0, ingamePlaytime = 0;
 
 		if (dt >= this.updateFrequency ) {
-			if (!!this.getStats().playtime) {
-				var recordedPlaytime = JSON.parse(this.getStats().playtime);
+			let recordedPlaytime = this.getObj();
 
-				if (recordedPlaytime.hasOwnProperty("oog")) {
+			if (recordedPlaytime) {
+
+				if (recordedPlaytime.oog) {
 					oogPlaytime = recordedPlaytime.oog;
 				}
 
-				if (recordedPlaytime.hasOwnProperty("ingame")) {
+				if (recordedPlaytime.ingame) {
 					ingamePlaytime = recordedPlaytime.ingame;
 				}
 			}
@@ -235,7 +236,8 @@ var Playtime = {
 
 			this.lastTick = newTick;
 
-			this.updateStats("playtime", JSON.stringify({oog: oogPlaytime, ingame: ingamePlaytime}));
+			this.updateStats("oog", oogPlaytime);
+			this.updateStats("ingame", ingamePlaytime);
 		}
 	},
 
