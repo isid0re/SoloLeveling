@@ -1,6 +1,7 @@
 /**
 *	@filename	D2BotSoloCleaner.dbj
-*	@author		Whoever did the original D2BotAccountCleaner.dbj
+*	@author		theBGuy
+*	@credits	Whoever did the original D2BotAccountCleaner.dbj
 *	@desc		This is a modifed D2BotAccountCleaner to also delete extra files leftover after deleting a char to
 *					be specifically used with SoloLeveling. It has also been modified to work with single player
 */
@@ -8,6 +9,7 @@
 var StarterConfig = {
 	DataCleaner:		true,	// Clean data files associated with running SoloLeveling. A must, if using Performance.js or the Overlay system and wish to use profile over.
 	SaveFiles:			false,	// Save important files to new folder inside libs/SoloLeveling/Data/ Must set to true if running Performance.js and wish to save related files for performance review.
+	CompileData:		false,	// After running SaveFiles a couple times this allows all the data to be averaged together. Search // START HERE FOR DATA COMPILING for further instructions
 	DelayBetweenAccounts: rand(10,25), //Seconds to wait before cleaning next account
 	SwitchKeyDelay: 0, // Seconds to wait before switching a used/banned key or after realm down
 
@@ -19,6 +21,10 @@ var StarterConfig = {
 	PleaseWaitTimeout: rand(30, 60), // Seconds to wait before cancelling the 'Please Wait...' screen
 	WaitInLineTimeout: rand(30, 60) // Seconds to wait before cancelling the 'Waiting in Line...' screen
 };
+
+if (!isIncluded("SoloLeveling/Tools/Performance.js")) {
+	include("SoloLeveling/Tools/Performance.js");
+}
 
 var AccountsToClean = {
 		/* Format:
@@ -48,6 +54,7 @@ var profiles = [
 		"SCL-ZON123",
 		"hcnl-pal123",
 	Enter your lines under here*/
+	
 ];
 
 function moveFiles() {
@@ -167,6 +174,302 @@ function moveFiles() {
 	}
 
 	D2Bot.printToConsole("SoloCleaner: Done cleaning files", 6);	
+};
+
+// START HERE FOR DATA COMPILING
+/*Enter a profile of the type you wish to compile.
+	I.E if i want to compile the saved files for my soft-core non-ladder sorceresses I would enter
+	"scnl-sor",
+	for a hard-core ladder paladin I would enter
+	"hcl-pal",
+
+	@description: The following function will open and read each performanceFile based on the charType (Expansion or Classic) and charClass.
+		It will then average all the data points and save the info to a new file inside a that charClasses Folder as review.json
+*/
+
+var profile = [""];
+
+function compileData () {
+	if(!profile.length){
+		D2Bot.printToConsole("SoloCleaner: No profile entered. Exiting compileData. Moving on to characters", 6);
+		return;
+	}
+
+	var charClass, charType;
+	var Path, folder;
+	var diffs = ["Normal", "Nightmare", "Hell"];
+
+	for(let i = 0; i < profile.length; i++) {
+		let buildCheck = profile[i].toUpperCase();
+		buildCheck = profile[i].split("-"); // SCL-ZON123
+		
+		if(buildCheck[0].indexOf("CC", "cc") === -1) { // not CC so not classic - true
+			charType = "Expansion";
+		} else{
+			charType = "Classic";
+		} 
+		
+		buildCheck[1] = buildCheck[1].toString().substring(0, 3); // removes numbers ZON for switch
+		buildCheck[1] = buildCheck[1].toUpperCase();
+		print(buildCheck[1]);
+
+		switch (buildCheck[1]) {
+		case "ZON":
+		case "zon":
+			charClass = "amazon";
+			break;
+		case "SOR":
+		case "sor":
+			charClass = "sorceress";
+			break;
+		case "NEC":
+		case "nec":
+			charClass = "necromancer";
+			break;
+		case "PAL":
+		case "pal":
+			charClass = "paladin";
+			break;
+		case "BAR":
+		case "bar":
+			charClass = "barbarian";
+			break;
+		case "DRU":
+		case "dru":
+			charClass = "druid";
+			break;
+		case "SIN":
+		case "sin":
+			charClass = "assassin";
+			break;
+		default:
+			D2Bot.printToConsole("SoloCleaner: Failed to get charClass. Please check that your profile was entered correctly.", 6);
+			return;
+		}
+
+		var objects = [];
+
+		if (charType === "Classic") {
+			objects = ["den", "bloodraven", "bloodravenMF", "tristam", "countess", "countessMF", "pits", "andariel", "andarielMF",
+					"radament", "cube", "amulet", "staff", "ancienttunnels", "summoner", "tombs", "duriel",
+					"eye", "tome", "heart", "brain", "lowerkurast", "travincal", "travincalMF", "mephisto", "mephistoMF",
+					"izual", "hellforge", "diablo", "diabloMF", "cows"];
+		} else {
+			objects = ["den", "bloodraven", "bloodravenMF", "tristam", "countess", "countessMF", "pits", "andariel", "andarielMF",
+					"radament", "cube", "amulet", "staff", "ancienttunnels", "summoner", "tombs", "duriel",
+					"eye", "tome", "heart", "brain", "lowerkurast", "travincal", "travincalMF", "mephisto", "mephistoMF",
+					"izual", "hellforge", "diablo", "diabloMF",
+					"shenk", "shenkMF", "saveBarby", "anya", "pindle", "ancients", "baal", "baalMF", "cows"];
+		}
+
+		this.create = function (Path) {
+			var obj, string;
+
+			obj = {
+				Class: charClass,
+			};
+
+			string = JSON.stringify(obj, null, 2);
+
+			Misc.fileAction(Path, 1, string);
+
+			return obj;
+		};
+
+		this.set = function (Path) {
+			this.create(Path);
+
+			var obj = getObj(Path);
+
+			for (let i = 0; i < diffs.length; i++) {
+				obj[diffs[i]] = {};
+
+				for (let j = 0; j < objects.length; j++) {
+					obj[diffs[i]][objects[j]] = {QuestCompleted: 0, TotalTime: 0, TotalAttempts: 0, ShortestAttempt: 0, LongestAttempt: 0, Average: 0, lvl: 0, TT: 0, SA: 0, LA: 0, AVG: 0};
+				}
+
+			}
+
+			let string = JSON.stringify(obj, null, 2);
+
+			Misc.fileAction(Path, 1, string);	
+		};
+
+		this.getObj = function (Path) {
+			var obj, string;
+
+			string = Misc.fileAction(Path, 0);
+
+			try {
+				obj = JSON.parse(string);
+			} catch (e) {
+				Misc.errorReport(e, "D2BotSoloCleaner");
+			}
+
+			if (obj) {
+				return obj;
+			}
+
+			return false;
+		};
+
+		this.getStats = function (Path) {
+			var obj = this.getObj(Path);
+
+			return Misc.clone(obj);
+		};
+
+		this.updateStats = function (diff, name, arg, value, object) {
+			if (name === undefined) {
+				return;
+			}
+
+			var i, obj, string, myObj,
+				statArr = [];
+			var tt, uftt;
+
+			if (typeof arg === "object") {
+				statArr = arg.slice();
+			}
+
+			if (typeof arg === "string") {
+				statArr.push(arg);
+			}
+
+			obj = this.getObj(Path);
+
+			if (!!object) {
+				myObj = Misc.clone(object);
+			}
+
+			for (i = 0; i < statArr.length; i += 1) {
+				switch (statArr[i]) {
+				case "updateValues":
+					obj[diff][name].TT += myObj[diff][name].TT;
+					obj[diff][name].lvl += myObj[diff][name].lvl;
+					obj[diff][name].TotalAttempts += myObj[diff][name].TotalAttempts;
+					obj[diff][name].SA += myObj[diff][name].SA;
+					obj[diff][name].LA += myObj[diff][name].LA;
+					obj[diff][name].AVG += myObj[diff][name].AVG;
+
+					break;
+				case "formatTimes":
+					obj[diff][name].TT = (obj[diff][name].TT) / value;
+					obj[diff][name].SA = (obj[diff][name].SA) / value;
+					obj[diff][name].LA = (obj[diff][name].LA) / value;
+					obj[diff][name].AVG = (obj[diff][name].AVG) / value;
+					obj[diff][name].lvl = Math.ceil(obj[diff][name].lvl / value);
+					obj[diff][name].TotalAttempts = Math.ceil(obj[diff][name].TotalAttempts / value);
+
+					obj[diff][name].QuestCompleted = Performance.formatTime(obj[diff][name].TT);
+					obj[diff][name].TotalTime = Performance.formatTime(obj[diff][name].AVG);									//Format it so its easily readable
+					obj[diff][name].ShortestAttempt = Performance.formatTime(obj[diff][name].SA);
+					obj[diff][name].LongestAttempt = Performance.formatTime(obj[diff][name].LA);
+					obj[diff][name].Average = Performance.formatTime((obj[diff][name].AVG) / obj[diff][name].TotalAttempts);	//Format it so its easily readable
+
+					break; 
+				default:
+					return;
+
+					break;
+				}
+
+			}
+
+			string = JSON.stringify(obj, null, 2);
+
+			Misc.fileAction(Path, 1, string);
+		};
+
+		this.calculateRunTime = function (charType, folders) {
+			var seqCount;
+			let runTime = 0;
+
+			switch (charType) {
+			case "Classic":
+				seqCount = 31;
+				runTime = (31 * 250 * folders.length) * 3;
+				break;
+			case "Expansion":
+				seqCount = 39;
+				runTime = (39 * 250 * folders.length) * 3;
+				break;
+			default:
+				seqCount = 0;
+				break;
+			}
+
+			return Performance.formatTime(runTime);
+		};
+
+		if (!FileTools.exists("libs/SoloLeveling/Data/" + charType)) {
+			folder = dopen("libs/SoloLeveling/Data");
+			folder.create(charType);
+		}
+
+		if (!FileTools.exists("libs/SoloLeveling/Data/" + charType + "/" + charClass + "Review")) {
+			folder = dopen("libs/SoloLeveling/Data/" + charType);
+			folder.create(charClass + "Review");
+		}
+
+		var folders = dopen("libs/SoloLeveling/Data/" + charType + "/" + charClass + "Review" + "/").getFolders();
+		var h = 1;
+
+		folders.forEach( (folder) => {
+			if (FileTools.exists("libs/SoloLeveling/Data/" + charType + "/" + charClass + "Review" + "/" + h.toString())){
+				h++;
+			}	
+		});
+
+		if (!FileTools.exists("libs/SoloLeveling/Data/" + charType + "/" + charClass + "Review" + "/" + h.toString())) {
+			folder = dopen("libs/SoloLeveling/Data/" + charType + "/" + charClass + "Review");
+			folder.create(h.toString());
+		}
+
+		Path = "libs/SoloLeveling/Data/" + charType + "/" + charClass + "Review" + "/" + h.toString() + "/review.json";
+		this.set(Path);
+
+		var files = dopen("libs/SoloLeveling/Data/" + charType + "/" + charClass + "/").getFolders();
+
+		if(!files) {
+			D2Bot.printToConsole("No files to compile. Exiting dataCompiler.");
+			return;
+		}
+
+		D2Bot.printToConsole("Runtime estimate: " + this.calculateRunTime(charType, files), 6);
+
+		var j = 1;
+
+		files.forEach( (file) => {
+			if (FileTools.exists("libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString())) {
+				let readPath = "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/performanceFile.json";
+				let obj = this.getObj(readPath);
+
+				if (obj) {
+					for (let i = 0; i < diffs.length; i++) {
+						for (let k = 0; k < objects.length; k++) {
+							//this.updateStats(diffs[i], objects[k], "QuestCompleted", this.getStats(readPath)[diffs[i]][objects[k]].TT);
+							this.updateStats(diffs[i], objects[k], "updateValues", null, obj);
+							print("DataCompiler: Updated Stats for " + diffs[i] + " " + objects[k] + " for current file: " + readPath);
+							delay(250);
+						}	
+					}
+					
+				}
+				j++;
+			}	
+		});
+
+		for (let i = 0; i < diffs.length; i++) {
+			for (let k = 0; k < objects.length; k++) {
+				this.updateStats(diffs[i], objects[k], "formatTimes", j);
+				print("DataCompiler: Formating Stats for " + diffs[i] + " " + objects[k]);
+				delay(250);
+			}	
+		}
+
+		D2Bot.printToConsole("Done compiling. Saved file: " + Path, 6);
+	}
 };
 
 /* Generate accounts to entirely clean ("all") 
@@ -399,6 +702,10 @@ function main() {
 		moveFiles();
 	}
 
+	if(StarterConfig.CompileData) {
+		compileData();
+	}
+	
 	parseInfo();
 
 	while (true) {
