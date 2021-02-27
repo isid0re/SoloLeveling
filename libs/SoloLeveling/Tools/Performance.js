@@ -175,14 +175,14 @@ var Performance = {
 			switch (statArr[i]) {
 			case "QuestCompleted":
 
-				if (!!Playtime.getStats().playtime) {
-					var recordedPlaytime = JSON.parse(Playtime.getStats().playtime);
+				if (!!Playtime.getStats().ingame) {
+					var recordedPlaytime = Playtime.getObj();
 
-					if (recordedPlaytime.hasOwnProperty("ingame")) {
+					if (recordedPlaytime) {
 						tt = recordedPlaytime.ingame;
-						uftt = tt;
+						uftt = tt;	
 					}
-
+					
 					tt = this.formatTime(tt);
 				}
 
