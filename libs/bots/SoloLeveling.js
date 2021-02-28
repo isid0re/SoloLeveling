@@ -81,7 +81,7 @@ function SoloLeveling () {
 				load("libs/SoloLeveling/Tools/ToolsThread.js");
 			}
 
-			if (shouldLog) {
+			if (SoloSettings.shouldLog) {
 				Playtime.updateStats("checkvalues");
 			}
 		}
