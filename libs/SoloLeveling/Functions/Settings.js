@@ -53,7 +53,7 @@ const SoloSettings = {
 		verbose: false,
 		logItems: false,
 		logExperience: false,
-		debugScripts: false,
+		skillInfo: false,	//When turned on, this will display the current skillId and skill level above the bots head
 	},
 
 };
