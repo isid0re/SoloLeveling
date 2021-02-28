@@ -211,7 +211,7 @@ function diablo () {
 				}
 			}
 
-			if (seal.mode || seal === undefined) {
+			if (seal === undefined || seal.mode) {
 				return true;
 			}
 
