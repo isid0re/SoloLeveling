@@ -60,10 +60,7 @@ Misc.openChests = function (range) {
 
 // Cast a skill on self, Unit or coords. Always use packet casting for caster skills becasue it's more stable.
 Skill.cast = function (skillId, hand, x, y, item) {
-	var casterSkills = [36, 38, 39, 44, 45, 47, 48, 49, 53, 54, 55, 
-						56, 59, 64, 67, 84, 87, 92, 93, 101, 112, 121,
-						 130, 137, 138, 146, 149, 154, 155, 225, 229, 230, 
-						 234, 240, 244, 245, 249, 250, 251, 256, 261, 262, 271, 276];
+	var casterSkills = [36, 38, 39, 44, 45, 47, 48, 49, 53, 54, 55, 56, 59, 64, 67, 84, 87, 92, 93, 101, 112, 121, 130, 137, 138, 146, 149, 154, 155, 225, 229, 230, 234, 240, 244, 245, 249, 250, 251, 256, 261, 262, 271, 276];
 
 	if (me.inTown && !this.townSkill(skillId)) {
 		return false;
@@ -110,12 +107,12 @@ Skill.cast = function (skillId, hand, x, y, item) {
 	}
 
 	if ((casterSkills.indexOf(skillId) > -1) || Config.PacketCasting > 1) {
+		if (SoloSettings.debugging.skillInfo) {
+			me.overhead("Using skill: " + skillId + "| Current skill level: " + me.getSkill(skillId, 1));
+		}
+		
 		switch (typeof x) {
 		case "number":
-			if (SoloSettings.debugging.skillInfo) {
-				me.overhead("Using skill: " + skillId + "| Current skill level: " + me.getSkill(skillId, 1));
-			}
-			
 			Packet.castSkill(hand, x, y);
 			delay(250);
 
