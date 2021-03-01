@@ -368,10 +368,6 @@ Item.autoEquip = function () {
 					if (this.equip(items[0], bodyLoc[j])) {
 						Misc.logItem("Equipped", me.getItem(-1, -1, gid));
 						
-						if (SoloSettings.logEquipped) {
-							MuleLogger.logEquippedItems();
-						}
-						
 					}
 
 					break;
@@ -614,10 +610,6 @@ Item.equipMerc = function (item, bodyLoc) {
 							cursorItem.drop();
 						}
 					}
-				}
-
-				if (SoloSettings.logEquipped) {
-					MuleLogger.logEquippedItems();
 				}
 
 				return true;

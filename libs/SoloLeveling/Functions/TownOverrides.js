@@ -79,6 +79,9 @@ Town.townTasks = function () {
 	this.clearJunk();
 	this.organizeStash();
 	Town.organizeInventory();
+	if (SoloSettings.logEquipped) {
+		MuleLogger.logEquippedItems();
+	}
 	this.characterRespec();
 
 	for (i = 0; i < cancelFlags.length; i += 1) {
@@ -163,6 +166,9 @@ Town.doChores = function (repair = false) {
 	this.clearJunk();
 	this.clearScrolls();
 	Town.organizeInventory();
+	if (SoloSettings.logEquipped) {
+		MuleLogger.logEquippedItems();
+	}
 	this.characterRespec();
 
 	if (me.classid !== 4 && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
