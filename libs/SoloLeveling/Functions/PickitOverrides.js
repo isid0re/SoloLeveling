@@ -1,6 +1,6 @@
 /*
 *	@filename	PickitOverrides.js
-*	@author		theBGuy
+*	@author		theBGuy, isid0re
 *	@desc		Pickit.js fixes to improve functionality
 */
 
@@ -62,14 +62,14 @@ Pickit.checkItem = function (unit) {
 		if (Item.autoEquipCheck(unit) && NTIP.GetTier(unit) > 1) {
 			return {
 				result: 1,
-				line: "Equip char tier: " + NTIP.GetTier(unit)
+				line: "Autoequip Tier: " + NTIP.GetTier(unit)
 			};
 		}
 
-		if (Item.autoEquipCheckMerc(unit)) {
+		if (Item.autoEquipCheckMerc(unit) && NTIP.GetMercTier(unit) > 1) {
 			return {
 				result: 1,
-				line: "Equip merc tier: " + NTIP.GetMercTier(unit)
+				line: "Autoequip MercTier: " + NTIP.GetMercTier(unit)
 			};
 		}
 
@@ -87,7 +87,7 @@ Pickit.checkItem = function (unit) {
 			};
 		}
 
-		if ((unit.getItemCost(1) / (unit.sizex * unit.sizey) >= 10)) {
+		if (unit.getItemCost(1) / (unit.sizex * unit.sizey) >= 10) {
 			return {
 				result: 4,
 				line: null
@@ -98,8 +98,7 @@ Pickit.checkItem = function (unit) {
 	return rval;
 };
 
-// Add range parameter
-Pickit.pickItems = function (range = Config.PickRange) {
+Pickit.pickItems = function () {
 	var status, item, canFit,
 		needMule = false,
 		pickList = [];
@@ -118,7 +117,7 @@ Pickit.pickItems = function (range = Config.PickRange) {
 
 	if (item) {
 		do {
-			if ((item.mode === 3 || item.mode === 5) && getDistance(me, item) <= range) {
+			if ((item.mode === 3 || item.mode === 5) && getDistance(me, item) <= Config.PickRange) {
 				pickList.push(copyUnit(item));
 			}
 		} while (item.getNext());
@@ -129,15 +128,12 @@ Pickit.pickItems = function (range = Config.PickRange) {
 			return false;
 		}
 
-		pickList.sort(Pickit.sortItems);
+		pickList.sort(this.sortItems);
 
 		// Check if the item unit is still valid and if it's on ground or being dropped
-		if (copyUnit(pickList[0]).x !== undefined && (pickList[0].mode === 3 || pickList[0].mode === 5) &&
-            (Pather.useTeleport || me.inTown || !checkCollision(me, pickList[0], 0x1))) { // Don't pick items behind walls/obstacles when walking
+		if (copyUnit(pickList[0]).x !== undefined && (pickList[0].mode === 3 || pickList[0].mode === 5) && (Pather.useTeleport() || me.inTown || !checkCollision(me, pickList[0], 0x1))) { // Don't pick items behind walls/obstacles when walking
 			// Check if the item should be picked
-			status = Pickit.checkItem(pickList[0]);
-
-			//  && Item.autoEquipCheck(pickList[0]) pbp
+			status = this.checkItem(pickList[0]);
 
 			if (status.result && Pickit.canPick(pickList[0])) {
 				// Override canFit for scrolls, potions and gold
@@ -151,33 +147,33 @@ Pickit.pickItems = function (range = Config.PickRange) {
 				// Try to make room by selling items in town
 				if (!canFit) {
 					// Check if any of the current inventory items can be stashed or need to be identified and eventually sold to make room
-					if (Pickit.canMakeRoom()) {
-						print("\xFFc7Trying to make room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
+					if (this.canMakeRoom()) {
+						print("ÿc7Trying to make room for " + this.itemColor(pickList[0]) + pickList[0].name);
 
 						// Go to town and do town chores
 						if (Town.visitTown()) {
 							// Recursive check after going to town. We need to remake item list because gids can change.
 							// Called only if room can be made so it shouldn't error out or block anything.
 
-							return Pickit.pickItems();
+							return this.pickItems();
 						}
 
 						// Town visit failed - abort
-						print("\xFFc7Not enough room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
+						print("ÿc7Not enough room for " + this.itemColor(pickList[0]) + pickList[0].name);
 
 						return false;
 					}
 
 					// Can't make room - trigger automule
 					Misc.itemLogger("No room for", pickList[0]);
-					print("\xFFc7Not enough room for " + Pickit.itemColor(pickList[0]) + pickList[0].name);
+					print("ÿc7Not enough room for " + this.itemColor(pickList[0]) + pickList[0].name);
 
 					needMule = true;
 				}
 
 				// Item can fit - pick it up
 				if (canFit) {
-					Pickit.pickItem(pickList[0], status.result, status.line);
+					this.pickItem(pickList[0], status.result, status.line);
 				}
 			}
 		}

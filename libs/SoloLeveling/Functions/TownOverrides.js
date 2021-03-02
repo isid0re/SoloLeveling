@@ -456,7 +456,7 @@ Town.shopItems = function () {
 		}
 
 		// tier'ed items
-		if (result.result === 1 && Item.autoEquipCheck(items[i])) {
+		if (result.result === 1 && (Item.autoEquipCheck(items[i]) || Item.autoEquipCheckMerc(items[i]))) {
 			try {
 				if (Storage.Inventory.CanFit(items[i]) && me.getStat(14) + me.getStat(15) >= items[i].getItemCost(0)) {
 					if (Item.hasTier(items[i]) &&
@@ -1083,17 +1083,26 @@ Town.characterRespec = function () {// Akara reset for build change
 			return false;
 		}
 
-		delay(1000 + me.ping * 2);
+		delay(750 + me.ping * 2);
 		Town.clearBelt();
 		delay(250 + me.ping);
+		Config.init(true);
+		delay(250 + me.ping);
 
-		let script = getScript("default.dbj");
-		script.stop();
-		load("default.dbj");
+		if (!isIncluded("common/AutoStat.js")) {
+			include("common/AutoStat.js");
+		}
+
+		if (!isIncluded("common/AutoSkill.js")) {
+			include("common/AutoSkill.js");
+		}
+
+		AutoBuild.initialize();
+		AutoStat.init(Config.AutoStat.Build, Config.AutoStat.Save, Config.AutoStat.BlockChance, Config.AutoStat.UseBulk);
+		AutoSkill.init(Config.AutoSkill.Build, Config.AutoSkill.Save);
 	}
 
 	return true;
-
 };
 
 Town.npcInteract = function (name) {

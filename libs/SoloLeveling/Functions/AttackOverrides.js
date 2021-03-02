@@ -68,10 +68,6 @@ Attack.killTarget = function (name) {
 			Packet.flash(me.gid);
 		}
 
-		if (me.classid === 1 && me.getSkill(54, 0) && getDistance(me, target) <= 10) {
-			Pather.moveTo(target.x, me.y < target.y ? target.y + 15 : target.y - 15);
-		}
-
 		attackCount += 1;
 		ClassAttack.afterAttack();
 
@@ -92,7 +88,11 @@ Attack.openChests = function () { // don't open chests when attacking
 };
 
 // Class Specific Attacks
-if (me.classid === 1) { // Sorceress
+switch (me.classid) {
+case 0: // Amazon
+
+	break;
+case 1: // Sorceress
 	if (!isIncluded("common/Attacks/Sorceress.js")) {
 		include("common/Attacks/Sorceress.js");
 	}
@@ -260,7 +260,7 @@ if (me.classid === 1) { // Sorceress
 			}
 
 			if (Math.round(getDistance(me, unit)) > Skill.getRange(timedSkill) || checkCollision(me, unit, 0x4)) {
-				// Allow short-distance walking for melee skills
+			// Allow short-distance walking for melee skills
 				walk = Skill.getRange(timedSkill) < 4 && getDistance(me, unit) < 10 && !checkCollision(me, unit, 0x1);
 
 				if (!Attack.getIntoPosition(unit, Skill.getRange(timedSkill), 0x4, walk)) {
@@ -293,7 +293,7 @@ if (me.classid === 1) { // Sorceress
 			}
 
 			if (Math.round(getDistance(me, unit)) > Skill.getRange(untimedSkill) || checkCollision(me, unit, 0x4)) {
-				// Allow short-distance walking for melee skills
+			// Allow short-distance walking for melee skills
 				walk = Skill.getRange(untimedSkill) < 4 && getDistance(me, unit) < 10 && !checkCollision(me, unit, 0x1);
 
 				if (!Attack.getIntoPosition(unit, Skill.getRange(untimedSkill), 0x4, walk)) {
@@ -330,9 +330,9 @@ if (me.classid === 1) { // Sorceress
 
 		return 1;
 	};
-}
 
-if (me.classid === 2) { // Necromancer
+	break;
+case 2: // Necromancer
 	if (!isIncluded("common/Attacks/Necromancer.js")) {
 		include("common/Attacks/Necromancer.js");
 	}
@@ -412,9 +412,13 @@ if (me.classid === 2) { // Necromancer
 
 		return false;
 	};
-}
 
-if (me.classid === 5) { // druid
+	break;
+case 3: // Paladin
+	break;
+case 4: // Barbarian
+	break;
+case 5: // Druid
 	if (!isIncluded("common/Attacks/Druid.js")) {
 		include("common/Attacks/Druid.js");
 	}
@@ -495,4 +499,8 @@ if (me.classid === 5) { // druid
 
 		return 1;
 	};
+
+	break;
+case 6: // Assasin
+	break;
 }
