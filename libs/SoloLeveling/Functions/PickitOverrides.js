@@ -310,7 +310,7 @@ Pickit.pickItem = function (unit, status, keptLine) {
 		case 1:
 			print("ÿc7Picked up " + stats.color + stats.name + " ÿc0(ilvl " + stats.ilvl + (keptLine ? ") (" + keptLine + ")" : ")"));
 
-			if (this.ignoreLog.indexOf(stats.type) === -1 && keptLine.indexOf("tier") === -1) {
+			if (this.ignoreLog.indexOf(stats.type) === -1) {
 				Misc.itemLogger("Kept", item);
 				Misc.logItem("Kept", item, keptLine);
 			}
