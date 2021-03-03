@@ -83,7 +83,7 @@ if (!FileTools.exists("data/" + me.profile + ".json")) {
 	delay(Math.floor(rand(1, 25)));
 }
 
-var loadPlaytime = (SoloSettings.shouldLog || SoloSettings.useOverlay);
+var loadPlaytime = (Development.shouldLog || Development.useOverlay);
 
 if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && loadPlaytime) {
 	delay(Math.floor(rand(5, 25)));

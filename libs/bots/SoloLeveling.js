@@ -34,7 +34,7 @@ if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) {
 
 includeSoloLeveling();
 
-if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && SoloSettings.shouldLog) {
+if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && Development.shouldLog) {
 	Performance.set();
 }
 
@@ -65,7 +65,7 @@ function SoloLeveling () {
 		}
 
 		//New Stuff
-		if (SoloSettings.shouldLog || SoloSettings.useOverlay) {
+		if (Development.shouldLog || Development.useOverlay) {
 			while (me.ingame && !me.gameReady) {
 				delay(100);
 			}
@@ -81,7 +81,7 @@ function SoloLeveling () {
 				load("libs/SoloLeveling/Tools/ToolsThread.js");
 			}
 
-			if (SoloSettings.shouldLog) {
+			if (Development.shouldLog) {
 				Playtime.updateStats("checkvalues");
 			}
 		}
@@ -93,13 +93,12 @@ function SoloLeveling () {
 		let j, k, forQuest = false,
 			setDifficulty = nextDifficulty();
 
-		DataFile.updateStats("setDifficulty", setDifficulty);
-		D2Bot.setProfile(null, null, null, setDifficulty);
-
 		var nonQuests = ["pits", "ancienttunnels", "tombs", "lowerkurast", "pindle", "cows"];
 
 		for (k = 0; k < sequence.length; k += 1) {
 			if (!completedTask(sequence[k][1])) {
+				DataFile.updateStats("setDifficulty", setDifficulty);
+				D2Bot.setProfile(null, null, null, setDifficulty);
 				if (!isIncluded("SoloLeveling/Scripts/" + sequence[k][0] + ".js")) {
 					include("SoloLeveling/Scripts/" + sequence[k][0] + ".js");
 				}
@@ -107,7 +106,7 @@ function SoloLeveling () {
 				for (j = 0; j < 5; j += 1) {
 					let tick = getTickCount();
 
-					if (SoloSettings.shouldLog) {
+					if (Development.shouldLog) {
 						Playtime.updateStats("setvalues", sequence[k][0]);
 
 						if (isForQuest(sequence[k][0])) {
@@ -125,7 +124,7 @@ function SoloLeveling () {
 
 					if (this[sequence[k][0]]()) {
 
-						if (SoloSettings.shouldLog) {
+						if (Development.shouldLog) {
 							if (forQuest) {
 								if (isQuestFinished(sequence[k][0])) {
 									Performance.updateStats(sequence[k][0], "QuestCompleted");

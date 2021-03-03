@@ -79,7 +79,7 @@ Town.townTasks = function () {
 	this.clearJunk();
 	this.organizeStash();
 	Town.organizeInventory();
-	if (SoloSettings.logEquipped) {
+	if (Development.logEquipped) {
 		MuleLogger.logEquippedItems();
 	}
 	this.characterRespec();
@@ -166,7 +166,7 @@ Town.doChores = function (repair = false) {
 	this.clearJunk();
 	this.clearScrolls();
 	Town.organizeInventory();
-	if (SoloSettings.logEquipped) {
+	if (Development.logEquipped) {
 		MuleLogger.logEquippedItems();
 	}
 	this.characterRespec();

@@ -1,7 +1,7 @@
 /*
-*	@filename	Settings.js
+*	@filename	Developer.js
 *	@author		theBGuy
-*	@desc		Configurable settings for Sololeveling
+*	@desc		Developer settings for Sololeveling
 */
 
 /* To use this feature uncomment this function and change the value of the return to true/false for whichever class you'd like to perform logging with.
@@ -42,18 +42,11 @@
 	}
 };*/
 
-const SoloSettings = {
+const Development = {
 	//shouldLog: logBasedOnClass(),		// Uncomment this to use above function
 	//useOverlay: logBasedOnClass(),	// Uncomment this to use above function
 	shouldLog: false,	//Default should be false for people who aren't interested in performance statistics
 	useOverlay: false,	//Default should be false for people who aren't interested in having the overlay
 	logEquipped: false,	//Default should be false for people who arne't interested in having equipped items viewable from D2Bot# charviewer tab
-
-	debugging: {
-		verbose: false,
-		logItems: false,
-		logExperience: false,
-		skillInfo: false,	//When turned on, this will display the current skillId and skill level above the bots head
-	},
 
 };
