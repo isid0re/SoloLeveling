@@ -72,7 +72,7 @@ include("torchsystem.js");
 include("common/misc.js");
 include("common/util.js");
 include("common/pather.js");
-include("sololeveling/Functions/Settings.js");
+include("sololeveling/Functions/Developer.js");
 include("sololeveling/Tools/NameGen.js");
 include("SoloLeveling/Tools/Performance.js");
 include("SoloLeveling/Tools/Playtime.js");
