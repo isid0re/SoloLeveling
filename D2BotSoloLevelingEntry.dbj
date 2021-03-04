@@ -72,6 +72,7 @@ include("torchsystem.js");
 include("common/misc.js");
 include("common/util.js");
 include("common/pather.js");
+include("sololeveling/Functions/Developer.js");
 include("sololeveling/Tools/NameGen.js");
 include("SoloLeveling/Tools/Performance.js");
 include("SoloLeveling/Tools/Playtime.js");
@@ -82,7 +83,9 @@ if (!FileTools.exists("data/" + me.profile + ".json")) {
 	delay(Math.floor(rand(1, 25)));
 }
 
-if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json")) {
+var loadPlaytime = (Development.shouldLog || Development.useOverlay);
+
+if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && loadPlaytime) {
 	delay(Math.floor(rand(5, 25)));
 	Playtime.create();
 }
@@ -248,8 +251,10 @@ function locationTimeout (time, location) {
 		delay(500);
 	}
 
-	Playtime.recordPlaytime();
-
+	if (loadPlaytime) {
+		Playtime.recordPlaytime();
+	}
+	
 	return (getLocation() !== location);
 }
 
@@ -1080,8 +1085,11 @@ function main () {
 	}
 
 	var wasInGame = false;
-	Playtime.track(false);
 
+	if (loadPlaytime) {
+		Playtime.track(false);
+	}
+	
 	while (true) {
 		while (me.ingame) { // returns true before actually in game so we can't only use this check
 			if (me.gameReady) { // returns false when switching acts so we can't use while
@@ -1095,13 +1103,16 @@ function main () {
 					DataFile.updateStats("ingameTick");
 				}
 
-				Playtime.recordPlaytime();
+				if (loadPlaytime) {
+					Playtime.recordPlaytime();
 
-				if (!wasInGame) {
-					Playtime.track(true);
-					wasInGame = true;
+					if (!wasInGame) {
+						Playtime.track(true);
+						wasInGame = true;
+					}
+
 				}
-
+				
 				myExp = Math.max(0, Experience.progress());
 				myGold = me.getStat(14) + me.getStat(15);
 				resPenalty = me.gametype === 0 ? [ 0, 20, 50][me.diff] : [ 0, 40, 100][me.diff];
@@ -1120,14 +1131,18 @@ function main () {
 			delay(1000);
 		}
 
-		if (wasInGame) {
+		if (wasInGame && loadPlaytime) {
 			Playtime.recordPlaytime();
 			Playtime.track(false);
 			wasInGame = false;
 		}
 
 		isUp = "no";
-		Playtime.recordPlaytime();
+
+		if (loadPlaytime) {
+			Playtime.recordPlaytime();
+		}
+		
 		locationAction(getLocation());
 		delay(1000);
 	}

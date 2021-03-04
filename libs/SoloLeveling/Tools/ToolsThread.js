@@ -49,6 +49,16 @@ function main () {
 		canQuit = true,
 		timerLastDrink = [];
 
+	//Double Safeguard to stop the base toolsthread
+	let origToolsThread = getScript("tools/ToolsThread.js");
+
+	if(!!origToolsThread) {
+		if (origToolsThread.running) {
+			D2Bot.printToConsole("Base is running in the background", 4);
+			origToolsThread.stop();
+		}
+	}
+
 	print("ÿc9SoloLevelingÿc3: Start Custom ToolsThread script");
 	D2Bot.init();
 	Config.init(false);
@@ -59,7 +69,7 @@ function main () {
 	Runewords.init();
 	Cubing.init();
 
-	if (useOverlay) {
+	if (Development.useOverlay) {
 		include("SoloLeveling/Tools/OverlayThread.js");
 
 		var sayings = ["Oh no :( ", "gonna chicken?", "no bueno", "little low?"];
@@ -691,17 +701,10 @@ function main () {
 
 	var myAct = me.act;
 
-	//Double Safeguard to stop the base toolsthread
-	let origToolsThread = getScript("tools/ToolsThread.js");
-
-	if ((origToolsThread && origToolsThread.running)) {
-		origToolsThread.stop();
-	}
-
 	// Start
 	while (true) {
-		if (isIncluded("SoloLeveling/Tools/OverlayThread.js") && useOverlay) {
-			if (useOverlay) {
+		if (isIncluded("SoloLeveling/Tools/OverlayThread.js") && Development.useOverlay) {
+			if (Development.useOverlay) {
 				SoloLevelingHooks.update();
 
 				if (me.act !== myAct) {

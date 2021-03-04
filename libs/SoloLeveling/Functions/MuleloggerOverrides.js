@@ -312,7 +312,7 @@ MuleLogger.logEquippedItems = function () {
 	items.sort(itemSort);
 
 	for (i = 0; i < items.length; i += 1) {
-		if ((items[i].mode === 1 && (items[i].quality !== 2 || !Misc.skipItem(items[i].classid))) || (items[i].mode === 0 && items[i].itemType === 74) ) {
+		if ((items[i].mode === 1 && (items[i].quality !== 2 || !Misc.skipItem(items[i].classid))) || (items[i].mode === 0 && items[i].itemType === 74) || (items[i].location === 3 && [603, 604, 605].indexOf(items[i].classid) > -1) ) {
 			parsedItem = this.logItem(items[i], true, "Player");
 
 			// Always put name on Char Viewer items
@@ -331,8 +331,12 @@ MuleLogger.logEquippedItems = function () {
 				parsedItem.title += " (secondary equipped)";
 			}
 
-			if (items[i].mode === 0) {
+			if (items[i].mode === 0 && [603, 604, 605].indexOf(items[i].classid) === -1) {
 				parsedItem.title += " (in stash)";
+			}
+
+			if (items[i].mode === 0 && [603, 604, 605].indexOf(items[i].classid) > -1) {
+				parsedItem.title += " (equipped charm)";
 			}
 
 			string = JSON.stringify(parsedItem);
@@ -370,6 +374,6 @@ MuleLogger.logEquippedItems = function () {
 
 	// hcl = hardcore class ladder
 	// sen = softcore expan nonladder
-	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + charClass + me.name + "." + ( me.playertype ? "h" : "s" ) + (me.gametype ? "e" : "c" ) + ( me.ladder > 0 ? "l" : "n" ) + ".txt", finalString);
+	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + charClass + me.profile + "-" + me.name + "." + ( me.playertype ? "h" : "s" ) + (me.gametype ? "e" : "c" ) + ( me.ladder > 0 ? "l" : "n" ) + ".txt", finalString);
 	print("Item logging done.");
 };

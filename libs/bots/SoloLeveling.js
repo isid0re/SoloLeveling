@@ -34,29 +34,12 @@ if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) {
 
 includeSoloLeveling();
 
-if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && shouldLog) {
+if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && Development.shouldLog) {
 	Performance.set();
 }
 
 function SoloLeveling () {
 	this.setup = function () {
-		//New Stuff
-		if (shouldLog || useOverlay) {
-			let origToolsThread = getScript("tools/ToolsThread.js");
-
-			if (origToolsThread && origToolsThread.running) {
-				origToolsThread.stop();
-			}
-
-			if (!origToolsThread.running) {
-				load("libs/SoloLeveling/Tools/ToolsThread.js");
-			}
-
-			if (shouldLog) {
-				Playtime.updateStats("checkvalues");
-			}
-		}
-
 		print('ÿc9SoloLevelingÿc0: start run');
 		me.overhead('starting run');
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
@@ -81,6 +64,23 @@ function SoloLeveling () {
 			me.cancel();
 		}
 
+		//New Stuff
+		if (Development.shouldLog || Development.useOverlay) {
+			let origToolsThread = getScript("tools/ToolsThread.js");
+
+			if (origToolsThread && origToolsThread.running) {
+				origToolsThread.stop();
+			}
+
+			if (!origToolsThread.running) {
+				load("libs/SoloLeveling/Tools/ToolsThread.js");
+			}
+
+			if (Development.shouldLog) {
+				Playtime.updateStats("checkvalues");
+			}
+		}
+
 		return true;
 	};
 
@@ -101,7 +101,7 @@ function SoloLeveling () {
 				for (j = 0; j < 5; j += 1) {
 					let tick = getTickCount();
 
-					if (shouldLog) {
+					if (Development.shouldLog) {
 						Playtime.updateStats("setvalues", sequence[k][0]);
 
 						if (isForQuest(sequence[k][0])) {
@@ -119,7 +119,7 @@ function SoloLeveling () {
 
 					if (this[sequence[k][0]]()) {
 
-						if (shouldLog) {
+						if (Development.shouldLog) {
 							if (forQuest) {
 								if (isQuestFinished(sequence[k][0])) {
 									Performance.updateStats(sequence[k][0], "QuestCompleted");
