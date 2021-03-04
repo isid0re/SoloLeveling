@@ -47,7 +47,7 @@ const respecTwoCheck = function () {
 		respecTwo = haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
 		break;
 	case "Smiter":
-		respecTwo = haveItem("weapon", "runeword", "Grief") ? me.charlvl : 100;
+		respecTwo = haveItem("sword", "runeword", "Grief") ? me.charlvl : 100;
 		break;
 	case "Frenzy":
 		respecTwo = haveItem("weapon", "runeword", "Grief") && haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
@@ -264,7 +264,7 @@ var completedTask = function (taskID) {
 
 		break;
 	case 6: //pits
-		if (me.diff !== 2 && haveGold) {
+		if (me.diff !== 2 || me.diff === 2 && dontMF) {
 			dontQuest = true;
 		}
 
@@ -1193,7 +1193,7 @@ var tierscore = function (item) {
 	};
 
 	var generalWeights = {
-		CBF: 25, // cannot be frozen
+		CBF: 150, // cannot be frozen
 		FRW: 1, // faster run/walk
 		FHR: 3, // faster hit recovery
 		DEF: 0.05, // defense
@@ -1262,13 +1262,17 @@ var tierscore = function (item) {
 			needsCBF = !me.getSkill(54, 0),
 			body = me.getItems()
 				.filter(item => [1].indexOf(item.location) > -1 ) // limit search to equipped body parts
-				.sort((a, b) => a.location - b.location); // Sort on body, low to high.
+				.sort((a, b) => a.bodylocation - b.bodylocation); // Sort on body, low to high.
 
 		if (needsCBF && item.getStatEx(cbfItem)) {
 			let haveCBF = false;
 
 			for (let part = 0; part < body.length; part++) { // total 10 body slots
 				if (body[part].getStatEx(cbfItem)) {
+					if (item.bodylocation === body[part]) {
+						break;
+					}
+
 					haveCBF = true;
 
 					break;

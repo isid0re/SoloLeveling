@@ -143,6 +143,50 @@ Item.getBodyLoc = function (item) {
 	return bodyLoc;
 };
 
+Item.equip = function (item, bodyLoc) {
+	if (!this.canEquip(item)) {
+		return false;
+	}
+
+	if (item.mode === 1 && item.bodylocation === bodyLoc) {
+		return true;
+	}
+
+	var i, cursorItem;
+
+	if (item.location === 7) {
+		if (!Town.openStash()) {
+			return false;
+		}
+	}
+
+	for (i = 0; i < 3; i += 1) {
+		if (item.toCursor()) {
+			clickItemAndWait(0, bodyLoc);
+
+			if (item.bodylocation === bodyLoc) {
+				if (getCursorType() === 3) {
+					cursorItem = getUnit(100);
+
+					if (cursorItem) {
+						if (NTIP.CheckItem(cursorItem, NTIP_CheckListNoTier, true).result === 1 || this.autoEquipCheckMerc(cursorItem) || this.autoEquipCheck(cursorItem)) {
+							if (Storage.Inventory.CanFit(cursorItem)) {
+								Storage.Inventory.MoveTo(cursorItem);
+							} else {
+								cursorItem.drop();
+							}
+						}
+					}
+				}
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+};
+
 Item.autoEquipCheck = function (item) {
 	if (!Config.AutoEquip) {
 		return true;
@@ -154,19 +198,13 @@ Item.autoEquipCheck = function (item) {
 
 	if (tier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
-			// Low tier items shouldn't be kept if they can't be equipped
 			if (tier > this.getEquippedItem(bodyLoc[i]).tier && (this.canEquip(item) || !item.getFlag(0x10))) {
 				return true;
-			}
-
-			// Sell/ignore low tier items, keep high tier
-			if (tier > 0 && tier <= this.getEquippedItem(bodyLoc[i]).tier) {
-				return false;
 			}
 		}
 	}
 
-	return true;
+	return false;
 };
 
 Item.autoEquip = function () {
@@ -181,7 +219,7 @@ Item.autoEquip = function () {
 		return false;
 	}
 
-	function sortEq(a, b) {
+	function sortEq (a, b) {
 		if (Item.canEquip(a)) {
 			return -1;
 		}
@@ -231,11 +269,10 @@ Item.autoEquip = function () {
 
 					if (this.equip(items[0], bodyLoc[j])) {
 						Misc.logItem("Equipped", me.getItem(-1, -1, gid));
-						
-						if(logEquipped) {
+
+						if (logEquipped) {
 							MuleLogger.logEquippedItems();
 						}
-						
 					}
 
 					break;
@@ -480,7 +517,7 @@ Item.equipMerc = function (item, bodyLoc) {
 					}
 				}
 
-				if(logEquipped) {
+				if (logEquipped) {
 					MuleLogger.logEquippedItems();
 				}
 
@@ -495,28 +532,28 @@ Item.equipMerc = function (item, bodyLoc) {
 Item.getEquippedItemMerc = function (bodyLoc) {
 	let mercenary = getMercFix();
 
-	if (!mercenary) { // dont have merc or he is dead
-		return false;
-	}
+	if (mercenary) {
+		let item = mercenary.getItem();
 
-	let item = mercenary.getItem();
-
-	if (item) {
-		do {
-			if (item.bodylocation === bodyLoc && item.location === 1) {
-				return {
-					classid: item.classid,
-					tier: mercscore(item),
-					name: item.fname,
-					str: item.getStatEx(0),
-					dex: item.getStatEx(2)
-				};
-			}
-		} while (item.getNext());
+		if (item) {
+			do {
+				if (item.bodylocation === bodyLoc && item.location === 1) {
+					return {
+						classid: item.classid,
+						prefixnum: item.prefixnum,
+						tier: NTIP.GetMercTier(item),
+						name: item.fname,
+						str: item.getStatEx(0),
+						dex: item.getStatEx(2)
+					};
+				}
+			} while (item.getNext());
+		}
 	}
 
 	return { // Don't have anything equipped in there
 		classid: -1,
+		prefixnum: -1,
 		tier: -1,
 		name: "none",
 		str: 0,
@@ -594,7 +631,7 @@ Item.autoEquipMerc = function () {
 		return true;
 	}
 
-	let i, j, tier, bodyLoc, tome, scroll, gid, items = me.findItems(-1, 0);
+	let i, j, tier, bodyLoc, tome, scroll, items = me.findItems(-1, 0);
 
 	if (!items) {
 		return false;
