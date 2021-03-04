@@ -57,10 +57,6 @@ Skill.cast = function (skillId, hand, x, y, item) {
 	}
 
 	if ((casterSkills.indexOf(skillId) > -1) || Config.PacketCasting > 1) {
-		if (SoloSettings.debugging.skillInfo) {
-			me.overhead("Using skill: " + skillId + "| Current skill level: " + me.getSkill(skillId, 1));
-		}
-
 		switch (typeof x) {
 		case "number":
 			Packet.castSkill(hand, x, y);
