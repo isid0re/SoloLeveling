@@ -10,14 +10,16 @@ function anya () {
 	me.overhead("anya");
 
 	if (!Pather.checkWP(113)) {
-		Pather.getWP(113);
+		Pather.getWP(113, true);
 	} else {
 		Pather.useWaypoint(113);
 	}
 
 	Precast.doPrecast(true);
 
-	if (!Pather.moveToExit(114, true) || !Pather.moveToPreset(me.area, 2, 460)) {
+	Pather.clearToExit(113, 114, true); //Crytsaline Passage -> Frozen River
+
+	if (!Pather.moveToPreset(me.area, 2, 460)) {
 		print("ÿc9SoloLevelingÿc0: Failed to move to Anya");
 	}
 

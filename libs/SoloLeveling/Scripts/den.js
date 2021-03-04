@@ -17,7 +17,7 @@ function den () {
 
 		Pather.moveToExit(8, false, true);
 		Pather.makePortal();
-		Pather.getWP(3);
+		Pather.getWP(3, true);
 		Pather.useWaypoint(1);
 	}
 
@@ -33,7 +33,7 @@ function den () {
 
 	if (!me.getItem(518)) {
 		Pather.moveToExit([2, 3], true);
-		Pather.getWP(3);
+		Pather.getWP(3, true);
 		Pather.useWaypoint(1);
 	} else {
 		Town.goToTown();

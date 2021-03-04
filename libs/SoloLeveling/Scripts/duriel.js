@@ -12,13 +12,13 @@ function duriel () {
 	me.overhead("duriel");
 
 	if (!Pather.checkWP(46)) {
-		Pather.getWP(46);
+		Pather.getWP(46, true);
 	} else {
 		Pather.useWaypoint(46);
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToExit(getRoom().correcttomb, true);
+	Pather.clearToExit(46, getRoom().correcttomb, true);
 	Pather.moveToPreset(me.area, 2, 152);
 	Attack.securePosition(me.x, me.y, 30, 3000, true, me.diff === 2);
 	Quest.placeStaff();

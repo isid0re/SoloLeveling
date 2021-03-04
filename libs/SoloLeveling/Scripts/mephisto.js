@@ -10,13 +10,13 @@ function mephisto () {
 	me.overhead("mephisto");
 
 	if (!Pather.checkWP(101)) {
-		Pather.getWP(101);
+		Pather.getWP(101, true);
 	} else {
 		Pather.useWaypoint(101);
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToExit(102, true);
+	Pather.clearToExit(101, 102, true); //Durance 2 -> Durance 3
 	Town.doChores();
 	Town.buyPots(10, "Thawing"); // thawing
 	Town.drinkPots();

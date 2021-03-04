@@ -10,13 +10,13 @@ function radament () {
 	me.overhead("radament");
 
 	if (!Pather.checkWP(48)) {
-		Pather.getWP(48);
+		Pather.getWP(48, true);
 	} else {
 		Pather.useWaypoint(48);
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToExit(49, true);
+	Pather.clearToExit(48, 49, true); //Sewers 2 -> Sewers 3
 	Pather.moveToPreset(me.area, 2, 355);
 	Attack.killTarget("Radament");
 	Pickit.pickItems();

@@ -11,7 +11,7 @@ function travincal () {
 	me.overhead("travincal");
 
 	if (!Pather.checkWP(83)) {
-		Pather.getWP(83);
+		Pather.getWP(83, true);
 	} else {
 		Pather.useWaypoint(83);
 	}

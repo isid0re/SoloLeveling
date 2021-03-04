@@ -74,7 +74,7 @@ function summoner () {
 	me.overhead("summoner");
 
 	if (!Pather.checkWP(74)) {
-		Pather.getWP(74);
+		Pather.getWP(74, true);
 	} else {
 		Pather.useWaypoint(74);
 	}

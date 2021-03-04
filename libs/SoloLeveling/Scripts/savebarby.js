@@ -13,7 +13,7 @@ function saveBarby () {
 	me.overhead("barbies");
 
 	if (!Pather.checkWP(111)) {
-		Pather.getWP(111);
+		Pather.getWP(111, true);
 	} else {
 		Pather.useWaypoint(111);
 	}

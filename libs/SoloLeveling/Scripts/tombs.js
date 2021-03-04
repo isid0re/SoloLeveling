@@ -16,7 +16,7 @@ function tombs () {
 		}
 
 		if (!Pather.checkWP(46)) {
-			Pather.getWP(46);
+			Pather.getWP(46, true);
 		} else {
 			Pather.useWaypoint(46);
 		}

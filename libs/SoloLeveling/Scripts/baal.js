@@ -156,7 +156,8 @@ function baal () {
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToExit([130, 131], true);
+	Pather.clearToExit(129, 130, true); 	//WS2 -> WS3
+	Pather.clearToExit(130, 131, true); 	//WS3 -> Throne
 	Pather.moveTo(15095, 5029);
 
 	if (me.diff === 2 && getUnit(1, 691)) {
@@ -167,6 +168,13 @@ function baal () {
 	}
 
 	if (me.diff === 2 && getUnit(1, 641)) {
+		print("ÿc9SoloLevelingÿc0: Souls found! NG.");
+		me.overhead("Souls found! NG.");
+
+		return true;
+	}
+
+	if (me.classid === 0 && getUnit(1, 641) && !Attack.checkInfinity()) {
 		print("ÿc9SoloLevelingÿc0: Souls found! NG.");
 		me.overhead("Souls found! NG.");
 

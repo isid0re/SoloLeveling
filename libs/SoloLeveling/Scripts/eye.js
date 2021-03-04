@@ -10,16 +10,14 @@ function eye () {
 	me.overhead("eye");
 
 	if (!Pather.checkWP(76)) {
-		Pather.getWP(76);
+		Pather.getWP(76, true);
 	} else {
 		Pather.useWaypoint(76);
 	}
 
 	Precast.doPrecast(true);
 
-	if (!Pather.moveToExit([76, 85], true)) {
-		print('ÿc9SoloLevelingÿc0: Failed to get the eye');
-	}
+	Pather.clearToExit(76, 85, true); //Spider Forest -> Spider Cavern
 
 	Town.doChores();
 	Town.buyPots(10, "Antidote"); // antidote

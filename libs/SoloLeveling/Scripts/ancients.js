@@ -62,13 +62,13 @@ function ancients () {
 	me.overhead("ancients");
 
 	if (!Pather.checkWP(118)) {
-		Pather.getWP(118);
+		Pather.getWP(118, true);
 	} else {
 		Pather.useWaypoint(118);
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToExit(120, true); // enter at ancients plateau
+	Pather.clearToExit(118, 120, true); //Ancient's Way -> Arreat Plateau
 	let tempConfig = Misc.copy(Config); // save and update config settings
 	let updateConfig = {
 		TownCheck: false,

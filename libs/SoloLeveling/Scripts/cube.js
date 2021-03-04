@@ -10,13 +10,13 @@ function cube () {
 	me.overhead("cube");
 
 	if (!Pather.checkWP(57)) {
-		Pather.getWP(57);
+		Pather.getWP(57, true);
 	} else {
 		Pather.useWaypoint(57);
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToExit(60, true);
+	Pather.clearToExit(57, 60, true); //HoD2 -> HoD3
 	Pather.moveToPreset(me.area, 2, 354);
 	Attack.securePosition(me.x, me.y, 30, 3000, true);
 	Quest.collectItem(549, 354);

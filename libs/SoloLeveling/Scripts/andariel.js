@@ -16,13 +16,14 @@ function andariel () {
 	}
 
 	if (!Pather.checkWP(35)) {
-		Pather.getWP(35);
+		Pather.getWP(35, true);
 	} else {
 		Pather.useWaypoint(35);
 	}
 
 	Precast.doPrecast(true);
-	Pather.moveToExit([36, 37], true);
+	Pather.clearToExit(35, 36, true); //Cata 2 -> Cata 3
+	Pather.clearToExit(36, 37, true); //Cata 3 -> Cata 4
 	Town.doChores();
 	Town.buyPots(10, "Antidote"); // antidote
 	Town.drinkPots();

@@ -9,7 +9,7 @@ function bloodraven () {
 	print('ÿc9SoloLevelingÿc0: starting blood raven');
 
 	if (!Pather.checkWP(3)) {
-		Pather.getWP(3);
+		Pather.getWP(3, true);
 	} else {
 		Pather.useWaypoint(3);
 	}
@@ -19,7 +19,7 @@ function bloodraven () {
 	if (me.diff === 0) {
 		me.overhead("blood raven");
 		Attack.clear(0x7);
-		Pather.moveToExit(17, true);
+		Pather.clearToExit(3, 17, true);
 		Pather.moveToPreset(17, 1, 805);
 		Attack.killTarget("Blood Raven");
 		Pickit.pickItems();

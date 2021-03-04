@@ -12,7 +12,7 @@ function tristam () {
 	if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 		if (!me.getItem(524)) {
 			if (!Pather.checkWP(5)) {
-				Pather.getWP(5);
+				Pather.getWP(5, true);
 			} else {
 				Pather.useWaypoint(5);
 			}
@@ -33,7 +33,7 @@ function tristam () {
 	}
 
 	if (!Pather.checkWP(4)) {
-		Pather.getWP(4);
+		Pather.getWP(4, true);
 	} else {
 		Pather.useWaypoint(4);
 	}
@@ -70,7 +70,14 @@ function tristam () {
 			print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
 		}
 
-		Misc.openChest(gibbet);
+		for (let i = 0; i < 5; i++) {	//Sometimes fails to open cains cage.
+			if (Misc.openChest(gibbet)) {
+				break;
+			}
+
+			delay(250 + me.ping)
+		}
+		
 	}
 
 	if (me.diff === 0) {

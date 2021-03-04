@@ -10,7 +10,7 @@ function lowerkurast () {
 	me.overhead("lower kurast");
 
 	if (!Pather.checkWP(79)) {
-		Pather.getWP(79);
+		Pather.getWP(79, true);
 	} else {
 		Pather.useWaypoint(79);
 	}

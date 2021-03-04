@@ -12,7 +12,7 @@ function hellforge () {
 	me.overhead("hellforge");
 
 	if (!Pather.checkWP(107)) {
-		Pather.getWP(107);
+		Pather.getWP(107, true);
 	} else {
 		Pather.useWaypoint(107);
 	}

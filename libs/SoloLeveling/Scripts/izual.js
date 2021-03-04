@@ -10,7 +10,7 @@ function izual () {
 	me.overhead("izual");
 
 	if (!Pather.checkWP(106)) {
-		Pather.getWP(106);
+		Pather.getWP(106, true);
 	} else {
 		Pather.useWaypoint(106);
 	}

@@ -10,7 +10,7 @@ function tome () {
 	me.overhead("tome");
 
 	if (!Pather.checkWP(80)) {
-		Pather.getWP(80);
+		Pather.getWP(80, true);
 	} else {
 		Pather.useWaypoint(80);
 	}
