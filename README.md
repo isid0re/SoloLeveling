@@ -48,7 +48,7 @@ NL/L		NonLadder/Ladder
 
 ### Discord
 
-[Join me on discord.](https://discord.gg/2JAAWBCQnb)
+Join me on Discord. Link is here: https://discord.gg/2JAAWBCQnb
 
 ### Contributing
 
