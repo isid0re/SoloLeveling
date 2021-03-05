@@ -46,6 +46,10 @@ NL/L		NonLadder/Ladder
 10. Run the Bot.
 11. Enjoy.
 
+### Discord
+
+[Join me on discord.](https://discord.gg/2JAAWBCQnb)
+
 ### Contributing
 
 This is a hobby project that I'm doing in my spare time. So if you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
