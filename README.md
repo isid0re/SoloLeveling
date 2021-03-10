@@ -54,3 +54,9 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ### License
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
+
+Example Profile for a SoftCore Ladder Paladin with final build Hammerdin
+<a href="https://imgur.com/YlUZ68d"><img src="https://i.imgur.com/YlUZ68d.jpg" title="source: imgur.com" /></a>
+
+Example Profile for a HardCore Classic Ladder Sorceress with final build Blizzard
+<a href="https://imgur.com/Kf4TXoz"><img src="https://i.imgur.com/Kf4TXoz.jpg" title="source: imgur.com" /></a>
