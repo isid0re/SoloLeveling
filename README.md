@@ -46,6 +46,24 @@ NL/L		NonLadder/Ladder
 10. Run the Bot.
 11. Enjoy.
 
+Example Profile for a SoftCore Ladder Paladin with final build Hammerdin
+<a href="https://imgur.com/YlUZ68d"><img src="https://i.imgur.com/YlUZ68d.jpg" title="source: imgur.com" /></a>
+
+Example Profile for a HardCore Classic Ladder Sorceress with final build Blizzard
+<a href="https://imgur.com/Kf4TXoz"><img src="https://i.imgur.com/Kf4TXoz.jpg" title="source: imgur.com" /></a>
+
+### Extra Options
+1) Overlay - by theBGuy
+<a href="https://imgur.com/x67jTpY"><img src="https://i.imgur.com/x67jTpY.jpg" title="source: imgur.com" /></a>
+
+If you wish to have this follow this step-by-step
+1. Navigate to your kolbot folder
+2. kolbot/d2bs/kolbot/libs/SoloLeveling/Functions/Devloper.js
+3. Open in Devloper.js in whatever text editor you prefer. You should see
+<a href="https://imgur.com/Cw81PuM"><img src="https://i.imgur.com/Cw81PuM.jpg" title="source: imgur.com" /></a>
+4. Set useOverlay: false, to true
+5. Save and enjoy
+
 ### Contributing
 
 This is a hobby project that I'm doing in my spare time. So if you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
@@ -54,9 +72,3 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 
 ### License
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
-
-Example Profile for a SoftCore Ladder Paladin with final build Hammerdin
-<a href="https://imgur.com/YlUZ68d"><img src="https://i.imgur.com/YlUZ68d.jpg" title="source: imgur.com" /></a>
-
-Example Profile for a HardCore Classic Ladder Sorceress with final build Blizzard
-<a href="https://imgur.com/Kf4TXoz"><img src="https://i.imgur.com/Kf4TXoz.jpg" title="source: imgur.com" /></a>
