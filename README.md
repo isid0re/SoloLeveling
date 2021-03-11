@@ -54,6 +54,7 @@ Example Profile for a HardCore Classic Ladder Sorceress with final build Blizzar
 
 ### Extra Options
 1) Overlay - by theBGuy
+
 <a href="https://imgur.com/x67jTpY"><img src="https://i.imgur.com/x67jTpY.jpg" title="source: imgur.com" /></a>
 
 If you wish to have this follow this step-by-step
