@@ -65,6 +65,10 @@ If you wish to have this follow this step-by-step
 4. Set useOverlay: false, to true
 5. Save and enjoy
 
+### Discord
+
+Join me on Discord. Link is here: https://discord.gg/S3YerA6U7g
+
 ### Contributing
 
 This is a hobby project that I'm doing in my spare time. So if you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
