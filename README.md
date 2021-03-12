@@ -73,9 +73,10 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 ## Discord
 Join me on Discord. Link is here: https://discord.gg/S3YerA6U7g
 
-## Contributing
+## Support SoloLeveling
 This is a hobby project that I'm doing in my spare time. So if you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
 
+## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 ## License
