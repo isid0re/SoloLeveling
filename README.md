@@ -26,7 +26,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 |:------:|:-------|-------:|
 | 1.| Download Kolbot here: [github.com/blizzhackers/kolbot](https://github.com/blizzhackers/kolbot). |![blizzhackers github](https://i.imgur.com/RksqKEA.jpg) |
 | 2.| Click the green button to Download SoloLeveling. |![enter image description here](https://i.imgur.com/cNqZDbW.jpg) |
-| 3.a| Extract the zip into where your `path\to\kolbot\d2bs\kolbot`.| ![extractto](https://i.imgur.com/ztFbgnd.jpg)|
+| 3.a| copy and paste everything from the zip into `\d2bs\kolbot`.| ![extractto](https://i.imgur.com/ztFbgnd.jpg)|
 |3.b|A successful installation will show 2 new files in the folder and look similar to the second image|![extract into](https://i.imgur.com/5OxVVNH.jpg)| 4.| Select Add for new a Kolbot Profile. | ![Add-profile.jpg](https://imgur.com/tHs9ZoH.jpg)|
 | 4.a| Input a profile name. See the Profile Name Options below for more details | ![set profile name](https://imgur.com/B865nPU.jpg) |
 | 4.b| ***Optional*** Input your account name. If no name than a random account is created. | |
