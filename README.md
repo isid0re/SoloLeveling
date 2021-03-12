@@ -68,7 +68,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 - **SCCL-NECRO** would make a softcore classic ladder necromancer
 - **HCCL-NECRO** would make a hardcore classic ladder necromancer
 - **SCCNL-PAL** would make a softcore classic nonladder paladin
-- **HCCNL-SORC** would make a softcore classic nonladder sorceress
+- **HCCNL-SORC** would make a hardcore classic nonladder sorceress
 
 ## Discord
 Join me on Discord. Link is here: https://discord.gg/S3YerA6U7g
