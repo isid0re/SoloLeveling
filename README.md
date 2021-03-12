@@ -67,7 +67,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 - **HCNL-DRU** would make a hardcore expansion nonladder druid
 - **SCCL-NECRO** would make a softcore classic ladder necromancer
 - **HCCL-NECRO** would make a hardcore classic ladder necromancer
-- **HCCNL-PAL** would make a softcore classic nonladder paladin
+- **SCCNL-PAL** would make a softcore classic nonladder paladin
 - **HCCNL-SORC** would make a softcore classic nonladder sorceress
 
 ## Discord
