@@ -1,4 +1,4 @@
-# Welcome to SoloLeveling!
+![SoloLeveling](https://i.imgur.com/Nz04onp.png)
 
 SoloLeveling is an automated leveling script for all Diablo 2 softcore expansion characters using Kolbot from level 1 to 99. After the initial setup, the bot will operate without user involvement. This is a hobby project that I'm doing in my spare time. 
 
