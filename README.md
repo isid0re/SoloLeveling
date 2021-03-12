@@ -1,6 +1,6 @@
 ![SoloLeveling](https://i.imgur.com/Nz04onp.png)
 
-SoloLeveling is an automated leveling script for all Diablo 2 softcore expansion characters using Kolbot from level 1 to 99. After the initial setup, the bot will operate without user involvement. This is a hobby project that I'm doing in my spare time. 
+SoloLeveling is an automated leveling script for any Diablo 2 characters using Blizzhackers Kolbot. The overall goal of the project is to be the easiest and fastest leveling script for any character class.
 
 **NOTE:** This script is designed to be only run from [https://github.com/blizzhackers/kolbot](https://github.com/blizzhackers/kolbot). Most errors occur from using the wrong Kolbot repo installation. 
 
@@ -15,9 +15,9 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 - Makes and equips CTA and spirit shield on swap
 
 ## Available Characters and Builds
-| ~~Amazon~~ | Sorceress | Necromancer | Paladin | ~~Barbarian~~|Druid| Assassin |
+| Amazon | Sorceress | Necromancer | Paladin | Barbarian | Druid | Assassin |
 |:------:|:-------:|:-------:|:------:|:------:|:------:|:-----:|
-| N/A| Blizzard | Poison | Hammerdin| N/A| Wind |Trapsin|
+| Currently N/A | Blizzard | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
 | | BlizzBaller |   Bone | Smiter| | Elemental |
 | | Meteorb |    Summon | |
 
