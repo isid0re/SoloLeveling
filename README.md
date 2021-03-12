@@ -62,13 +62,13 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 
 #### Example Profile Names
 -**SCL-PAL** would make a softcore expansion ladder paladin
--**HCL-SIN** would make a hardcore expansion ladder assassin
--**SCNL-SORC** would make a softcore expanision nonladder sorceress
--**HCNL-DRU** would make a hardcore expansion nonladder druid
--**SCCL-NECRO** would make a softcore classic ladder necromancer
--**HCCL-NECRO** would make a hardcore classic ladder necromancer
--**HCCNL-PAL** would make a softcore classic nonladder paladin
--**HCCNL-SORC** would make a softcore classic nonladder sorceress
+- **HCL-SIN** would make a hardcore expansion ladder assassin
+- **SCNL-SORC** would make a softcore expanision nonladder sorceress
+- **HCNL-DRU** would make a hardcore expansion nonladder druid
+- **SCCL-NECRO** would make a softcore classic ladder necromancer
+- **HCCL-NECRO** would make a hardcore classic ladder necromancer
+- **HCCNL-PAL** would make a softcore classic nonladder paladin
+- **HCCNL-SORC** would make a softcore classic nonladder sorceress
 
 ## Discord
 Join me on Discord. Link is here: https://discord.gg/S3YerA6U7g
