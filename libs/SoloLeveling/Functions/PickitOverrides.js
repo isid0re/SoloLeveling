@@ -2,6 +2,7 @@
 *	@filename	PickitOverrides.js
 *	@author		theBGuy, isid0re
 *	@desc		Pickit.js fixes to improve functionality
+*	@credits	based on existing pickit.js from PBP autoplays (Sonic, AutoSorc, etc)
 */
 
 if (!isIncluded("common/Pickit.js")) {
@@ -51,6 +52,20 @@ Pickit.checkItem = function (unit) {
 		};
 	}
 
+	if (NTIP.GetTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && !unit.getFlag(0x10)) {
+		return {
+			result: -1,
+			line: null
+		};
+	}
+
+	if (NTIP.GetTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && unit.getFlag(0x10)) {
+		return {
+			result: NTIP.CheckItem(unit),
+			line: "Autocharm Tier: " + NTIP.GetTier(unit)
+		};
+	}
+
 	if ((NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && !unit.getFlag(0x10)) {
 		return {
 			result: -1,
@@ -59,14 +74,14 @@ Pickit.checkItem = function (unit) {
 	}
 
 	if ((NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && unit.getFlag(0x10)) {
-		if (Item.autoEquipCheck(unit) && NTIP.GetTier(unit) > 1) {
+		if (Item.autoEquipCheck(unit)) {
 			return {
 				result: 1,
 				line: "Autoequip Tier: " + NTIP.GetTier(unit)
 			};
 		}
 
-		if (Item.autoEquipCheckMerc(unit) && NTIP.GetMercTier(unit) > 1) {
+		if (Item.autoEquipCheckMerc(unit)) {
 			return {
 				result: 1,
 				line: "Autoequip MercTier: " + NTIP.GetMercTier(unit)

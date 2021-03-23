@@ -1,5 +1,6 @@
 /**
  *    @filename   druid.StartBuild.js
+ *	  @author	  isid0re
  *    @desc       druid build for before respecOne
  */
 
@@ -8,6 +9,9 @@ var build = {
 	skillstab: 42, // elemental
 	wantedskills: [225, 234], // firestorm, fissure
 	usefulskills: [229], // molten boulder
+	mercAuraName: "Blessed Aim",
+	mercAuraWanted: 108,
+	mercDiff: 0,
 	stats: [
 		["vitality", 70],
 		["strength", 35],

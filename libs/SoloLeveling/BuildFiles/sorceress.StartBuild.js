@@ -1,6 +1,7 @@
-/**
- *    @filename   sorceress.startBuild.js
- *    @desc       sorceress build for before respecOne
+/*
+ *    @filename   	sorceress.startBuild.js
+ *	  @author	  	isid0re
+ *    @desc       	sorceress build for before respecOne
  */
 
 var build = {
@@ -8,6 +9,9 @@ var build = {
 	skillstab: 9, //lightning
 	wantedskills: [38, 42], // charged bolt, static
 	usefulskills: [40, 49], // frozen armor, lightning
+	mercAuraName: "Holy Freeze",
+	mercAuraWanted: 114,
+	mercDiff: 1,
 	stats: [
 		["strength", 15],
 		["vitality", 25],

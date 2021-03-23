@@ -1,5 +1,5 @@
 /*
-*	@filename	SoloLeveling.js
+*	@filename	ancients.js
 *	@author		isid0re
 *	@desc		ancients quest
 */

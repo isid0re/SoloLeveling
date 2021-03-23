@@ -3,6 +3,7 @@
 *	@author		isid0re
 *	@desc		Miscellaneous quest tasks for leveling
 */
+
 var Quest = {
 	preReqs: function () {
 		if (me.act === 2 && !Misc.checkQuest(10, 0) && !me.getItem(91)) { // horadric staff
@@ -354,5 +355,208 @@ var Quest = {
 		}
 
 		return !me.getItem(tool);
+	},
+
+	characterRespec: function () {// Akara reset for build change
+		if (Misc.checkQuest(41, 0)) {
+			return true;
+		}
+
+		if (me.charlvl === SetUp.respecOne || me.charlvl === SetUp.respecTwo()) {
+			Precast.doPrecast(true);
+			Town.goToTown(1);
+			me.overhead('time to respec');
+			Town.npcInteract("akara");
+			delay(10 + me.ping * 2);
+
+			if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
+				return false;
+			}
+
+			delay(750 + me.ping * 2);
+			Town.clearBelt();
+			delay(250 + me.ping);
+			let script = getScript("default.dbj");
+			script.stop();
+			load("default.dbj");
+			Item.autoEquip();
+		}
+
+		return true;
+	},
+
+	Status: function (name) {
+		let quest = false;
+
+		switch (name.toLowerCase()) {
+		case "den": //den
+			if (Misc.checkQuest(1, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "bloodraven": //bloodaraven
+			if (Misc.checkQuest(2, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "imbue": //tools of the trade 
+			if (Misc.checkQuest(3, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "tristam": //tristam
+			if (Misc.checkQuest(4, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "countess": //countess
+			if (Misc.checkQuest(5, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "andariel": //andy
+			if (Misc.checkQuest(6, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "cube": //cube
+			if (me.getItem(549)) {
+				quest = true;
+			}
+
+			break;
+		case "radament": //radament
+			if (Misc.checkQuest(9, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "staff": //staff
+			if (me.getItem(92)) {
+				quest = true;
+			}
+
+			break;
+		case "amulet": //ammy
+			if (Misc.checkQuest(11, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "summoner": //summoner
+			if (Misc.checkQuest(13, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "duriel": //duriel
+			if (!Misc.checkQuest(14, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "eye": // eye
+			if (me.getItem(553)) {
+				quest = true;
+			}
+
+			break;
+		case "tome": // tome
+			if (Misc.checkQuest(17, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "heart": //heart
+			if (me.getItem(554)) {
+				quest = true;
+			}
+
+			break;
+		case "brain": //brain
+			if (me.getItem(555)) {
+				quest = true;
+			}
+
+			break;
+		case "gidbinn": //gidbinn
+			if (Misc.checkQuest(19, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "travincal": //travincal
+			if (Misc.checkQuest(22, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "mephisto": //mephisto
+			if (Misc.checkQuest(22, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "izual": // izzy
+			if (Misc.checkQuest(25, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "diablo": //diablo
+			if (Misc.checkQuest(26, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "hellforge": // hellforge
+			if (Misc.checkQuest(27, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "shenk": // shenk
+			if (Misc.checkQuest(35, 0) || Misc.checkQuest(35, 1)) {
+				quest = true;
+			}
+
+			break;
+		case "savebarby": //barbies
+			if (Misc.checkQuest(36, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "anya": //anya
+			if (Misc.checkQuest(37, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "ancients": //ancients
+			if (Misc.checkQuest(39, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "baal": //baal
+			if (Misc.checkQuest(40, 0)) {
+				quest = true;
+			}
+
+			break;
+		default:
+			quest = false;
+
+			break;
+		}
+
+		return quest;
 	},
 };

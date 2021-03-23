@@ -20,34 +20,30 @@ if (!isIncluded("SoloLeveling/Functions/globals.js")) {
 	include("SoloLeveling/Functions/globals.js");
 }
 
-if (!isIncluded("SoloLeveling/Tools/Playtime.js")) {
-	include("SoloLeveling/Tools/Playtime.js");
+if (!isIncluded("SoloLeveling/Tools/Developer.js")) {
+	include("SoloLeveling/Tools/Developer.js");
 }
 
-if (!isIncluded("SoloLeveling/Tools/Performance.js")) {
-	include("SoloLeveling/Tools/Performance.js");
+if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
+	include("SoloLeveling/Tools/Tracker.js");
 }
 
-if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) {
-	include("SoloLeveling/Tools/OOGOverrides.js");
-}
-
-includeSoloLeveling();
-
-if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && Development.shouldLog) {
-	Performance.set();
-}
+SetUp.include();
 
 function SoloLeveling () {
+	if (Developer.logPerformance) {
+		addEventListener("scriptmsg", Tracker.logLeveling);
+	}
+
 	this.setup = function () {
 		print('ÿc9SoloLevelingÿc0: start run');
 		me.overhead('starting run');
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
-		NTIP.arrayLooping(questItems);
+		NTIP.arrayLooping(nipItems.Quest);
 		print("ÿc9SoloLevelingÿc0: general items loaded to Pickit");
-		NTIP.arrayLooping(generalItems);
+		NTIP.arrayLooping(nipItems.General);
 		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
-		NTIP.arrayLooping(valuableItems);
+		NTIP.arrayLooping(nipItems.Selling);
 
 		if (me.charlvl === 1) {
 			let buckler = me.getItem(328);
@@ -64,77 +60,35 @@ function SoloLeveling () {
 			me.cancel();
 		}
 
-		//New Stuff
-		if (Development.shouldLog || Development.useOverlay) {
-			let origToolsThread = getScript("tools/ToolsThread.js");
+		let origToolsThread = getScript("tools/ToolsThread.js");
 
-			if (origToolsThread && origToolsThread.running) {
-				origToolsThread.stop();
-			}
+		if (origToolsThread && origToolsThread.running) {
+			origToolsThread.stop();
+		}
 
-			if (!origToolsThread.running) {
-				load("libs/SoloLeveling/Tools/ToolsThread.js");
-			}
-
-			if (Development.shouldLog) {
-				Playtime.updateStats("checkvalues");
-			}
+		if (!origToolsThread.running) {
+			load("libs/SoloLeveling/Tools/ToolsThread.js");
 		}
 
 		return true;
 	};
 
 	this.runsequence = function () {
-		let j, k, forQuest = false,
-			setDifficulty = nextDifficulty();
-		var nonQuests = ["pits", "ancienttunnels", "tombs", "lowerkurast", "pindle", "cows"];
+		let j, k;
 
 		for (k = 0; k < sequence.length; k += 1) {
-			DataFile.updateStats("setDifficulty", setDifficulty);
-			D2Bot.setProfile(null, null, null, setDifficulty);
-
-			if (!completedTask(sequence[k][1])) {
+			if (!Check.Task(sequence[k][1])) {
 				if (!isIncluded("SoloLeveling/Scripts/" + sequence[k][0] + ".js")) {
 					include("SoloLeveling/Scripts/" + sequence[k][0] + ".js");
 				}
 
+				let tick = getTickCount();
+
 				for (j = 0; j < 5; j += 1) {
-					let tick = getTickCount();
-
-					if (Development.shouldLog) {
-						Playtime.updateStats("setvalues", sequence[k][0]);
-
-						if (isForQuest(sequence[k][0])) {
-							Performance.updateStats(sequence[k][0], "TotalAttempts");
-							forQuest = true;
-						} else {
-							if (nonQuests.indexOf(sequence[k][0]) > -1) {
-								Performance.updateStats(sequence[k][0], "TotalAttempts");
-							} else {
-								Playtime.updateStats("setvalues", sequence[k][0] + "MF");
-								Performance.updateStats(sequence[k][0] + "MF", "TotalAttempts");
-							}
-						}
-					}
-
 					if (this[sequence[k][0]]()) {
-
-						if (Development.shouldLog) {
-							if (forQuest) {
-								if (isQuestFinished(sequence[k][0])) {
-									Performance.updateStats(sequence[k][0], "QuestCompleted");
-								}
-
-								Performance.updateStats(sequence[k][0], "checkTimes", getTickCount() - tick);
-							} else {
-								if (nonQuests.indexOf(sequence[k][0]) > -1) {
-									Performance.updateStats(sequence[k][0], "TotalTime", getTickCount() - tick);
-									Performance.updateStats(sequence[k][0], "checkTimes", getTickCount() - tick);
-								} else {
-									Performance.updateStats(sequence[k][0] + "MF", "TotalTime", getTickCount() - tick);
-									Performance.updateStats(sequence[k][0] + "MF", "checkTimes", getTickCount() - tick);
-								}
-							}
+						if (Developer.logPerformance) {
+							Tracker.CurrScript = sequence[k][0];
+							Tracker.Script(tick, Tracker.CurrScript);
 						}
 
 						break;
@@ -152,7 +106,17 @@ function SoloLeveling () {
 	this.setup();
 	addEventListener("gamepacket", Misc.gamePacket);
 	this.runsequence();
+
+	if (DataFile.updateStats("setDifficulty", Check.nextDifficulty())) {
+		D2Bot.setProfile(null, null, null, Check.nextDifficulty());
+	}
+
 	removeEventListener("gamepacket", Misc.gamePacket);
+
+	if (Developer.logPerformance) {
+		removeEventListener("scriptmsg", Tracker.logLeveling);
+	}
+
 	scriptBroadcast('quit');
 
 	return true;

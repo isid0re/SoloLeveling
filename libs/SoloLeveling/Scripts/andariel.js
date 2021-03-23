@@ -1,5 +1,5 @@
 /*
-*	@filename	SoloLeveling.js
+*	@filename	andariel.js
 *	@author		isid0re
 *	@desc		andariel quest.
 */

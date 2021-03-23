@@ -14,7 +14,8 @@ var StarterConfig = {
 	SwitchKeyDelay: 300, // Seconds to wait before switching a used/banned key or after realm down
 	CrashDelay: 10, // Seconds to wait after a d2 window crash
 	FTJDelay: 300, // Seconds to wait after failing to create a game
-	RealmDownDelay: 3, // Minutes to wait after getting Realm Down message
+	RealmDownDelay: 10, // Minutes to wait after getting Realm Down message
+	InvalidPasswordDelay: 10, // Minutes to wait after getting Invalid Password message
 	UnableToConnectDelay: 5, // Minutes to wait after Unable To Connect message
 	TCPIPNoHostDelay: 5, // Seconds to wait after Cannot Connect To Server message
 	CDKeyInUseDelay: 5, // Minutes to wait before connecting again if CD-Key is in use.
@@ -23,7 +24,8 @@ var StarterConfig = {
 	WaitInLineTimeout: 12000, // Seconds to wait before cancelling the 'Waiting in Line...' screen
 	GameDoesNotExistTimeout: 600, // Seconds to wait before cancelling the 'Game does not exist.' screen
 	DelayBeforeLogin: rand(5, 25),	// Seconds to wait before logging in
-	VersionErrorDelay: rand(5, 30)	// Seconds to wait after 'unable to identify version' message
+	VersionErrorDelay: rand(5, 30),	// Seconds to wait after 'unable to identify version' message
+	GlobalAccountPassword: "" // Set value for a global password for account generation
 };
 
 var ChannelConfig = {
@@ -72,24 +74,19 @@ include("torchsystem.js");
 include("common/misc.js");
 include("common/util.js");
 include("common/pather.js");
-include("sololeveling/Functions/Developer.js");
-include("sololeveling/Tools/NameGen.js");
-include("SoloLeveling/Tools/Performance.js");
-include("SoloLeveling/Tools/Playtime.js");
+include("SoloLeveling/Tools/Developer.js");
+include("SoloLeveling/Tools/Tracker.js");
+include("SoloLeveling/Tools/NameGen.js");
 include("SoloLeveling/Tools/OOGOverrides.js");
 
 if (!FileTools.exists("data/" + me.profile + ".json")) {
 	DataFile.create();
-	delay(Math.floor(rand(1, 25)));
+	delay(Math.floor(rand(1, 20)));
 }
 
-var loadPlaytime = (Development.shouldLog || Development.useOverlay);
-
-if (!FileTools.exists("libs/SoloLeveling/Performance/" + me.profile + ".json") && loadPlaytime) {
-	delay(Math.floor(rand(5, 25)));
-	Playtime.create();
+if (Developer.logPerformance) {
+	Tracker.initialize();
 }
-
 var gameInfo, gameStart, ingame, chatActionsDone, pingQuit, myExp, myGold, resPenalty, frRes, crRes, lrRes, prRes, areaName, diffName,
 	handle, useChat, firstLogin, connectFail, setUp, deadCheck, connectFailRetry,
 	battlenet = Profile().type === 2 ? true : false,
@@ -251,10 +248,6 @@ function locationTimeout (time, location) {
 		delay(500);
 	}
 
-	if (loadPlaytime) {
-		Playtime.recordPlaytime();
-	}
-	
 	return (getLocation() !== location);
 }
 
@@ -609,11 +602,12 @@ function locationAction (location) {
 			ControlAction.click(6, 33, 572, 128, 35);
 		}
 
-		ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
 		D2Bot.updateStatus("Logging In");
 
 		try {
 			if (battlenet) { // make battlenet accounts/characters
+				ControlAction.timeoutDelay("Login Delay", StarterConfig.DelayBeforeLogin * 1e3);
+
 				if (setUp.account !== "") { // existing account
 					try {
 						login(me.profile);
@@ -630,9 +624,17 @@ function locationAction (location) {
 					}
 				} else { // new account
 					if (setUp.account === "") { // make char if not found
-						setUp.account = randomString(12, true);
-						setUp.password = randomString(12, true);
-						ControlAction.timeoutDelay("Generating Random Account Information", StarterConfig.DelayBeforeLogin * 1e3);
+						if (StarterConfig.GlobalAccountPassword) {
+							setUp.account = randomString(12, true);
+							setUp.password = StarterConfig.GlobalAccountPassword;
+							print("Generating Account Information");
+							ControlAction.timeoutDelay("Generating Account Information", StarterConfig.DelayBeforeLogin * 1e3);
+						} else {
+							setUp.account = randomString(12, true);
+							setUp.password = randomString(12, true);
+							print("Generating Random Account Information");
+							ControlAction.timeoutDelay("Generating Random Account Information", StarterConfig.DelayBeforeLogin * 1e3);
+						}
 
 						if (ControlAction.makeAccount(setUp)) {
 							D2Bot.setProfile(setUp.account, setUp.password);
@@ -682,9 +684,16 @@ function locationAction (location) {
 
 				break;
 			case getLocaleString(5207):
-			case getLocaleString(5219): // password must be 2 characters
 				D2Bot.updateStatus("Invalid Password");
 				D2Bot.printToConsole("Invalid Password");
+				ControlAction.timeoutDelay("Invalid password delay", StarterConfig.InvalidPasswordDelay * 6e4);
+				D2Bot.printToConsole("Invalid Password - Restart");
+				D2Bot.restart();
+
+				break;
+			case getLocaleString(5219): // password must be 2 characters
+				D2Bot.updateStatus("Password must be 2 characters");
+				D2Bot.printToConsole("Password must be 2 characters");
 				D2Bot.stop();
 
 				break;
@@ -940,7 +949,13 @@ function locationAction (location) {
 
 		if (setUp) {
 			if (!ControlAction.findCharacter(setUp)) {
-				ControlAction.makeCharacter(setUp);
+				if (setUp.charName === DataFile.getObj().name) {
+					ControlAction.timeoutDelay("[R/D] Character not found ", 18e4);
+					D2Bot.printToConsole("Avoid Creating New Character - Restart");
+					D2Bot.restart();
+				} else {
+					ControlAction.makeCharacter(setUp);
+				}
 			} else {
 				ControlAction.loginCharacter(setUp);
 			}
@@ -1081,15 +1096,11 @@ function main () {
 		setUp.charName = NameGen();
 		D2Bot.setProfile(null, null, setUp.charName);
 		print("Generating Character Name");
-		delay(500);
+		delay(50);
 	}
 
 	var wasInGame = false;
 
-	if (loadPlaytime) {
-		Playtime.track(false);
-	}
-	
 	while (true) {
 		while (me.ingame) { // returns true before actually in game so we can't only use this check
 			if (me.gameReady) { // returns false when switching acts so we can't use while
@@ -1103,22 +1114,12 @@ function main () {
 					DataFile.updateStats("ingameTick");
 				}
 
-				if (loadPlaytime) {
-					Playtime.recordPlaytime();
-
-					if (!wasInGame) {
-						Playtime.track(true);
-						wasInGame = true;
-					}
-
-				}
-				
 				myExp = Math.max(0, Experience.progress());
 				myGold = me.getStat(14) + me.getStat(15);
 				resPenalty = me.gametype === 0 ? [ 0, 20, 50][me.diff] : [ 0, 40, 100][me.diff];
 				frRes = Math.min(75, me.getStat(39) - resPenalty);
-				crRes = Math.min(75, me.getStat(41) - resPenalty);
-				lrRes = Math.min(75, me.getStat(43) - resPenalty);
+				crRes = Math.min(75, me.getStat(43) - resPenalty);
+				lrRes = Math.min(75, me.getStat(41) - resPenalty);
 				prRes = Math.min(75, me.getStat(45) - resPenalty);
 				areaName = Pather.getAreaName(me.area);
 				diffName = ['Normal', 'Nightmare', 'Hell'][me.diff];
@@ -1131,18 +1132,7 @@ function main () {
 			delay(1000);
 		}
 
-		if (wasInGame && loadPlaytime) {
-			Playtime.recordPlaytime();
-			Playtime.track(false);
-			wasInGame = false;
-		}
-
 		isUp = "no";
-
-		if (loadPlaytime) {
-			Playtime.recordPlaytime();
-		}
-		
 		locationAction(getLocation());
 		delay(1000);
 	}

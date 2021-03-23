@@ -180,3 +180,62 @@ NTIP.CheckItem = function (item, entryList, verbose) {
 
 	return result;
 };
+
+NTIP.OpenFile = function (filepath, notify) {
+	if (!FileTools.exists(filepath)) {
+		if (notify) {
+			Misc.errorReport("ÿc1NIP file doesn't exist: ÿc0" + filepath);
+		}
+
+		return false;
+	}
+
+	var i, nipfile, line, lines, info, tick = getTickCount(), entries = 0,
+		filename = filepath.substring(filepath.lastIndexOf("/") + 1, filepath.length);
+
+	try {
+		nipfile = File.open(filepath, 0);
+	} catch (fileError) {
+		if (notify) {
+			Misc.errorReport("ÿc1Failed to load NIP: ÿc0" + filename);
+		}
+	}
+
+	if (!nipfile) {
+		return false;
+	}
+
+	lines = nipfile.readAllLines();
+
+	nipfile.close();
+
+	for (i = 0; i < lines.length; i += 1) {
+		info = {
+			line: i + 1,
+			file: filename,
+			string: lines[i]
+		};
+
+		line = NTIP.ParseLineInt(lines[i], info);
+
+		if (line) {
+			entries += 1;
+
+			NTIP_CheckList.push(line);
+
+			if (!lines[i].toLowerCase().match("tier")) {
+				NTIP_CheckListNoTier.push(line);
+			} else {
+				NTIP_CheckListNoTier.push([false, false]);
+			}
+
+			stringArray.push(info);
+		}
+	}
+
+	if (notify) {
+		print("ÿc4Loaded NIP: ÿc2" + filename + "ÿc4. Lines: ÿc2" + lines.length + "ÿc4. Valid entries: ÿc2" + entries + ". ÿc4Time: ÿc2" + (getTickCount() - tick) + " ms");
+	}
+
+	return true;
+};

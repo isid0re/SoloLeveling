@@ -1,6 +1,12 @@
+/*
+*	@filename	NameGen.js
+*	@author		isid0re
+*	@desc		Creates character names by combining a Descriptive Adjective + Noun
+*/
+
 var NameGen = function () {
 	var adjectives = [
-		"Ancient", "Artful", "Able", "Abundant", "Accepting", "Acclaimed", "Active", "Addictive", "Adept", "Adequate", "Admired", "Adorable",
+		"Ancient", "Angry", "Artful", "Able", "Abundant", "Accepting", "Acclaimed", "Active", "Addictive", "Adept", "Adequate", "Admired", "Adorable",
 		"Adored", "Agile", "Amazing", "Amiable", "Amicable", "Amusing", "Anxious", "Anxious", "Apathetic", "Aquatic", "Arrogant", "Artistic",
 		"Attentive", "Awesome", "Azure", "Barren", "Bitter", "Black", "Blue", "Blasted", "Bold", "Bonding", "Boorish", "Bountiful", "Braggart",
 		"Brave", "Bright", "Brilliant", "Broken", "Burning", "Busy", "Buzzing", "Callous", "Captious", "Caring", "Cautious", "Celestial",
@@ -22,7 +28,7 @@ var NameGen = function () {
 		"Just", "Juvenile", "Kingly", "Keen", "Kind", "Kindred", "Kooky", "Liberal", "Listening", "Loathsome", "Loving", "LOYAL", "Limp", "Lord",
 		"Loud", "Light", "Little", "Lanky", "Lazy", "Long", "Lucky", "Last", "Leaping", "Lone", "Lonely", "Lost", "Magical", "Majestic", "Malicious",
 		"Mammoth", "Marine", "Masterful", "Meddling", "Migratory", "Minuscule", "Miserable", "Misty", "Modest", "Moral", "Mediocre", "Mellow", "Mute",
-		"Miserable", "Naive", "Nascent", "Native", "Natural", "Nature", "Needy", "Nefarious", "Negative", "Neglected", "Negligent", "Nice", "Noble",
+		"Miserable", "Naive", "Nascent", "Native", "Natural", "Natures", "Needy", "Nefarious", "Negative", "Neglected", "Negligent", "Nice", "Noble",
 		"Northern", "Notorious", "Obedient", "Observant", "Open", "Orderly", "Original", "Outspoken", "Organic", "Ornate", "Ordinary", "Orange",
 		"Parasitic", "Partial", "Patient", "Personal", "Petulant", "Pleasant", "Poise", "Polite", "Pollutant", "Popular", "Pouncing", "Powerful",
 		"Prideful", "Primal", "Prime", "Pristine", "Prompt", "Proper", "Punctual", "Pure", "Purple", "Putrid", "Practical", "Precious", "Puzzled",

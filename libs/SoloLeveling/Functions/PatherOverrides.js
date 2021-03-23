@@ -66,20 +66,9 @@ NodeAction.killMonsters = function (arg) {
 NodeAction.popChests = function () {
 	if (Config.OpenChests) {
 		Misc.openChests(Config.ClearPath.Range);
-
-		let well = getUnit(2, "Well", 0);
-
-		if (well) {
-			do {
-				if (getDistance(me, well) <= 5 || Pather.moveToUnit(well, 3, 0)) {
-					for (let w = 0; w < 3; w++) {
-						Misc.click(0, 0, well);
-						delay(25 + me.ping);
-					}
-				}
-			} while (well.getNext());
-		}
 	}
+
+	Misc.useWell(Config.ClearPath.Range);
 };
 
 Pather.checkWP = function (area) {

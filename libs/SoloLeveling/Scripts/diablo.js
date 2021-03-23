@@ -5,7 +5,7 @@
 */
 
 function diablo () {
-	if (Misc.checkQuest(26, 0) && !Misc.checkQuest(28, 0)) {
+	if (!me.classic && Misc.checkQuest(26, 0) && !Misc.checkQuest(28, 0)) {
 		Pather.changeAct();
 
 		return true;

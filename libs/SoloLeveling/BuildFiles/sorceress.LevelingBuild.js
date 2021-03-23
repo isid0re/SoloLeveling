@@ -1,6 +1,7 @@
-/**
- *    @filename   Sorceress.BlizzballerBuild.js
- *    @desc      Sorceress blizzballer build for after respecOne
+/*
+ *    @filename 	Sorceress.BlizzballerBuild.js
+ *	  @author	  	isid0re
+ *    @desc    		Sorceress blizzballer build for after respecOne
  */
 
 var build = {
@@ -8,6 +9,9 @@ var build = {
 	skillstab: 10, //cold
 	wantedskills: [59, 47, 65], // blizzard, fireball, cold mastery
 	usefulskills: [55, 56, 61, 42], // glacial spike, meteor, fire mastery, static
+	mercAuraName: "Holy Freeze",
+	mercAuraWanted: 114,
+	mercDiff: 1,
 	stats: [
 		["energy", 50], ["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 84], ["dexterity", "block"], ["vitality", "all"]
 	],

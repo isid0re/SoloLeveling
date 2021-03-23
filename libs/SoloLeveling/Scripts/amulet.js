@@ -1,5 +1,5 @@
 /*
-*	@filename	SoloLeveling.js
+*	@filename	amulet.js
 *	@author		isid0re
 *	@desc		get the amulet from viper temple
 */

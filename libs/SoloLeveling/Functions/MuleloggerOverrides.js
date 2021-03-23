@@ -1,7 +1,7 @@
 /*
 *	@filename	MuleloggerOverrides.js
 *	@author		theBguy
-*	@desc		Mulelogger.js fixes for QOL
+*	@desc		Added tiers to mulelogging
 */
 
 if (!isIncluded("MuleLogger.js")) {
@@ -98,13 +98,12 @@ MuleLogger.logItem = function (unit, logIlvl, type) {
 
 	if (NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) {
 		if (unit.mode === 1 && type === "Player") {
-			desc += ("\n\\xffc0Equip char tier: " + NTIP.GetTier(unit));
+			desc += ("\n\\xffc0Autoequip tier: " + NTIP.GetTier(unit));
 
 		} else if (unit.mode === 1 && type === "Merc") {
-			desc += ("\n\\xffc0Equip merc tier: " + NTIP.GetMercTier(unit));
+			desc += ("\n\\xffc0Autoequip merctier: " + NTIP.GetMercTier(unit));
 
 		}
-		
 	}
 
 	switch (unit.quality) {
@@ -346,15 +345,7 @@ MuleLogger.logEquippedItems = function () {
 	}
 
 	if (Config.UseMerc) {
-		for (i = 0; i < 3; i += 1) {
-			merc = getMercFix();
-
-			if (merc) {
-				break;
-			}
-
-			delay(50);
-		}
+		merc = Merc.getMercFix();
 
 		if (merc) {
 			items = merc.getItems();
@@ -372,8 +363,8 @@ MuleLogger.logEquippedItems = function () {
 
 	charClass = ["amazon.", "sorceress.", "necromancer.", "paladin.", "barbarian.", "druid.", "assassin."][me.classid];
 
-	// hcl = hardcore class ladder
-	// sen = softcore expan nonladder
-	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + charClass + me.profile + "-" + me.name + "." + ( me.playertype ? "h" : "s" ) + (me.gametype ? "e" : "c" ) + ( me.ladder > 0 ? "l" : "n" ) + ".txt", finalString);
+	// hccl = hardcore classic ladder
+	// scnl = softcore expan nonladder
+	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + charClass + "." + me.profile + "-" + me.name + "." + ( me.playertype ? "hc" : "sc" ) + (me.classic ? "c" : "" ) + ( me.ladder > 0 ? "l" : "nl" ) + ".txt", finalString);
 	print("Item logging done.");
 };

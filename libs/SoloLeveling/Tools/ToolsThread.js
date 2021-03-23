@@ -29,8 +29,12 @@ include("common/Runewords.js");
 include("common/Storage.js");
 include("common/Town.js");
 
-if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) {
-	include("SoloLeveling/Tools/OOGOverrides.js");
+if (!isIncluded("SoloLeveling/Tools/Developer.js")) {
+	include("SoloLeveling/Tools/Developer.js");
+}
+
+if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
+	include("SoloLeveling/Tools/Tracker.js");
 }
 
 if (!isIncluded("SoloLeveling/Functions/globals.js")) {
@@ -52,7 +56,7 @@ function main () {
 	//Double Safeguard to stop the base toolsthread
 	let origToolsThread = getScript("tools/ToolsThread.js");
 
-	if(!!origToolsThread) {
+	if (!!origToolsThread) {
 		if (origToolsThread.running) {
 			D2Bot.printToConsole("Base is running in the background", 4);
 			origToolsThread.stop();
@@ -69,8 +73,8 @@ function main () {
 	Runewords.init();
 	Cubing.init();
 
-	if (Development.useOverlay) {
-		include("SoloLeveling/Tools/OverlayThread.js");
+	if (Developer.Overlay) {
+		include("SoloLeveling/Tools/Overlay.js");
 
 		var sayings = ["Oh no :( ", "gonna chicken?", "no bueno", "little low?"];
 
@@ -102,25 +106,6 @@ function main () {
 		};
 		//Fav fonts - 3(really big), 4 thin, 5 thick funny, 6 small
 
-		this.soloEvent = function (key) {
-			switch (key) {
-			case 219:
-				if (me.screensize === 0) {
-					this.ee.push(new Text("SoloLeveling by Isid0re", 402, 411, 1, 0, 2));
-					this.ee.push(new Text("Overlay by theBGuy", 402, 421, 1, 0, 2));
-				} else {
-					this.ee.push(new Text("SoloLeveling by Isid0re", 394, 525, 1, 0, 2));
-					this.ee.push(new Text("Overlay by theBGuy", 394, 535, 1, 0, 2));
-				}
-
-				break;
-			case 221:
-				this.clear();
-				break;
-			}
-		};
-
-		addEventListener("keyup", this.soloEvent);
 	}
 
 	for (i = 0; i < 5; i += 1) {
@@ -257,6 +242,14 @@ function main () {
 	};
 
 	this.exit = function () {
+		if (Developer.logPerformance) {
+			Tracker.Update();
+		}
+
+		if (DataFile.updateStats("setDifficulty", Check.nextDifficulty())) {
+			D2Bot.setProfile(null, null, null, Check.nextDifficulty());
+		}
+
 		this.stopDefault();
 		quit();
 	};
@@ -703,12 +696,12 @@ function main () {
 
 	// Start
 	while (true) {
-		if (isIncluded("SoloLeveling/Tools/OverlayThread.js") && Development.useOverlay) {
-			if (Development.useOverlay) {
-				SoloLevelingHooks.update();
+		if (isIncluded("SoloLeveling/Tools/Overlay.js") && Developer.Overlay) {
+			if (Developer.Overlay) {
+				Overlay.update();
 
 				if (me.act !== myAct) {
-					SoloLevelingHooks.flush();
+					Overlay.flush();
 					myAct = me.act;
 				}
 
@@ -831,8 +824,6 @@ function main () {
 
 		if (debugInfo.area !== Pather.getAreaName(me.area)) {
 			debugInfo.area = Pather.getAreaName(me.area);
-
-			//D2Bot.store(JSON.stringify(debugInfo));
 			DataFile.updateStats("debugInfo", JSON.stringify(debugInfo));
 		}
 
