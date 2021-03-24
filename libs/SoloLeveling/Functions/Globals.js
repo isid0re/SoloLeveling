@@ -31,7 +31,7 @@ var SetUp = {
 	levelCap: [35, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
-	respecOne: [ 0, 7, 26, 25, 24, 24, 30][me.classid],
+	respecOne: [ 0, 28, 26, 25, 24, 24, 30][me.classid],
 
 	respecTwo: function () {
 		let respec;
