@@ -1,8 +1,12 @@
-# SoloLeveling
+![SoloLeveling](https://i.imgur.com/Nz04onp.png)
 
-An automated leveling script for all Diablo 2 softcore expansion characters using Kolbot from level 1 to 99. After the initial setup, the bot will operate without user involvement. This is a hobby project that I'm doing in my spare time. So if you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
+SoloLeveling is an automated leveling script for any Diablo 2 characters using Kolbot. The overall goal of the project is to be the easiest and fastest leveling script for any character class.
 
-### Features
+**NOTE:** This script is designed to be only run from [https://github.com/blizzhackers/kolbot](https://github.com/blizzhackers/kolbot). Most errors occur from using the wrong Kolbot repo installation. 
+
+If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
+
+## Features
 - Operates in Hell difficulty within 24 hours
 - Includes character build options for final respec
 - Plays and finishes the game through Act 5 Hell
@@ -10,47 +14,71 @@ An automated leveling script for all Diablo 2 softcore expansion characters usin
 - Fully configured Autoequip for bot and mercenary
 - Makes and equips CTA and spirit shield on swap
 
-### Installation
+## Available Characters and Builds
+| Amazon | Sorceress | Necromancer | Paladin | Barbarian | Druid | Assassin |
+|:------:|:-------:|:-------:|:------:|:------:|:------:|:-----:|
+| Currently N/A | Blizzard | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
+| | BlizzBaller |   Bone | Smiter| | Elemental |
+| | Meteorb |    Summon | |
 
-This script is designed to be plug and play with [blizzhackers/kolbot](https://github.com/blizzhackers/kolbot) after you've installed Kolbot per it's installation instructions. If you are downloading Kolbot from the discord link use the "New Development" link.
+## Install Guide
+| Step | Instructions | |
+|:------:|:-------|-------:|
+| 1.| Download Kolbot here: [github.com/blizzhackers/kolbot](https://github.com/blizzhackers/kolbot). |![blizzhackers github](https://i.imgur.com/RksqKEA.jpg) |
+| 2.| Click the green button to Download SoloLeveling. |![enter image description here](https://i.imgur.com/cNqZDbW.jpg) |
+| 3.a| Copy and paste everything from the zip into `\d2bs\kolbot`.| ![extractto](https://i.imgur.com/ztFbgnd.jpg)|
+|3.b|A successful installation will show 2 new files in the folder and look similar to the second image|![extract into](https://i.imgur.com/5OxVVNH.jpg)| 4.| Select Add for new a Kolbot Profile. | ![Add-profile.jpg](https://imgur.com/tHs9ZoH.jpg)|
+| 4.a| Input a profile name. See the Profile Name Options below for more details | ![set profile name](https://imgur.com/B865nPU.jpg) |
+| 4.b| ***Optional*** Input your account name. If no name than a random account is created. | |
+| 4.c|***Optional*** Input your account password. If no name than a random password is created. | |
+| 4.d|***Optional*** Input your character name. If no name than a random name is created. | ![enter character name](https://i.imgur.com/Casmjbc.jpg) |
+|5.| Select Entry Script D2BotSoloLevelingEntry.dbj| ![Select Entry Script](https://imgur.com/tZnH7kU.jpg)|
+|6.| Input your Info Tag Information. See **Available Characters and Builds** for a a list of options. <br><br> Make sure the spelling matches the listed builds and there are no trailing spaces. | ![enter image description here](https://i.imgur.com/gmUQvbw.jpg)|
+|7.|Ensure your Game Path, Key List, Realm, Mode are all set on the settings you want to use then click Apply.||
+|8.|Run the Bot.||
+|9.|Enjoy!||
 
-1. Download SoloLeveling.zip
-2. Extract and copy both the `libs` folder and `D2BotSoloLevelingEntry.dbj` into the `kolbot` folder.
-3. A proper installation will have the following folders and files added to the `libs` directory.
-```	
-	bots\				sololeveling.js
-	SoloLeveling\Scripts\ 		[multiple scripts used for bot sequences]
-	SoloLeveling\Functions\ 	[the various overrides and globals used by this script]
-	SoloLeveling\BuildFiles\ 	[the various build files for the bots]
-	configs\Builds\ 		[the autobuild templates for the bot builds]
-	configs\ 			[the various class config files for the bots]
-```
-4. A proper installation will have the `D2BotSoloLevelingEntry.dbj` in the same location as the `D2BotLead.dbj` entry script.
+## Profile Name Options 
+| Prefix | Description|
+|:----|:--|
+|HCCNL| Hardcore Classic NonLadder|
+|HCCL| Hardcore Classic Ladder|
+|HCNL| Hardcore Expansion NonLadder|
+|HCL| Hardcore Expansion Ladder|
+|SCCNL| Softcore Classic NonLadder|
+|SCCL| Softcore Classic Ladder|
+|SCNL| Softcore Expansion NonLadder|
+|SCL| Softcore Expansion Ladder|
 
-### Usage
-1. After installation create your profile in the Kolbot D2Bot profile manager. The profile name will decide on the type of character to be made.
-2. The profile needs to adhere to the following format PREFIX-SUFFIX: (for example, a hardcore classic ladder sorceress will be `HCCL-SORC` or a softcore expansion nonladder hammerdin will be `SCNL-PAL`).
-```
-Prefix		Description		Suffix						Description
-HC/SC		Hardcore/SoftCore	ZON, SORC, NECRO, PAL, BARB, DRUID, SIN		Abbreviated character class names
-C		Classic	
-NL/L		NonLadder/Ladder
-```
-3. The profile Info Tag box will need to have the final build selection for the character type chosen. Please refer to the respective Class.Sololeveling.js config file for build options.
-4. Account Name: leave blank if you want it to create a random name (later saved in Data/profile.json) OR use your existing account
-5. Account Password: leave blank if you want it to create a random password (later saved in Data/profile.json) OR use your existing account
-6. Character Name: leave blank if you want it to create a random character name OR use a specific character name (script will error if name is taken)
-7. Ensure the Difficulty is set to HIGHEST.
-8. Use the D2BotSoloLevelingEntry.dbj entry script.
-9. Click apply.
-10. Run the Bot.
-11. Enjoy.
+| Suffix | Description|
+|:----|:--|
+|ZON| Amazon Class **NOT CURRENTLY AVAILABLE**|
+|SORC| Sorceress Class|
+|NECRO| Necromancer Class|
+|PAL| Paladin Class|
+|BARB| Barbarian Class **NOT CURRENTLY AVAILABLE**|
+|DRU| Druid Class|
+|SIN| Assassin Class|
 
-### Contributing
+#### Example Profile Names
+- **SCL-PAL** would make a softcore expansion ladder paladin
+- **HCL-SIN** would make a hardcore expansion ladder assassin
+- **SCNL-SORC** would make a softcore expansion nonladder sorceress
+- **HCNL-DRU** would make a hardcore expansion nonladder druid
+- **SCCL-NECRO** would make a softcore classic ladder necromancer
+- **HCCL-NECRO** would make a hardcore classic ladder necromancer
+- **SCCNL-PAL** would make a softcore classic nonladder paladin
+- **HCCNL-SORC** would make a hardcore classic nonladder sorceress
 
+## Discord
+Join me on Discord. Link is here: https://discord.gg/S3YerA6U7g
+
+## Support SoloLeveling
 This is a hobby project that I'm doing in my spare time. So if you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
 
+## Contributing
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
-### License
+## License
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
+
