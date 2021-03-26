@@ -1,10 +1,10 @@
 /*
-*	@filename	tome.js
+*	@filename	lamessen.js
 *	@author		isid0re
 *	@desc		get the lam essen's tome
 */
 
-function tome () {
+function lamessen () {
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting tome');
 	me.overhead("tome");

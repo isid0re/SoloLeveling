@@ -376,14 +376,14 @@ var Overlay = {
 			case "questbox":
 				this.hooks.push({
 					name: "questbox",
-					hook: new Box (Overlay.questX + Overlay.resfixX - 8, Overlay.questY + Overlay.resfixY - 17, 185, 10 + [0, 105, 90, 90, 60, 90][me.act], 0x0, 1, 0)
+					hook: new Box (Overlay.questX + Overlay.resfixX - 8, Overlay.questY + Overlay.resfixY - 17, 190, 10 + [0, 105, 90, 90, 60, 90][me.act], 0x0, 1, 0)
 				});
 
 				break;
 			case "questframe":
 				this.hooks.push({
 					name: "questframe",
-					hook: new Frame(Overlay.questX + Overlay.resfixX - 8, Overlay.questY + Overlay.resfixY - 17, 185, 10 + [0, 105, 90, 90, 60, 90][me.act], 0)
+					hook: new Frame(Overlay.questX + Overlay.resfixX - 8, Overlay.questY + Overlay.resfixY - 17, 190, 10 + [0, 105, 90, 90, 60, 90][me.act], 0)
 				});
 
 				break;
@@ -622,6 +622,10 @@ var Overlay = {
 	update: function () {
 		while (!me.gameReady) {
 			delay(100);
+		}
+
+		while (Misc.getUIFlags() !== null && (Misc.getUIFlags().includes(1) || Misc.getUIFlags().includes(5) || Misc.getUIFlags().includes(12) || Misc.getUIFlags().includes(15) || Misc.getUIFlags().includes(25) || Misc.getUIFlags().includes(26) || Misc.getUIFlags().includes(36))) {
+			this.text.flush();
 		}
 
 		this.text.check();

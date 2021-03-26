@@ -401,7 +401,7 @@ var Quest = {
 			}
 
 			break;
-		case "imbue": //tools of the trade 
+		case "smith": //tools of the trade
 			if (Misc.checkQuest(3, 0)) {
 				quest = true;
 			}
@@ -467,7 +467,7 @@ var Quest = {
 			}
 
 			break;
-		case "tome": // tome
+		case "lamessen": // lamessen tome
 			if (Misc.checkQuest(17, 0)) {
 				quest = true;
 			}

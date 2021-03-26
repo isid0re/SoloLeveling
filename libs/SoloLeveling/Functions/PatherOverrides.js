@@ -19,12 +19,8 @@ NodeAction.killMonsters = function (arg) {
 		}
 	}
 
-	if ([8, 3, 38, 6, 27, 28, 33, 56, 57, 60, 45, 58, 61, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
-		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30); // summoner targeting provided by penguins0690
-
-		if (monList) {
-			Attack.clearList(monList);
-		}
+	if (!me.inTown) {
+		Attack.clear(5, 0);
 	}
 
 	if ([39].indexOf(me.area) > -1) {
@@ -478,4 +474,54 @@ Pather.makePortal = function (use) {
 	}
 
 	return false;
+};
+
+Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
+	var useTeleport = this.useTeleport();
+
+	if (offX === undefined) {
+		if (me.classid !== 3) {// not paladin
+			if (unit.type === 1) { //is monster
+				offX = 5; //prevent sorc & similar teleporting on top of the target
+			} else {
+				offX = 0;
+			}
+		} else {
+			offX = 0;
+		}
+	}
+
+	if (offY === undefined) {
+		if (me.classid !== 3) {
+			if (unit.type === 1) {
+				offY = 5; //prevent sorc & similar teleporting on top of the target
+			} else {
+				offY = 0;
+			}
+		} else {
+			offY = 0;
+		}
+	}
+
+	if (clearPath === undefined) {
+		clearPath = false;
+	}
+
+	if (pop === undefined) {
+		pop = false;
+	}
+
+	if (!unit || !unit.hasOwnProperty("x") || !unit.hasOwnProperty("y")) {
+		throw new Error("moveToUnit: Invalid unit.");
+	}
+
+	if (unit instanceof PresetUnit) {
+		return this.moveTo(unit.roomx * 5 + unit.x + offX, unit.roomy * 5 + unit.y + offY, 3, clearPath);
+	}
+
+	if (!useTeleport) {
+		this.moveTo(unit.x + offX, unit.y + offY, 0, clearPath, true);	// The unit will most likely be moving so call the first walk with 'pop' parameter
+	}
+
+	return this.moveTo(unit.x + offX, unit.y + offY, useTeleport && unit.type && unit.type === 1 ? 3 : 0, clearPath, pop);
 };

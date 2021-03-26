@@ -197,153 +197,151 @@ var Check = {
 		let haveGold = this.Gold();
 		let haveRunes = this.Runes();
 
-		switch (taskID) {
+		switch (taskID.toLowerCase()) {
 		case 0:
 			break;
-		case 1: //den
+		case "den": //den
 			if (Misc.checkQuest(1, 0)) { //completed
 				dontQuest = true;
 			}
 
 			break;
-		case 2: //bloodaraven
+		case "bloodraven": //bloodaraven
 			if (me.normal && Misc.checkQuest(2, 0) || me.nightmare && haveGold) { //complete raven normal || goldreq met
 				dontQuest = true;
 			}
 
 			break;
-		case 3: // imbue quest
+		case "smith": // imbue quest
 			break;
-		case 4: //tristam
+		case "tristam": //tristam
 			if (me.classic && !Misc.checkQuest(26, 0) || !Misc.checkQuest(40, 0) || Misc.checkQuest(4, 0)) { //completed
 				dontQuest = true;
 			}
 
 			break;
-		case 5: //countess
+		case "countess": //countess
 			if (me.classic && me.normal && Misc.checkQuest(5, 0) || haveRunes) { // classic quest completed normal || have runes for difficulty
 				dontQuest = true;
 			}
 
 			break;
-		case 6: //pits
+		case "pits": //pits
 			if (!me.hell || me.hell && dontMF) {
 				dontQuest = true;
 			}
 
 			break;
-		case 7: //andy
+		case "andariel": //andy
 			if (Misc.checkQuest(7, 0) && (me.normal || me.classic && me.nightmare)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 8: //cube
+		case "cube": //cube
 			if (!Pather.accessToAct(2) || me.getItem(549)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 9: //radament
+		case "radament": //radament
 			if (!Pather.accessToAct(2) || Misc.checkQuest(9, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 10: //staff
+		case "staff": //staff
 			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || Misc.checkQuest(10, 0)) { //have staff or quest completed
 				dontQuest = true;
 			}
 
 			break;
-		case 11: //ammy
+		case "amulet": //ammy
 			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || Misc.checkQuest(10, 0)) { //have staff or quest completed
 				dontQuest = true;
 			}
 
 			break;
-		case 12: // ancient tunnels
+		case "ancienttunnels": // ancient tunnels
 			if (!Pather.accessToAct(2) || me.hell && me.classid === 3 || !me.hell && haveGold) { // lowgold || no pally in hell mode magic immunes
 				dontQuest = true;
 			}
 
 			break;
-		case 13: //summoner
+		case "summoner": //summoner
 			if (!Pather.accessToAct(2) || Misc.checkQuest(13, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 14: //tombs
+		case "tombs": //tombs
 			if (!Pather.accessToAct(2) || haveGold) {
 				dontQuest = true;
 			}
 
 			break;
-		case 15: //duriel
+		case "duriel": //duriel
 			if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 16: // eye
+		case "eye": // eye
 			if (!Pather.accessToAct(3) || me.getItem(553) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 17: // tome
+		case "lamessen": //lamessen tome
 			if (!Pather.accessToAct(3) || Misc.checkQuest(17, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 18: //heart
+		case "heart": //heart
 			if (!Pather.accessToAct(3) || me.getItem(554) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 19: //gidbinn
-			break;
-		case 20: //brain
+		case "brain": //brain
 			if (!Pather.accessToAct(3) || me.getItem(555) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 21: //lowerkurast
+		case "lowerkurast": //lowerkurast
 			if (!Pather.accessToAct(3) || !me.hell && haveGold) {
 				dontQuest = true;
 			}
 
 			break;
-		case 22: //travincal
+		case "travincal": //travincal
 			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || !me.normal && Misc.checkQuest(18, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 23: //mephisto
+		case "mephisto": //mephisto
 			if (!Pather.accessToAct(3) || !Misc.checkQuest(18, 0) || Misc.checkQuest(23, 0) && me.normal) {
 				dontQuest = true;
 			}
 
 			break;
 		case 24:
-		case 25: // izzy
+		case "izual": // izzy
 			if (!Pather.accessToAct(4) || Misc.checkQuest(25, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 26: //diablo
+		case "diablo": //diablo
 			if (!Pather.accessToAct(4)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 27: // hellforge
+		case "hellforge": // hellforge
 			if (me.classic || me.normal || !Pather.accessToAct(4) || Misc.checkQuest(27, 0)) {
 				dontQuest = true;
 			}
@@ -355,43 +353,43 @@ var Check = {
 		case 31:
 		case 33:
 		case 34:
-		case 35: // shenk
+		case "shenk": // shenk
 			if (me.classic || !Pather.accessToAct(5) || haveGold && dontMF) {
 				dontQuest = true;
 			}
 
 			break;
-		case 36: //barbies
+		case "savebarby": //barbies
 			if (me.classic || !me.normal || !Pather.accessToAct(5) || Misc.checkQuest(36, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 37: //anya
+		case "anya": //anya
 			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(37, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 38: //nith (pindle)
+		case "pindle": //nith (pindle)
 			if (me.classic || !Pather.accessToAct(5) || !Misc.checkQuest(37, 0) || haveGold && dontMF) {
 				dontQuest = true;
 			}
 
 			break;
-		case 39: //ancients
+		case "ancients": //ancients
 			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(39, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 40: //baal
+		case "baal": //baal
 			if (me.classic || !Pather.accessToAct(5) || !Misc.checkQuest(39, 0)) {
 				dontQuest = true;
 			}
 
 			break;
-		case 42: //cows
+		case "cows": //cows
 			if (me.classic && !Misc.checkQuest(26, 0) || !Misc.checkQuest(40, 0) || Misc.checkQuest(4, 10)) {
 				dontQuest = true;
 			}

@@ -28,22 +28,22 @@ function tristam () {
 		}
 
 		if (me.getItem(524)) {
+			Town.goToTown();
 			Town.npcInteract("akara");
 		}
 	}
 
-	if (!Pather.checkWP(4)) {
-		Pather.getWP(4);
-	} else {
-		Pather.useWaypoint(4);
-	}
-
-	Precast.doPrecast(true);
-	Pather.moveToPreset(4, 2, 17, 0, 0, false, true);
-	Attack.clear(15, 0x7);
-	Pather.moveToPreset(4, 2, 17, 0, 0, false, true);
-
 	if (me.getItem(525)) {
+		if (!Pather.checkWP(4)) {
+			Pather.getWP(4);
+		} else {
+			Pather.useWaypoint(4);
+		}
+
+		Precast.doPrecast(true);
+		Pather.moveToPreset(4, 2, 17, 0, 0, false, true);
+		Attack.clear(15, 0x7);
+		Pather.moveToPreset(4, 2, 17, 0, 0, false, true);
 		let stone;
 
 		for (let touch = 0; touch < 5; touch += 1) {
@@ -56,25 +56,27 @@ function tristam () {
 				}
 			}
 		}
-	}
 
-	while (!Pather.usePortal(38)) {
-		Attack.securePosition(me.x, me.y, 10, 1000);
-	}
-
-	Pather.moveTo(me.x, me.y + 6);
-	let gibbet = getUnit(2, 26);
-
-	if (!gibbet.mode) {
-		if (!Pather.moveToPreset(me.area, 2, 26, 0, 0, true, true)) {
-			print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
+		while (!Pather.usePortal(38)) {
+			Attack.securePosition(me.x, me.y, 10, 1000);
 		}
 
-		Misc.openChest(gibbet);
-	}
+		Pather.moveTo(me.x, me.y + 6);
+		let gibbet = getUnit(2, 26);
 
-	if (me.diff === 0) {
-		Attack.clear(30);
+		if (!gibbet.mode) {
+			if (!Pather.moveToPreset(38, 2, 26, 0, 0, true, true)) {
+				print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
+			}
+
+			while (!gibbet.mode) {
+				Misc.openChest(gibbet);
+			}
+		}
+
+		if (me.diff === 0) {
+			Attack.clear(30);
+		}
 	}
 
 	return true;

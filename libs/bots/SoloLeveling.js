@@ -7,11 +7,11 @@
 
 // Sequence Settings
 var sequence = [
-	["den", 1], ["bloodraven", 2], ["tristam", 4], ["countess", 5], ["pits", 6], ["andariel", 7], ["cows", 42], // Act 1
-	["radament", 9], ["cube", 8], ["amulet", 11], ["summoner", 13], ["staff", 10], ["ancienttunnels", 12], ["tombs", 14], ["duriel", 15], // Act 2
-	["eye", 16], ["heart", 18], ["tome", 17], ["brain", 20], ["lowerkurast", 21], ["travincal", 22], ["mephisto", 23], // Act 3
-	["izual", 25], ["hellforge", 27], ["diablo", 26], //Act 4
-	["shenk", 35], ["saveBarby", 36], ["anya", 37], ["pindle", 38], ["ancients", 39], ["baal", 40], // Act 5
+	"den", "bloodraven", "tristam", "countess", "pits", "andariel", "cows", // Act 1
+	"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
+	"eye", "heart", "lamessen", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
+	"izual", "hellforge", "diablo", //Act 4
+	"shenk", "savebarby", "anya", "pindle", "ancients", "baal", // Act 5
 ];
 
 //---------------- Do Not Touch Below ----------------\\
@@ -77,17 +77,17 @@ function SoloLeveling () {
 		let j, k;
 
 		for (k = 0; k < sequence.length; k += 1) {
-			if (!Check.Task(sequence[k][1])) {
-				if (!isIncluded("SoloLeveling/Scripts/" + sequence[k][0] + ".js")) {
-					include("SoloLeveling/Scripts/" + sequence[k][0] + ".js");
+			if (!Check.Task(sequence[k])) {
+				if (!isIncluded("SoloLeveling/Scripts/" + sequence[k] + ".js")) {
+					include("SoloLeveling/Scripts/" + sequence[k] + ".js");
 				}
 
 				let tick = getTickCount();
 
 				for (j = 0; j < 5; j += 1) {
-					if (this[sequence[k][0]]()) {
+					if (this[sequence[k]]()) {
 						if (Developer.logPerformance) {
-							Tracker.CurrScript = sequence[k][0];
+							Tracker.CurrScript = sequence[k];
 							Tracker.Script(tick, Tracker.CurrScript);
 						}
 
@@ -96,7 +96,7 @@ function SoloLeveling () {
 				}
 
 				if (j === 5) {
-					me.overhead("sequence " + sequence[k][0] + " failed.");
+					me.overhead("sequence " + sequence[k] + " failed.");
 				}
 			}
 		}

@@ -195,8 +195,8 @@ function LoadConfig () {
 	Config.BossPriority = me.normal ? true : false;
 	Config.ClearType = 0;
 	Config.ClearPath = {
-		Range: 9,
-		Spectype: 0,
+		Range: 30,
+		Spectype: 0xF,
 	};
 
 	/* Monster skip configuration. */
@@ -247,7 +247,7 @@ function LoadConfig () {
 				//armor
 				"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
 				//shield
-				"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal  # [EnhancedDefense] >= 185 # [tier] == 100000", //hoz
+				"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal  # [EnhancedDefense] >= 150 # [tier] == 100000", //hoz
 				//gloves
 				"[name] == vampirebonegloves && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 100 && [strength] >= 12 && [lifeleech] >= 9  # [tier] == 100000", // drac's
 				//ammy
@@ -286,8 +286,8 @@ function LoadConfig () {
 				"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 50 # [tier] == 100000", //war traveler
 				//armor -- using Enigma
 				"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
-				//shield -- using HoZ
-				"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal # [EnhancedDefense] >= 185 # [tier] == 100000", //hoz
+				//shield
+				"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal # [EnhancedDefense] >= 150 # [tier] == 100000", //hoz
 				//gloves -- using Magefist
 				"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000",
 				//ammy

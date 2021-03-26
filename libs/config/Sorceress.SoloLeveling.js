@@ -206,8 +206,8 @@ function LoadConfig () {
 	Config.BossPriority = me.normal ? true : false;
 	Config.ClearType = 0;
 	Config.ClearPath = {
-		Range: 9,
-		Spectype: 0,
+		Range: 30,
+		Spectype: 0xF,
 	};
 
 	/* Monster skip configuration. */

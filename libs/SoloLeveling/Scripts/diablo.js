@@ -106,11 +106,21 @@ function diablo () {
 	};
 
 	this.diabloPrep = function () {
-		let tick = getTickCount();
+		let tick = getTickCount(), decoyDuration = (10 + me.getSkill(28, 1) * 5) * 1000;
 
 		while (getTickCount() - tick < 17500) {
 			if (getTickCount() - tick >= 8000) {
 				switch (me.classid) {
+				case 0: //Amazon
+					if (me.getSkill(28, 1)) {
+						let decoy = getUnit(1, 356);
+
+						if (!decoy || (getTickCount() - tick >= decoyDuration)) {
+							Skill.cast(28, 0, 7793, 5293);
+						}
+					}
+
+					break;
 				case 1: // Sorceress
 					if ([56, 59, 64].indexOf(Config.AttackSkill[1]) > -1) {
 						if (me.getState(121)) {

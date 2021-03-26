@@ -17,12 +17,19 @@ function shenk () {
 
 	Precast.doPrecast(true);
 
-	if (!Misc.checkQuest(35, 1)) {
-		Pather.moveTo(3883, 5113);
-		Attack.killTarget(getLocaleString(22435));
+	if (Attack.canAttack(getLocaleString(22500)) {
+		Pather.moveTo(3745, 5084);
+		Attack.killTarget(getLocaleString(22500)); // Eldritch the Rectifier
+		Pickit.pickItems()
 	}
 
+	Pather.moveTo(110, true);
+	Pather.moveTo(3883, 5113);
+	Attack.killTarget(getLocaleString(22435)); // Shenk the Overseer
 	Pickit.pickItems();
+
+	return true;
+}
 
 	return true;
 }

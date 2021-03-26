@@ -58,7 +58,7 @@ function main () {
 
 	if (!!origToolsThread) {
 		if (origToolsThread.running) {
-			D2Bot.printToConsole("Base is running in the background", 4);
+			D2Bot.printToConsole("Default Tools Thread is running in the background", 4);
 			origToolsThread.stop();
 		}
 	}
@@ -75,37 +75,6 @@ function main () {
 
 	if (Developer.Overlay) {
 		include("SoloLeveling/Tools/Overlay.js");
-
-		var sayings = ["Oh no :( ", "gonna chicken?", "no bueno", "little low?"];
-
-		this.ee = [];
-		this.life = [];
-
-		this.clear = function () {
-			while (this.ee.length > 0) {
-				this.ee.shift().remove();
-			}
-		};
-
-		this.lifeSaying = function () {
-			if (this.life.length < 1) {
-				let text = Math.floor(Math.random() * sayings.length);
-
-				if (me.screensize === 0) {
-					this.life.push(new Text(sayings[text], 42, 433, 1/*color*/, 6/*font*/, 0/*align*/));
-				} else {
-					this.life.push(new Text(sayings[text], 46, 554, 1/*color*/, 6/*font*/, 0/*align*/));
-				}
-			}
-		};
-
-		this.clearlife = function () {
-			while (this.life.length > 0) {
-				this.life.shift().remove();
-			}
-		};
-		//Fav fonts - 3(really big), 4 thin, 5 thick funny, 6 small
-
 	}
 
 	for (i = 0; i < 5; i += 1) {
@@ -697,21 +666,17 @@ function main () {
 	// Start
 	while (true) {
 		if (isIncluded("SoloLeveling/Tools/Overlay.js") && Developer.Overlay) {
-			if (Developer.Overlay) {
-				Overlay.update();
+			if (Developer.logPerformance) {
+				if (Developer.Overlay) {
+					Overlay.update();
 
-				if (me.act !== myAct) {
-					Overlay.flush();
-					myAct = me.act;
+					if (me.act !== myAct) {
+						Overlay.flush();
+						myAct = me.act;
+					}
 				}
-
-				if (me.hp <= Math.floor(me.hpmax * 25 / 100)) {
-					this.lifeSaying();
-				}
-
-				if (me.hp > Math.floor(me.hpmax * 25 / 100) && this.life.length > 0) {
-					this.clearlife();
-				}
+			} else {
+				D2Bot.printToConsole('Overlay cannot work without Developer.logPerformance = true;', 4);
 			}
 		}
 
@@ -728,7 +693,6 @@ function main () {
 				if (Config.LifeChicken > 0 && me.hp <= Math.floor(me.hpmax * Config.LifeChicken / 100)) {
 					D2Bot.printToConsole("Life Chicken (" + me.hp + "/" + me.hpmax + ")" + this.getNearestMonster() + " in " + Pather.getAreaName(me.area) + ". Ping: " + me.ping, 9);
 					D2Bot.updateChickens();
-					DataFile.updateStats("chickens");
 					this.exit();
 
 					break;
