@@ -4,7 +4,7 @@
 *	@desc		rescue barbies for runes for ancient pledge
 */
 
-function saveBarby () {
+function savebarby () {
 	let coords = [];
 	let barbies = [];
 

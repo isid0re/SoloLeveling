@@ -601,7 +601,7 @@ var Overlay = {
 			delay(100);
 		}
 
-		if (Misc.getUIFlags() !== null && (Misc.getUIFlags().includes(1) || Misc.getUIFlags().includes(5) || Misc.getUIFlags().includes(12) || Misc.getUIFlags().includes(15) || Misc.getUIFlags().includes(25) || Misc.getUIFlags().includes(26) || Misc.getUIFlags().includes(36))) {
+		if (Misc.getUIFlags() !== null && (Misc.getUIFlags().includes(1) || Misc.getUIFlags().includes(2) || Misc.getUIFlags().includes(5) || Misc.getUIFlags().includes(12) || Misc.getUIFlags().includes(15) || Misc.getUIFlags().includes(20) || Misc.getUIFlags().includes(25) || Misc.getUIFlags().includes(26) || Misc.getUIFlags().includes(36))) {
 			this.text.enabled = false;
 		} else {
 			this.text.enabled = true;

@@ -80,16 +80,12 @@ var SetUp = {
 	getBuild: function () {
 		let buildType;
 
-		if (me.charlvl < this.respecOne) {
+		if (me.charlvl < SetUp.respecOne) {
 			buildType = "Start";
-		}
-
-		if (me.charlvl >= this.respecOne && me.charlvl < this.respecTwo()) {
+		} else if (me.charlvl >= SetUp.respecTwo()) {
+			buildType = SetUp.finalBuild;
+		} else {
 			buildType = "Leveling";
-		}
-
-		if (me.charlvl >= this.respecTwo()) {
-			buildType = this.finalBuild;
 		}
 
 		return buildType;
@@ -293,7 +289,7 @@ var Check = {
 
 			break;
 		case "lamessen": //lamessen tome
-			if (!Pather.accessToAct(3) || Misc.checkQuest(17, 0) || Misc.checkQuest(17, 1)) {
+			if (!Pather.accessToAct(3) || Misc.checkQuest(17, 0)) {
 				dontQuest = true;
 			}
 
@@ -360,7 +356,7 @@ var Check = {
 
 			break;
 		case "savebarby": //barbies
-			if (me.classic || !me.normal || !Pather.accessToAct(5) || Misc.checkQuest(36, 0)) {
+			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(36, 0) || !me.normal) {
 				dontQuest = true;
 			}
 
