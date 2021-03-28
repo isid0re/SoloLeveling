@@ -5,14 +5,11 @@
 */
 
 function diablo () {
-	if (!me.classic && Misc.checkQuest(26, 0) && !Misc.checkQuest(28, 0)) {
-		Pather.changeAct();
-
-		return true;
-	}
-
-	if (!Misc.checkQuest(25, 0)) { // Izual quest completion check
+	if (!me.classic && Misc.checkQuest(26, 0) && !Pather.accessToAct(5)) {
 		Town.npcInteract("tyrael");
+		me.cancel();
+		delay(500 + me.ping);
+		Pather.useUnit(2, 566, 109);
 	}
 
 	this.getLayout = function (seal, value) {// Start Diablo Quest

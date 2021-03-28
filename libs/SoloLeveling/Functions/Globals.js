@@ -293,7 +293,7 @@ var Check = {
 
 			break;
 		case "lamessen": //lamessen tome
-			if (!Pather.accessToAct(3) || Misc.checkQuest(17, 0)) {
+			if (!Pather.accessToAct(3) || Misc.checkQuest(17, 0) || Misc.checkQuest(17, 1)) {
 				dontQuest = true;
 			}
 

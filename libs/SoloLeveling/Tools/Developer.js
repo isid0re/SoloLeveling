@@ -10,6 +10,7 @@ const Developer = {
 	Overlay: false,	//enables overlay
 	logEquipped: false,	//enables equipped items viewable from D2Bot# charviewer tab
 	forcePacketCasting: true, //enables forced packet casting for skill.cast
+	hideChickens: true, // disable printing chicken info in D2Bot console
 
 	/*  Developer tools */
 	getObj: function (path) {

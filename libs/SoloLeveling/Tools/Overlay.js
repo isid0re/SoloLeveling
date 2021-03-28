@@ -23,7 +23,6 @@ var Overlay = {
 	text: {
 		hooks: [],
 		enabled: true,
-		activeAction: false,
 
 		clock: function (name) {
 			var GameTracker = Developer.readObj(Tracker.GTPath),
@@ -59,28 +58,6 @@ var Overlay = {
 			}
 
 			return -1;
-		},
-
-		hookHandler: function (click, x, y) {
-			function sortHooks (h1, h2) {// Get the hook closest to the clicked location
-				return Math.abs(h1.y - y) - Math.abs(h2.y - y);
-			}
-
-			if (click === 0) {// Left click
-
-				this.hooks.sort(sortHooks);// Sort hooks
-
-				if (activeAction && activeAction !== this.hooks[0].text) {// Don't start new action until the current one finishes
-					return true;
-				}
-
-				activeAction = activeAction ? false : this.hooks[0].text;// Toggle current action on/off
-				this.hooks[0].color = this.hooks[0].color === 4 ? 1 : 4;
-
-				return true;// Block click
-			}
-
-			return false;
 		},
 
 		check: function () {
@@ -624,8 +601,10 @@ var Overlay = {
 			delay(100);
 		}
 
-		while (Misc.getUIFlags() !== null && (Misc.getUIFlags().includes(1) || Misc.getUIFlags().includes(5) || Misc.getUIFlags().includes(12) || Misc.getUIFlags().includes(15) || Misc.getUIFlags().includes(25) || Misc.getUIFlags().includes(26) || Misc.getUIFlags().includes(36))) {
-			this.text.flush();
+		if (Misc.getUIFlags() !== null && (Misc.getUIFlags().includes(1) || Misc.getUIFlags().includes(5) || Misc.getUIFlags().includes(12) || Misc.getUIFlags().includes(15) || Misc.getUIFlags().includes(25) || Misc.getUIFlags().includes(26) || Misc.getUIFlags().includes(36))) {
+			this.text.enabled = false;
+		} else {
+			this.text.enabled = true;
 		}
 
 		this.text.check();

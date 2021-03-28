@@ -69,13 +69,9 @@ function tristam () {
 				print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
 			}
 
-			while (!gibbet.mode) {
+			for (let x = 0; x < 5; x++) {
 				Misc.openChest(gibbet);
 			}
-		}
-
-		if (me.diff === 0) {
-			Attack.clear(30);
 		}
 	}
 

@@ -254,6 +254,22 @@ Misc.gamePacket = function (bytes) {// Merc hiring and golden bird quest
 	let id;
 
 	switch (bytes[0]) {
+	case 0x89: // den completion lights
+		if (me.area === 8) {
+			Pickit.pickItems();
+
+			if (!me.getItem(518)) {
+				Pather.moveToExit([2, 3], true);
+				Pather.getWP(3);
+				Pather.useWaypoint(1);
+			} else {
+				Town.goToTown();
+			}
+
+			Town.npcInteract("akara");
+		}
+
+		break;
 	case 0x4e: // merc list packet
 		id = (bytes[2] << 8) + bytes[1];
 

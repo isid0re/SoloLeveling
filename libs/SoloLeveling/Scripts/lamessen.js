@@ -6,8 +6,8 @@
 
 function lamessen () {
 	Town.townTasks();
-	print('ÿc9SoloLevelingÿc0: starting tome');
-	me.overhead("tome");
+	print('ÿc9SoloLevelingÿc0: starting lamessen');
+	me.overhead("lamessen");
 
 	if (!Pather.checkWP(80)) {
 		Pather.getWP(80);

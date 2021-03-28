@@ -691,7 +691,10 @@ function main () {
 				}
 
 				if (Config.LifeChicken > 0 && me.hp <= Math.floor(me.hpmax * Config.LifeChicken / 100)) {
-					D2Bot.printToConsole("Life Chicken (" + me.hp + "/" + me.hpmax + ")" + this.getNearestMonster() + " in " + Pather.getAreaName(me.area) + ". Ping: " + me.ping, 9);
+					if (!Developer.hideChickens) {
+						D2Bot.printToConsole("Life Chicken (" + me.hp + "/" + me.hpmax + ")" + this.getNearestMonster() + " in " + Pather.getAreaName(me.area) + ". Ping: " + me.ping, 9);
+					}
+
 					D2Bot.updateChickens();
 					this.exit();
 
@@ -707,7 +710,10 @@ function main () {
 				}
 
 				if (Config.ManaChicken > 0 && me.mp <= Math.floor(me.mpmax * Config.ManaChicken / 100)) {
-					D2Bot.printToConsole("Mana Chicken: (" + me.mp + "/" + me.mpmax + ") in " + Pather.getAreaName(me.area), 9);
+					if (!Developer.hideChickens) {
+						D2Bot.printToConsole("Mana Chicken: (" + me.mp + "/" + me.mpmax + ") in " + Pather.getAreaName(me.area), 9);
+					}
+
 					D2Bot.updateChickens();
 					this.exit();
 
@@ -721,7 +727,10 @@ function main () {
 
 					if (ironGolem) {
 						if (ironGolem.hp <= Math.floor(128 * Config.IronGolemChicken / 100)) { // ironGolem.hpmax is bugged with BO
-							D2Bot.printToConsole("Irom Golem Chicken in " + Pather.getAreaName(me.area), 9);
+							if (!Developer.hideChickens) {
+								D2Bot.printToConsole("Irom Golem Chicken in " + Pather.getAreaName(me.area), 9);
+							}
+
 							D2Bot.updateChickens();
 							this.exit();
 
@@ -736,7 +745,10 @@ function main () {
 
 					if (mercHP > 0 && merc && merc.mode !== 12) {
 						if (mercHP < Config.MercChicken) {
-							D2Bot.printToConsole("Merc Chicken in " + Pather.getAreaName(me.area), 9);
+							if (!Developer.hideChickens) {
+								D2Bot.printToConsole("Merc Chicken in " + Pather.getAreaName(me.area), 9);
+							}
+
 							D2Bot.updateChickens();
 							this.exit();
 
