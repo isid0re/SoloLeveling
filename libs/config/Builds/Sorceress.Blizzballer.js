@@ -1,4 +1,4 @@
-//	/d2bs/kolbot/libs/config/Builds/Sorceress.BlizzBaller.js
+//	/d2bs/kolbot/libs/config/Builds/Sorceress.Blizzballer.js
 
 /**
 *
