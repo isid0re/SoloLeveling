@@ -407,11 +407,10 @@ function LoadConfig () {
 					"[Name] == OrtRune # # [MaxQuantity] == 1",
 					"[Name] == AmnRune # # [MaxQuantity] == 1",
 				];
+				NTIP.arrayLooping(SpiritShield);
 			}
 
 			NTIP.addLine("([Name] == Targe || [Name] == Rondache || [Name] == HeraldicShield ||[Name] == AerinShield || [Name] == AkaranTarge || [Name] == AkaranRondache || [Name] == GildedShield ||[Name] == ProtectorShield || [Name] == SacredTarge) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] > 0 && [Sockets] == 4 # [MaxQuantity] == 1");
-			NTIP.arrayLooping(SpiritShield);
-
 			Config.Runewords.push([Runeword.Spirit, "Targe"]);
 			Config.Runewords.push([Runeword.Spirit, "Rondache"]);
 			Config.Runewords.push([Runeword.Spirit, "Heraldic Shield"]);
