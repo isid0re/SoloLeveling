@@ -71,7 +71,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 - **HCCNL-SORC** would make a hardcore classic nonladder sorceress
 
 ## Discord
-Join me on Discord. Link is here: https://discord.gg/S3YerA6U7g
+Join me on Discord. Link is here: https://discord.gg/AK57Mm4TFj
 
 ## Support SoloLeveling
 This is a hobby project that I'm doing in my spare time. So if you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
