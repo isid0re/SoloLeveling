@@ -1,6 +1,7 @@
 /**
 *	@filename	D2BotSoloCleaner.dbj
-*	@author		Whoever did the original D2BotAccountCleaner.dbj
+*	@author		theBGuy
+*	@credits 	Whoever did the original D2BotAccountCleaner.dbj
 *	@desc		This is a modifed D2BotAccountCleaner to also delete extra files leftover after deleting a char to
 *					be specifically used with SoloLeveling. It has also been modified to work with single player
 */
@@ -48,10 +49,11 @@ var profiles = [
 		"SCL-ZON123",
 		"hcnl-pal123",
 	Enter your lines under here*/
+
 ];
 
 function moveFiles() {
-	if(!profiles.length){
+	if (!profiles.length){
 		D2Bot.printToConsole("SoloCleaner: No profiles entered. Exiting moveFiles. Moving on to characters", 6);
 		return;
 	}
@@ -59,11 +61,11 @@ function moveFiles() {
 	var charClass, charType;
 	var path, folder;
 
-	for(let i = 0; i < profiles.length; i++) {
+	for (let i = 0; i < profiles.length; i++) {
 		let buildCheck = profiles[i].toUpperCase();
 		buildCheck = profiles[i].split("-"); // SCL-ZON123
 		
-		if(buildCheck[0].indexOf("CC", "cc") === -1) { // not CC so not classic - true
+		if (buildCheck[0].indexOf("CC", "cc") === -1) { // not CC so not classic - true
 			charType = "Expansion";
 		} else{
 			charType = "Classic";
@@ -71,7 +73,6 @@ function moveFiles() {
 		
 		buildCheck[1] = buildCheck[1].toString().substring(0, 3); // removes numbers ZON for switch
 		buildCheck[1] = buildCheck[1].toUpperCase();
-		print(buildCheck[1]);
 
 		switch (buildCheck[1]) {
 		case "ZON":
@@ -107,7 +108,7 @@ function moveFiles() {
 			return;
 		}
 
-		if(StarterConfig.SaveFiles) {
+		if (StarterConfig.SaveFiles) {
 			if (!FileTools.exists("libs/SoloLeveling/Data/" + charType)) {
 				folder = dopen("libs/SoloLeveling/Data");
 				folder.create(charType);
@@ -134,30 +135,38 @@ function moveFiles() {
 		}
 				
 		if (FileTools.exists("data/" + profiles[i] + ".json")) {
-			if(StarterConfig.SaveFiles){
+			if (StarterConfig.SaveFiles){
 				FileTools.copy("data/" + profiles[i] + ".json", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/dataFile.json");
 			}
 			
 			FileTools.remove("data/" + profiles[i] + ".json");
 		}
 		
-		if (FileTools.exists("libs/SoloLeveling/Performance/" + profiles[i] + ".json")) {
-			if(StarterConfig.SaveFiles) {
-				FileTools.copy("libs/SoloLeveling/Performance/" + profiles[i] + ".json", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/performanceFile.json");
+		if (FileTools.exists("libs/SoloLeveling/Data/" + profiles[i] + ".GameTime" + ".json")) {
+			if (StarterConfig.SaveFiles) {
+				FileTools.copy("libs/SoloLeveling/Data/" + profiles[i] + ".GameTime" + ".json", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/GameTime.json");
 			}
 			
-			FileTools.remove("libs/SoloLeveling/Performance/" + profiles[i] + ".json");
+			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".GameTime" + ".json");
 		}
 		
-		if (FileTools.exists("libs/SoloLeveling/Data/" + profiles[i] + ".json")) {
-			if(StarterConfig.SaveFiles) {
-				FileTools.copy("libs/SoloLeveling/Data/" + profiles[i] + ".json", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/recordingFile.json");
+		if (FileTools.exists("libs/SoloLeveling/Data/" + profiles[i] + ".LevelingPerformance" + ".csv")) {
+			if (StarterConfig.SaveFiles) {
+				FileTools.copy("libs/SoloLeveling/Data/" + profiles[i] + ".LevelingPerformance" + ".csv", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/LevelingPerformance.csv");
 			}
 			
-			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".json");
+			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".LevelingPerformance" + ".csv");
+		}
+
+		if (FileTools.exists("libs/SoloLeveling/Data/" + profiles[i] + ".ScriptPerformance" + ".csv")) {
+			if (StarterConfig.SaveFiles) {
+				FileTools.copy("libs/SoloLeveling/Data/" + profiles[i] + ".ScriptPerformance" + ".csv", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/ScriptPerformance.csv");
+			}
+			
+			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".ScriptPerformance" + ".csv");
 		}
 		
-		if(StarterConfig.SaveFiles) {
+		if (StarterConfig.SaveFiles) {
 			D2Bot.printToConsole("SoloCleaner: Files saved to -> libs/SoloLeveling/Data/" + charType + "/" + charClass, 6);
 		}
 
@@ -395,7 +404,7 @@ function main() {
 
 	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
 
-	if(StarterConfig.DataCleaner) {
+	if (StarterConfig.DataCleaner) {
 		moveFiles();
 	}
 
