@@ -5,10 +5,6 @@
 */
 
 function smith () {
-	if (!Misc.checkQuest(4, 0)) {	//Cain must be completed first
-		return false;
-	}
-
 	NTIP.addLine("[name] == horadricmalus");
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting smith');
@@ -33,7 +29,7 @@ function smith () {
 		print('ÿc9SoloLevelingÿc0: Failed to kill Smith');
 	}
 
-	Quest.collectItem(89, 30);
+	Quest.collectItem(89, 108);
 	Pickit.pickItems();
 	Town.goToTown();
 	Town.npcInteract("charsi");

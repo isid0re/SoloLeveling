@@ -616,6 +616,14 @@ Town.shopItems = function () {
 };
 
 Town.unfinishedQuests = function () {
+	//tools of the trade
+	let malus = me.getItem(89);
+
+	if (malus) {
+		Town.goToTown(1);
+		Town.npcInteract("charsi");
+	}
+
 	//Radament skill book
 	let book = me.getItem(552);
 
@@ -1177,6 +1185,11 @@ Town.npcInteract = function (name) {
 	case "akara":
 		Town.move(NPC.Akara);
 		npc = getUnit(1, NPC.Akara);
+
+		break;
+	case "charsi":
+		Town.move(NPC.Charsi);
+		npc = getUnit(1, NPC.Charsi);
 
 		break;
 	case "warriv":
