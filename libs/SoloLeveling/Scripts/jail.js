@@ -5,6 +5,7 @@
 */
 
 function jail () {
+	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting jail');
 	me.overhead("jail");
 
