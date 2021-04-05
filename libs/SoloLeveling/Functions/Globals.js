@@ -187,15 +187,13 @@ var nipItems = {
 
 // General Game functions
 var Check = {
-	Task: function (taskID) {
+	Task: function (sequenceName) {
 		let dontQuest = false;
 		let dontMF = !me.classic && !Misc.checkQuest(40, 0) ? true : me.classic && !Misc.checkQuest(26, 0) ? true : false;
 		let haveGold = this.Gold();
 		let haveRunes = this.Runes();
 
-		switch (taskID.toLowerCase()) {
-		case 0:
-			break;
+		switch (sequenceName.toLowerCase()) {
 		case "den": //den
 			if (Misc.checkQuest(1, 0)) { //completed
 				dontQuest = true;
@@ -203,12 +201,16 @@ var Check = {
 
 			break;
 		case "bloodraven": //bloodaraven
-			if (me.normal && Misc.checkQuest(2, 0) || me.nightmare && haveGold) { //complete raven normal || goldreq met
+			if (me.normal && Misc.checkQuest(2, 0) || me.nightmare || me.hell) { //complete raven normal || goldreq met
 				dontQuest = true;
 			}
 
 			break;
-		case "smith": // imbue quest
+		case "smith": //tools of the trade
+			if (Misc.checkQuest(3, 0) || Misc.checkQuest(3, 1)) { // completed or needs to imbue
+				dontQuest = true;
+			}
+
 			break;
 		case "tristam": //tristam
 			if (me.classic && !Misc.checkQuest(26, 0) || !Misc.checkQuest(40, 0) || Misc.checkQuest(4, 0)) { //completed

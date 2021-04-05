@@ -14,6 +14,10 @@ var Quest = {
 
 				for (let getAmmy = 0; getAmmy < 5; getAmmy++) {
 					amulet();
+
+					if (me.getItem(521)) {
+						break;
+					}
 				}
 			}
 
@@ -24,6 +28,10 @@ var Quest = {
 
 				for (let getStaff = 0; getStaff < 5; getStaff++) {
 					staff();
+
+					if (me.getItem(92)) {
+						break;
+					}
 				}
 			}
 		}
@@ -36,6 +44,10 @@ var Quest = {
 
 				for (let getEye = 0; getEye < 5; getEye++) {
 					eye();
+
+					if (me.getItem(553)) {
+						break;
+					}
 				}
 			}
 
@@ -46,6 +58,10 @@ var Quest = {
 
 				for (let getHeart = 0; getHeart < 5; getHeart++) {
 					heart();
+
+					if (me.getItem(554)) {
+						break;
+					}
 				}
 			}
 
@@ -56,6 +72,10 @@ var Quest = {
 
 				for (let getBrain = 0; getBrain < 5; getBrain++) {
 					brain();
+
+					if (me.getItem(555)) {
+						break;
+					}
 				}
 			}
 		}

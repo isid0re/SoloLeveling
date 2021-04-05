@@ -250,8 +250,8 @@ Misc.getWell = function (unit) {
 	return false;
 };
 
-Misc.gamePacket = function (bytes) {// Merc hiring and golden bird quest
-	let id;
+Misc.gamePacket = function (bytes) {// various game events
+	let id, diablo, jadefigurine;
 
 	switch (bytes[0]) {
 	case 0x89: // den completion lights
@@ -270,6 +270,32 @@ Misc.gamePacket = function (bytes) {// Merc hiring and golden bird quest
 		}
 
 		break;
+	case 0x4c: // diablo lightning dodge
+		if (bytes[6] === 193) {
+			diablo = getUnit(1, 243);
+
+			if (me.y <= diablo.y) { // above D
+				if (me.x <= diablo.x) { //move east
+					Pather.moveTo(diablo.x + 3, diablo.y);
+				}
+
+				if (me.x > diablo.x) { //move south
+					Pather.moveTo(diablo.x, diablo.y + 3);
+				}
+			}
+
+			if (me.y > diablo.y) { // below D
+				if (me.x >= diablo.x) { //move west
+					Pather.moveTo(diablo.x - 3, diablo.y);
+				}
+
+				if (me.x < diablo.x) { //move north
+					Pather.moveTo(diablo.x, diablo.y - 3);
+				}
+			}
+		}
+
+		break;
 	case 0x4e: // merc list packet
 		id = (bytes[2] << 8) + bytes[1];
 
@@ -280,32 +306,30 @@ Misc.gamePacket = function (bytes) {// Merc hiring and golden bird quest
 		mercId.push(id);
 		break;
 	case 0x5d: // golden bird quest
-		if (!Misc.checkQuest(20, 0)) {
-			let jadefigurine = getUnit(4, 546);
+		jadefigurine = getUnit(4, 546);
 
-			if (jadefigurine) {
-				if (Storage.Inventory.CanFit(jadefigurine)) {
-					Pickit.pickItem(jadefigurine);
-				} else {
-					Town.clearJunk();
-					Town.organizeInventory();
-					Pickit.pickItem(jadefigurine);
-				}
+		if (jadefigurine) {
+			if (Storage.Inventory.CanFit(jadefigurine)) {
+				Pickit.pickItem(jadefigurine);
+			} else {
+				Town.clearJunk();
+				Town.organizeInventory();
+				Pickit.pickItem(jadefigurine);
+			}
+		}
+
+		if (me.getItem(546)) {
+			print("ÿc9SoloLevelingÿc0: starting jade figurine");
+			me.overhead('jade figurine');
+
+			if (!me.inTown) {
+				Town.goToTown();
 			}
 
-			if (me.getItem(546)) {
-				print("ÿc9SoloLevelingÿc0: starting jade figurine");
-				me.overhead('jade figurine');
-
-				if (!me.inTown) {
-					Town.goToTown();
-				}
-
-				Town.unfinishedQuests();
-				Town.heal();
-				Town.move("portalspot");
-				Pather.usePortal(null, me.name);
-			}
+			Town.unfinishedQuests();
+			Town.heal();
+			Town.move("portalspot");
+			Pather.usePortal(null, me.name);
 		}
 
 		break;

@@ -20,7 +20,7 @@ NodeAction.killMonsters = function (arg) {
 	}
 
 	if (!me.inTown) {
-		Attack.clear(5, 0);
+		Attack.clear(7, 0);
 	}
 
 	if ([39].indexOf(me.area) > -1) {
