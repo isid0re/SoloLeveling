@@ -8,7 +8,7 @@
 
 var StarterConfig = {
 	DataCleaner:		true,	// Clean data files associated with running SoloLeveling. A must, if using Performance.js or the Overlay system and wish to use profile over.
-	SaveFiles:			true,	// Save important files to new folder inside libs/SoloLeveling/Data/ Must set to true if running Performance.js and wish to save related files for performance review.
+	SaveFiles:			false,	// Save important files to new folder inside libs/SoloLeveling/Data/ Must set to true if running Performance.js and wish to save related files for performance review.
 	DelayBetweenAccounts: rand(10,25), //Seconds to wait before cleaning next account
 	SwitchKeyDelay: 0, // Seconds to wait before switching a used/banned key or after realm down
 
