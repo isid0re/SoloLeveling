@@ -517,56 +517,56 @@ var Overlay = {
 			case "Izual":
 				this.hooks.push({
 					name: "Izual",
-					hook: new Text("Izual : " + (me.getQuest(25, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 15, 4, 13, 0)
+					hook: new Text("Izual: " + (me.getQuest(25, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 15, 4, 13, 0)
 				});
 
 				break;
 			case "HellForge":
 				this.hooks.push({
 					name: "HellForge",
-					hook: new Text("HellForge : " + (me.getQuest(27, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 30, 4, 13, 0)
+					hook: new Text("HellForge: " + (me.getQuest(27, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 30, 4, 13, 0)
 				});
 
 				break;
 			case "Diablo":
 				this.hooks.push({
 					name: "Diablo",
-					hook: new Text("Diablo : " + (me.getQuest(26, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 45, 4, 13, 0)
+					hook: new Text("Diablo: " + (me.getQuest(26, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 45, 4, 13, 0)
 				});
 
 				break;
 			case "Shenk":
 				this.hooks.push({
 					name: "Shenk",
-					hook: new Text("Shenk : " + ((me.getQuest(35, 0) || me.getQuest(35, 1)) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 15, 4, 13, 0)
+					hook: new Text("Shenk: " + ((me.getQuest(35, 0) || me.getQuest(35, 1)) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 15, 4, 13, 0)
 				});
 
 				break;
 			case "Barbies":
 				this.hooks.push({
 					name: "Barbies",
-					hook: new Text("Barbies : " + (me.getQuest(36, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 30, 4, 13, 0)
+					hook: new Text("Barbies: " + (me.getQuest(36, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 30, 4, 13, 0)
 				});
 
 				break;
 			case "Anya":
 				this.hooks.push({
 					name: "Anya",
-					hook: new Text("Anya : " + (me.getQuest(37, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 45, 4, 13, 0)
+					hook: new Text("Anya: " + (me.getQuest(37, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 45, 4, 13, 0)
 				});
 
 				break;
 			case "Ancients":
 				this.hooks.push({
 					name: "Ancients",
-					hook: new Text("Ancients : " + (me.getQuest(39, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 60, 4, 13, 0)
+					hook: new Text("Ancients: " + (me.getQuest(39, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 60, 4, 13, 0)
 				});
 
 				break;
 			case "Baal":
 				this.hooks.push({
 					name: "Baal",
-					hook: new Text("Baal : " + (me.getQuest(26, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 75, 4, 13, 0)
+					hook: new Text("Baal: " + (me.getQuest(26, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 75, 4, 13, 0)
 				});
 
 				break;
@@ -616,10 +616,4 @@ var Overlay = {
 
 		return true;
 	},
-
 };
-
-function main () {
-	print("SoloLeveling Overlay Thread Loaded.");
-
-}

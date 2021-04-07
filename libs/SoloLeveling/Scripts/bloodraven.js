@@ -18,6 +18,11 @@ function bloodraven () {
 
 	if (me.diff === 0) {
 		me.overhead("blood raven");
+
+		if (me.charlvl < 7) {
+			Attack.clearLevel();
+		}
+
 		Attack.clear(0x7);
 		Pather.moveToExit(17, true);
 		Pather.moveToPreset(17, 1, 805);

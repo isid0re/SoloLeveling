@@ -6,7 +6,7 @@
 
 function beetleburst () {
 	Town.townTasks();
-	print('ÿc9SoloLevelingÿc0: starting blood raven');
+	print('ÿc9SoloLevelingÿc0: starting beetleburst');
 
 	if (!Pather.checkWP(43)) {
 		Pather.getWP(43);
