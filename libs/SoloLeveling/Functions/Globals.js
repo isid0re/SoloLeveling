@@ -187,46 +187,46 @@ var nipItems = {
 
 // General Game functions
 var Check = {
-	Task: function (sequenceName) {
-		let questIdMap = {
-			"spokeToWarriv": 0, "den": 1, "bloodRaven": 2, "tristram": 4, "countess": 5, "toolsOfTheTrade": 3, "sistersToTheSlaughter": 6, "andariel": 7,
-			"spokeToJerhyn": 8, "radament": 9, "horadricStaff": 10, "taintedSun": 11, "arcaneSanctuary": 12, "summoner": 13, "sevenTombs": 14, "duriel": 15,
-			"spokeToHratli": 16, "goldenBird": 20, "bladeOfTheOldReligion": 19, "khalimFlail": 18, "lamEsensTome": 17, "trvincal": 21, "mephisto": 22, "ableToGoToActIv": 23,
-			"spokeToTyrael": 24, "izual": 25, "hellsForge": 27, "diablo": 26, "ableToGoToActV": 28,
-			"seigeOnHaggorath": 35, "rescueOnMountArreat": 36, "anya": 37, "betrayalOfHaggorath": 38, "riteOfPassage": 39, "baal": 40
-		};
+	questIdMap: {
+		"spokeToWarriv": 0, "den": 1, "bloodRaven": 2, "tristram": 4, "countess": 5, "toolsOfTheTrade": 3, "sistersToTheSlaughter": 6, "andariel": 7,
+		"spokeToJerhyn": 8, "radament": 9, "horadricStaff": 10, "taintedSun": 11, "arcaneSanctuary": 12, "summoner": 13, "sevenTombs": 14, "duriel": 15,
+		"spokeToHratli": 16, "goldenBird": 20, "bladeOfTheOldReligion": 19, "khalimFlail": 18, "lamEsensTome": 17, "trvincal": 21, "mephisto": 22, "ableToGoToActIv": 23,
+		"spokeToTyrael": 24, "izual": 25, "hellsForge": 27, "diablo": 26, "ableToGoToActV": 28,
+		"seigeOnHaggorath": 35, "rescueOnMountArreat": 36, "anya": 37, "betrayalOfHaggorath": 38, "riteOfPassage": 39, "baal": 40
+	},
+	Task: function (sequenceName) {;
 		let dontRun = false;
-		let dontMF = !me.classic && !Misc.checkQuest(questIdMap.baal, 0) ? true : me.classic && !Misc.checkQuest(questIdMap.diablo, 0) ? true : false;
+		let dontMF = !me.classic && !Misc.checkQuest(Check.questIdMap.baal, 0) ? true : me.classic && !Misc.checkQuest(Check.questIdMap.diablo, 0) ? true : false;
 		let haveGold = this.Gold();
 		let haveRunes = this.Runes();
 
 		switch (sequenceName.toLowerCase()) {
 		case "den": //den
-			if (Misc.checkQuest(questIdMap.den, 0)) { //completed
+			if (Misc.checkQuest(Check.questIdMap.den, 0)) { //completed
 				dontRun = true;
 			}
 
 			break;
 		case "bloodraven": //bloodaraven
-			if (me.normal && Misc.checkQuest(questIdMap.bloodRaven, 0) || me.nightmare || me.hell) { //complete raven normal || goldreq met
+			if (me.normal && Misc.checkQuest(Check.questIdMap.bloodRaven, 0) || me.nightmare || me.hell) { //complete raven normal || goldreq met
 				dontRun = true;
 			}
 
 			break;
 		case "smith": //tools of the trade
-			if (Misc.checkQuest(questIdMap.toolsOfTheTrade, 0) || Misc.checkQuest(questIdMap.toolsOfTheTrade, 1)) { // completed or needs to imbue
+			if (Misc.checkQuest(Check.questIdMap.toolsOfTheTrade, 0) || Misc.checkQuest(Check.questIdMap.toolsOfTheTrade, 1)) { // completed or needs to imbue
 				dontRun = true;
 			}
 
 			break;
 		case "tristam": //tristam
-			if (me.charlvl > 11 && (me.classic && !Misc.checkQuest(questIdMap.diablo, 0) || !Misc.checkQuest(questIdMap.baal, 0)) || Misc.checkQuest(questIdMap.tristram, 0)) { //completed
+			if (me.charlvl > 11 && (me.classic && !Misc.checkQuest(Check.questIdMap.diablo, 0) || !Misc.checkQuest(Check.questIdMap.baal, 0)) || Misc.checkQuest(Check.questIdMap.tristram, 0)) { //completed
 				dontRun = true;
 			}
 
 			break;
 		case "countess": //countess
-			if (me.classic && me.normal && Misc.checkQuest(questIdMap.countess, 0) || haveRunes) { // classic quest completed normal || have runes for difficulty
+			if (me.classic && me.normal && Misc.checkQuest(Check.questIdMap.countess, 0) || haveRunes) { // classic quest completed normal || have runes for difficulty
 				dontRun = true;
 			}
 
@@ -244,7 +244,7 @@ var Check = {
 
 			break;
 		case "andariel": //andy
-			if (Misc.checkQuest(questIdMap.andariel, 0) && (me.normal || me.classic && me.nightmare)) {
+			if (Misc.checkQuest(Check.questIdMap.andariel, 0) && (me.normal || me.classic && me.nightmare)) {
 				dontRun = true;
 			}
 
@@ -256,19 +256,19 @@ var Check = {
 
 			break;
 		case "radament": //radament
-			if (!Pather.accessToAct(2) || Misc.checkQuest(questIdMap.radament, 0)) {
+			if (!Pather.accessToAct(2) || Misc.checkQuest(Check.questIdMap.radament, 0)) {
 				dontRun = true;
 			}
 
 			break;
 		case "staff": //staff
-			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || Misc.checkQuest(questIdMap.horadricStaff, 0)) { //have staff or quest completed
+			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || Misc.checkQuest(Check.questIdMap.horadricStaff, 0)) { //have staff or quest completed
 				dontRun = true;
 			}
 
 			break;
 		case "amulet": //ammy
-			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || Misc.checkQuest(questIdMap.horadricStaff, 0)) { //have staff or quest completed
+			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || Misc.checkQuest(Check.questIdMap.horadricStaff, 0)) { //have staff or quest completed
 				dontRun = true;
 			}
 
@@ -280,7 +280,7 @@ var Check = {
 
 			break;
 		case "summoner": //summoner
-			if (!Pather.accessToAct(2) || Misc.checkQuest(questIdMap.summoner, 0)) {
+			if (!Pather.accessToAct(2) || Misc.checkQuest(Check.questIdMap.summoner, 0)) {
 				dontRun = true;
 			}
 
@@ -292,13 +292,13 @@ var Check = {
 
 			break;
 		case "duriel": //duriel
-			if (!Pather.accessToAct(2) || Misc.checkQuest(questIdMap.duriel, 0)) {
+			if (!Pather.accessToAct(2) || Misc.checkQuest(Check.questIdMap.duriel, 0)) {
 				dontRun = true;
 			}
 
 			break;
 		case "eye": // eye
-			if (!Pather.accessToAct(3) || me.getItem(553) || me.getItem(174) || Misc.checkQuest(questIdMap.khalimFlail, 0)) {
+			if (!Pather.accessToAct(3) || me.getItem(553) || me.getItem(174) || Misc.checkQuest(Check.questIdMap.khalimFlail, 0)) {
 				dontRun = true;
 			}
 
@@ -310,13 +310,13 @@ var Check = {
 
 			break;
 		case "heart": //heart
-			if (!Pather.accessToAct(3) || me.getItem(554) || me.getItem(174) || Misc.checkQuest(questIdMap.khalimFlail, 0)) {
+			if (!Pather.accessToAct(3) || me.getItem(554) || me.getItem(174) || Misc.checkQuest(Check.questIdMap.khalimFlail, 0)) {
 				dontRun = true;
 			}
 
 			break;
 		case "brain": //brain
-			if (!Pather.accessToAct(3) || me.getItem(555) || me.getItem(174) || Misc.checkQuest(questIdMap.khalimFlail, 0)) {
+			if (!Pather.accessToAct(3) || me.getItem(555) || me.getItem(174) || Misc.checkQuest(Check.questIdMap.khalimFlail, 0)) {
 				dontRun = true;
 			}
 
@@ -328,19 +328,19 @@ var Check = {
 
 			break;
 		case "travincal": //travincal
-			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || !me.normal && Misc.checkQuest(questIdMap.khalimFlail, 0)) {
+			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || !me.normal && Misc.checkQuest(Check.questIdMap.khalimFlail, 0)) {
 				dontRun = true;
 			}
 
 			break;
 		case "mephisto": //mephisto
-			if (!Pather.accessToAct(3) || !Misc.checkQuest(questIdMap.khalimFlail, 0) || Misc.checkQuest(questIdMap.ableToGoToActIv, 0) && me.normal) {
+			if (!Pather.accessToAct(3) || !Misc.checkQuest(Check.questIdMap.khalimFlail, 0) || Misc.checkQuest(Check.questIdMap.ableToGoToActIv, 0) && me.normal) {
 				dontRun = true;
 			}
 
 			break;
 		case "izual": // izzy
-			if (!Pather.accessToAct(4) || Misc.checkQuest(questIdMap.izual, 0)) {
+			if (!Pather.accessToAct(4) || Misc.checkQuest(Check.questIdMap.izual, 0)) {
 				dontRun = true;
 			}
 
@@ -352,7 +352,7 @@ var Check = {
 
 			break;
 		case "hellforge": // hellforge
-			if (me.classic || me.normal || !Pather.accessToAct(4) || Misc.checkQuest(questIdMap.hellsForge, 0)) {
+			if (me.classic || me.normal || !Pather.accessToAct(4) || Misc.checkQuest(Check.questIdMap.hellsForge, 0)) {
 				dontRun = true;
 			}
 
@@ -364,37 +364,37 @@ var Check = {
 
 			break;
 		case "savebarby": //barbies
-			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(questIdMap.rescueOnMountArreat, 0) || !me.normal) {
+			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(Check.questIdMap.rescueOnMountArreat, 0) || !me.normal) {
 				dontRun = true;
 			}
 
 			break;
 		case "anya": //anya
-			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(questIdMap.anya, 0)) {
+			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(Check.questIdMap.anya, 0)) {
 				dontRun = true;
 			}
 
 			break;
 		case "pindle": //nith (pindle)
-			if (me.classic || !Pather.accessToAct(5) || !Misc.checkQuest(questIdMap.anya, 0) || haveGold && dontMF) {
+			if (me.classic || !Pather.accessToAct(5) || !Misc.checkQuest(Check.questIdMap.anya, 0) || haveGold && dontMF) {
 				dontRun = true;
 			}
 
 			break;
 		case "ancients": //ancients
-			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(questIdMap.riteOfPassage, 0)) {
+			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(Check.questIdMap.riteOfPassage, 0)) {
 				dontRun = true;
 			}
 
 			break;
 		case "baal": //baal
-			if (me.classic || !Pather.accessToAct(5) || !Misc.checkQuest(questIdMap.riteOfPassage, 0)) {
+			if (me.classic || !Pather.accessToAct(5) || !Misc.checkQuest(Check.questIdMap.riteOfPassage, 0)) {
 				dontRun = true;
 			}
 
 			break;
 		case "cows": //cows
-			if (me.classic && !Misc.checkQuest(questIdMap.diablo, 0) || !Misc.checkQuest(questIdMap.baal, 0) || Misc.checkQuest(questIdMap.tristram, 10)) {
+			if (me.classic && !Misc.checkQuest(Check.questIdMap.diablo, 0) || !Misc.checkQuest(Check.questIdMap.baal, 0) || Misc.checkQuest(Check.questIdMap.tristram, 10)) {
 				dontRun = true;
 			}
 
@@ -442,7 +442,7 @@ var Check = {
 		let diffShift = me.diff;
 		let lowRes = !this.Resistance().Status;
 		let lvlReq = me.charlvl >= SetUp.levelCap ? true : false;
-		let diffCompleted = !me.classic && Misc.checkQuest(questIdMap.baal, 0) ? true : me.classic && Misc.checkQuest(questIdMap.diablo, 0) ? true : false;
+		let diffCompleted = !me.classic && Misc.checkQuest(Check.questIdMap.baal, 0) ? true : me.classic && Misc.checkQuest(Check.questIdMap.diablo, 0) ? true : false;
 
 		if (diffCompleted) {
 			if (lvlReq && !lowRes) {
@@ -483,7 +483,7 @@ var Check = {
 
 			break;
 		case 2: //hell
-			if (!Misc.checkQuest(questIdMap.baal, 0)) {
+			if (!Misc.checkQuest(Check.questIdMap.baal, 0)) {
 				haveRunes = true;
 			}
 
