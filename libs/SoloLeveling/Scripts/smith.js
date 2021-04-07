@@ -33,6 +33,9 @@ function smith () {
 	Pickit.pickItems();
 	Town.goToTown();
 	Town.npcInteract("charsi");
+	Pather.usePortal(null, me.name);
+	Pather.getWP(29);
+	Pather.useWaypoint(1);
 
 	return true;
 }

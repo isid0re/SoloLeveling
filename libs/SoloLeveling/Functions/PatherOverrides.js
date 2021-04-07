@@ -42,11 +42,13 @@ NodeAction.killMonsters = function (arg) {
 	if ((typeof Config.ClearPath === "number" || typeof Config.ClearPath === "object") && arg.clearPath === false) {
 		switch (typeof Config.ClearPath) {
 		case "number":
+			Attack.clear(7, 0);
 			Attack.clear(30, Config.ClearPath);
 
 			break;
 		case "object":
 			if (!Config.ClearPath.hasOwnProperty("Areas") || Config.ClearPath.Areas.length === 0 || Config.ClearPath.Areas.indexOf(me.area) > -1) {
+				Attack.clear(7, 0);
 				Attack.clear(Config.ClearPath.Range, Config.ClearPath.Spectype);
 			}
 
@@ -55,16 +57,17 @@ NodeAction.killMonsters = function (arg) {
 	}
 
 	if (arg.clearPath !== false) {
+		Attack.clear(7, 0);
 		Attack.clear(15, typeof arg.clearPath === "number" ? arg.clearPath : 0);
 	}
 };
 
 NodeAction.popChests = function () {
 	if (Config.OpenChests) {
-		Misc.openChests(Config.ClearPath.Range);
+		Misc.openChests(10);
 	}
 
-	Misc.useWell(Config.ClearPath.Range);
+	Misc.useWell(10);
 };
 
 Pather.checkWP = function (area) {
@@ -287,7 +290,7 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 	}
 
 	if (clearPath === undefined) {
-		clearPath = false;
+		clearPath = true;
 	}
 
 	if (pop === undefined) {
@@ -356,6 +359,7 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 				if (fail > 0 && !useTeleport && !me.inTown) {
 					if (!cleared) {
 						Attack.clear(5);
+						Misc.openChests(2);
 
 						cleared = true;
 					}
@@ -481,7 +485,7 @@ Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
 
 	if (offX === undefined) {
 		if (me.classid !== 3) {// not paladin
-			if (unit.type === 1) { //is monster
+			if (unit && unit.type === 1) { //is monster
 				offX = 5; //prevent sorc & similar teleporting on top of the target
 			} else {
 				offX = 0;
@@ -493,7 +497,7 @@ Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
 
 	if (offY === undefined) {
 		if (me.classid !== 3) {
-			if (unit.type === 1) {
+			if (unit && unit.type === 1) {
 				offY = 5; //prevent sorc & similar teleporting on top of the target
 			} else {
 				offY = 0;
@@ -504,7 +508,7 @@ Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
 	}
 
 	if (clearPath === undefined) {
-		clearPath = false;
+		clearPath = true;
 	}
 
 	if (pop === undefined) {

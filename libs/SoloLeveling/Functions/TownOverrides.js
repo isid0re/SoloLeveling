@@ -977,45 +977,6 @@ Town.clearInventory = function () {
 	var i, col, result, item, beltSize,
 		items = [];
 
-	// Return potions to belt
-	item = me.getItem(-1, 0);
-
-	if (item) {
-		do {
-			if (item.location === 3 && [76, 77, 78].indexOf(item.itemType) > -1) {
-				items.push(copyUnit(item));
-			}
-		} while (item.getNext());
-
-		beltSize = Storage.BeltSize();
-		col = this.checkColumns(beltSize);
-
-		// Sort from RV to HP
-		items.sort(function (a, b) {
-			return b.itemType - a.itemType;
-		});
-
-		while (items.length) {
-			item = items.shift();
-
-			for (i = 3; i > 0; i -= 1) {
-				if (item.code.indexOf(Config.BeltColumn[i]) > -1 && col[i] > 0) {
-					if (col[i] === beltSize) { // Pick up the potion and put it in belt if the column is empty
-						if (item.toCursor()) {
-							clickItem(0, i, 0, 2);
-						}
-					} else {
-						clickItem(2, item.x, item.y, item.location); // Shift-click potion
-					}
-
-					delay(200 + me.ping);
-
-					col = this.checkColumns(beltSize);
-				}
-			}
-		}
-	}
-
 	// Cleanup remaining potions
 	item = me.getItem(-1, 0);
 

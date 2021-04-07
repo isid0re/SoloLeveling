@@ -14,11 +14,11 @@ if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
 }
 
 var Overlay = {
-	resfixX: me.screensize ? 0 : -160,
+	resfixX: me.screensize ? 0 : -100,
 	resfixY: me.screensize ? 0 : -120,
 	questX: 12,
 	questY: 302,
-	dashboardX: 460,
+	dashboardX: 400,
 	dashboardY: 480,
 	text: {
 		hooks: [],

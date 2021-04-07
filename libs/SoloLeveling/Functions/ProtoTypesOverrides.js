@@ -1,7 +1,7 @@
 /*
 *	@filename	ProtoTypesOverrides.js
 *	@author		isid0re
-*	@desc		additional prototype functions for improved SoloLeveling functionality
+*	@desc		additions for improved SoloLeveling functionality and code readability
 */
 
 Unit.prototype.getItems = function (...args) {
@@ -347,5 +347,75 @@ Object.defineProperty(Unit.prototype, 'hell', {
 		}
 
 		return this.diff === 2;
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'amazon', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.amazon: Must be used with player units.");
+		}
+
+		return this.classid === 0;
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'sorceress', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.sorceress: Must be used with player units.");
+		}
+
+		return this.classid === 1;
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'necromancer', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.necromancer: Must be used with player units.");
+		}
+
+		return this.classid === 2;
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'paladin', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.paladin: Must be used with player units.");
+		}
+
+		return this.classid === 3;
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'barbarian', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.barbarian: Must be used with player units.");
+		}
+
+		return this.classid === 4;
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'druid', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.druid: Must be used with player units.");
+		}
+
+		return this.classid === 5;
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'assassin', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.assassin: Must be used with player units.");
+		}
+
+		return this.classid === 6;
 	}
 });

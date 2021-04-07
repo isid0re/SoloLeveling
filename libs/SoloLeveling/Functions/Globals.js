@@ -254,6 +254,12 @@ var Check = {
 			}
 
 			break;
+		case "beetleburst": //beetleburst
+			if (!Pather.accessToAct(2) || me.charlvl >= 24) {
+				dontRun = true;
+			}
+
+			break
 		case "staff": //staff
 			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || Misc.checkQuest(10, 0)) { //have staff or quest completed
 				dontRun = true;

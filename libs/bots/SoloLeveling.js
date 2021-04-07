@@ -8,7 +8,7 @@
 // Sequence Settings
 var sequence = [
 	"den", "bloodraven", "tristam", "countess", "smith", "jail", "pits", "andariel", "cows", // Act 1
-	"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
+	"radament", "cube", "amulet", "summoner", "beetleburst", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
 	"eye", "heart", "lamessen", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
 	"izual", "hellforge", "diablo", //Act 4
 	"shenk", "savebarby", "anya", "pindle", "ancients", "baal", // Act 5
