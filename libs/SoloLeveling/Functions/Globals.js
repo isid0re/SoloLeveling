@@ -449,7 +449,7 @@ var Check = {
 				diffShift = me.diff + 1;
 				D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + Difficulty[diffShift]);
 			} else if (lvlReq && lowRes) {
-				D2Bot.printToConsolquestIdMap.countess('SoloLeveling: ' + Difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + Check.Resistance().FR + ' | CR: ' + Check.Resistance().CR + ' | LR: ' + Check.Resistance().LR);
+				D2Bot.printToConsole('SoloLeveling: ' + Difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + Check.Resistance().FR + ' | CR: ' + Check.Resistance().CR + ' | LR: ' + Check.Resistance().LR);
 
 				if (me.charlvl >= SetUp.levelCap + 5) {
 					diffShift = me.diff + 1;
