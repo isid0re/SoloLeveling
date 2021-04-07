@@ -422,7 +422,7 @@ var Check = {
 			resPenalty = me.classic ? [0, 20, 50, 50][me.diff + 1] : [ 0, 40, 100, 100][me.diff + 1],
 			frRes = me.getStat(39) - resPenalty,
 			lrRes = me.getStat(41) - resPenalty,
-			crRes = me.questIdMap.andarieletStat(43) - resPenalty;
+			crRes = me.getStat(43) - resPenalty;
 
 		if ((frRes >= 0) && (lrRes >= 0) && (crRes >= 0)) {
 			resStatus = true;
@@ -434,7 +434,7 @@ var Check = {
 			Status: resStatus,
 			FR: frRes,
 			CR: crRes,
-			LR: lrResquestIdMap.radament
+			LR: lrRes,
 		};
 	},
 
