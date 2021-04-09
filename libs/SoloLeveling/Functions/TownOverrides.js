@@ -106,7 +106,7 @@ Town.townTasks = function () {
 	}
 
 	Config.NoTele = me.normal && me.gold < 10000 ? true : !me.normal && me.gold < 50000 ? true : false;
-	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
+	Config.Dodge = me.getSkill(54, 0) && me.sorceress ? !Config.NoTele : false;
 
 	return true;
 };
@@ -193,7 +193,7 @@ Town.doChores = function (repair = false) {
 	}
 
 	Config.NoTele = me.normal && me.gold < 10000 ? true : !me.normal && me.gold < 50000 ? true : false;
-	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
+	Config.Dodge = me.getSkill(54, 0) && me.sorceress ? !Config.NoTele : false;
 
 	return true;
 };
@@ -1357,7 +1357,7 @@ Town.reviveMerc = function () {
 	Attack.checkInfinity();
 
 	if (!!Merc.getMercFix()) {
-		if (Config.MercWatch && (me.classid === 4 || Precast.checkCTA())) { // Cast BO on merc so he doesn't just die again. Only Do this is you are a barb or actually have a cta. Otherwise its just a waste of time.
+		if (Config.MercWatch && (me.barbarian || Precast.checkCTA())) { // Cast BO on merc so he doesn't just die again. Only Do this is you are a barb or actually have a cta. Otherwise its just a waste of time.
 			print("MercWatch precast");
 			Pather.useWaypoint("random");
 			Precast.doPrecast(true);

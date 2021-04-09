@@ -7,7 +7,7 @@
 
 // Sequence Settings
 var sequence = [
-	"den", "bloodraven", "tristam", "countess", "smith", "jail", "pits", "andariel", "cows", // Act 1
+	"den", "bloodraven", "tristam", "countess", "jail", "smith", "pits", "andariel", "cows", // Act 1
 	"radament", "cube", "amulet", "summoner", "beetleburst", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
 	"eye", "heart", "lamessen", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
 	"izual", "hellforge", "diablo", //Act 4
@@ -60,16 +60,6 @@ function SoloLeveling () {
 			me.cancel();
 		}
 
-		let origToolsThread = getScript("tools/ToolsThread.js");
-
-		if (origToolsThread && origToolsThread.running) {
-			origToolsThread.stop();
-		}
-
-		if (!origToolsThread.running) {
-			load("libs/SoloLeveling/Tools/ToolsThread.js");
-		}
-
 		return true;
 	};
 
@@ -77,6 +67,10 @@ function SoloLeveling () {
 		let j, k;
 
 		for (k = 0; k < sequence.length; k += 1) {
+			if (DataFile.updateStats("setDifficulty", Check.nextDifficulty())) {
+				D2Bot.setProfile(null, null, null, Check.nextDifficulty());
+			}
+
 			if (!Check.Task(sequence[k])) {
 				if (!isIncluded("SoloLeveling/Scripts/" + sequence[k] + ".js")) {
 					include("SoloLeveling/Scripts/" + sequence[k] + ".js");
@@ -106,11 +100,6 @@ function SoloLeveling () {
 	this.setup();
 	addEventListener("gamepacket", Misc.gamePacket);
 	this.runsequence();
-
-	if (DataFile.updateStats("setDifficulty", Check.nextDifficulty())) {
-		D2Bot.setProfile(null, null, null, Check.nextDifficulty());
-	}
-
 	removeEventListener("gamepacket", Misc.gamePacket);
 
 	if (Developer.logPerformance) {

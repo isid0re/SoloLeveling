@@ -529,3 +529,52 @@ Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
 
 	return this.moveTo(unit.x + offX, unit.y + offY, useTeleport && unit.type && unit.type === 1 ? 3 : 0, clearPath, pop);
 };
+
+Pather.useUnit = function (type, id, targetArea) {
+	var i, tick, unit, preArea = me.area;
+
+	for (i = 0; i < 5; i += 1) {
+		unit = getUnit(type, id);
+
+		if (unit) {
+			break;
+		}
+
+		delay(200);
+	}
+
+	if (!unit) {
+		throw new Error("useUnit: Unit not found. TYPE: " + type + " ID: " + id + " AREA: " + me.area);
+	}
+
+	for (i = 0; i < 3; i += 1) {
+		if (getDistance(me, unit) > 5) {
+			Pather.moveToUnit(unit);
+		}
+
+		delay(300);
+
+		if (type === 5) {
+			Misc.click(0, 0, unit);
+		} else {
+			sendPacket(1, 0x13, 4, unit.type, 4, unit.gid);
+		}
+
+		tick = getTickCount();
+
+		while (getTickCount() - tick < 3000) {
+			if ((!targetArea && me.area !== preArea) || me.area === targetArea) {
+				delay(100);
+
+				return true;
+			}
+
+			delay(10);
+		}
+
+		Packet.flash(me.gid);
+		Pather.moveTo(me.x + 3 * rand(-1, 1), me.y + 3 * rand(-1, 1));
+	}
+
+	return targetArea ? me.area === targetArea : me.area !== preArea;
+};

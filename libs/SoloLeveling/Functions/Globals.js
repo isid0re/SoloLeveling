@@ -189,37 +189,37 @@ var nipItems = {
 var Check = {
 	Task: function (sequenceName) {
 		let dontRun = false;
-		let dontMF = !me.classic && !Misc.checkQuest(40, 0) ? true : me.classic && !Misc.checkQuest(26, 0) ? true : false;
+		let dontMF = !me.classic && !Quest.Status("baal") ? true : me.classic && !Quest.Status("diablo") ? true : false;
 		let haveGold = this.Gold();
 		let haveRunes = this.Runes();
 
 		switch (sequenceName.toLowerCase()) {
 		case "den": //den
-			if (Misc.checkQuest(1, 0)) { //completed
+			if (Quest.Status("den")) { //completed
 				dontRun = true;
 			}
 
 			break;
 		case "bloodraven": //bloodaraven
-			if (me.normal && Misc.checkQuest(2, 0) || me.nightmare || me.hell) { //complete raven normal || goldreq met
+			if (me.normal && Quest.Status("bloodraven") || me.nightmare || me.hell && !me.getSkill(54, 0)) { //complete raven normal || goldreq met
 				dontRun = true;
 			}
 
 			break;
 		case "smith": //tools of the trade
-			if (Misc.checkQuest(3, 0) || Misc.checkQuest(3, 1)) { // completed or needs to imbue
+			if (Quest.Status("smith")) { // completed or needs to imbue
 				dontRun = true;
 			}
 
 			break;
 		case "tristam": //tristam
-			if (me.charlvl > 11 && (me.classic && !Misc.checkQuest(26, 0) || !Misc.checkQuest(40, 0)) || Misc.checkQuest(4, 0)) { //completed
+			if (me.charlvl > 11 && (me.classic && !Quest.Status("diablo") || !Quest.Status("baal")) || Quest.Status("tristam")) { //completed
 				dontRun = true;
 			}
 
 			break;
 		case "countess": //countess
-			if (me.classic && me.normal && Misc.checkQuest(5, 0) || haveRunes) { // classic quest completed normal || have runes for difficulty
+			if (me.classic && Quest.Status("countess") || haveRunes) { // classic quest completed normal || have runes for difficulty
 				dontRun = true;
 			}
 
@@ -231,115 +231,115 @@ var Check = {
 
 			break;
 		case "pits": //pits
-			if (!me.hell || me.hell && dontMF) {
+			if (!me.hell || me.hell) {
 				dontRun = true;
 			}
 
 			break;
 		case "andariel": //andy
-			if (Misc.checkQuest(7, 0) && (me.normal || me.classic && me.nightmare)) {
+			if (Quest.Status("andariel") && (me.normal || me.classic && me.nightmare)) {
 				dontRun = true;
 			}
 
 			break;
 		case "cube": //cube
-			if (!Pather.accessToAct(2) || me.getItem(549)) {
+			if (!Pather.accessToAct(2) || Quest.Status("cube")) {
 				dontRun = true;
 			}
 
 			break;
 		case "radament": //radament
-			if (!Pather.accessToAct(2) || Misc.checkQuest(9, 0)) {
+			if (!Pather.accessToAct(2) || Quest.Status("Radament")) {
 				dontRun = true;
 			}
 
 			break;
 		case "beetleburst": //beetleburst
-			if (!Pather.accessToAct(2) || me.charlvl >= 24) {
+			if (!Pather.accessToAct(2) || me.charlvl > 24) {
 				dontRun = true;
 			}
 
-			break
+			break;
 		case "staff": //staff
-			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(92) || Misc.checkQuest(10, 0)) { //have staff or quest completed
+			if (!Pather.accessToAct(2) || Quest.Status("staff")) { //have staff or quest completed
 				dontRun = true;
 			}
 
 			break;
 		case "amulet": //ammy
-			if (!Pather.accessToAct(2) || me.getItem(91) || me.getItem(521) || Misc.checkQuest(10, 0)) { //have staff or quest completed
+			if (!Pather.accessToAct(2) || Quest.Status("amulet")) { //have staff or quest completed
 				dontRun = true;
 			}
 
 			break;
 		case "ancienttunnels": // ancient tunnels
-			if (!Pather.accessToAct(2) || me.hell && me.classid === 3 || !me.hell && haveGold) { // lowgold || no pally in hell mode magic immunes
+			if (!Pather.accessToAct(2) || !me.hell || me.hell && me.paladin) { // no pally in hell magic immunes
 				dontRun = true;
 			}
 
 			break;
 		case "summoner": //summoner
-			if (!Pather.accessToAct(2) || Misc.checkQuest(13, 0)) {
+			if (!Pather.accessToAct(2) || !me.hell && Quest.Status("summoner")) {
 				dontRun = true;
 			}
 
 			break;
 		case "tombs": //tombs
-			if (!Pather.accessToAct(2) || haveGold) {
+			if (!Pather.accessToAct(2) || !me.hell || haveGold) {
 				dontRun = true;
 			}
 
 			break;
 		case "duriel": //duriel
-			if (!Pather.accessToAct(2) || Misc.checkQuest(15, 0)) {
+			if (!Pather.accessToAct(2) || Quest.Status("duriel")) {
 				dontRun = true;
 			}
 
 			break;
 		case "eye": // eye
-			if (!Pather.accessToAct(3) || me.getItem(553) || me.getItem(174) || Misc.checkQuest(18, 0)) {
+			if (!Pather.accessToAct(3) || Quest.Status("eye")) {
 				dontRun = true;
 			}
 
 			break;
 		case "lamessen": //lamessen tome
-			if (!Pather.accessToAct(3) || Misc.checkQuest(17, 0)) {
+			if (!Pather.accessToAct(3) || Quest.Status("lamessen")) {
 				dontRun = true;
 			}
 
 			break;
 		case "heart": //heart
-			if (!Pather.accessToAct(3) || me.getItem(554) || me.getItem(174) || Misc.checkQuest(18, 0)) {
+			if (!Pather.accessToAct(3) || Quest.Status("heart")) {
 				dontRun = true;
 			}
 
 			break;
 		case "brain": //brain
-			if (!Pather.accessToAct(3) || me.getItem(555) || me.getItem(174) || Misc.checkQuest(18, 0)) {
+			if (!Pather.accessToAct(3) || Quest.Status("brain")) {
 				dontRun = true;
 			}
 
 			break;
 		case "lowerkurast": //lowerkurast
-			if (!Pather.accessToAct(3) || !me.hell && haveGold) {
+			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || me.nightmare && me.charlvl > 50) {
 				dontRun = true;
 			}
 
 			break;
 		case "travincal": //travincal
-			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || !me.normal && Misc.checkQuest(18, 0)) {
+			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || !me.normal && Quest.Status("travincal")) {
 				dontRun = true;
 			}
 
 			break;
 		case "mephisto": //mephisto
-			if (!Pather.accessToAct(3) || !Misc.checkQuest(18, 0) || Misc.checkQuest(23, 0) && me.normal) {
+			if (!Pather.accessToAct(3) || !Quest.Status("travincal") || me.normal && Quest.Status("mephisto")) {
 				dontRun = true;
 			}
 
 			break;
 		case "izual": // izzy
-			if (!Pather.accessToAct(4) || Misc.checkQuest(25, 0)) {
+			if (!Pather.accessToAct(4) || Quest.Status("izual")) {
 				dontRun = true;
 			}
 
@@ -351,49 +351,49 @@ var Check = {
 
 			break;
 		case "hellforge": // hellforge
-			if (me.classic || me.normal || !Pather.accessToAct(4) || Misc.checkQuest(27, 0)) {
+			if (me.classic || me.normal || !Pather.accessToAct(4) || Quest.Status("hellforge")) {
 				dontRun = true;
 			}
 
 			break;
 		case "shenk": // shenk
-			if (me.classic || !Pather.accessToAct(5) || haveGold && dontMF) {
+			if (me.classic || !Pather.accessToAct(5)) {
 				dontRun = true;
 			}
 
 			break;
 		case "savebarby": //barbies
-			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(36, 0) || !me.normal) {
+			if (me.classic || !Pather.accessToAct(5) || Quest.Status("savebarby") || !me.normal) {
 				dontRun = true;
 			}
 
 			break;
 		case "anya": //anya
-			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(37, 0)) {
+			if (me.classic || !Pather.accessToAct(5) || Quest.Status("anya")) {
 				dontRun = true;
 			}
 
 			break;
 		case "pindle": //nith (pindle)
-			if (me.classic || !Pather.accessToAct(5) || !Misc.checkQuest(37, 0) || haveGold && dontMF) {
+			if (me.classic || !Pather.accessToAct(5) || !Quest.Status("anya")) {
 				dontRun = true;
 			}
 
 			break;
 		case "ancients": //ancients
-			if (me.classic || !Pather.accessToAct(5) || Misc.checkQuest(39, 0)) {
+			if (me.classic || !Pather.accessToAct(5) || Quest.Status("ancients")) {
 				dontRun = true;
 			}
 
 			break;
 		case "baal": //baal
-			if (me.classic || !Pather.accessToAct(5) || !Misc.checkQuest(39, 0)) {
+			if (me.classic || !Pather.accessToAct(5) || !Quest.Status("ancients")) {
 				dontRun = true;
 			}
 
 			break;
 		case "cows": //cows
-			if (me.classic && !Misc.checkQuest(26, 0) || !Misc.checkQuest(40, 0) || Misc.checkQuest(4, 10)) {
+			if (me.classic && !Quest.Status("diablo") || !Quest.Status("baal") || Quest.Status("cows")) {
 				dontRun = true;
 			}
 
@@ -441,7 +441,7 @@ var Check = {
 		let diffShift = me.diff;
 		let lowRes = !this.Resistance().Status;
 		let lvlReq = me.charlvl >= SetUp.levelCap ? true : false;
-		let diffCompleted = !me.classic && Misc.checkQuest(40, 0) ? true : me.classic && Misc.checkQuest(26, 0) ? true : false;
+		let diffCompleted = !me.classic && Quest.Status("baal") ? true : me.classic && Quest.Status("diablo") ? true : false;
 
 		if (diffCompleted) {
 			if (lvlReq && !lowRes) {
@@ -482,7 +482,7 @@ var Check = {
 
 			break;
 		case 2: //hell
-			if (!Misc.checkQuest(40, 0)) {
+			if (!Quest.Status("baal")) {
 				haveRunes = true;
 			}
 

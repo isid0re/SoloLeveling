@@ -5,10 +5,6 @@
 */
 
 function staff () {
-	if (!me.getItem(521)) {
-		this.amulet();
-	}
-
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting staff');
 	me.overhead("staff");

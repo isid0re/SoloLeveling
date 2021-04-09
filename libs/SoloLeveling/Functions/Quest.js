@@ -422,7 +422,7 @@ var Quest = {
 
 			break;
 		case "smith": //tools of the trade
-			if (Misc.checkQuest(3, 0)) {
+			if (Misc.checkQuest(3, 0) || Misc.checkQuest(3, 1)) {
 				quest = true;
 			}
 
@@ -440,7 +440,7 @@ var Quest = {
 
 			break;
 		case "andariel": //andy
-			if (Misc.checkQuest(6, 0)) {
+			if (Misc.checkQuest(7, 0)) {
 				quest = true;
 			}
 
@@ -458,13 +458,13 @@ var Quest = {
 
 			break;
 		case "staff": //staff
-			if (me.getItem(92)) {
+			if (me.getItem(92) || me.getItem(91) || Misc.checkQuest(10, 0)) {
 				quest = true;
 			}
 
 			break;
 		case "amulet": //ammy
-			if (Misc.checkQuest(11, 0)) {
+			if (me.getItem(521) || me.getItem(91) || Misc.checkQuest(11, 0)) {
 				quest = true;
 			}
 
@@ -476,13 +476,13 @@ var Quest = {
 
 			break;
 		case "duriel": //duriel
-			if (!Misc.checkQuest(14, 0)) {
+			if (Misc.checkQuest(15, 0)) {
 				quest = true;
 			}
 
 			break;
 		case "eye": // eye
-			if (me.getItem(553)) {
+			if (me.getItem(553) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 				quest = true;
 			}
 
@@ -494,13 +494,13 @@ var Quest = {
 
 			break;
 		case "heart": //heart
-			if (me.getItem(554)) {
+			if (me.getItem(554) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 				quest = true;
 			}
 
 			break;
 		case "brain": //brain
-			if (me.getItem(555)) {
+			if (me.getItem(555) || me.getItem(174) || Misc.checkQuest(18, 0)) {
 				quest = true;
 			}
 
@@ -512,13 +512,13 @@ var Quest = {
 
 			break;
 		case "travincal": //travincal
-			if (Misc.checkQuest(22, 0)) {
+			if (Misc.checkQuest(18, 0)) {
 				quest = true;
 			}
 
 			break;
 		case "mephisto": //mephisto
-			if (Misc.checkQuest(22, 0)) {
+			if (Misc.checkQuest(23, 0)) {
 				quest = true;
 			}
 
@@ -567,6 +567,12 @@ var Quest = {
 			break;
 		case "baal": //baal
 			if (Misc.checkQuest(40, 0)) {
+				quest = true;
+			}
+
+			break;
+		case "cows": //cows
+			if (Misc.checkQuest(4, 10)) {
 				quest = true;
 			}
 

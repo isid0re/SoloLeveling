@@ -53,17 +53,7 @@ function main () {
 		canQuit = true,
 		timerLastDrink = [];
 
-	//Double Safeguard to stop the base toolsthread
-	let origToolsThread = getScript("tools/ToolsThread.js");
-
-	if (!!origToolsThread) {
-		if (origToolsThread.running) {
-			D2Bot.printToConsole("Default Tools Thread is running in the background", 4);
-			origToolsThread.stop();
-		}
-	}
-
-	print("ÿc9SoloLevelingÿc3: Start Custom ToolsThread script");
+	print("ÿc9SoloLeveling:ÿc3 Start Custom ToolsThread script");
 	D2Bot.init();
 	Config.init(false);
 	Pickit.init(false);
@@ -213,10 +203,6 @@ function main () {
 	this.exit = function () {
 		if (Developer.logPerformance) {
 			Tracker.Update();
-		}
-
-		if (DataFile.updateStats("setDifficulty", Check.nextDifficulty())) {
-			D2Bot.setProfile(null, null, null, Check.nextDifficulty());
 		}
 
 		this.stopDefault();

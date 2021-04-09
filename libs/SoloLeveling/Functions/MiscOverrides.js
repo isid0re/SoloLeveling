@@ -251,7 +251,7 @@ Misc.getWell = function (unit) {
 };
 
 Misc.gamePacket = function (bytes) {// various game events
-	let id, diablo, jadefigurine;
+	let id, diablo, jadefigurine, tick;
 
 	switch (bytes[0]) {
 	case 0x89: // den completion lights
@@ -273,24 +273,27 @@ Misc.gamePacket = function (bytes) {// various game events
 	case 0x4c: // diablo lightning dodge
 		if (bytes[6] === 193) {
 			diablo = getUnit(1, 243);
+			tick = getTickCount();
 
-			if (me.y <= diablo.y) { // above D
-				if (me.x <= diablo.x) { //move east
-					Pather.moveTo(diablo.x + 3, diablo.y);
+			while (getTickCount() - tick < 2000) {
+				if (me.y <= diablo.y) { // above D
+					if (me.x <= diablo.x) { //move east
+						Pather.moveTo(diablo.x + 3, diablo.y);
+					}
+
+					if (me.x > diablo.x) { //move south
+						Pather.moveTo(diablo.x, diablo.y + 3);
+					}
 				}
 
-				if (me.x > diablo.x) { //move south
-					Pather.moveTo(diablo.x, diablo.y + 3);
-				}
-			}
+				if (me.y > diablo.y) { // below D
+					if (me.x >= diablo.x) { //move west
+						Pather.moveTo(diablo.x - 3, diablo.y);
+					}
 
-			if (me.y > diablo.y) { // below D
-				if (me.x >= diablo.x) { //move west
-					Pather.moveTo(diablo.x - 3, diablo.y);
-				}
-
-				if (me.x < diablo.x) { //move north
-					Pather.moveTo(diablo.x, diablo.y - 3);
+					if (me.x < diablo.x) { //move north
+						Pather.moveTo(diablo.x, diablo.y - 3);
+					}
 				}
 			}
 		}
