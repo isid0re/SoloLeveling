@@ -28,17 +28,17 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 | 2.| Click the green button to Download SoloLeveling. |![enter image description here](https://i.imgur.com/cNqZDbW.jpg) |
 | 3.a| Copy and paste everything from the zip into `\d2bs\kolbot`.| ![extractto](https://i.imgur.com/ztFbgnd.jpg)|
 |3.b|A successful installation will show 2 new files in the folder and look similar to the second image|![extract into](https://i.imgur.com/5OxVVNH.jpg)| 4.| Select Add for new a Kolbot Profile. | ![Add-profile.jpg](https://imgur.com/tHs9ZoH.jpg)|
-| 4.a| Input a profile name. See the Profile Name Options below for more details | ![set profile name](https://imgur.com/B865nPU.jpg) |
+| 4.a| Select and Input a profile name. See the **Possible Profile Name Choices** below for a list of available options. | ![set profile name](https://imgur.com/B865nPU.jpg) |
 | 4.b| ***Optional*** Input your account name. If no name than a random account is created. | |
 | 4.c|***Optional*** Input your account password. If no name than a random password is created. | |
 | 4.d|***Optional*** Input your character name. If no name than a random name is created. | ![enter character name](https://i.imgur.com/Casmjbc.jpg) |
-|5.| Select Entry Script D2BotSoloLevelingEntry.dbj| ![Select Entry Script](https://imgur.com/tZnH7kU.jpg)|
+|5.| Select Entry Script `D2BotSoloLevelingEntry.dbj`.| ![Select Entry Script](https://imgur.com/tZnH7kU.jpg)|
 |6.| Input your Info Tag Information. See **Available Characters and Builds** for a a list of options. <br><br> Make sure the spelling matches the listed builds and there are no trailing spaces. | ![enter image description here](https://i.imgur.com/gmUQvbw.jpg)|
 |7.|Ensure your Game Path, Key List, Realm, Mode are all set on the settings you want to use then click Apply.||
 |8.|Run the Bot.||
 |9.|Enjoy!||
 
-## Profile Name Options 
+## Possible Profile Name Choices 
 | Prefix | Description|
 |:----|:--|
 |HCCNL| Hardcore Classic NonLadder|
