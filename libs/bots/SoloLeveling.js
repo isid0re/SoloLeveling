@@ -25,8 +25,8 @@ function SoloLeveling () {
 		NTIP.arrayLooping(nipItems.General);
 		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
 		NTIP.arrayLooping(nipItems.Selling);
-		me.overhead('preparing sequences');
-		print("ÿc9SoloLevelingÿc0: preparing sequences");
+		me.overhead('preparing run sequence');
+		print("ÿc9SoloLevelingÿc0: preparing run sequence");
 
 		for (let run = 0; run < SetUp.scripts.length; run++) {
 			if (!Check.Task(SetUp.scripts[run])) {

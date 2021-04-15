@@ -234,8 +234,8 @@ function LoadConfig () {
 
 	/* Class specific configuration. */
 	Config.UseTelekinesis = !!me.getSkill(43, 0); // use telekinesis if have skill
-	Config.Dodge = !!me.getSkill(54, 0); // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
-	Config.DodgeRange = me.charlvl >= SetUp.respecOne ? 15 : 0; // Distance to keep from monsters.
+	Config.Dodge = me.charlvl >= SetUp.respecOne ? true : false; // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
+	Config.DodgeRange = 15; // Distance to keep from monsters.
 	Config.DodgeHP = 90; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
 	Config.CastStatic = me.normal ? 33 : 50;

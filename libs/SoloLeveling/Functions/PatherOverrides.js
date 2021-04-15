@@ -57,6 +57,7 @@ NodeAction.killMonsters = function (arg) {
 	}
 
 	if (arg.clearPath !== false) {
+		Attack.clear(7, 0);
 		Attack.clear(15, typeof arg.clearPath === "number" ? arg.clearPath : 0);
 	}
 };

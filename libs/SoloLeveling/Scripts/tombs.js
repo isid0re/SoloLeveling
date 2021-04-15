@@ -21,7 +21,9 @@ function tombs () {
 		Pather.moveToExit(tombID[number], true, true);
 
 		if (me.area === tombID[number]) {
-			for (let i = 0; i < 6; i += 1) {
+			for (let i = 0; i < tombID.length; i += 1) {
+				me.overhead("Tomb #" + (number + 1));
+
 				try {
 					let gbox = getPresetUnit(me.area, 2, 397);
 					let orifice = getPresetUnit(me.area, 2, 152);
@@ -40,7 +42,7 @@ function tombs () {
 				}
 			}
 
-			Attack.clear(30, 0);
+			Attack.clear(50);
 			Pickit.pickItems();
 			Town.doChores();
 		}
