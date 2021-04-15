@@ -9,19 +9,6 @@ function tristam () {
 	print('ÿc9SoloLevelingÿc0: starting tristam');
 	me.overhead("tristam");
 
-	if (me.charlvl <= 11) {
-		if (!Pather.checkWP(4)) {
-			Pather.getWP(4);
-		} else {
-			Pather.useWaypoint(4);
-		}
-
-		Pather.moveToPreset(4, 2, 17, 0, 0, false, true);
-		Attack.clear(15, 0x7);
-
-		return true;
-	}
-
 	if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 		if (!me.getItem(524)) {
 			if (!Pather.checkWP(5)) {

@@ -11,10 +11,6 @@ function tombs () {
 	let tombID = [66, 67, 68, 69, 70, 71, 72];
 
 	for (let number = 0; number < tombID.length; number += 1) {
-		if (Check.Gold()) {
-			break;
-		}
-
 		if (!Pather.checkWP(46)) {
 			Pather.getWP(46);
 		} else {

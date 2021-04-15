@@ -26,14 +26,13 @@ var Tracker = {
 		//File Structure
 		var LPHeader = "Total Time,Split Time,Sequence,Difficulty,Area,Character Level,Current Build" + "\n"; //Leveling Performance
 		var SPHeader = "Total Time,Sequence Time,Sequence,Quest Complete,Difficulty,EXP%,Character Level,Current Build" + "\n"; //Script Performance
-		let LastSave = getTickCount();
+		let FirstSave = getTickCount();
 		var GameTracker = {
 			"Total": 0,
 			"InGame": 0,
 			"OOG": 0,
 			"LastLevel": 0,
-			"LastSave": 0,
-			"ProfileStart": 0
+			"LastSave": FirstSave
 		};
 
 		// Create Files
@@ -49,14 +48,6 @@ var Tracker = {
 			Misc.fileAction(Tracker.SPPath, 1, SPHeader);
 		}
 
-		if (FileTools.exists("libs/SoloLeveling/Data/" + me.profile + ".GameTime.json")) {
-			GameTracker = Developer.readObj(Tracker.GTPath);
-			GameTracker.LastSave = LastSave;
-			GameTracker.ProfileStart = LastSave;
-			GameTracker.OOG = GameTracker.Total - GameTracker.InGame;
-			Developer.writeObj(GameTracker, Tracker.GTPath);
-		}
-
 		return true;
 	},
 
@@ -69,7 +60,7 @@ var Tracker = {
 	Script: function (starttime, subscript) {
 		var GameTracker = Developer.readObj(Tracker.GTPath),
 			newTick = me.gamestarttime > GameTracker.LastSave ? me.gamestarttime : GameTracker.LastSave,
-			totalTick = GameTracker.ProfileStart > GameTracker.LastSave ? GameTracker.ProfileStart : GameTracker.LastSave,
+			totalTick = GameTracker.LastSave,
 			newIG = GameTracker.InGame + Developer.Timer(newTick),
 			newTotal = GameTracker.Total + Developer.Timer(totalTick),
 			scriptTime = Developer.Timer(starttime),
@@ -92,7 +83,7 @@ var Tracker = {
 	Leveling: function (subscript) {
 		var GameTracker = Developer.readObj(Tracker.GTPath),
 			newTick = me.gamestarttime > GameTracker.LastSave ? me.gamestarttime : GameTracker.LastSave,
-			totalTick = GameTracker.ProfileStart > GameTracker.LastSave ? GameTracker.ProfileStart : GameTracker.LastSave,
+			totalTick = GameTracker.LastSave,
 			newIG = GameTracker.InGame + Developer.Timer(newTick),
 			newTotal = GameTracker.Total + Developer.Timer(totalTick),
 			newOOG = newTotal - newIG,
@@ -117,7 +108,7 @@ var Tracker = {
 	Update: function () {
 		var GameTracker = Developer.readObj(Tracker.GTPath),
 			newTick = me.gamestarttime > GameTracker.LastSave ? me.gamestarttime : GameTracker.LastSave,
-			totalTick = GameTracker.ProfileStart > GameTracker.LastSave ? GameTracker.ProfileStart : GameTracker.LastSave,
+			totalTick = GameTracker.LastSave,
 			newIG = GameTracker.InGame + Developer.Timer(newTick),
 			newTotal = GameTracker.Total + Developer.Timer(totalTick),
 			newOOG = newTotal - newIG,
@@ -128,5 +119,11 @@ var Tracker = {
 		GameTracker.OOG = newOOG;
 		GameTracker.LastSave = newSave;
 		Developer.writeObj(GameTracker, Tracker.GTPath);
+	},
+
+	Interval: function () {
+		let minutes = 3; // interval for timeout in minutes;
+		Tracker.Update();
+		setTimeout(Tracker.Interval, minutes * 60000);
 	},
 };

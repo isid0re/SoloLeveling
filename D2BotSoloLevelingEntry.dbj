@@ -1121,7 +1121,7 @@ function main () {
 				crRes = Math.min(75, me.getStat(43) - resPenalty);
 				lrRes = Math.min(75, me.getStat(41) - resPenalty);
 				prRes = Math.min(75, me.getStat(45) - resPenalty);
-				areaName = Pather.getAreaName(me.area);
+				areaName = getArea().name;
 				diffName = ['Normal', 'Nightmare', 'Hell'][me.diff];
 
 				if (me.ingame) {

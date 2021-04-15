@@ -13,18 +13,23 @@ var build = {
 	mercAuraWanted: 114,
 	mercDiff: 1,
 	stats: [
-		["strength", 15],
 		["vitality", 25],
+		["strength", 15],
 		["energy", 50],
 		["vitality", 50],
 		["strength", 35],
 		["vitality", "all"]
 	],
 	skills: [
-		[38, 6], // charged Bolt
+		[38, 1], // charged Bolt
+		[37, 1], // Warmth
+		[44, 1, false], // Frost Nova
+		[38, 6], // Charge Bolt
 		[40, 1], // Frozen Armor
-		[38, 20], // charged Bolt
 		[42, 1], // Static
+		[54, 1, false], // Telekinesis
+		[54, 1, false], // Teleport
+		[38, 20], // Charged Bolt
 		[49, 20], // lightning
 	]
 };

@@ -110,6 +110,10 @@ Pather.checkWP = function (area) {
 	return getWaypoint(Pather.wpAreas.indexOf(area));
 };
 
+Pather.useTeleport = function () { //XCon provided. to turn off teleport if below 20% mana
+	return this.teleport && !Config.NoTele && !me.getState(139) && !me.getState(140) && !me.inTown && ((me.classid === 1 && me.getSkill(54, 1) && ((me.getStat(8) / me.getStat(9)) * 100) >= 20) || me.getStat(97, 54));
+};
+
 Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 	if (me.inTown) {
 		return false;
@@ -146,61 +150,33 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 
 	// Monsta doors (Barricaded)
 	var p,
-		monstadoor1 = getUnit(1, 432), //barricaded door 1
-		monstadoor2 = getUnit(1, 433), //barricaded door 2
-		monstawall1 = getUnit(1, 524), //barricaded wall 1
-		monstawall2 = getUnit(1, 525); //barricaded wall 2
+		monstadoor = getUnit(1, "Barricaded Door"), //barricaded door
+		monstawall = getUnit(1, "Barricade"); //barricaded wall
 
-	if (monstadoor1) {
+	if (monstadoor) {
 		do {
-			if ((getDistance(monstadoor1, x, y) < 4 && getDistance(me, monstadoor1) < 9) || getDistance(me, monstadoor1) < 4) {
+			if ((getDistance(monstadoor, x, y) < 4 && getDistance(me, monstadoor) < 9) || getDistance(me, monstadoor) < 4) {
 
-				for (p = 0; p < 20 && monstadoor1.hp; p += 1) {
-					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstadoor1);
+				for (p = 0; p < 20 && monstadoor.hp; p += 1) {
+					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstadoor);
 				}
 
 				me.overhead("Broke a barricaded door!");
 			}
-		} while (monstadoor1.getNext());
+		} while (monstadoor.getNext());
 	}
 
-	if (monstadoor2) {
+	if (monstawall) {
 		do {
-			if ((getDistance(monstadoor2, x, y) < 4 && getDistance(me, monstadoor2) < 9) || getDistance(me, monstadoor2) < 4) {
+			if ((getDistance(monstawall, x, y) < 4 && getDistance(me, monstawall) < 9) || getDistance(me, monstawall) < 4) {
 
-				for (p = 0; p < 20 && monstadoor2.hp; p += 1) {
-					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstadoor2);
-				}
-
-				me.overhead("Broke a barricaded door!");
-			}
-		} while (monstadoor2.getNext());
-	}
-
-	if (monstawall1) {
-		do {
-			if ((getDistance(monstawall1, x, y) < 4 && getDistance(me, monstawall1) < 9) || getDistance(me, monstawall1) < 4) {
-
-				for (p = 0; p < 20 && monstawall1.hp; p += 1) {
-					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstawall1);
+				for (p = 0; p < 20 && monstawall.hp; p += 1) {
+					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstawall);
 				}
 
 				me.overhead("Broke a barricaded wall!");
 			}
-		} while (monstawall1.getNext());
-	}
-
-	if (monstawall2) {
-		do {
-			if ((getDistance(monstawall2, x, y) < 4 && getDistance(me, monstawall2) < 9) || getDistance(me, monstawall2) < 4) {
-
-				for (p = 0; p < 20 && monstawall2.hp; p += 1) {
-					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstawall2);
-				}
-
-				me.overhead("Broke a barricaded wall!");
-			}
-		} while (monstawall2.getNext());
+		} while (monstawall.getNext());
 	}
 
 	return false;
@@ -484,27 +460,11 @@ Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
 	var useTeleport = this.useTeleport();
 
 	if (offX === undefined) {
-		if (me.classid !== 3) {// not paladin
-			if (unit && unit.type === 1) { //is monster
-				offX = 5; //prevent sorc & similar teleporting on top of the target
-			} else {
-				offX = 0;
-			}
-		} else {
-			offX = 0;
-		}
+		offX = 0;
 	}
 
 	if (offY === undefined) {
-		if (me.classid !== 3) {
-			if (unit && unit.type === 1) {
-				offY = 5; //prevent sorc & similar teleporting on top of the target
-			} else {
-				offY = 0;
-			}
-		} else {
-			offY = 0;
-		}
+		offY = 0;
 	}
 
 	if (clearPath === undefined) {

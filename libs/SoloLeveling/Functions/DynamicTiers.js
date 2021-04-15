@@ -73,31 +73,31 @@ var mercscore = function (item) {
 
 var tierscore = function (item) {
 	var resistWeights = {
-		FR: 3.5, // fire resist
-		LR: 4, // lightning resist
-		CR: 2, // cold resist
+		FR: 2, // fire resist
+		LR: 2, // lightning resist
+		CR: 1.5, // cold resist
 		PR: 1, // poison resist
-		ABS: 2.5 // absorb damage (fire light magic cold)
+		ABS: 2.7 // absorb damage (fire light magic cold)
 	};
 
 	var generalWeights = {
-		CBF: 150, // cannot be frozen
+		CBF: 25, // cannot be frozen
 		FRW: 1, // faster run/walk
 		FHR: 3, // faster hit recovery
 		DEF: 0.05, // defense
 		ICB: 2, // increased chance to block
-		BELTSLOTS: 1.25, //belt potion storage
+		BELTSLOTS: 1.55, //belt potion storage
 		MF: 1, //Magic Find
 		// base stats
-		HP:	1.75,
-		MANA: 0.8,
-		STR: 1.5,
-		DEX: 1.5,
+		HP:	0.5,
+		MANA: 0.5,
+		STR: 1,
+		DEX: 1,
 	};
 
 	var casterWeights = {
 		//breakpoint stats
-		FCR: 3.5,
+		FCR: 5,
 		IAS: 0,
 		// Attack
 		MINDMG:	0, // min damage
@@ -112,7 +112,7 @@ var tierscore = function (item) {
 		ML:	0, //manaleach
 		// regen
 		HPREGEN: 2,
-		MANAREGEN: 2,
+		MANAREGEN: 2.2,
 	};
 
 	var meleeWeights = {
@@ -136,11 +136,11 @@ var tierscore = function (item) {
 	};
 
 	var skillsWeights = {
-		ALL: 180, // + all skills
+		ALL: 200, // + all skills
 		CLASS: 175, // + class tab
-		TAB: 100, // + skill tab
-		WANTED: 30, // + wanted key skills
-		USEFUL: 20 // + wanted supportive skills
+		TAB: 125, // + skill tab
+		WANTED: 45, // + wanted key skills
+		USEFUL: 30, // + wanted supportive skills
 	};
 
 	this.generalScore = function (item) {

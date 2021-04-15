@@ -12,12 +12,20 @@ if (!isIncluded("OOG.js")) {
 var Difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 var SetUp = {
+	scripts: [
+		"den", "bloodraven", "tristam", "countess", "jail", "smith", "pits", "andariel", "cows", // Act 1
+		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
+		"eye", "heart", "templeruns", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
+		"izual", "hellforge", "diablo", //Act 4
+		"shenk", "savebarby", "anya", "pindle", "ancients", "baal", // Act 5
+	],
+
 	include: function () {
 		var folders = ["Functions"];
 		folders.forEach( (folder) => {
 			var files = dopen("libs/SoloLeveling/" + folder + "/").getFiles();
 			files.forEach( (file) => {
-				if (file.indexOf(".js") !== -1) {
+				if (file.slice(file.length - 3) === ".js") {
 					if (!isIncluded("SoloLeveling/" + folder + "/" + file)) {
 						if (!include("SoloLeveling/" + folder + "/" + file)) {
 							throw new Error("Failed to include " + "SoloLeveling/" + folder + "/" + file);
@@ -28,6 +36,7 @@ var SetUp = {
 		});
 	},
 
+	sequences: [],
 	levelCap: [35, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
@@ -44,7 +53,7 @@ var SetUp = {
 		case 1:
 			switch (this.finalBuild) {
 			case "Javazon":
-			case "LightSorc":
+			case "Lightning":
 			case "Blova":
 				respec = Attack.checkInfinity() ? me.charlvl : 100;
 				break;
@@ -207,7 +216,7 @@ var Check = {
 
 			break;
 		case "smith": //tools of the trade
-			if (Quest.Status("smith")) { // completed or needs to imbue
+			if (!me.normal || Quest.Status("smith")) { // completed or needs to imbue
 				dontRun = true;
 			}
 
@@ -225,7 +234,7 @@ var Check = {
 
 			break;
 		case "jail": //jail runs
-			if (me.charlvl >= 18) {
+			if (me.charlvl > 15) {
 				dontRun = true;
 			}
 
@@ -254,12 +263,6 @@ var Check = {
 			}
 
 			break;
-		case "beetleburst": //beetleburst
-			if (!Pather.accessToAct(2) || me.charlvl > 24) {
-				dontRun = true;
-			}
-
-			break;
 		case "staff": //staff
 			if (!Pather.accessToAct(2) || Quest.Status("staff")) { //have staff or quest completed
 				dontRun = true;
@@ -279,13 +282,13 @@ var Check = {
 
 			break;
 		case "summoner": //summoner
-			if (!Pather.accessToAct(2) || !me.hell && Quest.Status("summoner")) {
+			if (!Pather.accessToAct(2) || !me.hell && Quest.Status("summoner") || me.hell && Quest.Status("summoner") && me.paladin) {
 				dontRun = true;
 			}
 
 			break;
 		case "tombs": //tombs
-			if (!Pather.accessToAct(2) || !me.hell || haveGold) {
+			if (!Pather.accessToAct(2) || !me.normal || me.normal && me.charlvl > 24) {
 				dontRun = true;
 			}
 
@@ -302,8 +305,8 @@ var Check = {
 			}
 
 			break;
-		case "lamessen": //lamessen tome
-			if (!Pather.accessToAct(3) || Quest.Status("lamessen")) {
+		case "templeruns": //temple runs
+			if (!Pather.accessToAct(3) || me.normal > 24 || !me.normal && Quest.Status("lamessen")) {
 				dontRun = true;
 			}
 

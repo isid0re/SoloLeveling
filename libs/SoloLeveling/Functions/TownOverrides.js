@@ -485,7 +485,20 @@ Town.buyPotions = function () {
 		return true;
 	}
 
-	if (me.normal && Pather.accessToAct(4) && me.act < 4) {
+
+	if (me.normal && Pather.accessToAct(2) && !Pather.accessToAct(3) && me.act < 2) {
+		this.goToTown(2);
+	}
+
+	if (me.normal && Pather.accessToAct(3) && !Pather.accessToAct(4) && me.act < 3) {
+		this.goToTown(3);
+	}
+
+	if (me.normal && Pather.accessToAct(4) && !Pather.accessToAct(5) && me.act < 4) {
+		this.goToTown(4);
+	}
+
+	if (me.normal && Pather.accessToAct(5) && (me.getQuest(35, 0) || me.getQuest(35, 1)) && me.act < 5) {
 		this.goToTown(4);
 	}
 
@@ -974,8 +987,7 @@ Town.organizeInventory = function () {
 };
 
 Town.clearInventory = function () {
-	var i, col, result, item, beltSize,
-		items = [];
+	var i, result, item, items = [];
 
 	// Cleanup remaining potions
 	item = me.getItem(-1, 0);
@@ -1233,78 +1245,6 @@ Town.npcInteract = function (name) {
 	}
 
 	Packet.flash(me.gid);
-
-	return true;
-};
-
-Town.visitTown = function (repair = false) {
-	if (me.inTown) {
-		this.doChores();
-		this.move("stash");
-
-		return true;
-	}
-
-	var preArea = me.area,
-		preAct = me.act;
-
-	this.doChores(repair);
-
-	if (me.act !== preAct) {
-		this.goToTown(preAct);
-	}
-
-	this.move("portalspot");
-
-	if (!Pather.usePortal(preArea, me.name)) { // this part is essential
-		Packet.flash(me.gid); // try resynch then use portal agian.
-
-		if (!Pather.usePortal(preArea, me.name)) {
-			throw new Error("Town.visitTown: Failed to go back from town");
-		}
-	}
-
-	if (Config.PublicMode) {
-		Pather.makePortal();
-	}
-
-	return true;
-};
-
-Town.goToTown = function (act, wpmenu) {
-	var towns = [1, 40, 75, 103, 109];
-
-	if (!me.inTown) {
-		Packet.flash(me.gid);
-
-		if (!Pather.makePortal()) {
-			throw new Error("Town.goToTown: Failed to make TP");
-		}
-
-		if (!Pather.usePortal(null, me.name)) {
-			Packet.flash(me.gid);
-
-			if (!Pather.usePortal(null, me.name)) {
-				throw new Error("Town.goToTown: Failed to take TP");
-			}
-		}
-	}
-
-	if (act === undefined) {
-		return true;
-	}
-
-	if (act < 1 || act > 5) {
-		throw new Error("Town.goToTown: Invalid act");
-	}
-
-	if (act !== me.act) {
-		try {
-			Pather.useWaypoint(towns[act - 1], wpmenu);
-		} catch (WPError) {
-			throw new Error("Town.goToTown: Failed use WP");
-		}
-	}
 
 	return true;
 };

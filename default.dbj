@@ -169,6 +169,19 @@ function main () {
 
 	// Load threads
 	if (getScript("D2BotSoloLevelingEntry.dbj")) {
+		if (!isIncluded("SoloLeveling/Tools/Developer.js")) {
+			include("SoloLeveling/Tools/Developer.js");
+		}
+
+		if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
+			include("SoloLeveling/Tools/Tracker.js");
+		}
+
+		if (!isIncluded("libs/SoloLeveling/Functions/Globals.js")) {
+			include("libs/SoloLeveling/Functions/Globals.js");
+			SetUp.include();
+		}
+
 		load("libs/SoloLeveling/Tools/ToolsThread.js");
 	} else {
 		load("tools/ToolsThread.js");
