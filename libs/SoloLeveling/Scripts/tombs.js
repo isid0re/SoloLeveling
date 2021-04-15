@@ -40,7 +40,7 @@ function tombs () {
 				}
 			}
 
-			Attack.clear(50);
+			Attack.clear(30, 0);
 			Pickit.pickItems();
 			Town.doChores();
 		}

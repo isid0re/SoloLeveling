@@ -23,7 +23,7 @@ function templeruns () {
 		Precast.doPrecast(true);
 
 		if (Pather.moveToExit(temples[run], true, true)) {
-			if (me.area(94) && !Quest.Status("lamessen")) {
+			if (me.area === 94 && !Quest.Status("lamessen")) {
 				me.overhead("lamessen");
 				Pather.moveToPreset(94, 2, 193);
 				Quest.collectItem(548, 193);

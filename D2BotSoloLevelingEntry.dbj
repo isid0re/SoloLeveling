@@ -1114,7 +1114,7 @@ function main () {
 					DataFile.updateStats("ingameTick");
 				}
 
-				myExp = Math.max(0, Experience.progress());
+				myExp = me.getStat(13) > 0 ? Experience.progress() : 0;
 				myGold = me.getStat(14) + me.getStat(15);
 				resPenalty = me.gametype === 0 ? [ 0, 20, 50][me.diff] : [ 0, 40, 100][me.diff];
 				frRes = Math.min(75, me.getStat(39) - resPenalty);
