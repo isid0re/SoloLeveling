@@ -153,6 +153,80 @@ Misc.checkQuest = function (id, state) {
 	return me.getQuest(id, state);
 };
 
+Misc.townCheck = function () {
+	var i, potion, check,
+		needhp = true,
+		needmp = true;
+
+	// Can't tp from uber trist or when dead
+	if (me.area === 136 || me.dead) {
+		return false;
+	}
+
+	if (Config.TownCheck && !me.inTown) {
+		try {
+			if (me.charlvl > 2 && me.gold > 500) {
+				for (i = 0; i < 4; i += 1) {
+					if (Config.BeltColumn[i] === "hp" && Config.MinColumn[i] > 0) {
+						potion = me.getItem(-1, 2); // belt item
+
+						if (potion) {
+							do {
+								if (potion.code.indexOf("hp") > -1) {
+									needhp = false;
+
+									break;
+								}
+							} while (potion.getNext());
+						}
+
+						if (needhp) {
+							print("We need healing potions");
+
+							check = true;
+						}
+					}
+
+					if (Config.BeltColumn[i] === "mp" && Config.MinColumn[i] > 0) {
+						potion = me.getItem(-1, 2); // belt item
+
+						if (potion) {
+							do {
+								if (potion.code.indexOf("mp") > -1) {
+									needmp = false;
+
+									break;
+								}
+							} while (potion.getNext());
+						}
+
+						if (needmp) {
+							print("We need mana potions");
+
+							check = true;
+						}
+					}
+				}
+			}
+
+			if (Config.OpenChests && Town.needKeys()) {
+				check = true;
+			}
+		} catch (e) {
+			check = false;
+		}
+	}
+
+	if (check) {
+		scriptBroadcast("townCheck");
+		delay(500);
+
+		return true;
+	}
+
+	return false;
+};
+
 Misc.openChests = function (range) {
 	var unit,
 		unitList = [],
@@ -170,6 +244,16 @@ Misc.openChests = function (range) {
 	}
 
 	unit = getUnit(2);
+
+	// Skip invalid and Countess chests
+	if (!unit || unit.x === 12526 || unit.x === 12565) {
+		return false;
+	}
+
+	// already open
+	if (unit.mode) {
+		return true;
+	}
 
 	if (unit) {
 		do {
@@ -250,6 +334,22 @@ Misc.getWell = function (unit) {
 	return false;
 };
 
+Misc.gamePause = function () {
+	let script = getScript("default.dbj");
+
+	if (script) {
+		if (script.running) {
+			print("ÿc1Pausing.");
+			script.pause();
+		} else {
+			print("ÿc2Resuming.");
+			script.resume();
+		}
+	}
+
+	return true;
+};
+
 Misc.gamePacket = function (bytes) {// various game events
 	let id, diablo, jadefigurine, tick;
 
@@ -271,7 +371,7 @@ Misc.gamePacket = function (bytes) {// various game events
 
 		break;
 	case 0x4c: // diablo lightning dodge
-		if (bytes[6] === 193) {
+		if (bytes[6] === 193 && !me.getSkill(54, 0)) {
 			diablo = getUnit(1, 243);
 			tick = getTickCount();
 
@@ -310,6 +410,7 @@ Misc.gamePacket = function (bytes) {// various game events
 		break;
 	case 0x5d: // golden bird quest
 		jadefigurine = getUnit(4, 546);
+		Pickit.pickItems();
 
 		if (jadefigurine) {
 			if (Storage.Inventory.CanFit(jadefigurine)) {
@@ -333,6 +434,35 @@ Misc.gamePacket = function (bytes) {// various game events
 			Town.heal();
 			Town.move("portalspot");
 			Pather.usePortal(null, me.name);
+		}
+
+		break;
+	case 0xa4: //baalwave
+		tick = getTickCount();
+
+		while (getTickCount() - tick < 5650) { //prep
+			Pather.moveTo(15092, 5073);
+			Config.NoTele = true;
+		}
+
+		tick = getTickCount();
+
+		while (getTickCount() - tick < 5000) { // 5 second delay (5000ms)
+			Pather.moveTo(15098, 5082);	// leave throne
+		}
+
+		tick = getTickCount();
+		Pather.moveTo(15099, 5078); // reenter throne
+
+		while (getTickCount() - tick < 2000) {// 2 second delay (2000ms)
+			Pather.moveTo(15098, 5082);
+		}
+
+		Pather.moveTo(15098, 5073);
+		Config.NoTele = false;
+
+		if (JSON.stringify(bytes[0] === 176)) {
+			break;
 		}
 
 		break;

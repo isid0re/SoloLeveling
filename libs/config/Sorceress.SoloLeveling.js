@@ -14,6 +14,7 @@
 *			Blova
 *		4. Save the profile and start
 */
+
 function LoadConfig () {
 	if (!isIncluded("common/Storage.js")) {
 		include("common/Storage.js");
@@ -27,17 +28,17 @@ function LoadConfig () {
 		include("NTItemParser.dbl");
 	}
 
-	if (!isIncluded("bots/SoloLeveling.js")) {
-		include("bots/SoloLeveling.js");
+	if (!isIncluded("SoloLeveling/Functions/Globals.js")) {
+		include("SoloLeveling/Functions/Globals.js");
 	}
+
+	SetUp.include();
 
 	/* Script */
 	Scripts.UserAddon = false;
 	Scripts.SoloLeveling = true;
 
 	/* General configuration. */
-	var chooseBuffer = me.charlvl < 5 ? 0 : me.charlvl < SetUp.respecOne ? 1 : me.charlvl < SetUp.respecTwo() ? 2 : 3;
-
 	Config.MinGameTime = 400;
 	Config.MaxGameTime = 7200;
 	Config.MiniShopBot = true;
@@ -88,28 +89,23 @@ function LoadConfig () {
 	Config.RejuvBuffer = 0;
 
 	/* Belt configuration. */
-	var beltPots = [/* new char belt */["hp", "hp", "hp", "hp"], /* startbuild belt */["hp", "hp", "mp", "mp"], /* levelingbuild belt */["hp", "hp", "mp", "mp"], /* Final belt */["hp", "mp", "mp", "rv"]][chooseBuffer];
-
-	Config.BeltColumn = beltPots;
+	Config.BeltColumn = ["hp", "mp", "mp", "rv"];
 	Config.MinColumn[0] = Config.BeltColumn[0] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[1] = Config.BeltColumn[1] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[2] = Config.BeltColumn[2] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[3] = Config.BeltColumn[3] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 
 	/* Inventory buffers and lock configuration. */
-	var bufferHP = [4, 4, 4, 2][chooseBuffer];
-	var bufferMP = [12, 10, 10, 4][chooseBuffer];
-	var bufferRV = [0, 4, 4, 4][chooseBuffer];
-	Config.HPBuffer = bufferHP;
-	Config.MPBuffer = bufferMP;
-	Config.RejuvBuffer = bufferRV;
+	Config.HPBuffer = 0;
+	Config.MPBuffer = 0;
+	Config.RejuvBuffer = 4;
 	Config.Inventory[0] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[1] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[2] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	/* Pickit configuration. */
-	Config.PickRange = me.hell ? 40 : 20;
+	Config.PickRange = me.hell ? 40 : 30;
 	Config.FastPick = false;
 	Config.CainID.Enable = false;
 	Config.FieldID = false;
@@ -118,10 +114,10 @@ function LoadConfig () {
 
 	/* Gambling configuration. */
 	Config.Gamble = true;
-	Config.GambleGoldStart = 2000000;
+	Config.GambleGoldStart = 1250000;
 	Config.GambleGoldStop = 750000;
 	Config.GambleItems.push("Amulet");
-	//Config.GambleItems.push("Ring");
+	Config.GambleItems.push("Ring");
 	Config.GambleItems.push("Circlet");
 	Config.GambleItems.push("Coronet");
 
@@ -194,14 +190,14 @@ function LoadConfig () {
 	NTIP.arrayLooping(autoequipmercTiers);
 
 	/* FastMod configuration. */
-	Config.FCR = me.getStat(105);
-	Config.FHR = me.getStat(99);
-	Config.FBR = me.getStat(102);
-	Config.IAS = me.getStat(93);
+	Config.FCR = 255;
+	Config.FHR = 255;
+	Config.FBR = 255;
+	Config.IAS = 255;
 
 	/* Attack configuration. */
 	Config.AttackSkill = [0, 0, 0, 0, 0, 0, 0];
-	Config.LowManaSkill = [0, 0];
+	Config.LowManaSkill = [-1, -1];
 	Config.MaxAttackCount = 1000;
 	Config.BossPriority = me.normal ? true : false;
 	Config.ClearType = 0;
@@ -237,13 +233,13 @@ function LoadConfig () {
 	Config.AutoBuild.Template = SetUp.getBuild();
 
 	/* Class specific configuration. */
-	Config.UseTelekinesis = !!me.getSkill(43, 0); // use telekensis if have skill
-	Config.Dodge = !!me.getSkill(54, 0); // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
+	Config.UseTelekinesis = !!me.getSkill(43, 0); // use telekinesis if have skill
+	Config.Dodge = me.charlvl >= SetUp.respecOne ? true : false; // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
 	Config.DodgeRange = 15; // Distance to keep from monsters.
-	Config.DodgeHP = 100; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
+	Config.DodgeHP = 90; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
-	Config.CastStatic = 50;
-	Config.StaticList = ["Duriel", "Mephisto", "Izual", "Diablo", "Baal"];
+	Config.CastStatic = me.normal ? 33 : 50;
+	Config.StaticList = me.normal ? ["Andarial", "Duriel", "Mephisto", "Izual", "Diablo", "Talic", "Madawc", "Korlic", "Baal"] : ["Andarial", "Duriel", "Mephisto", "Izual", "Diablo", "Baal"];
 
 	/* LOD gear */
 	if (!me.classic) {

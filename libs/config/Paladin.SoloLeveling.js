@@ -26,9 +26,11 @@ function LoadConfig () {
 		include("NTItemParser.dbl");
 	}
 
-	if (!isIncluded("bots/SoloLeveling.js")) {
-		include("bots/SoloLeveling.js");
+	if (!isIncluded("SoloLeveling/Functions/Globals.js")) {
+		include("SoloLeveling/Functions/Globals.js");
 	}
+
+	SetUp.include();
 
 	/* Script */
 	Scripts.UserAddon = false;
@@ -183,10 +185,10 @@ function LoadConfig () {
 	NTIP.arrayLooping(autoequipmercTiers);
 
 	/* FastMod configuration. */
-	Config.FCR = me.getStat(105);
-	Config.FHR = me.getStat(99);
-	Config.FBR = me.getStat(102);
-	Config.IAS = me.getStat(93);
+	Config.FCR = 255;
+	Config.FHR = 255;
+	Config.FBR = 255;
+	Config.IAS = 255;
 
 	/* Attack configuration. */
 	Config.AttackSkill = [0, 0, 0, 0, 0, 0, 0];

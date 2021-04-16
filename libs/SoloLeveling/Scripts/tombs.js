@@ -11,10 +11,6 @@ function tombs () {
 	let tombID = [66, 67, 68, 69, 70, 71, 72];
 
 	for (let number = 0; number < tombID.length; number += 1) {
-		if (Check.Gold()) {
-			break;
-		}
-
 		if (!Pather.checkWP(46)) {
 			Pather.getWP(46);
 		} else {
@@ -25,7 +21,9 @@ function tombs () {
 		Pather.moveToExit(tombID[number], true, true);
 
 		if (me.area === tombID[number]) {
-			for (let i = 0; i < 6; i += 1) {
+			for (let i = 0; i < tombID.length; i += 1) {
+				me.overhead("Tomb #" + (number + 1));
+
 				try {
 					let gbox = getPresetUnit(me.area, 2, 397);
 					let orifice = getPresetUnit(me.area, 2, 152);
