@@ -84,9 +84,6 @@ function LoadConfig () {
 	Config.UseRejuvHP = me.playertype ? 65 : 40;
 	Config.UseMP = me.playertype ? 75 : 55;
 	Config.UseMercHP = 75;
-	Config.HPBuffer = 0;
-	Config.MPBuffer = 0;
-	Config.RejuvBuffer = 0;
 
 	/* Belt configuration. */
 	Config.BeltColumn = ["hp", "mp", "mp", "rv"];
@@ -238,7 +235,7 @@ function LoadConfig () {
 	Config.DodgeRange = 15; // Distance to keep from monsters.
 	Config.DodgeHP = 90; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
-	Config.CastStatic = me.normal ? 33 : 50;
+	Config.CastStatic = me.normal ? 15 : me.nightmare ? 33 : 50;
 	Config.StaticList = me.normal ? ["Andarial", "Duriel", "Mephisto", "Izual", "Diablo", "Talic", "Madawc", "Korlic", "Baal"] : ["Andarial", "Duriel", "Mephisto", "Izual", "Diablo", "Baal"];
 
 	/* LOD gear */

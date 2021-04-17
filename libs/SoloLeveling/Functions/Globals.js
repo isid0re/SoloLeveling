@@ -330,7 +330,7 @@ var Check = {
 
 			break;
 		case "travincal": //travincal
-			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || !me.normal && Quest.Status("travincal")) {
+			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 && Quest.Status("travincal") || !me.normal && Quest.Status("travincal")) {
 				dontRun = true;
 			}
 
