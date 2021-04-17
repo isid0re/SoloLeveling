@@ -306,7 +306,7 @@ var Check = {
 
 			break;
 		case "templeruns": //temple runs
-			if (!Pather.accessToAct(3) || me.normal > 24 || !me.normal && Quest.Status("lamessen")) {
+			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || !me.normal && Quest.Status("lamessen")) {
 				dontRun = true;
 			}
 
