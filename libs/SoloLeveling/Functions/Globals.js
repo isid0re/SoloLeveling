@@ -90,11 +90,21 @@ var SetUp = {
 		let buildType;
 
 		if (me.charlvl < SetUp.respecOne) {
+                     if  (!Developer.pd2) {
 			buildType = "Start";
+			}
+                     else {
+			buildType = "pd2Start";  //stub out for pd2 builds		
+			}			
 		} else if (me.charlvl >= SetUp.respecTwo()) {
 			buildType = SetUp.finalBuild;
 		} else {
+					if  (!Developer.pd2) {
 			buildType = "Leveling";
+			}
+					else {
+			buildType = "pd2Leveling"; //stub out for pd2 builds		
+					}	
 		}
 
 		return buildType;
