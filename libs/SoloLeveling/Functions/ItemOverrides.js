@@ -384,6 +384,18 @@ Item.getBodyLocMerc = function (item) {
 		}
 
 		break;
+	 case 15: // boots
+        		bodyLoc = 9;
+        
+        	break;
+    	case 16: // Gloves
+        		bodyLoc = 10;
+        
+       	 	break;
+    	case 19: // belt
+        		bodyLoc = 8;
+        
+        break;		
 	default:
 		return false;
 	}
