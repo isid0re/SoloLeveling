@@ -13,7 +13,7 @@ var Difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 var SetUp = {
 	scripts: [
-		"den", "bloodraven", "tristam", "countess", "jail", "smith", "pits", "andariel", "cows", // Act 1
+		"den", "bloodraven", "tristam",  "jail", "smith", "pits", "andariel", "cows", // Act 1 "countess", <- overly hard
 		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
 		"eye", "heart", "templeruns", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
