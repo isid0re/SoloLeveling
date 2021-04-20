@@ -31,7 +31,7 @@ var Tracker = {
 			"Total": 0,
 			"InGame": 0,
 			"OOG": 0,
-			"LastLevel": 0,
+			"LastLevel": me.gamestarttime,
 			"LastSave": FirstSave
 		};
 
@@ -64,7 +64,9 @@ var Tracker = {
 			newIG = GameTracker.InGame + Developer.Timer(newTick),
 			newTotal = GameTracker.Total + Developer.Timer(totalTick),
 			scriptTime = Developer.Timer(starttime),
-			questComplete = Quest.Status(subscript),
+		//	questComplete = Quest.Status(subscript),
+			questName = me + "." + subscript,
+			questComplete = questName ? true : false,
 			diffString = Difficulty[me.diff],
 			gainPCT = Experience.gainPercent() / 100,
 			currentBuild = SetUp.getBuild(),

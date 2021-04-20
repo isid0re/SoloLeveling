@@ -13,11 +13,11 @@ var Difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 var SetUp = {
 	scripts: [
-		"den", "bloodraven", "tristam", "countess", "jail", "smith", "pits", "andariel", "cows", // Act 1
+		"den", "bloodraven", "tristam", "countess", "jail", /*"smith",*/ "pits", "andariel", "cows", // Act 1
 		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
-		"eye", "heart", "templeruns", "brain", "lowerkurast", "travincal", "mephisto", // Act 3
+		"templeruns", "eye", "heart", "brain", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
-		"shenk", "savebarby", "anya", "pindle", "ancients", "baal", // Act 5
+		"shenk", "savebarby", "anya", "ancients", "baal", // Act 5
 	],
 
 	include: function () {
@@ -136,13 +136,13 @@ var nipItems = {
 	Selling: [
 		'([type] == ring || [type] == amulet) && [quality] >= magic # [fcr] >= 600',
 		'([type] == armor || [type] == boots || [type] == gloves || [type] == belt) && [quality] >= magic # [fcr] >= 600',
-		'([type] == helm || [type] == circlet || [type] == primalhelm || [type] == pelt)&& [quality] >= magic # [fcr] >= 600',
+		'([type] == helm || [type] == circlet || [type] == primalhelm || [type] == pelt) && [quality] >= magic # [fcr] >= 600',
 		'([type] == anyshield || [type] == voodooheads) && [quality] >= magic # [fcr] >= 600',
-		'([type] == javelin || [type] == amazonspear || [type] == amazonjavelin) && [quality] >= magic # [fcr] >= 600',
+		'([type] == javelin || [type] == amazonspear || [type] == amazonjavelin) && [quality] >= rare # [fcr] >= 600',
 		'([type] == orb || [type] == wand || [type] == staff) && [quality] >= normal # [fcr] >= 600',
 		'([type] == throwingaxe || [type] == axe || [type] == mace || [type] == club || [type] == scepter || [type] == hammer) && [quality] >= magic # [fcr] >= 600',
 		'([type] == sword || [type] == knife || [type] == throwingknife) && [quality] >= magic # [fcr] >= 600',
-		'([type] == bow || [type] == crossbow) && [quality] >= magic # [fcr] >= 600',
+		'([type] == bow || [type] == crossbow) && [quality] >= rare # [fcr] >= 600',
 		'([type] == handtohand || [type] == assassinclaw) && [quality] >= magic  # [fcr] >= 600',
 	],
 
@@ -197,213 +197,198 @@ var nipItems = {
 // General Game functions
 var Check = {
 	Task: function (sequenceName) {
-		let dontRun = false;
-		let dontMF = !me.classic && !Quest.Status("baal") ? true : me.classic && !Quest.Status("diablo") ? true : false;
-		let haveGold = this.Gold();
-		let haveRunes = this.Runes();
+		let needRunes = this.Runes();
 
 		switch (sequenceName.toLowerCase()) {
 		case "den": //den
-			if (Quest.Status("den")) { //completed
-				dontRun = true;
+			if (!me.den) {
+				SetUp.sequences.push("den");
 			}
 
 			break;
 		case "bloodraven": //bloodaraven
-			if (me.normal && Quest.Status("bloodraven") || me.nightmare || me.hell && !me.getSkill(54, 0)) { //complete raven normal || goldreq met
-				dontRun = true;
+			if (me.normal && !me.bloodraven || me.hell && !me.getSkill(54, 0)) {
+				SetUp.sequences.push("bloodraven");
 			}
 
 			break;
 		case "smith": //tools of the trade
-			if (!me.normal || Quest.Status("smith")) { // completed or needs to imbue
-				dontRun = true;
+			if (me.normal && !me.smith) {
+				SetUp.sequences.push("smith");
 			}
 
 			break;
 		case "tristam": //tristam
-			if (me.charlvl > 11 && (me.classic && !Quest.Status("diablo") || !Quest.Status("baal")) || Quest.Status("tristam")) { //completed
-				dontRun = true;
+			if (!me.normal && (me.classic && me.diablo || me.baal) || !me.tristam) {
+				SetUp.sequences.push("tristam");
 			}
 
 			break;
 		case "countess": //countess
-			if (me.classic && Quest.Status("countess") || haveRunes) { // classic quest completed normal || have runes for difficulty
-				dontRun = true;
+			if (me.classic && !me.countess || needRunes) { // classic quest completed normal || have runes for difficulty
+				SetUp.sequences.push("countess");
 			}
 
 			break;
 		case "jail": //jail runs
-			if (me.charlvl > 15) {
-				dontRun = true;
+			if (me.charlvl < 15) {
+				SetUp.sequences.push("jail");
 			}
 
 			break;
 		case "pits": //pits
-			if (!me.hell || me.hell) {
-				dontRun = true;
+			if (me.hell) {
+				SetUp.sequences.push("pits");
 			}
 
 			break;
 		case "andariel": //andy
-			if (Quest.Status("andariel") && (me.normal || me.classic && me.nightmare)) {
-				dontRun = true;
+			if (me.hell || !me.classic && me.nightmare || !me.andariel && (me.normal || me.nightmare)) {
+				SetUp.sequences.push("andariel");
 			}
 
 			break;
 		case "cube": //cube
-			if (!Pather.accessToAct(2) || Quest.Status("cube")) {
-				dontRun = true;
+			if (Pather.accessToAct(2) && !me.cube) {
+				SetUp.sequences.push("cube");
 			}
 
 			break;
 		case "radament": //radament
-			if (!Pather.accessToAct(2) || Quest.Status("Radament")) {
-				dontRun = true;
+			if (Pather.accessToAct(2) && !me.radament) {
+				SetUp.sequences.push("radament");
 			}
 
 			break;
 		case "staff": //staff
-			if (!Pather.accessToAct(2) || Quest.Status("staff")) { //have staff or quest completed
-				dontRun = true;
+			if (Pather.accessToAct(2) && !me.shaft && !me.staff && !me.horadricstaff) {
+				SetUp.sequences.push("staff");
 			}
 
 			break;
 		case "amulet": //ammy
-			if (!Pather.accessToAct(2) || Quest.Status("amulet")) { //have staff or quest completed
-				dontRun = true;
+			if (Pather.accessToAct(2) && !me.amulet && !me.staff && !me.horadricstaff) {
+				SetUp.sequences.push("amulet");
 			}
 
 			break;
 		case "ancienttunnels": // ancient tunnels
-			if (!Pather.accessToAct(2) || !me.hell || me.hell && me.paladin) { // no pally in hell magic immunes
-				dontRun = true;
+			if (Pather.accessToAct(2) && me.hell && !me.paladin) { // no pally in hell magic immunes
+				SetUp.sequences.push("ancienttunnels");
 			}
 
 			break;
 		case "summoner": //summoner
-			if (!Pather.accessToAct(2) || !me.hell && Quest.Status("summoner") || me.hell && Quest.Status("summoner") && me.paladin) {
-				dontRun = true;
+			if (Pather.accessToAct(2) && (!me.hell && !me.summoner || me.hell)) {
+				SetUp.sequences.push("summoner");
 			}
 
 			break;
 		case "tombs": //tombs
-			if (!Pather.accessToAct(2) || !me.normal || me.normal && me.charlvl > 24) {
-				dontRun = true;
+			if (Pather.accessToAct(2) && me.normal && me.charlvl < 25) {
+				SetUp.sequences.push("tombs");
 			}
 
 			break;
 		case "duriel": //duriel
-			if (!Pather.accessToAct(2) || Quest.Status("duriel")) {
-				dontRun = true;
+			if (Pather.accessToAct(2) && !me.duriel) {
+				SetUp.sequences.push("duriel");
 			}
 
 			break;
 		case "eye": // eye
-			if (!Pather.accessToAct(3) || Quest.Status("eye")) {
-				dontRun = true;
+			if (Pather.accessToAct(3) && !me.eye && !me.khalimswill && !me.travincal) {
+				SetUp.sequences.push("eye");
 			}
 
 			break;
 		case "templeruns": //temple runs
-			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || !me.normal && Quest.Status("lamessen")) {
-				dontRun = true;
+			if (Pather.accessToAct(3) && (me.normal && me.charlvl < 25 || me.nightmare && me.charlvl < 50 || me.hell)) {
+				SetUp.sequences.push("templeruns");
 			}
 
 			break;
 		case "heart": //heart
-			if (!Pather.accessToAct(3) || Quest.Status("heart")) {
-				dontRun = true;
+			if (Pather.accessToAct(3) && !me.heart && !me.khalimswill && !me.travincal) {
+				SetUp.sequences.push("heart");
 			}
 
 			break;
 		case "brain": //brain
-			if (!Pather.accessToAct(3) || Quest.Status("brain")) {
-				dontRun = true;
-			}
-
-			break;
-		case "lowerkurast": //lowerkurast
-			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 || me.nightmare && me.charlvl > 50) {
-				dontRun = true;
+			if (Pather.accessToAct(3) && !me.brain && !me.khalimswill && !me.travincal) {
+				SetUp.sequences.push("brain");
 			}
 
 			break;
 		case "travincal": //travincal
-			if (!Pather.accessToAct(3) || me.normal && me.charlvl > 24 && Quest.Status("travincal") || !me.normal && Quest.Status("travincal")) {
-				dontRun = true;
+			if (Pather.accessToAct(3) && (me.charlvl < 25 || !me.travincal)) {
+				SetUp.sequences.push("travincal");
 			}
 
 			break;
 		case "mephisto": //mephisto
-			if (!Pather.accessToAct(3) || !Quest.Status("travincal") || me.normal && Quest.Status("mephisto")) {
-				dontRun = true;
+			if (Pather.accessToAct(3) && (!me.normal || me.normal && !me.mephisto)) {
+				SetUp.sequences.push("mephisto");
 			}
 
 			break;
 		case "izual": // izzy
-			if (!Pather.accessToAct(4) || Quest.Status("izual")) {
-				dontRun = true;
+			if (Pather.accessToAct(4) && !me.izual) {
+				SetUp.sequences.push("izual");
 			}
 
 			break;
 		case "diablo": //diablo
-			if (!Pather.accessToAct(4)) {
-				dontRun = true;
+			if (Pather.accessToAct(4)) {
+				SetUp.sequences.push("diablo");
 			}
 
 			break;
 		case "hellforge": // hellforge
-			if (me.classic || me.normal || !Pather.accessToAct(4) || Quest.Status("hellforge")) {
-				dontRun = true;
+			if (Pather.accessToAct(4) && !me.normal && !me.hellforge) {
+				SetUp.sequences.push("hellforge");
 			}
 
 			break;
 		case "shenk": // shenk
-			if (me.classic || !Pather.accessToAct(5)) {
-				dontRun = true;
+			if (!me.classic && Pather.accessToAct(5)) {
+				SetUp.sequences.push("shenk");
 			}
 
 			break;
 		case "savebarby": //barbies
-			if (me.classic || !Pather.accessToAct(5) || Quest.Status("savebarby") || !me.normal) {
-				dontRun = true;
+			if (!me.classic && Pather.accessToAct(5) && me.normal && !me.savebarby) {
+				SetUp.sequences.push("savebarby");
 			}
 
 			break;
 		case "anya": //anya
-			if (me.classic || !Pather.accessToAct(5) || Quest.Status("anya")) {
-				dontRun = true;
-			}
-
-			break;
-		case "pindle": //nith (pindle)
-			if (me.classic || !Pather.accessToAct(5) || !Quest.Status("anya")) {
-				dontRun = true;
+			if (!me.classic && Pather.accessToAct(5)) {
+				SetUp.sequences.push("anya");
 			}
 
 			break;
 		case "ancients": //ancients
-			if (me.classic || !Pather.accessToAct(5) || Quest.Status("ancients")) {
-				dontRun = true;
+			if (!me.classic && Pather.accessToAct(5) && !me.ancients) {
+				SetUp.sequences.push("ancients");
 			}
 
 			break;
 		case "baal": //baal
-			if (me.classic || !Pather.accessToAct(5) || !Quest.Status("ancients")) {
-				dontRun = true;
+			if (!me.classic && Pather.accessToAct(5)) {
+				SetUp.sequences.push("baal");
 			}
 
 			break;
 		case "cows": //cows
-			if (me.classic && !Quest.Status("diablo") || !Quest.Status("baal") || Quest.Status("cows")) {
-				dontRun = true;
+			if (!me.cows && (me.classic && me.diablo || me.baal)) {
+				SetUp.sequences.push("cows");
 			}
 
 			break;
 		}
 
-		return dontRun;
+		return true;
 	},
 
 	Gold: function () {
@@ -444,7 +429,7 @@ var Check = {
 		let diffShift = me.diff;
 		let lowRes = !this.Resistance().Status;
 		let lvlReq = me.charlvl >= SetUp.levelCap ? true : false;
-		let diffCompleted = !me.classic && Quest.Status("baal") ? true : me.classic && Quest.Status("diablo") ? true : false;
+		let diffCompleted = !me.classic && me.baal ? true : me.classic && me.diablo ? true : false;
 
 		if (diffCompleted) {
 			if (lvlReq && !lowRes) {
@@ -466,18 +451,13 @@ var Check = {
 	},
 
 	Runes: function () {
-		let haveRunes = false;
+		let needRunes = true;
 
 		switch (me.diff) {
 		case 0: //normal
-			//have items
-			if (this.haveItem("shield", "runeword", "Ancients' Pledge") || this.haveItem("auricshields", "runeword", "Ancients' Pledge")) {
-				haveRunes = true;
-			}
-
-			//have runes for "Ancients' Pledge"
-			if (me.getItem("ralrune") && me.getItem("ortrune") && me.getItem("talrune")) {
-				haveRunes = true;
+			//have runes or stealth
+			if (me.getItem("talrune") && me.getItem("ethrune") || this.haveItem("armor", "runeword", "Stealth")) {
+				needRunes = false;
 			}
 
 			break;
@@ -485,14 +465,14 @@ var Check = {
 
 			break;
 		case 2: //hell
-			if (!Quest.Status("baal")) {
-				haveRunes = true;
+			if (!me.baal) {
+				needRunes = false;
 			}
 
 			break;
 		}
 
-		return haveRunes;
+		return needRunes;
 	},
 
 	haveItem: function (type, flag, iName) {

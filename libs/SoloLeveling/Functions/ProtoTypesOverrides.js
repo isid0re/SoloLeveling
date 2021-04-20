@@ -419,3 +419,335 @@ Object.defineProperty(Unit.prototype, 'assassin', {
 		return this.classid === 6;
 	}
 });
+
+Object.defineProperty(Unit.prototype, 'den', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.den: Must be used with player units.");
+		}
+
+		return this.getQuest(1, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'bloodraven', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.bloodraven: Must be used with player units.");
+		}
+
+		return this.getQuest(2, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'smith', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.smith: Must be used with player units.");
+		}
+
+		return this.getQuest(3, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'tristam', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.tristam: Must be used with player units.");
+		}
+
+		return this.getQuest(4, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'countess', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.countess: Must be used with player units.");
+		}
+
+		return this.getQuest(5, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'andariel', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.andariel: Must be used with player units.");
+		}
+
+		return this.getQuest(7, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'cube', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.cube: Must be used with player units.");
+		}
+
+		return !!this.getItem(549);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'radament', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.radament: Must be used with player units.");
+		}
+
+		return this.getQuest(9, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'shaft', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.shaft: Must be used with player units.");
+		}
+
+		return this.getItem(92);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'amulet', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.amulet: Must be used with player units.");
+		}
+
+		return this.getItem(521);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'staff', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.staff: Must be used with player units.");
+		}
+
+		return this.getItem(91);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'horadricstaff', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.horadricstaff: Must be used with player units.");
+		}
+
+		return this.getQuest(10, 0);
+	}
+});
+
+
+Object.defineProperty(Unit.prototype, 'summoner', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.summoner: Must be used with player units.");
+		}
+
+		return this.getQuest(13, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'duriel', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.duriel: Must be used with player units.");
+		}
+
+		return this.getQuest(15, 0);
+	}
+});
+
+
+Object.defineProperty(Unit.prototype, 'eye', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.eye: Must be used with player units.");
+		}
+
+		return this.getItem(553);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'brain', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.brain: Must be used with player units.");
+		}
+
+		return this.getItem(555);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'heart', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.heart: Must be used with player units.");
+		}
+
+		return this.getItem(554);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'khalimswill', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.khalimswill: Must be used with player units.");
+		}
+
+		return this.getItem(174);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'lamessen', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.lamessen: Must be used with player units.");
+		}
+
+		return this.getQuest(17, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'gidbinn', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.gidbinn: Must be used with player units.");
+		}
+
+		return this.getQuest(19, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'travincal', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.travincal: Must be used with player units.");
+		}
+
+		return this.getQuest(18, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'mephisto', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.mephisto: Must be used with player units.");
+		}
+
+		return this.getQuest(23, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'izual', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.izual: Must be used with player units.");
+		}
+
+		return this.getQuest(25, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'diablo', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.diablo: Must be used with player units.");
+		}
+
+		return this.getQuest(26, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'hellforge', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.hellforge: Must be used with player units.");
+		}
+
+		return this.getQuest(27, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'shenk', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.shenk: Must be used with player units.");
+		}
+
+		return this.getQuest(35, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'larzuk', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.larzuk: Must be used with player units.");
+		}
+
+		return this.getQuest(35, 1);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'savebarby', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.savebarby: Must be used with player units.");
+		}
+
+		return this.getQuest(36, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'anya', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.anya: Must be used with player units.");
+		}
+
+		return this.getQuest(37, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'ancients', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ancients: Must be used with player units.");
+		}
+
+		return this.getQuest(39, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'baal', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.baal: Must be used with player units.");
+		}
+
+		return this.getQuest(40, 0);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'cows', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.cows: Must be used with player units.");
+		}
+
+		return this.getQuest(4, 10);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'respec', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.respec: Must be used with player units.");
+		}
+
+		return this.getQuest(41, 0);
+	}
+});

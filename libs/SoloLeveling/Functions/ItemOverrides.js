@@ -268,6 +268,12 @@ Item.canEquipMerc = function (item, bodyLoc) {
 };
 
 Item.equipMerc = function (item, bodyLoc) {
+	var i, cursorItem, mercenary = Merc.getMercFix();
+
+	if (!mercenary) { // dont have merc or he is dead
+		return false;
+	}
+
 	if (!Item.canEquipMerc(item, bodyLoc)) {
 		return false;
 	}
@@ -275,8 +281,6 @@ Item.equipMerc = function (item, bodyLoc) {
 	if (item.mode === 1 && item.bodylocation === bodyLoc) { // Already equipped in the right slot
 		return true;
 	}
-
-	var i, cursorItem, mercenary = Merc.getMercFix();
 
 	if (item.location === 7) {
 		if (!Town.openStash()) {

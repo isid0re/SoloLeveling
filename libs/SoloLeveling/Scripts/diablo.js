@@ -260,9 +260,11 @@ function diablo () {
 		this.openSeal(394);
 
 		if (this.seisLayout === 1) {
-			Pather.moveTo(7771, 5196, 3, 30);
+			// Pather.moveTo(7771, 5196);
+			Pather.moveTo(7798, 5194, 3, 30); // safe location
 		} else {
-			Pather.moveTo(7798, 5186, 3, 30);
+			// Pather.moveTo(7798, 5186);
+			Pather.moveTo(7796, 5155, 3, 30); // safe location
 		}
 
 		if (!this.getBoss(getLocaleString(2852))) {

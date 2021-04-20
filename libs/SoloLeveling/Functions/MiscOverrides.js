@@ -334,6 +334,33 @@ Misc.getWell = function (unit) {
 	return false;
 };
 
+Misc.getExpShrine = function (...expLocs) {
+	if (me.getState(137)) {
+		return true;
+	}
+
+	for (let expLoc of expLocs) {
+		if (!Pather.checkWP(expLoc)) {
+			Pather.getWP(expLoc);
+		} else {
+			Pather.useWaypoint(expLoc);
+		}
+
+		Precast.doPrecast(true);
+
+		if (me.getState(137) || Misc.getShrinesInArea(expLoc, 15, true)) {
+			break;
+		}
+	}
+
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
+	return true;
+};
+
+
 Misc.gamePause = function () {
 	let script = getScript("default.dbj");
 

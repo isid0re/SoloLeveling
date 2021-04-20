@@ -16,8 +16,15 @@ function SoloLeveling () {
 	}
 
 	this.setup = function () {
-		print('ÿc9SoloLevelingÿc0: setup run');
-		me.overhead('setup run');
+		print('ÿc9SoloLevelingÿc0: start setup');
+		me.overhead('start setup');
+		me.overhead('preparing run sequence');
+		print("ÿc9SoloLevelingÿc0: preparing run sequence");
+
+		for (let run = 0; run < SetUp.scripts.length; run++) {
+			Check.Task(SetUp.scripts[run]);
+		}
+
 		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
 		NTIP.arrayLooping(nipItems.Quest);
 		me.overhead('loading pickits');
@@ -25,15 +32,6 @@ function SoloLeveling () {
 		NTIP.arrayLooping(nipItems.General);
 		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
 		NTIP.arrayLooping(nipItems.Selling);
-		me.overhead('preparing run sequence');
-		print("ÿc9SoloLevelingÿc0: preparing run sequence");
-
-		for (let run = 0; run < SetUp.scripts.length; run++) {
-			if (!Check.Task(SetUp.scripts[run])) {
-				SetUp.sequences.push(SetUp.scripts[run]);
-			}
-		}
-
 		print('ÿc9SoloLevelingÿc0: start run');
 		me.overhead('starting run');
 

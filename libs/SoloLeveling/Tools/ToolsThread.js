@@ -201,10 +201,6 @@ function main () {
 	};
 
 	this.exit = function () {
-		if (Developer.logPerformance) {
-			Tracker.Update();
-		}
-
 		this.stopDefault();
 		quit();
 	};
@@ -468,6 +464,11 @@ function main () {
 				if (AutoMule.getMuleItems().length > 0) {
 					print("ÿc2Mule triggered");
 					scriptBroadcast("mule");
+
+					if (Developer.logPerformance) {
+						Tracker.Update();
+					}
+
 					this.exit();
 				} else {
 					me.overhead("No items to mule.");
@@ -651,21 +652,6 @@ function main () {
 
 	// Start
 	while (true) {
-		if (isIncluded("SoloLeveling/Tools/Overlay.js") && Developer.Overlay) {
-			if (Developer.logPerformance) {
-				if (Developer.Overlay) {
-					Overlay.update();
-
-					if (me.act !== myAct) {
-						Overlay.flush();
-						myAct = me.act;
-					}
-				}
-			} else {
-				D2Bot.printToConsole('Overlay cannot work without Developer.logPerformance = true;', 4);
-			}
-		}
-
 		try {
 			if (me.gameReady && !me.inTown) {
 				if (Config.UseHP > 0 && me.hp < Math.floor(me.hpmax * Config.UseHP / 100)) {
@@ -679,6 +665,10 @@ function main () {
 				if (Config.LifeChicken > 0 && me.hp <= Math.floor(me.hpmax * Config.LifeChicken / 100)) {
 					if (!Developer.hideChickens) {
 						D2Bot.printToConsole("Life Chicken (" + me.hp + "/" + me.hpmax + ")" + this.getNearestMonster() + " in " + Pather.getAreaName(me.area) + ". Ping: " + me.ping, 9);
+					}
+
+					if (Developer.logPerformance) {
+						Tracker.Update();
 					}
 
 					D2Bot.updateChickens();
@@ -700,6 +690,10 @@ function main () {
 						D2Bot.printToConsole("Mana Chicken: (" + me.mp + "/" + me.mpmax + ") in " + Pather.getAreaName(me.area), 9);
 					}
 
+					if (Developer.logPerformance) {
+						Tracker.Update();
+					}
+
 					D2Bot.updateChickens();
 					this.exit();
 
@@ -715,6 +709,10 @@ function main () {
 						if (ironGolem.hp <= Math.floor(128 * Config.IronGolemChicken / 100)) { // ironGolem.hpmax is bugged with BO
 							if (!Developer.hideChickens) {
 								D2Bot.printToConsole("Irom Golem Chicken in " + Pather.getAreaName(me.area), 9);
+							}
+
+							if (Developer.logPerformance) {
+								Tracker.Update();
 							}
 
 							D2Bot.updateChickens();
@@ -733,6 +731,10 @@ function main () {
 						if (mercHP < Config.MercChicken) {
 							if (!Developer.hideChickens) {
 								D2Bot.printToConsole("Merc Chicken in " + Pather.getAreaName(me.area), 9);
+							}
+
+							if (Developer.logPerformance) {
+								Tracker.Update();
 							}
 
 							D2Bot.updateChickens();
@@ -778,6 +780,10 @@ function main () {
 				Experience.log();
 			}
 
+			if (Developer.logPerformance) {
+				Tracker.Update();
+			}
+
 			this.checkPing(false); // In case of quitlist triggering first
 			this.exit();
 
@@ -787,6 +793,19 @@ function main () {
 		if (debugInfo.area !== Pather.getAreaName(me.area)) {
 			debugInfo.area = Pather.getAreaName(me.area);
 			DataFile.updateStats("debugInfo", JSON.stringify(debugInfo));
+		}
+
+		if (Developer.Overlay) {
+			if (Developer.logPerformance) {
+				Overlay.update();
+
+				if (me.act !== myAct) {
+					Overlay.flush();
+					myAct = me.act;
+				}
+			} else {
+				D2Bot.printToConsole('Overlay cannot work without Developer.logPerformance = true;', 4);
+			}
 		}
 
 		delay(20);

@@ -6,8 +6,8 @@
 
 var Quest = {
 	preReqs: function () {
-		if (me.act === 2 && !Misc.checkQuest(10, 0) && !me.getItem(91)) { // horadric staff
-			if (!me.getItem(521)) {
+		if (Pather.accessToAct(2) && !me.staff && !me.horadricstaff) { // horadric staff
+			if (!me.amulet) {
 				if (!isIncluded("SoloLeveling/Scripts/amulet.js")) {
 					include("SoloLeveling/Scripts/amulet.js");
 				}
@@ -15,13 +15,13 @@ var Quest = {
 				for (let getAmmy = 0; getAmmy < 5; getAmmy++) {
 					amulet();
 
-					if (me.getItem(521)) {
+					if (me.amulet) {
 						break;
 					}
 				}
 			}
 
-			if (!me.getItem(92)) {
+			if (!me.shaft) {
 				if (!isIncluded("SoloLeveling/Scripts/staff.js")) {
 					include("SoloLeveling/Scripts/staff.js");
 				}
@@ -29,15 +29,15 @@ var Quest = {
 				for (let getStaff = 0; getStaff < 5; getStaff++) {
 					staff();
 
-					if (me.getItem(92)) {
+					if (me.shaft) {
 						break;
 					}
 				}
 			}
 		}
 
-		if (me.act === 3 && !Misc.checkQuest(18, 0) && !me.getItem(174)) { // khalim's will
-			if (!me.getItem(553)) {
+		if (Pather.accessToAct(3) && !me.travincal && !me.khalimswill) { // khalim's will
+			if (!me.eye) {
 				if (!isIncluded("SoloLeveling/Scripts/eye.js")) {
 					include("SoloLeveling/Scripts/eye.js");
 				}
@@ -45,13 +45,13 @@ var Quest = {
 				for (let getEye = 0; getEye < 5; getEye++) {
 					eye();
 
-					if (me.getItem(553)) {
+					if (me.eye) {
 						break;
 					}
 				}
 			}
 
-			if (!me.getItem(554)) {
+			if (!me.heart) {
 				if (!isIncluded("SoloLeveling/Scripts/heart.js")) {
 					include("SoloLeveling/Scripts/heart.js");
 				}
@@ -59,13 +59,13 @@ var Quest = {
 				for (let getHeart = 0; getHeart < 5; getHeart++) {
 					heart();
 
-					if (me.getItem(554)) {
+					if (me.heart) {
 						break;
 					}
 				}
 			}
 
-			if (!me.getItem(555)) {
+			if (!me.brain) {
 				if (!isIncluded("SoloLeveling/Scripts/brain.js")) {
 					include("SoloLeveling/Scripts/brain.js");
 				}
@@ -73,7 +73,7 @@ var Quest = {
 				for (let getBrain = 0; getBrain < 5; getBrain++) {
 					brain();
 
-					if (me.getItem(555)) {
+					if (me.brain) {
 						break;
 					}
 				}
@@ -82,7 +82,7 @@ var Quest = {
 	},
 
 	cubeItems: function (outcome, ...classids) {
-		if (me.getItem(outcome) || outcome === 91 && Misc.checkQuest(10, 0) || outcome === 174 && Misc.checkQuest(18, 0)) {
+		if (me.getItem(outcome) || outcome === 91 && me.horadricstaff || outcome === 174 && me.travincal) {
 			return true;
 		}
 
@@ -145,9 +145,9 @@ var Quest = {
 	placeStaff: function () {
 		let tick = getTickCount();
 		let orifice = getUnit(2, 152);
-		let hstaff = me.getItem(91);
+		let hstaff = me.staff;
 
-		if (Misc.checkQuest(10, 0)) {
+		if (me.horadricstaff) {
 			return true;
 		}
 
@@ -378,7 +378,7 @@ var Quest = {
 	},
 
 	characterRespec: function () {// Akara reset for build change
-		if (Misc.checkQuest(41, 0)) {
+		if (me.respec) {
 			return true;
 		}
 

@@ -28,7 +28,7 @@ var build = {
 		[40, 1], // Frozen Armor
 		[42, 1], // Static
 		[54, 1, false], // Telekinesis
-		[54, 1, false], // Teleport
+		//[54, 1, false], // Teleport
 		[38, 20], // Charged Bolt
 		[49, 20], // lightning
 	]

@@ -597,18 +597,20 @@ var Overlay = {
 	},
 
 	update: function () {
+		let hideflags = [1, 2, 5, 12, 15, 20, 25, 26, 36];
+
 		while (!me.gameReady) {
-			delay(100);
+			delay(10);
 		}
 
-		if (Misc.getUIFlags() !== null && (Misc.getUIFlags().includes(1) || Misc.getUIFlags().includes(2) || Misc.getUIFlags().includes(5) || Misc.getUIFlags().includes(12) || Misc.getUIFlags().includes(15) || Misc.getUIFlags().includes(20) || Misc.getUIFlags().includes(25) || Misc.getUIFlags().includes(26) || Misc.getUIFlags().includes(36))) {
-			this.text.enabled = false;
+		if (Misc.getUIFlags()) {
+			this.text.enabled = !hideflags.some(flag => Misc.getUIFlags().indexOf(flag) > -1);
 		} else {
 			this.text.enabled = true;
 		}
 
 		this.text.check();
-		delay(950);
+		delay(80);
 	},
 
 	flush: function () {
