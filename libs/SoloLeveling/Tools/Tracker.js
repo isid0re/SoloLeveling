@@ -121,6 +121,8 @@ var Tracker = {
 		GameTracker.OOG = newOOG;
 		GameTracker.LastSave = newSave;
 		Developer.writeObj(GameTracker, Tracker.GTPath);
+
+		return true;
 	},
 
 	Interval: function () {
