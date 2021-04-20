@@ -306,7 +306,6 @@ Precast.summon = function (skillId) {
 				delay(1000 + me.ping);
 				coord = CollMap.getRandCoordinate(me.x, -5, 5, me.y, -5, 5);	//Keeps bots from getting stuck trying to summon
 				Pather.moveTo(coord.x, coord.y);
-
 			} else {
 				coord = CollMap.getRandCoordinate(me.x, -5, 5, me.y, -5, 5);	//Keeps bots from getting stuck trying to summon
 				Pather.moveTo(coord.x, coord.y);

@@ -10,14 +10,10 @@ function den () {
 
 	if (!Pather.checkWP(3)) {
 		Pather.moveToExit(2, true);
-
-		if (me.charlvl < 3) {
-			Attack.clearLevel();
-		}
-
 		Pather.moveToExit(8, false, true);
 		Pather.makePortal();
 		Pather.getWP(3);
+		Attack.clear(50);
 		Pather.useWaypoint(1);
 	}
 
@@ -28,6 +24,7 @@ function den () {
 	}
 
 	Precast.doPrecast(true);
+	Attack.clear(50);
 	Pather.moveToExit(8, true);
 	Attack.clearLevel();
 

@@ -491,7 +491,7 @@ Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
 };
 
 Pather.useUnit = function (type, id, targetArea) {
-	var i, tick, unit, preArea = me.area;
+	var i, coord, tick, unit, preArea = me.area;
 
 	for (i = 0; i < 5; i += 1) {
 		unit = getUnit(type, id);
@@ -510,6 +510,18 @@ Pather.useUnit = function (type, id, targetArea) {
 	for (i = 0; i < 3; i += 1) {
 		if (getDistance(me, unit) > 5) {
 			Pather.moveToUnit(unit);
+		}
+
+		if (type === 2 && unit.mode === 0) {
+			if ((me.area === 83 && targetArea === 100 && me.getQuest(21, 0) !== 1) || (me.area === 120 && targetArea === 128 && me.getQuest(39, 0) !== 1)) {
+				throw new Error("useUnit: Incomplete quest.");
+			}
+
+			if (me.area === 92) {
+				this.openUnit(2, 367);
+			} else {
+				this.openUnit(2, id);
+			}
 		}
 
 		delay(300);
@@ -533,7 +545,8 @@ Pather.useUnit = function (type, id, targetArea) {
 		}
 
 		Packet.flash(me.gid);
-		Pather.moveTo(me.x + 3 * rand(-1, 1), me.y + 3 * rand(-1, 1));
+		coord = CollMap.getRandCoordinate(me.x, -1, 1, me.y, -1, 1, 3);
+		Pather.moveTo(coord.x, coord.y);
 	}
 
 	return targetArea ? me.area === targetArea : me.area !== preArea;
