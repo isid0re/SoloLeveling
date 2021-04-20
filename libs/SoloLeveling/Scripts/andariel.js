@@ -23,10 +23,13 @@ function andariel () {
 
 	Precast.doPrecast(true);
 	Pather.moveToExit([36, 37], true);
-	Town.doChores();
-	Town.buyPots(10, "Antidote"); // antidote
-	Town.drinkPots();
-	Pather.usePortal(37, me.name);
+	let resPenalty = [[0, 20, 50], [0, 40, 100]][me.gametype][me.diff];
+	if ((me.getStat(45) - resPenalty) < 75 + me.getStat(46)) {
+		Town.doChores();
+		Town.buyPots(10, "Antidote"); // antidote
+		Town.drinkPots();
+		Pather.usePortal(37, me.name);
+	}
 	Precast.doPrecast(true);
 	Pather.moveTo(22572, 9635);
 	Pather.moveTo(22554, 9618);
