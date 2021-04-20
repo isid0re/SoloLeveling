@@ -9,8 +9,8 @@ var build = {
 	skillstab: 24, //combat
 	wantedskills: [106, 102], //zeal, holy fire
 	usefulskills: [98, 100], //might, resist fire
-	mercAuraName: "Holy Freeze",
-	mercAuraWanted: 114,
+	mercAuraName: "Defiance",
+	mercAuraWanted: 104,
 	mercDiff: 1,
 	stats: [
 		["vitality", 80], // base 25

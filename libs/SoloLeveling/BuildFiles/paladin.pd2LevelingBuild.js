@@ -10,8 +10,8 @@ var build = {
 	skillstab: 24, //combat
 	wantedskills: [112, 113], // hammers, concentration
 	usefulskills: [117, 108], // holy shield, blessed aim
-	mercAuraName: "Holy Freeze",
-	mercAuraWanted: 114,
+	mercAuraName: "Defiance",
+	mercAuraWanted: 104,
 	mercDiff: 1,
 	stats: [
 		["strength", 47], ["dexterity", 27], ["vitality", 166], ["dexterity", 39], ["strength", 61], ["vitality", 241], ["strength", 89], ["vitality", 330], ["dexterity", "block"], ["vitality", "all"]
