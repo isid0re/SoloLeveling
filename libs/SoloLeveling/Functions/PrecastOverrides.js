@@ -38,7 +38,7 @@ Precast.doPrecast = function (force) {
 			if (!me.getState(20) || force) {
 				this.precastSkill(60); // Chilling Armor
 			}
-		} else if (me.getSkill(40, 0)) {
+		} else if (me.getSkill(40, 0) && (!Developer.pd2)) {
 			if (!me.getState(10) || force) {
 				this.precastSkill(40); // Frozen Armor
 			}
