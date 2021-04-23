@@ -64,7 +64,6 @@ var Tracker = {
 			newIG = GameTracker.InGame + Developer.Timer(newTick),
 			newTotal = GameTracker.Total + Developer.Timer(totalTick),
 			scriptTime = Developer.Timer(starttime),
-		//	questComplete = Quest.Status(subscript),
 			questName = me + "." + subscript,
 			questComplete = questName ? true : false,
 			diffString = Difficulty[me.diff],

@@ -18,7 +18,7 @@ function shenk () {
 	Precast.doPrecast(true);
 	let Eldritch = getUnit(1, getLocaleString(22500));
 
-	if (Attack.canAttack(Eldritch)) {// Eldritch the Rectifier
+	if (Eldritch && Attack.canAttack(Eldritch)) {// Eldritch the Rectifier
 		Pather.moveTo(3745, 5084);
 		Attack.killTarget(getLocaleString(22500));
 		Pickit.pickItems();

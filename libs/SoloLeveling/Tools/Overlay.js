@@ -597,20 +597,22 @@ var Overlay = {
 	},
 
 	update: function () {
-		let hideflags = [1, 2, 5, 12, 15, 20, 25, 26, 36];
+		let hide = [0x01, 0x02, 0x05, 0x0C, 0x0F, 0x14, 0x19, 0x1A, 0x24];
 
 		while (!me.gameReady) {
 			delay(10);
 		}
 
-		if (Misc.getUIFlags()) {
-			this.text.enabled = !hideflags.some(flag => Misc.getUIFlags().indexOf(flag) > -1);
-		} else {
-			this.text.enabled = true;
+		for (let flag = 0; flag < hide.length; flag++) {
+			if (getUIFlag(hide[flag])) {
+				this.text.enabled = false;
+				break;
+			} else {
+				this.text.enabled = true;
+			}
 		}
 
 		this.text.check();
-		delay(80);
 	},
 
 	flush: function () {
