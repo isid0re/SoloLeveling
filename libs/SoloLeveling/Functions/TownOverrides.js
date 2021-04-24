@@ -28,31 +28,7 @@ Town.townTasks = function () {
 		Town.goToTown();
 	}
 
-	let prevTown, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
-
-	switch (me.area) {
-	case 1:
-		prevTown = 1;
-
-		break;
-	case 40:
-		prevTown = 40;
-
-		break;
-	case 75:
-		prevTown = 75;
-
-		break;
-	case 103:
-		prevTown = 103;
-
-		break;
-	case 109:
-		prevTown = 109;
-
-		break;
-	}
-
+	let preAct = me.act, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
 	Attack.weaponSwitch(Attack.getPrimarySlot());
 	this.unfinishedQuests();
 	Runewords.makeRunewords();
@@ -97,8 +73,8 @@ Town.townTasks = function () {
 		Town.drinkPots();
 	}
 
-	if (me.inTown && prevTown && me.area !== prevTown) {
-		Pather.useWaypoint(prevTown);
+	if (me.act !== preAct) {
+		this.goToTown(preAct);
 	}
 
 	if (!me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
@@ -116,31 +92,7 @@ Town.doChores = function (repair = false) {
 		this.goToTown();
 	}
 
-	let prevTown, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
-
-	switch (me.area) {
-	case 1:
-		prevTown = 1;
-
-		break;
-	case 40:
-		prevTown = 40;
-
-		break;
-	case 75:
-		prevTown = 75;
-
-		break;
-	case 103:
-		prevTown = 103;
-
-		break;
-	case 109:
-		prevTown = 109;
-
-		break;
-	}
-
+	let preAct = me.act, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
 	Attack.weaponSwitch(Attack.getPrimarySlot());
 	Runewords.makeRunewords();
 	Cubing.doCubing();
@@ -184,8 +136,8 @@ Town.doChores = function (repair = false) {
 
 	me.cancel();
 
-	if (me.inTown && prevTown && me.area !== prevTown) {
-		Pather.useWaypoint(prevTown);
+	if (me.act !== preAct) {
+		this.goToTown(preAct);
 	}
 
 	if (me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
@@ -648,9 +600,10 @@ Town.unfinishedQuests = function () {
 
 		if (book.interact()) {
 			print('ÿc9SoloLevelingÿc0: used Radament skill book');
-		} else {
-			clickItem(1, book);
+		} else if (clickItem(1, book)) {
 			print('ÿc9SoloLevelingÿc0: used Radament skill book');
+		} else {
+			print('ÿc9SoloLevelingÿc0: failed to used Radament skill book');
 		}
 	}
 
@@ -675,9 +628,10 @@ Town.unfinishedQuests = function () {
 
 		if (pol.interact()) {
 			print('ÿc9SoloLevelingÿc0: used potion of life');
-		} else {
-			clickItem(1, pol);
+		} else if (clickItem(1, pol)) {
 			print('ÿc9SoloLevelingÿc0: used potion of life');
+		} else {
+			print('ÿc9SoloLevelingÿc0: failed to used potion of life');
 		}
 	}
 
@@ -767,9 +721,10 @@ Town.unfinishedQuests = function () {
 
 		if (sor.interact()) {
 			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
-		} else {
-			clickItem(1, sor);
+		} else if (clickItem(1, sor)) {
 			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
+		} else {
+			print('ÿc9SoloLevelingÿc0: failed to used scroll of resistance');
 		}
 	}
 
@@ -1308,4 +1263,44 @@ Town.reviveMerc = function () {
 	}
 
 	return false;
+};
+
+Town.visitTown = function (repair = false) {
+	if (me.inTown) {
+		this.doChores();
+		this.move("stash");
+
+		return true;
+	}
+
+	var preArea = me.area,
+		preAct = me.act;
+
+	try { // not an essential function -> handle thrown errors
+		this.goToTown();
+	} catch (e) {
+		return false;
+	}
+
+	this.doChores(repair);
+
+	if (me.act !== preAct) {
+		this.goToTown(preAct);
+	}
+
+	this.move("portalspot");
+
+	if (!Pather.usePortal(null, me.name)) { // this part is essential
+		try {
+			Pather.usePortal(preArea, me.name);
+		} catch (e) {
+			throw new Error("Town.visitTown: Failed to go back from town");
+		}
+	}
+
+	if (Config.PublicMode) {
+		Pather.makePortal();
+	}
+
+	return true;
 };
