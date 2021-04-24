@@ -92,7 +92,7 @@ Town.townTasks = function () {
 
 	me.cancel();
 
-	if ((me.classid !== 1 && !me.getSkill(115, 0) || me.classid === 1 && !me.getSkill(54, 0)) && (me.area === 40 || me.area === 75)) {
+	if ((!me.sorceress && !me.getSkill(115, 0) || me.sorceress && !me.getSkill(54, 0)) && (me.area === 40 || me.area === 75)) {
 		Town.buyPots(8, "Stamina");
 		Town.drinkPots();
 	}
@@ -101,7 +101,7 @@ Town.townTasks = function () {
 		Pather.useWaypoint(prevTown);
 	}
 
-	if (me.classid !== 4 && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
+	if (!me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
 		Precast.doPrecast(false);
 	}
 
@@ -173,10 +173,6 @@ Town.doChores = function (repair = false) {
 	this.organizeInventory();
 	Quest.characterRespec();
 
-	if (me.classid !== 4 && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
-		Precast.doPrecast(false);
-	}
-
 	for (i = 0; i < cancelFlags.length; i += 1) {
 		if (getUIFlag(cancelFlags[i])) {
 			delay(500);
@@ -190,6 +186,10 @@ Town.doChores = function (repair = false) {
 
 	if (me.inTown && prevTown && me.area !== prevTown) {
 		Pather.useWaypoint(prevTown);
+	}
+
+	if (me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
+		Precast.doPrecast(false);
 	}
 
 	Config.NoTele = me.normal && me.gold < 10000 ? true : !me.normal && me.gold < 50000 ? true : false;
