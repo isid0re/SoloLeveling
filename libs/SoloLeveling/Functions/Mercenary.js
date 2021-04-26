@@ -4,10 +4,9 @@
 *	@desc		Mercenary functionality and Hiring
 */
 
-//	Merc Hire and Setup
-var mercId = [];
-
 var Merc = {
+	Id: [],
+
 	equipMerc: function () {
 		if (!me.classic) {
 			Item.autoEquipMerc();
@@ -37,6 +36,24 @@ var Merc = {
 		}
 
 		return merc;
+	},
+
+	listPacket: function (bytes) {// mercenary hire list info packets
+		let id;
+
+		switch (bytes[0]) {
+		case 0x4e: // merc list packet
+			id = (bytes[2] << 8) + bytes[1];
+
+			if (Merc.Id.indexOf(id) !== -1) {
+				Merc.Id.length = 0;
+			}
+
+			Merc.Id.push(id);
+			break;
+		default:
+			break;
+		}
 	},
 
 	hireMerc: function () {
@@ -85,6 +102,7 @@ var Merc = {
 			return true;
 		}
 
+		addEventListener("gamepacket", Merc.listPacket);
 		Pather.getWP(me.area);
 		me.overhead('getting merc');
 		Town.goToTown(2);
@@ -101,9 +119,9 @@ var Merc = {
 		let greiz = getUnit(1, NPC.Greiz);
 
 		if (greiz && greiz.openMenu()) {
-			while (mercId.length > 0) {
+			while (Merc.Id.length > 0) {
 				Misc.useMenu(0x0D45);
-				sendPacket(1, 0x36, 4, greiz.gid, 4, mercId[0]);
+				sendPacket(1, 0x36, 4, greiz.gid, 4, Merc.Id[0]);
 				delay(500 + me.ping);
 				mercenary = Merc.getMercFix();
 
@@ -136,6 +154,7 @@ var Merc = {
 		this.equipMerc();
 		Pickit.pickItems(); // safetycheck for merc items on ground
 		this.equipMerc();
+		removeEventListener("gamepacket", Merc.listPacket);
 
 		return true;
 	},

@@ -9,7 +9,7 @@ function andariel () {
 	print('ÿc9SoloLevelingÿc0: starting andy');
 	me.overhead("andy");
 
-	if (me.diff === 0 && Misc.checkQuest(6, 1)) {
+	if (me.normal && Misc.checkQuest(6, 1)) {
 		Pather.changeAct();
 
 		return true;
@@ -24,12 +24,14 @@ function andariel () {
 	Precast.doPrecast(true);
 	Pather.moveToExit([36, 37], true);
 	let resPenalty = [[0, 20, 50], [0, 40, 100]][me.gametype][me.diff];
+
 	if ((me.getStat(45) - resPenalty) < 75 + me.getStat(46)) {
 		Town.doChores();
 		Town.buyPots(10, "Antidote"); // antidote
 		Town.drinkPots();
 		Pather.usePortal(37, me.name);
 	}
+
 	Precast.doPrecast(true);
 	Pather.moveTo(22572, 9635);
 	Pather.moveTo(22554, 9618);
@@ -43,7 +45,7 @@ function andariel () {
 	Pickit.pickItems();
 	Config.MercWatch = true;
 
-	if (!Misc.checkQuest(7, 0)) {
+	if (!me.andariel) {
 		Pather.changeAct();
 	}
 

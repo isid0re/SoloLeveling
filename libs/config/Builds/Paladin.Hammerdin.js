@@ -41,7 +41,7 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [-1, 112, 113, 112, 113, 97, 113];
 			Config.LowManaSkill = [0, 113];
 
-			if (me.diff === 2 && !Pather.accessToAct(5)) {
+			if (me.hell && !Pather.accessToAct(5)) {
 				Config.SkipImmune = ["magic"];
 			}
 		}

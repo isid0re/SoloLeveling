@@ -32,7 +32,7 @@ function travincal () {
 
 	Attack.clear(10); // clear area around orb
 
-	if (!Misc.checkQuest(18, 0)) { // khalim's will quest not complete
+	if (!me.travincal) { // khalim's will quest not complete
 		if (!me.getItem(174) && me.getItem(173)) { // cube flail to will
 			Quest.cubeItems(174, 553, 554, 555, 173);
 			delay(250 + me.ping);

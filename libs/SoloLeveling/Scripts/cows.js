@@ -137,10 +137,6 @@ function cows () {
 		return true;
 	};
 
-	if (me.gametype === 0 && !Misc.checkQuest(26, 0) || !Misc.checkQuest(40, 0) || Misc.checkQuest(4, 10)) {
-		return true;
-	}
-
 	NTIP.addLine("[Name] == wirt'sleg");
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting cows');

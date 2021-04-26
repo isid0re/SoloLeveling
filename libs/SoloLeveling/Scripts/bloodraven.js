@@ -16,7 +16,7 @@ function bloodraven () {
 
 	Precast.doPrecast(true);
 
-	if (me.diff === 0) {
+	if (me.normal) {
 		me.overhead("blood raven");
 		Attack.clearLevel(0x7);
 		Pather.moveToExit(17, true);
