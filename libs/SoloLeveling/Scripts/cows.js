@@ -79,7 +79,7 @@ function cows () {
 
 		Pather.useWaypoint(4); // get leg
 		Precast.doPrecast(true);
-		Pather.moveToPreset(me.area, 1, 737, 8, 8);
+		Pather.moveToPreset(4, 1, 737, 8, 8);
 		Pather.usePortal(38);
 		Pather.moveTo(25048, 5177);
 		Quest.collectItem(88, 268);

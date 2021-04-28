@@ -1,15 +1,20 @@
 /*
-Sorceress.SoloLeveling.js config file
-	To select your finalbuild.
-	1. Go into the D2BS console manager.
-	2. Select the Bots profile
-	3. In the info tag box enter one of the following choices:
-		Meteorb
-		Blizzard
-		BlizzBaller
-		Blova
-	4. Save the profile and start
+*	@filename	Sorceress.SoloLeveling.js
+*	@author		isid0re
+*	@desc		Config Settings for SoloLeveling Sorceress
+*
+*	FinalBuild choices
+*		To select your finalbuild.
+*		1. Go into the D2BS console manager.
+*		2. Select the Bots profile
+*		3. In the info tag box enter one of the following choices:
+*			Meteorb
+*			Blizzard
+*			BlizzBaller
+*			Blova
+*		4. Save the profile and start
 */
+
 function LoadConfig () {
 	if (!isIncluded("common/Storage.js")) {
 		include("common/Storage.js");
@@ -23,18 +28,17 @@ function LoadConfig () {
 		include("NTItemParser.dbl");
 	}
 
-	if (!isIncluded("bots/SoloLeveling.js")) {
-		include("bots/SoloLeveling.js");
+	if (!isIncluded("SoloLeveling/Functions/Globals.js")) {
+		include("SoloLeveling/Functions/Globals.js");
 	}
+
+	SetUp.include();
 
 	/* Script */
 	Scripts.UserAddon = false;
 	Scripts.SoloLeveling = true;
 
 	/* General configuration. */
-	var respecTwo = respecTwoCheck();
-	var chooseBuffer = me.charlvl < 5 ? 0 : me.charlvl < respecOne ? 1 : me.charlvl < respecTwo ? 2 : 3;
-
 	Config.MinGameTime = 400;
 	Config.MaxGameTime = 7200;
 	Config.MiniShopBot = true;
@@ -43,8 +47,8 @@ function LoadConfig () {
 	Config.LogExperience = false;
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
-	Config.OpenChests = me.diff === 2 ? 2 : true;
-	Config.LowGold = me.diff === 0 ? 25000 : me.diff === 1 ? 50000 : 100000;
+	Config.OpenChests = me.hell ? 2 : true;
+	Config.LowGold = me.normal ? 25000 : me.nightmare ? 50000 : 100000;
 	Config.PrimarySlot = 0;
 	Config.PacketCasting = 1;
 	Config.WaypointMenu = true;
@@ -53,7 +57,7 @@ function LoadConfig () {
 
 	/* General logging. */
 	Config.ItemInfo = false;
-	Config.LogKeys = true;
+	Config.LogKeys = false;
 	Config.LogOrgans = false;
 	Config.LogMiddleRunes = true;
 	Config.LogHighRunes = true;
@@ -80,33 +84,25 @@ function LoadConfig () {
 	Config.UseRejuvHP = me.playertype ? 65 : 40;
 	Config.UseMP = me.playertype ? 75 : 55;
 	Config.UseMercHP = 75;
-	Config.HPBuffer = 0;
-	Config.MPBuffer = 0;
-	Config.RejuvBuffer = 0;
 
 	/* Belt configuration. */
-	var beltPots = [/* new char belt */["hp", "hp", "hp", "hp"], /* startbuild belt */["hp", "hp", "mp", "mp"], /* levelingbuild belt */["hp", "hp", "mp", "mp"], /* Final belt */["hp", "mp", "mp", "rv"]][chooseBuffer];
-
-	Config.BeltColumn = beltPots;
+	Config.BeltColumn = ["hp", "mp", "mp", "rv"];
 	Config.MinColumn[0] = Config.BeltColumn[0] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[1] = Config.BeltColumn[1] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[2] = Config.BeltColumn[2] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[3] = Config.BeltColumn[3] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 
 	/* Inventory buffers and lock configuration. */
-	var bufferHP = [4, 4, 4, 2][chooseBuffer];
-	var bufferMP = [12, 10, 10, 4][chooseBuffer];
-	var bufferRV = [0, 4, 4, 4][chooseBuffer];
-	Config.HPBuffer = bufferHP;
-	Config.MPBuffer = bufferMP;
-	Config.RejuvBuffer = bufferRV;
+	Config.HPBuffer = 0;
+	Config.MPBuffer = 0;
+	Config.RejuvBuffer = 4;
 	Config.Inventory[0] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[1] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[2] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	/* Pickit configuration. */
-	Config.PickRange = me.diff === 2 ? 40 : 20;
+	Config.PickRange = me.hell ? 40 : 30;
 	Config.FastPick = false;
 	Config.CainID.Enable = false;
 	Config.FieldID = false;
@@ -115,10 +111,10 @@ function LoadConfig () {
 
 	/* Gambling configuration. */
 	Config.Gamble = true;
-	Config.GambleGoldStart = 2000000;
+	Config.GambleGoldStart = 1250000;
 	Config.GambleGoldStop = 750000;
 	Config.GambleItems.push("Amulet");
-	//Config.GambleItems.push("Ring");
+	Config.GambleItems.push("Ring");
 	Config.GambleItems.push("Circlet");
 	Config.GambleItems.push("Coronet");
 
@@ -186,29 +182,29 @@ function LoadConfig () {
 	var autoequipmercTiers = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
+		"me.charlvl > 14 && [Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 	];
 	NTIP.arrayLooping(autoequipmercTiers);
 
 	/* FastMod configuration. */
-	Config.FCR = me.getStat(105);
-	Config.FHR = me.getStat(99);
-	Config.FBR = me.getStat(102);
-	Config.IAS = me.getStat(93);
+	Config.FCR = 255;
+	Config.FHR = 255;
+	Config.FBR = 255;
+	Config.IAS = 255;
 
 	/* Attack configuration. */
 	Config.AttackSkill = [0, 0, 0, 0, 0, 0, 0];
-	Config.LowManaSkill = [0, 0];
+	Config.LowManaSkill = [-1, -1];
 	Config.MaxAttackCount = 1000;
-	Config.BossPriority = me.diff === 0 ? true : false;
+	Config.BossPriority = me.normal ? true : false;
 	Config.ClearType = 0;
 	Config.ClearPath = {
-		Range: 9,
-		Spectype: 0,
+		Range: 30,
+		Spectype: 0xF,
 	};
 
 	/* Monster skip configuration. */
-	Config.SkipException = [getLocaleString(2851), getLocaleString(2852), getLocaleString(2853)]; // vizer, de seis, infector
+	Config.SkipException = [];
 	Config.SkipEnchant = [];
 	Config.SkipAura = [];
 
@@ -220,31 +216,31 @@ function LoadConfig () {
 	Config.AutoStat.Save = 0;
 	Config.AutoStat.BlockChance = 57;
 	Config.AutoStat.UseBulk = true;
-	Config.AutoStat.Build = specPush("stats");
+	Config.AutoStat.Build = SetUp.specPush("stats");
 
 	/* AutoSkill configuration. */
 	Config.AutoSkill.Enabled = true;
 	Config.AutoSkill.Save = 0;
-	Config.AutoSkill.Build = specPush("skills");
+	Config.AutoSkill.Build = SetUp.specPush("skills");
 
 	/* AutoBuild configuration. */
 	Config.AutoBuild.Enabled = true;
 	Config.AutoBuild.Verbose = false;
 	Config.AutoBuild.DebugMode = false;
-	Config.AutoBuild.Template = getBuild();
+	Config.AutoBuild.Template = SetUp.getBuild();
 
 	/* Class specific configuration. */
-	Config.UseTelekinesis = !!me.getSkill(43, 0); // use telekensis if have skill
-	Config.Dodge = !!me.getSkill(54, 0); // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
+	Config.UseTelekinesis = !!me.getSkill(43, 0); // use telekinesis if have skill
+	Config.Dodge = me.charlvl >= SetUp.respecOne ? true : false; // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
 	Config.DodgeRange = 15; // Distance to keep from monsters.
-	Config.DodgeHP = 100; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
+	Config.DodgeHP = 90; // Dodge only if HP percent is less than or equal to Config.DodgeHP. 100 = always dodge.
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
-	Config.CastStatic = 50;
-	Config.StaticList = ["Duriel", "Mephisto", "Izual", "Diablo", "Baal"];
+	Config.CastStatic = me.normal ? 15 : me.nightmare ? 33 : 50;
+	Config.StaticList = me.normal ? ["Andarial", "Duriel", "Mephisto", "Izual", "Diablo", "Talic", "Madawc", "Korlic", "Baal"] : ["Andarial", "Duriel", "Mephisto", "Izual", "Diablo", "Baal"];
 
 	/* LOD gear */
-	if (me.gametype === 1) {
-		if (!haveItem("sword", "runeword", "Call To Arms")) {
+	if (!me.classic) {
+		if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
 			var CTA = [
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
 				"[Name] == RalRune # # [MaxQuantity] == 1",
@@ -263,7 +259,7 @@ function LoadConfig () {
 		}
 
 		if (me.ladder > 0 && Item.getEquippedItem(4).tier < 777) { // Spirit Sword
-			if (!haveItem("sword", "runeword", "Spirit") && me.diff !== 2) {
+			if (!Check.haveItem("sword", "runeword", "Spirit") && !me.hell) {
 				var SpiritSword = [
 					"[Name] == TalRune # # [MaxQuantity] == 1",
 					"[Name] == ThulRune # # [MaxQuantity] == 1",
@@ -292,7 +288,7 @@ function LoadConfig () {
 		}
 
 		if (me.ladder > 0 && Item.getEquippedItem(5).tier < 1000) { // Spirit shield
-			if (!haveItem("shield", "runeword", "Spirit") && me.diff === 2) {
+			if (!Check.haveItem("shield", "runeword", "Spirit") && me.hell) {
 				var SpiritShield = [
 					"[Name] == TalRune # # [MaxQuantity] == 1",
 					"[Name] == ThulRune # # [MaxQuantity] == 1",
@@ -334,7 +330,7 @@ function LoadConfig () {
 		}
 
 		if (Item.getEquippedItem(1).tier < 315) { // Lore
-			if (!haveItem("helm", "runeword", "Lore")) {
+			if (!Check.haveItem("helm", "runeword", "Lore")) {
 				var loreRunes = [
 					"[Name] == OrtRune # # [MaxQuantity] == 1",
 					"[Name] == SolRune # # [MaxQuantity] == 1",
@@ -362,8 +358,8 @@ function LoadConfig () {
 		}
 
 		if (Item.getEquippedItem(5).tier < 500) { // Ancients' Pledge
-			if (!haveItem("shield", "runeword", "Ancients' Pledge") && me.diff !== 2) {
-				if (me.diff === 0 && !me.getItem(618)) {
+			if (!Check.haveItem("shield", "runeword", "Ancients' Pledge") && !me.hell) {
+				if (me.normal && !me.getItem(618)) {
 					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 				}
 
@@ -429,7 +425,7 @@ function LoadConfig () {
 		}
 
 		if (Item.getEquippedItem(3).tier < 634) { // Smoke
-			if (!haveItem("armor", "runeword", "Smoke") && me.diff !== 2) {
+			if (!Check.haveItem("armor", "runeword", "Smoke") && !me.hell) {
 				if (!me.getItem(626)) { // Cube to Lum Rune
 					Config.Recipes.push([Recipe.Rune, "Io Rune"]); // cube Io to Lum
 				}
@@ -456,7 +452,7 @@ function LoadConfig () {
 		}
 
 		if (Item.getEquippedItem(3).tier < 233) { // Stealth
-			if (!haveItem("armor", "runeword", "Stealth") && me.diff === 0) {
+			if (!Check.haveItem("armor", "runeword", "Stealth") && me.normal) {
 				var stealthRunes = [
 					"[Name] == TalRune # # [MaxQuantity] == 1",
 					"[Name] == EthRune # # [MaxQuantity] == 1",

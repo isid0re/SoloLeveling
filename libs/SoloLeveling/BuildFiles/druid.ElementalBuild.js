@@ -9,6 +9,9 @@ var build = {
 	skillstab: 42, // elemental
 	wantedskills: [225, 234], // firestorm, fissure
 	usefulskills: [235], // cyclone armor
+	mercAuraName: "Blessed Aim",
+	mercAuraWanted: 108,
+	mercDiff: 0,
 	stats: [
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
 	],

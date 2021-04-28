@@ -3,65 +3,86 @@
 *	@author		isid0re
 *	@desc		Miscellaneous quest tasks for leveling
 */
+
 var Quest = {
 	preReqs: function () {
-		if (me.act === 2 && !Misc.checkQuest(10, 0) && !me.getItem(91)) { // horadric staff
-			if (!me.getItem(521)) {
+		if (Pather.accessToAct(2) && !me.staff && !me.horadricstaff) { // horadric staff
+			if (!me.amulet) {
 				if (!isIncluded("SoloLeveling/Scripts/amulet.js")) {
 					include("SoloLeveling/Scripts/amulet.js");
 				}
 
 				for (let getAmmy = 0; getAmmy < 5; getAmmy++) {
 					amulet();
+
+					if (me.amulet) {
+						break;
+					}
 				}
 			}
 
-			if (!me.getItem(92)) {
+			if (!me.shaft) {
 				if (!isIncluded("SoloLeveling/Scripts/staff.js")) {
 					include("SoloLeveling/Scripts/staff.js");
 				}
 
 				for (let getStaff = 0; getStaff < 5; getStaff++) {
 					staff();
+
+					if (me.shaft) {
+						break;
+					}
 				}
 			}
 		}
 
-		if (me.act === 3 && !Misc.checkQuest(18, 0) && !me.getItem(174)) { // khalim's will
-			if (!me.getItem(553)) {
+		if (Pather.accessToAct(3) && !me.travincal && !me.khalimswill) { // khalim's will
+			if (!me.eye) {
 				if (!isIncluded("SoloLeveling/Scripts/eye.js")) {
 					include("SoloLeveling/Scripts/eye.js");
 				}
 
 				for (let getEye = 0; getEye < 5; getEye++) {
 					eye();
+
+					if (me.eye) {
+						break;
+					}
 				}
 			}
 
-			if (!me.getItem(554)) {
+			if (!me.heart) {
 				if (!isIncluded("SoloLeveling/Scripts/heart.js")) {
 					include("SoloLeveling/Scripts/heart.js");
 				}
 
 				for (let getHeart = 0; getHeart < 5; getHeart++) {
 					heart();
+
+					if (me.heart) {
+						break;
+					}
 				}
 			}
 
-			if (!me.getItem(555)) {
+			if (!me.brain) {
 				if (!isIncluded("SoloLeveling/Scripts/brain.js")) {
 					include("SoloLeveling/Scripts/brain.js");
 				}
 
 				for (let getBrain = 0; getBrain < 5; getBrain++) {
 					brain();
+
+					if (me.brain) {
+						break;
+					}
 				}
 			}
 		}
 	},
 
 	cubeItems: function (outcome, ...classids) {
-		if (me.getItem(outcome) || outcome === 91 && Misc.checkQuest(10, 0) || outcome === 174 && Misc.checkQuest(18, 0)) {
+		if (me.getItem(outcome) || outcome === 91 && me.horadricstaff || outcome === 174 && me.travincal) {
 			return true;
 		}
 
@@ -124,9 +145,9 @@ var Quest = {
 	placeStaff: function () {
 		let tick = getTickCount();
 		let orifice = getUnit(2, 152);
-		let hstaff = me.getItem(91);
+		let hstaff = me.staff;
 
-		if (Misc.checkQuest(10, 0)) {
+		if (me.horadricstaff) {
 			return true;
 		}
 
@@ -260,7 +281,7 @@ var Quest = {
 		let questItem;
 		let tick = getTickCount();
 
-		while (getTickCount() - tick < 2000) {
+		while (getTickCount() - tick < 5000) {
 			questItem = getUnit(4, classid);
 
 			if (questItem) {
@@ -354,5 +375,33 @@ var Quest = {
 		}
 
 		return !me.getItem(tool);
+	},
+
+	characterRespec: function () {// Akara reset for build change
+		if (me.respec) {
+			return true;
+		}
+
+		if (me.charlvl === SetUp.respecOne || me.charlvl === SetUp.respecTwo()) {
+			Precast.doPrecast(true);
+			Town.goToTown(1);
+			me.overhead('time to respec');
+			Town.npcInteract("akara");
+			delay(10 + me.ping * 2);
+
+			if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
+				return false;
+			}
+
+			delay(750 + me.ping * 2);
+			Town.clearBelt();
+			delay(250 + me.ping);
+			let script = getScript("default.dbj");
+			script.stop();
+			load("default.dbj");
+			Item.autoEquip();
+		}
+
+		return true;
 	},
 };

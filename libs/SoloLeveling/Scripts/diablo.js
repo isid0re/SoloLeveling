@@ -5,16 +5,6 @@
 */
 
 function diablo () {
-	if (Misc.checkQuest(26, 0) && !Misc.checkQuest(28, 0)) {
-		Pather.changeAct();
-
-		return true;
-	}
-
-	if (!Misc.checkQuest(25, 0)) { // Izual quest completion check
-		Town.npcInteract("tyrael");
-	}
-
 	this.getLayout = function (seal, value) {// Start Diablo Quest
 		let sealPreset = getPresetUnit(108, 2, seal);
 
@@ -106,11 +96,21 @@ function diablo () {
 	};
 
 	this.diabloPrep = function () {
-		let tick = getTickCount();
+		let tick = getTickCount(), decoyDuration = (10 + me.getSkill(28, 1) * 5) * 1000;
 
 		while (getTickCount() - tick < 17500) {
 			if (getTickCount() - tick >= 8000) {
 				switch (me.classid) {
+				case 0: //Amazon
+					if (me.getSkill(28, 1)) {
+						let decoy = getUnit(1, 356);
+
+						if (!decoy || (getTickCount() - tick >= decoyDuration)) {
+							Skill.cast(28, 0, 7793, 5293);
+						}
+					}
+
+					break;
 				case 1: // Sorceress
 					if ([56, 59, 64].indexOf(Config.AttackSkill[1]) > -1) {
 						if (me.getState(121)) {
@@ -260,9 +260,11 @@ function diablo () {
 		this.openSeal(394);
 
 		if (this.seisLayout === 1) {
-			Pather.moveTo(7771, 5196, 3, 30);
+			// Pather.moveTo(7771, 5196);
+			Pather.moveTo(7798, 5194, 3, 30); // safe location
 		} else {
-			Pather.moveTo(7798, 5186, 3, 30);
+			// Pather.moveTo(7798, 5186);
+			Pather.moveTo(7796, 5155, 3, 30); // safe location
 		}
 
 		if (!this.getBoss(getLocaleString(2852))) {

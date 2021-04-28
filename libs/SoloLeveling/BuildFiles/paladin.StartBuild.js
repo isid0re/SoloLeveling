@@ -1,6 +1,7 @@
 /**
- *    @filename   paladin.startBuild.js
- *    @desc       paladin build for before respecOne
+ *    @filename  	paladin.startBuild.js
+ *	  @author	  	isid0re
+ *    @desc     	paladin build for before respecOne
  */
 
 var build = {
@@ -8,6 +9,9 @@ var build = {
 	skillstab: 24, //combat
 	wantedskills: [106, 102], //zeal, holy fire
 	usefulskills: [98, 100], //might, resist fire
+	mercAuraName: "Holy Freeze",
+	mercAuraWanted: 114,
+	mercDiff: 1,
 	stats: [
 		["vitality", 80], // base 25
 		["dexterity", 27], // base 20

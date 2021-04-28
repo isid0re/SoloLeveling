@@ -1,134 +1,13 @@
 /*
 *	@filename	OOGOverrides.js
-*	@author		theBGuy, isid0re
+*	@author		isid0re
 *	@desc		OOG.js fixes to improve functionality
+* 	@credits	kolton, D3STROY3R, theBGuy
 */
 
 if (!isIncluded("OOG.js")) {
 	include("OOG.js");
 }
-
-DataFile.create = function () {
-	var obj, string;
-
-	obj = {
-		runs: 0,
-		experience: 0,
-		deaths: 0,
-		lastArea: "",
-		gold: 0,
-		level: 0,
-		name: "",
-		gameName: "",
-		ingameTick: 0,
-		handle: 0,
-		nextGame: "",
-		chickens: 0
-	};
-
-	string = JSON.stringify(obj);
-
-	//FileTools.writeText("data/" + me.profile + ".json", string);
-	Misc.fileAction("data/" + me.profile + ".json", 1, string);
-
-	return obj;
-};
-
-DataFile.getObj = function () {
-	var obj, string;
-
-	if (!FileTools.exists("data/" + me.profile + ".json")) {
-		DataFile.create();
-	}
-
-	//string = FileTools.readText("data/" + me.profile + ".json");
-	string = Misc.fileAction("data/" + me.profile + ".json", 0);
-
-	try {
-		obj = JSON.parse(string);
-	} catch (e) {
-		// If we failed, file might be corrupted, so create a new one
-		obj = this.create();
-	}
-
-	if (obj) {
-		return obj;
-	}
-
-	print("Error reading DataFile. Using null values.");
-
-	return {runs: 0, experience: 0, lastArea: "", gold: 0, level: 0, name: "", gameName: "", ingameTick: 0, handle: 0, nextGame: "", chickens: 0};
-};
-
-DataFile.updateStats = function (arg, value) {
-	while (me.ingame && !me.gameReady) {
-		delay(100);
-	}
-
-	var i, obj, string,
-		statArr = [];
-
-	if (typeof arg === "object") {
-		statArr = arg.slice();
-	}
-
-	if (typeof arg === "string") {
-		statArr.push(arg);
-	}
-
-	obj = this.getObj();
-
-	for (i = 0; i < statArr.length; i += 1) {
-		switch (statArr[i]) {
-		case "experience":
-			obj.experience = me.getStat(13);
-			obj.level = me.getStat(12);
-
-			break;
-		case "lastArea":
-			if (obj.lastArea === Pather.getAreaName(me.area)) {
-				return;
-			}
-
-			obj.lastArea = Pather.getAreaName(me.area);
-
-			break;
-		case "gold":
-			if (!me.gameReady) {
-				break;
-			}
-
-			obj.gold = me.getStat(14) + me.getStat(15);
-
-			break;
-		case "name":
-			obj.name = me.name;
-
-			break;
-		case "ingameTick":
-			obj.ingameTick = getTickCount();
-
-			break;
-		case "deaths":
-			obj.deaths = (obj.deaths || 0) + 1;
-
-			break;
-		case "chickens":
-			obj.chickens += 1;
-
-			break;
-		default:
-			obj[statArr[i]] = value;
-
-			break;
-		}
-	}
-
-	string = JSON.stringify(obj);
-
-	//FileTools.writeText("data/" + me.profile + ".json", string);
-	Misc.fileAction("data/" + me.profile + ".json", 1, string);
-};
 
 ControlAction.makeCharacter = function (info) {
 	me.blockMouse = true;

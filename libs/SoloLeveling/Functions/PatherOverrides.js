@@ -19,12 +19,8 @@ NodeAction.killMonsters = function (arg) {
 		}
 	}
 
-	if ([8, 3, 38, 6, 27, 28, 33, 56, 57, 60, 45, 58, 61, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
-		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30); // summoner targeting provided by penguins0690
-
-		if (monList) {
-			Attack.clearList(monList);
-		}
+	if (!me.inTown) {
+		Attack.clear(7, 0);
 	}
 
 	if ([39].indexOf(me.area) > -1) {
@@ -46,11 +42,13 @@ NodeAction.killMonsters = function (arg) {
 	if ((typeof Config.ClearPath === "number" || typeof Config.ClearPath === "object") && arg.clearPath === false) {
 		switch (typeof Config.ClearPath) {
 		case "number":
+			Attack.clear(7, 0);
 			Attack.clear(30, Config.ClearPath);
 
 			break;
 		case "object":
 			if (!Config.ClearPath.hasOwnProperty("Areas") || Config.ClearPath.Areas.length === 0 || Config.ClearPath.Areas.indexOf(me.area) > -1) {
+				Attack.clear(7, 0);
 				Attack.clear(Config.ClearPath.Range, Config.ClearPath.Spectype);
 			}
 
@@ -59,27 +57,17 @@ NodeAction.killMonsters = function (arg) {
 	}
 
 	if (arg.clearPath !== false) {
+		Attack.clear(7, 0);
 		Attack.clear(15, typeof arg.clearPath === "number" ? arg.clearPath : 0);
 	}
 };
 
 NodeAction.popChests = function () {
 	if (Config.OpenChests) {
-		Misc.openChests(Config.ClearPath.Range);
-
-		let well = getUnit(2, "Well", 0);
-
-		if (well) {
-			do {
-				if (getDistance(me, well) <= 5 || Pather.moveToUnit(well, 3, 0)) {
-					for (let w = 0; w < 3; w++) {
-						Misc.click(0, 0, well);
-						delay(25 + me.ping);
-					}
-				}
-			} while (well.getNext());
-		}
+		Misc.openChests(10);
 	}
+
+	Misc.useWell(10);
 };
 
 Pather.checkWP = function (area) {
@@ -122,6 +110,10 @@ Pather.checkWP = function (area) {
 	return getWaypoint(Pather.wpAreas.indexOf(area));
 };
 
+Pather.useTeleport = function () { //XCon provided. to turn off teleport if below 20% mana
+	return this.teleport && !Config.NoTele && !me.getState(139) && !me.getState(140) && !me.inTown && ((me.classid === 1 && me.getSkill(54, 1) && ((me.getStat(8) / me.getStat(9)) * 100) >= 20) || me.getStat(97, 54));
+};
+
 Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 	if (me.inTown) {
 		return false;
@@ -158,61 +150,33 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 
 	// Monsta doors (Barricaded)
 	var p,
-		monstadoor1 = getUnit(1, 432), //barricaded door 1
-		monstadoor2 = getUnit(1, 433), //barricaded door 2
-		monstawall1 = getUnit(1, 524), //barricaded wall 1
-		monstawall2 = getUnit(1, 525); //barricaded wall 2
+		monstadoor = getUnit(1, "Barricaded Door"), //barricaded door
+		monstawall = getUnit(1, "Barricade"); //barricaded wall
 
-	if (monstadoor1) {
+	if (monstadoor) {
 		do {
-			if ((getDistance(monstadoor1, x, y) < 4 && getDistance(me, monstadoor1) < 9) || getDistance(me, monstadoor1) < 4) {
+			if ((getDistance(monstadoor, x, y) < 4 && getDistance(me, monstadoor) < 9) || getDistance(me, monstadoor) < 4) {
 
-				for (p = 0; p < 20 && monstadoor1.hp; p += 1) {
-					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstadoor1);
+				for (p = 0; p < 20 && monstadoor.hp; p += 1) {
+					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstadoor);
 				}
 
 				me.overhead("Broke a barricaded door!");
 			}
-		} while (monstadoor1.getNext());
+		} while (monstadoor.getNext());
 	}
 
-	if (monstadoor2) {
+	if (monstawall) {
 		do {
-			if ((getDistance(monstadoor2, x, y) < 4 && getDistance(me, monstadoor2) < 9) || getDistance(me, monstadoor2) < 4) {
+			if ((getDistance(monstawall, x, y) < 4 && getDistance(me, monstawall) < 9) || getDistance(me, monstawall) < 4) {
 
-				for (p = 0; p < 20 && monstadoor2.hp; p += 1) {
-					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstadoor2);
-				}
-
-				me.overhead("Broke a barricaded door!");
-			}
-		} while (monstadoor2.getNext());
-	}
-
-	if (monstawall1) {
-		do {
-			if ((getDistance(monstawall1, x, y) < 4 && getDistance(me, monstawall1) < 9) || getDistance(me, monstawall1) < 4) {
-
-				for (p = 0; p < 20 && monstawall1.hp; p += 1) {
-					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstawall1);
+				for (p = 0; p < 20 && monstawall.hp; p += 1) {
+					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstawall);
 				}
 
 				me.overhead("Broke a barricaded wall!");
 			}
-		} while (monstawall1.getNext());
-	}
-
-	if (monstawall2) {
-		do {
-			if ((getDistance(monstawall2, x, y) < 4 && getDistance(me, monstawall2) < 9) || getDistance(me, monstawall2) < 4) {
-
-				for (p = 0; p < 20 && monstawall2.hp; p += 1) {
-					Skill.cast(Config.AttackSkill[1], Skill.getHand(Config.AttackSkill[1]), monstawall2);
-				}
-
-				me.overhead("Broke a barricaded wall!");
-			}
-		} while (monstawall2.getNext());
+		} while (monstawall.getNext());
 	}
 
 	return false;
@@ -302,7 +266,7 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 	}
 
 	if (clearPath === undefined) {
-		clearPath = false;
+		clearPath = true;
 	}
 
 	if (pop === undefined) {
@@ -371,6 +335,7 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 				if (fail > 0 && !useTeleport && !me.inTown) {
 					if (!cleared) {
 						Attack.clear(5);
+						Misc.openChests(2);
 
 						cleared = true;
 					}
@@ -489,4 +454,100 @@ Pather.makePortal = function (use) {
 	}
 
 	return false;
+};
+
+Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
+	var useTeleport = this.useTeleport();
+
+	if (offX === undefined) {
+		offX = 0;
+	}
+
+	if (offY === undefined) {
+		offY = 0;
+	}
+
+	if (clearPath === undefined) {
+		clearPath = true;
+	}
+
+	if (pop === undefined) {
+		pop = false;
+	}
+
+	if (!unit || !unit.hasOwnProperty("x") || !unit.hasOwnProperty("y")) {
+		throw new Error("moveToUnit: Invalid unit.");
+	}
+
+	if (unit instanceof PresetUnit) {
+		return this.moveTo(unit.roomx * 5 + unit.x + offX, unit.roomy * 5 + unit.y + offY, 3, clearPath);
+	}
+
+	if (!useTeleport) {
+		this.moveTo(unit.x + offX, unit.y + offY, 0, clearPath, true);	// The unit will most likely be moving so call the first walk with 'pop' parameter
+	}
+
+	return this.moveTo(unit.x + offX, unit.y + offY, useTeleport && unit.type && unit.type === 1 ? 3 : 0, clearPath, pop);
+};
+
+Pather.useUnit = function (type, id, targetArea) {
+	var i, coord, tick, unit, preArea = me.area;
+
+	for (i = 0; i < 5; i += 1) {
+		unit = getUnit(type, id);
+
+		if (unit) {
+			break;
+		}
+
+		delay(200);
+	}
+
+	if (!unit) {
+		throw new Error("useUnit: Unit not found. TYPE: " + type + " ID: " + id + " AREA: " + me.area);
+	}
+
+	for (i = 0; i < 3; i += 1) {
+		if (getDistance(me, unit) > 5) {
+			Pather.moveToUnit(unit);
+		}
+
+		if (type === 2 && unit.mode === 0) {
+			if ((me.area === 83 && targetArea === 100 && me.getQuest(21, 0) !== 1) || (me.area === 120 && targetArea === 128 && me.getQuest(39, 0) !== 1)) {
+				throw new Error("useUnit: Incomplete quest.");
+			}
+
+			if (me.area === 92) {
+				this.openUnit(2, 367);
+			} else {
+				this.openUnit(2, id);
+			}
+		}
+
+		delay(300);
+
+		if (type === 5) {
+			Misc.click(0, 0, unit);
+		} else {
+			sendPacket(1, 0x13, 4, unit.type, 4, unit.gid);
+		}
+
+		tick = getTickCount();
+
+		while (getTickCount() - tick < 3000) {
+			if ((!targetArea && me.area !== preArea) || me.area === targetArea) {
+				delay(100);
+
+				return true;
+			}
+
+			delay(10);
+		}
+
+		Packet.flash(me.gid);
+		coord = CollMap.getRandCoordinate(me.x, -1, 1, me.y, -1, 1, 3);
+		Pather.moveTo(coord.x, coord.y);
+	}
+
+	return targetArea ? me.area === targetArea : me.area !== preArea;
 };

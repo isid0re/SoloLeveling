@@ -1,5 +1,6 @@
 /**
  *    @filename   paladin.SmiterBuild.js
+ *	  @author	  isid0re
  *    @desc       paladin build for after level 65  a Smiter Build
  */
 
@@ -8,6 +9,9 @@ var build = {
 	skillstab: 24, //combat
 	wantedskills: [97, 122], //smite, fanaticism
 	usefulskills: [117, 125], //holy shield, salvation
+	mercAuraName: "Holy Freeze",
+	mercAuraWanted: 114,
+	mercDiff: 1,
 	stats: [
 		["strength", 115], ["vitality", "300"], ["dexterity", "block"], ["vitality", "all"]
 	],

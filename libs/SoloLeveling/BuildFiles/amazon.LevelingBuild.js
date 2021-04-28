@@ -1,4 +1,4 @@
-/**
+/*
  *    @filename   amazon.LightBuild.js
  *	  @author	  theBGuy
  *    @desc       amazon build for after respecOne
@@ -9,6 +9,9 @@ var build = {
 	skillstab: 2, // Jav N Spear Skills
 	wantedskills: [24, 34], // Charged Strike, Lightning Strike
 	usefulskills: [9, 23, 32, 33], // Critical Strike, Penetrate, Valkyrie, Pierce
+	mercAuraName: "Holy Freeze",
+	mercAuraWanted: 114,
+	mercDiff: 1,
 	stats: [
 		["strength", 34], ["vitality", 30], ["dexterity", 47], 
 		["vitality", 45], ["strength", 47], ["dexterity", 65],

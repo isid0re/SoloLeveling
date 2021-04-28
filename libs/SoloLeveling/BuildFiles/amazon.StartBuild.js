@@ -1,5 +1,6 @@
-/**
+/*
  *    @filename   amazon.StartBuild.js
+ *	  @author	  isid0re
  *    @desc       amazon build for before respecOne
  */
 

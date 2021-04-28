@@ -1,5 +1,6 @@
 /**
  *    @filename   necromancer.BoneBuild.js
+ *	  @author	  isid0re
  *    @desc       bone necro build for after respecOne
  */
 
@@ -8,6 +9,9 @@ var build = {
 	skillstab: 17, //bone
 	wantedskills: [93, 84], // bonespirit, bonespear
 	usefulskills: [66, 68, 87], //ampdamage, bone armor, decrepify
+	mercAuraName: "Might",
+	mercAuraWanted: 98,
+	mercDiff: 1,
 	stats: [
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 156], ["vitality", "all"]
 	],

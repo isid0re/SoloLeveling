@@ -28,31 +28,7 @@ Town.townTasks = function () {
 		Town.goToTown();
 	}
 
-	let prevTown, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
-
-	switch (me.area) {
-	case 1:
-		prevTown = 1;
-
-		break;
-	case 40:
-		prevTown = 40;
-
-		break;
-	case 75:
-		prevTown = 75;
-
-		break;
-	case 103:
-		prevTown = 103;
-
-		break;
-	case 109:
-		prevTown = 109;
-
-		break;
-	}
-
+	let preAct = me.act, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
 	Attack.weaponSwitch(Attack.getPrimarySlot());
 	this.unfinishedQuests();
 	Runewords.makeRunewords();
@@ -71,15 +47,15 @@ Town.townTasks = function () {
 	this.repair(true);
 	this.shopItems();
 	this.reviveMerc();
-	Item.autoEquip();
-	Misc.hireMerc();
-	Misc.equipMerc();
 	this.gamble();
-	Town.stash();
+	Item.autoEquip();
+	Merc.hireMerc();
+	Merc.equipMerc();
+	this.stash();
 	this.clearJunk();
 	this.organizeStash();
-	Town.organizeInventory();
-	this.characterRespec();
+	this.organizeInventory();
+	Quest.characterRespec();
 
 	for (i = 0; i < cancelFlags.length; i += 1) {
 		if (getUIFlag(cancelFlags[i])) {
@@ -92,17 +68,21 @@ Town.townTasks = function () {
 
 	me.cancel();
 
-	if ((me.classid !== 1 && !me.getSkill(115, 0) || me.classid === 1 && !me.getSkill(54, 0)) && (me.area === 40 || me.area === 75)) {
+	if ((!me.sorceress && !me.getSkill(115, 0) || me.sorceress && !me.getSkill(54, 0)) && (me.area === 40 || me.area === 75)) {
 		Town.buyPots(8, "Stamina");
 		Town.drinkPots();
 	}
 
-	if (me.inTown && prevTown && me.area !== prevTown) {
-		Pather.useWaypoint(prevTown);
+	if (me.act !== preAct) {
+		this.goToTown(preAct);
 	}
 
-	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
-	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
+	if (!me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
+		Precast.doPrecast(false);
+	}
+
+	Config.NoTele = me.normal && me.gold < 10000 ? true : !me.normal && me.gold < 50000 ? true : false;
+	Config.Dodge = me.getSkill(54, 0) && me.sorceress ? !Config.NoTele : false;
 
 	return true;
 };
@@ -112,31 +92,7 @@ Town.doChores = function (repair = false) {
 		this.goToTown();
 	}
 
-	let prevTown, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
-
-	switch (me.area) {
-	case 1:
-		prevTown = 1;
-
-		break;
-	case 40:
-		prevTown = 40;
-
-		break;
-	case 75:
-		prevTown = 75;
-
-		break;
-	case 103:
-		prevTown = 103;
-
-		break;
-	case 109:
-		prevTown = 109;
-
-		break;
-	}
-
+	let preAct = me.act, i, cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
 	Attack.weaponSwitch(Attack.getPrimarySlot());
 	Runewords.makeRunewords();
 	Cubing.doCubing();
@@ -154,20 +110,20 @@ Town.doChores = function (repair = false) {
 	this.repair(repair);
 	this.shopItems();
 	this.reviveMerc();
-	Item.autoEquip();
-	Misc.hireMerc();
-	Misc.equipMerc();
 	this.gamble();
+	Item.autoEquip();
+	Merc.hireMerc();
+	Merc.equipMerc();
 	this.clearInventory();
 	this.stash();
 	this.clearJunk();
-	this.clearScrolls();
-	Town.organizeInventory();
-	this.characterRespec();
 
-	if (me.classid !== 4 && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
-		Precast.doPrecast(false);
+	if (me.getItem(518)) {
+		this.clearScrolls();
 	}
+
+	this.organizeInventory();
+	Quest.characterRespec();
 
 	for (i = 0; i < cancelFlags.length; i += 1) {
 		if (getUIFlag(cancelFlags[i])) {
@@ -180,28 +136,151 @@ Town.doChores = function (repair = false) {
 
 	me.cancel();
 
-	if (me.inTown && prevTown && me.area !== prevTown) {
-		Pather.useWaypoint(prevTown);
+	if (me.act !== preAct) {
+		this.goToTown(preAct);
 	}
 
-	Config.NoTele = me.diff === 0 && me.gold < 10000 ? true : me.diff !== 0 && me.gold < 50000 ? true : false;
-	Config.Dodge = me.getSkill(54, 0) && me.classid === 1 ? !Config.NoTele : false;
+	if (me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
+		Precast.doPrecast(false);
+	}
+
+	Config.NoTele = me.normal && me.gold < 10000 ? true : !me.normal && me.gold < 50000 ? true : false;
+	Config.Dodge = me.getSkill(54, 0) && me.sorceress ? !Config.NoTele : false;
 
 	return true;
 };
 
-Town.heal = function () {
-	if (!me.inTown) {
-		this.goToTown();
-	}
+Town.identify = function () {
+	var i, item, tome, scroll, npc, list, timer, tpTome, result,
+		tpTomePos = {};
 
-	if (!this.needHealing()) {
-		return true;
-	}
+	this.cainID();
 
-	if (!this.initNPC("Heal", "heal")) {
+	list = Storage.Inventory.Compare(Config.Inventory);
+
+	if (!list) {
 		return false;
 	}
+
+	// Avoid unnecessary NPC visits
+	for (i = 0; i < list.length; i += 1) {
+		// Only unid items or sellable junk (low level) should trigger a NPC visit
+		if ((!list[i].getFlag(0x10) || Config.LowGold > 0) && ([-1, 4].indexOf(Pickit.checkItem(list[i]).result) > -1 || (!list[i].getFlag(0x10) && (Item.hasTier(list[i]) || Item.hasMercTier(list[i]))))) {
+			break;
+		}
+	}
+
+	if (i === list.length) {
+		return false;
+	}
+
+	npc = this.initNPC("Shop", "identify");
+
+	if (!npc) {
+		return false;
+	}
+
+	tome = me.findItem(519, 0, 3);
+
+	if (tome && tome.getStat(70) < list.length) {
+		this.fillTome(519);
+	}
+
+	MainLoop:
+	while (list.length > 0) {
+		item = list.shift();
+
+		if (!item.getFlag(0x10) && item.location === 3 && this.ignoredItemTypes.indexOf(item.itemType) === -1) {
+			result = Pickit.checkItem(item);
+
+			// Force ID for unid items matching autoEquip criteria
+			if (result.result === 1 && !item.getFlag(0x10) && (Item.hasTier(item) || Item.hasMercTier(item))) {
+				result.result = -1;
+			}
+
+			switch (result.result) {
+			// Items for gold, will sell magics, etc. w/o id, but at low levels
+			// magics are often not worth iding.
+			case 4:
+				Misc.itemLogger("Sold", item);
+				item.sell();
+
+				break;
+			case -1:
+				if (tome) {
+					this.identifyItem(item, tome);
+				} else {
+					scroll = npc.getItem(530);
+
+					if (scroll) {
+						if (!Storage.Inventory.CanFit(scroll)) {
+							tpTome = me.findItem(518, 0, 3);
+
+							if (tpTome) {
+								tpTomePos = {x: tpTome.x, y: tpTome.y};
+
+								tpTome.sell();
+								delay(500);
+							}
+						}
+
+						delay(500);
+
+						if (Storage.Inventory.CanFit(scroll)) {
+							scroll.buy();
+						}
+					}
+
+					scroll = me.findItem(530, 0, 3);
+
+					if (!scroll) {
+						break MainLoop;
+					}
+
+					this.identifyItem(item, scroll);
+				}
+
+				result = Pickit.checkItem(item);
+
+				switch (result.result) {
+				case 1:
+					Misc.itemLogger("Kept", item);
+					Misc.logItem("Kept", item, result.line);
+
+					break;
+				case -1: // unidentified
+					break;
+				case 2: // cubing
+					Misc.itemLogger("Kept", item, "Cubing-Town");
+					Cubing.update();
+
+					break;
+				case 3: // runeword (doesn't trigger normally)
+					break;
+				case 5: // Crafting System
+					Misc.itemLogger("Kept", item, "CraftSys-Town");
+					CraftingSystem.update(item);
+
+					break;
+				default:
+					Misc.itemLogger("Sold", item);
+					item.sell();
+
+					timer = getTickCount() - this.sellTimer; // shop speedup test
+
+					if (timer > 0 && timer < 500) {
+						delay(timer);
+					}
+
+					break;
+				}
+
+				break;
+			}
+		}
+	}
+
+	this.fillTome(518); // Check for TP tome in case it got sold for ID scrolls
 
 	return true;
 };
@@ -358,7 +437,20 @@ Town.buyPotions = function () {
 		return true;
 	}
 
-	if (me.diff === 0 && Pather.accessToAct(4) && me.act < 4) {
+
+	if (me.normal && Pather.accessToAct(2) && !Pather.accessToAct(3) && me.act < 2) {
+		this.goToTown(2);
+	}
+
+	if (me.normal && Pather.accessToAct(3) && !Pather.accessToAct(4) && me.act < 3) {
+		this.goToTown(3);
+	}
+
+	if (me.normal && Pather.accessToAct(4) && !Pather.accessToAct(5) && me.act < 4) {
+		this.goToTown(4);
+	}
+
+	if (me.normal && Pather.accessToAct(5) && (me.getQuest(35, 0) || me.getQuest(35, 1)) && me.act < 5) {
 		this.goToTown(4);
 	}
 
@@ -462,7 +554,7 @@ Town.shopItems = function () {
 					if (Item.hasTier(items[i]) &&
 					Item.getBodyLoc(items[i])[0] !== undefined &&
 					Item.canEquip(items[i]) &&
-					tierscore(items[i]) > Item.getEquippedItem(Item.getBodyLoc(items[i])[0]).tier) {
+					NTIP.GetTier(items[i]) > Item.getEquippedItem(Item.getBodyLoc(items[i])[0]).tier) {
 						Misc.itemLogger("AutoEquip Shopped", items[i]);
 						Misc.logItem("AutoEquip Shopped", items[i], result.line);
 						items[i].buy();
@@ -471,9 +563,9 @@ Town.shopItems = function () {
 					if (Item.hasMercTier(items[i]) &&
 					Item.getBodyLocMerc(items[i])[0] !== undefined &&
 					Item.canEquipMerc(items[i], Item.getBodyLocMerc(items[i])[0]) &&
-					mercscore(items[i]) > Item.getEquippedItemMerc(Item.getBodyLocMerc(items[i])[0]).tier) {
-						Misc.itemLogger("Merc Shopped", items[i]);
-						Misc.logItem("Merc Shopped", items[i], result.line);
+					NTIP.GetMercTier(items[i]) > Item.getEquippedItemMerc(Item.getBodyLocMerc(items[i])[0]).tier) {
+						Misc.itemLogger("AutoEquipMerc Shopped", items[i]);
+						Misc.logItem("AutoEquipMerc Shopped", items[i], result.line);
 						items[i].buy();
 					}
 				}
@@ -489,6 +581,14 @@ Town.shopItems = function () {
 };
 
 Town.unfinishedQuests = function () {
+	//tools of the trade
+	let malus = me.getItem(89);
+
+	if (malus) {
+		Town.goToTown(1);
+		Town.npcInteract("charsi");
+	}
+
 	//Radament skill book
 	let book = me.getItem(552);
 
@@ -500,9 +600,10 @@ Town.unfinishedQuests = function () {
 
 		if (book.interact()) {
 			print('ÿc9SoloLevelingÿc0: used Radament skill book');
-		} else {
-			clickItem(1, book);
+		} else if (clickItem(1, book)) {
 			print('ÿc9SoloLevelingÿc0: used Radament skill book');
+		} else {
+			print('ÿc9SoloLevelingÿc0: failed to used Radament skill book');
 		}
 	}
 
@@ -527,9 +628,10 @@ Town.unfinishedQuests = function () {
 
 		if (pol.interact()) {
 			print('ÿc9SoloLevelingÿc0: used potion of life');
-		} else {
-			clickItem(1, pol);
+		} else if (clickItem(1, pol)) {
 			print('ÿc9SoloLevelingÿc0: used potion of life');
+		} else {
+			print('ÿc9SoloLevelingÿc0: failed to used potion of life');
 		}
 	}
 
@@ -577,7 +679,7 @@ Town.unfinishedQuests = function () {
 		leg.drop();
 	}
 
-	// drop hellforge hammer at startup to avoid selling and d/c
+	// drop hellforge hammer and soulstone at startup to avoid selling and d/c
 	let hammer = me.getItem(90);
 
 	if (hammer) {
@@ -593,6 +695,21 @@ Town.unfinishedQuests = function () {
 		hammer.drop();
 	}
 
+	let soulstone = me.getItem(551);
+
+	if (soulstone) {
+		Town.goToTown(1);
+
+		if (soulstone.location === 7) {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(soulstone);
+			delay(300 + me.ping);
+			me.cancel();
+		}
+
+		soulstone.drop();
+	}
+
 	// anya scroll of resistance
 	let sor = me.getItem(646);
 
@@ -604,9 +721,10 @@ Town.unfinishedQuests = function () {
 
 		if (sor.interact()) {
 			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
-		} else {
-			clickItem(1, sor);
+		} else if (clickItem(1, sor)) {
 			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
+		} else {
+			print('ÿc9SoloLevelingÿc0: failed to used scroll of resistance');
 		}
 	}
 
@@ -749,23 +867,12 @@ Town.stash = function (stashGold) {
 
 	me.cancel();
 
-	var i, result, tier, bodyLoc,
-		items = Storage.Inventory.Compare(Config.Inventory);
+	var i, result, items = Storage.Inventory.Compare(Config.Inventory);
 
 	if (items) {
 		for (i = 0; i < items.length; i += 1) {
 			if (this.canStash(items[i])) {
 				result = (Pickit.checkItem(items[i]).result > 0 && Pickit.checkItem(items[i]).result < 4) || Cubing.keepItem(items[i]) || Runewords.keepItem(items[i]) || CraftingSystem.keepItem(items[i]);
-
-				// Don't stash low tier autoequip items.
-				if (Config.AutoEquip && Pickit.checkItem(items[i]).result === 1) {
-					tier = NTIP.GetTier(items[i]);
-					bodyLoc = Item.getBodyLoc(items[i]);
-
-					if (tier > 0 && tier <= Item.getEquippedItem(bodyLoc).tier) {
-						result = false;
-					}
-				}
 
 				if (result) {
 					Misc.itemLogger("Stashed", items[i]);
@@ -806,7 +913,7 @@ Town.organizeStash = function () {
 		});
 
 		for (sorted = 0; sorted < items.length; sorted += 1) {
-			movetoStash(items[sorted], true);
+			moveTo.Stash(items[sorted], true);
 		}
 	}
 
@@ -827,7 +934,7 @@ Town.organizeInventory = function () {
 		});
 
 		for (inv = 0; inv < items.length; inv += 1) {
-			movetoInventory(items[inv], true);
+			moveTo.Inventory(items[inv], true);
 		}
 	}
 
@@ -835,47 +942,7 @@ Town.organizeInventory = function () {
 };
 
 Town.clearInventory = function () {
-	var i, col, result, item, beltSize,
-		items = [];
-
-	// Return potions to belt
-	item = me.getItem(-1, 0);
-
-	if (item) {
-		do {
-			if (item.location === 3 && [76, 77, 78].indexOf(item.itemType) > -1) {
-				items.push(copyUnit(item));
-			}
-		} while (item.getNext());
-
-		beltSize = Storage.BeltSize();
-		col = this.checkColumns(beltSize);
-
-		// Sort from RV to HP
-		items.sort(function (a, b) {
-			return b.itemType - a.itemType;
-		});
-
-		while (items.length) {
-			item = items.shift();
-
-			for (i = 3; i > 0; i -= 1) {
-				if (item.code.indexOf(Config.BeltColumn[i]) > -1 && col[i] > 0) {
-					if (col[i] === beltSize) { // Pick up the potion and put it in belt if the column is empty
-						if (item.toCursor()) {
-							clickItem(0, i, 0, 2);
-						}
-					} else {
-						clickItem(2, item.x, item.y, item.location); // Shift-click potion
-					}
-
-					delay(200 + me.ping);
-
-					col = this.checkColumns(beltSize);
-				}
-			}
-		}
-	}
+	var i, result, item, items = [];
 
 	// Cleanup remaining potions
 	item = me.getItem(-1, 0);
@@ -1007,38 +1074,6 @@ Town.clearJunk = function () {
 			}
 		}
 
-		let tier = NTIP.GetTier(junk[0]);
-		let bodyLoc = Item.getBodyLoc(junk[0])[0];
-
-		if (tier > 0 && bodyLoc) {
-			if ((junk[0].location === 7 || junk[0].location === 3) &&
-			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 ||
-			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 1 && junk[0].getFlag(NTIPAliasFlag["runeword"]))) &&
-			tier <= Item.getEquippedItem(bodyLoc).tier) {
-				if (junk[0].drop()) {
-					me.overhead('cleared autoequip junk');
-					print("ÿc9SoloLevelingÿc0: Cleared autoequip junk - " + junk[0].name);
-					delay(50 + me.ping);
-				}
-			}
-		}
-
-		let merctier = mercscore(junk[0]);
-		let mercbodyLoc = Item.getBodyLocMerc(junk[0])[0];
-
-		if (merctier > 0 && mercbodyLoc) {
-			if ((junk[0].location === 7 || junk[0].location === 3) &&
-			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 0 ||
-			(NTIP.CheckItem(junk[0], NTIP_CheckListNoTier, true).result === 1 && junk[0].getFlag(NTIPAliasFlag["runeword"]))) &&
-			merctier <= Item.getEquippedItemMerc(mercbodyLoc).tier) {
-				if (junk[0].drop()) {
-					me.overhead('cleared merc junk');
-					print("ÿc9SoloLevelingÿc0: Cleared merc junk - " + junk[0].name);
-					delay(50 + me.ping);
-				}
-			}
-		}
-
 		let rwBase = me.getItems()
 			.filter(item =>
 				item.itemType === junk[0].itemType// same item type as current
@@ -1067,44 +1102,6 @@ Town.clearJunk = function () {
 	return true;
 };
 
-Town.characterRespec = function () {// Akara reset for build change
-	if (Misc.checkQuest(41, 0)) {
-		return true;
-	}
-
-	if (me.charlvl === respecOne || me.charlvl === respecTwoCheck()) {
-		Precast.doPrecast(true);
-		Town.goToTown(1);
-		me.overhead('time to respec');
-		Town.npcInteract("akara");
-		delay(10 + me.ping * 2);
-
-		if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
-			return false;
-		}
-
-		delay(750 + me.ping * 2);
-		Town.clearBelt();
-		delay(250 + me.ping);
-		Config.init(true);
-		delay(250 + me.ping);
-
-		if (!isIncluded("common/AutoStat.js")) {
-			include("common/AutoStat.js");
-		}
-
-		if (!isIncluded("common/AutoSkill.js")) {
-			include("common/AutoSkill.js");
-		}
-
-		AutoBuild.initialize();
-		AutoStat.init(Config.AutoStat.Build, Config.AutoStat.Save, Config.AutoStat.BlockChance, Config.AutoStat.UseBulk);
-		AutoSkill.init(Config.AutoSkill.Build, Config.AutoSkill.Save);
-	}
-
-	return true;
-};
-
 Town.npcInteract = function (name) {
 	let npc;
 
@@ -1116,6 +1113,11 @@ Town.npcInteract = function (name) {
 	case "akara":
 		Town.move(NPC.Akara);
 		npc = getUnit(1, NPC.Akara);
+
+		break;
+	case "charsi":
+		Town.move(NPC.Charsi);
+		npc = getUnit(1, NPC.Charsi);
 
 		break;
 	case "warriv":
@@ -1202,78 +1204,6 @@ Town.npcInteract = function (name) {
 	return true;
 };
 
-Town.visitTown = function (repair = false) {
-	if (me.inTown) {
-		this.doChores();
-		this.move("stash");
-
-		return true;
-	}
-
-	var preArea = me.area,
-		preAct = me.act;
-
-	this.doChores(repair);
-
-	if (me.act !== preAct) {
-		this.goToTown(preAct);
-	}
-
-	this.move("portalspot");
-
-	if (!Pather.usePortal(preArea, me.name)) { // this part is essential
-		Packet.flash(me.gid); // try resynch then use portal agian.
-
-		if (!Pather.usePortal(preArea, me.name)) {
-			throw new Error("Town.visitTown: Failed to go back from town");
-		}
-	}
-
-	if (Config.PublicMode) {
-		Pather.makePortal();
-	}
-
-	return true;
-};
-
-Town.goToTown = function (act, wpmenu) {
-	var towns = [1, 40, 75, 103, 109];
-
-	if (!me.inTown) {
-		Packet.flash(me.gid);
-
-		if (!Pather.makePortal()) {
-			throw new Error("Town.goToTown: Failed to make TP");
-		}
-
-		if (!Pather.usePortal(null, me.name)) {
-			Packet.flash(me.gid);
-
-			if (!Pather.usePortal(null, me.name)) {
-				throw new Error("Town.goToTown: Failed to take TP");
-			}
-		}
-	}
-
-	if (act === undefined) {
-		return true;
-	}
-
-	if (act < 1 || act > 5) {
-		throw new Error("Town.goToTown: Invalid act");
-	}
-
-	if (act !== me.act) {
-		try {
-			Pather.useWaypoint(towns[act - 1], wpmenu);
-		} catch (WPError) {
-			throw new Error("Town.goToTown: Failed use WP");
-		}
-	}
-
-	return true;
-};
-
 Town.reviveMerc = function () {
 	if (!this.needMerc()) {
 		return true;
@@ -1309,7 +1239,7 @@ Town.reviveMerc = function () {
 		}
 
 		while (getTickCount() - tick < 2000) {
-			if (!!me.getMerc()) {
+			if (!!Merc.getMercFix()) {
 				delay(Math.max(750, me.ping * 2));
 
 				break MainLoop;
@@ -1321,8 +1251,8 @@ Town.reviveMerc = function () {
 
 	Attack.checkInfinity();
 
-	if (!!me.getMerc()) {
-		if (Config.MercWatch && (me.classid === 4 || Precast.checkCTA())) { // Cast BO on merc so he doesn't just die again. Only Do this is you are a barb or actually have a cta. Otherwise its just a waste of time.
+	if (!!Merc.getMercFix()) {
+		if (Config.MercWatch && (me.barbarian || Precast.checkCTA())) { // Cast BO on merc so he doesn't just die again. Only Do this is you are a barb or actually have a cta. Otherwise its just a waste of time.
 			print("MercWatch precast");
 			Pather.useWaypoint("random");
 			Precast.doPrecast(true);
@@ -1333,4 +1263,44 @@ Town.reviveMerc = function () {
 	}
 
 	return false;
+};
+
+Town.visitTown = function (repair = false) {
+	if (me.inTown) {
+		this.doChores();
+		this.move("stash");
+
+		return true;
+	}
+
+	var preArea = me.area,
+		preAct = me.act;
+
+	try { // not an essential function -> handle thrown errors
+		this.goToTown();
+	} catch (e) {
+		return false;
+	}
+
+	this.doChores(repair);
+
+	if (me.act !== preAct) {
+		this.goToTown(preAct);
+	}
+
+	this.move("portalspot");
+
+	if (!Pather.usePortal(null, me.name)) { // this part is essential
+		try {
+			Pather.usePortal(preArea, me.name);
+		} catch (e) {
+			throw new Error("Town.visitTown: Failed to go back from town");
+		}
+	}
+
+	if (Config.PublicMode) {
+		Pather.makePortal();
+	}
+
+	return true;
 };

@@ -29,8 +29,12 @@ include("common/Runewords.js");
 include("common/Storage.js");
 include("common/Town.js");
 
-if (!isIncluded("SoloLeveling/Tools/OOGOverrides.js")) {
-	include("SoloLeveling/Tools/OOGOverrides.js");
+if (!isIncluded("SoloLeveling/Tools/Developer.js")) {
+	include("SoloLeveling/Tools/Developer.js");
+}
+
+if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
+	include("SoloLeveling/Tools/Tracker.js");
 }
 
 if (!isIncluded("SoloLeveling/Functions/globals.js")) {
@@ -49,17 +53,7 @@ function main () {
 		canQuit = true,
 		timerLastDrink = [];
 
-	//Double Safeguard to stop the base toolsthread
-	let origToolsThread = getScript("tools/ToolsThread.js");
-
-	if(!!origToolsThread) {
-		if (origToolsThread.running) {
-			D2Bot.printToConsole("Base is running in the background", 4);
-			origToolsThread.stop();
-		}
-	}
-
-	print("ÿc9SoloLevelingÿc3: Start Custom ToolsThread script");
+	print("ÿc9SoloLeveling:ÿc3 Start Custom ToolsThread script");
 	D2Bot.init();
 	Config.init(false);
 	Pickit.init(false);
@@ -69,58 +63,8 @@ function main () {
 	Runewords.init();
 	Cubing.init();
 
-	if (Development.useOverlay) {
-		include("SoloLeveling/Tools/OverlayThread.js");
-
-		var sayings = ["Oh no :( ", "gonna chicken?", "no bueno", "little low?"];
-
-		this.ee = [];
-		this.life = [];
-
-		this.clear = function () {
-			while (this.ee.length > 0) {
-				this.ee.shift().remove();
-			}
-		};
-
-		this.lifeSaying = function () {
-			if (this.life.length < 1) {
-				let text = Math.floor(Math.random() * sayings.length);
-
-				if (me.screensize === 0) {
-					this.life.push(new Text(sayings[text], 42, 433, 1/*color*/, 6/*font*/, 0/*align*/));
-				} else {
-					this.life.push(new Text(sayings[text], 46, 554, 1/*color*/, 6/*font*/, 0/*align*/));
-				}
-			}
-		};
-
-		this.clearlife = function () {
-			while (this.life.length > 0) {
-				this.life.shift().remove();
-			}
-		};
-		//Fav fonts - 3(really big), 4 thin, 5 thick funny, 6 small
-
-		this.soloEvent = function (key) {
-			switch (key) {
-			case 219:
-				if (me.screensize === 0) {
-					this.ee.push(new Text("SoloLeveling by Isid0re", 402, 411, 1, 0, 2));
-					this.ee.push(new Text("Overlay by theBGuy", 402, 421, 1, 0, 2));
-				} else {
-					this.ee.push(new Text("SoloLeveling by Isid0re", 394, 525, 1, 0, 2));
-					this.ee.push(new Text("Overlay by theBGuy", 394, 535, 1, 0, 2));
-				}
-
-				break;
-			case 221:
-				this.clear();
-				break;
-			}
-		};
-
-		addEventListener("keyup", this.soloEvent);
+	if (Developer.Overlay) {
+		include("SoloLeveling/Tools/Overlay.js");
 	}
 
 	for (i = 0; i < 5; i += 1) {
@@ -520,6 +464,11 @@ function main () {
 				if (AutoMule.getMuleItems().length > 0) {
 					print("ÿc2Mule triggered");
 					scriptBroadcast("mule");
+
+					if (Developer.logPerformance) {
+						Tracker.Update();
+					}
+
 					this.exit();
 				} else {
 					me.overhead("No items to mule.");
@@ -703,25 +652,6 @@ function main () {
 
 	// Start
 	while (true) {
-		if (isIncluded("SoloLeveling/Tools/OverlayThread.js") && Development.useOverlay) {
-			if (Development.useOverlay) {
-				SoloLevelingHooks.update();
-
-				if (me.act !== myAct) {
-					SoloLevelingHooks.flush();
-					myAct = me.act;
-				}
-
-				if (me.hp <= Math.floor(me.hpmax * 25 / 100)) {
-					this.lifeSaying();
-				}
-
-				if (me.hp > Math.floor(me.hpmax * 25 / 100) && this.life.length > 0) {
-					this.clearlife();
-				}
-			}
-		}
-
 		try {
 			if (me.gameReady && !me.inTown) {
 				if (Config.UseHP > 0 && me.hp < Math.floor(me.hpmax * Config.UseHP / 100)) {
@@ -733,9 +663,15 @@ function main () {
 				}
 
 				if (Config.LifeChicken > 0 && me.hp <= Math.floor(me.hpmax * Config.LifeChicken / 100)) {
-					D2Bot.printToConsole("Life Chicken (" + me.hp + "/" + me.hpmax + ")" + this.getNearestMonster() + " in " + Pather.getAreaName(me.area) + ". Ping: " + me.ping, 9);
+					if (!Developer.hideChickens) {
+						D2Bot.printToConsole("Life Chicken (" + me.hp + "/" + me.hpmax + ")" + this.getNearestMonster() + " in " + Pather.getAreaName(me.area) + ". Ping: " + me.ping, 9);
+					}
+
+					if (Developer.logPerformance) {
+						Tracker.Update();
+					}
+
 					D2Bot.updateChickens();
-					DataFile.updateStats("chickens");
 					this.exit();
 
 					break;
@@ -750,7 +686,14 @@ function main () {
 				}
 
 				if (Config.ManaChicken > 0 && me.mp <= Math.floor(me.mpmax * Config.ManaChicken / 100)) {
-					D2Bot.printToConsole("Mana Chicken: (" + me.mp + "/" + me.mpmax + ") in " + Pather.getAreaName(me.area), 9);
+					if (!Developer.hideChickens) {
+						D2Bot.printToConsole("Mana Chicken: (" + me.mp + "/" + me.mpmax + ") in " + Pather.getAreaName(me.area), 9);
+					}
+
+					if (Developer.logPerformance) {
+						Tracker.Update();
+					}
+
 					D2Bot.updateChickens();
 					this.exit();
 
@@ -764,7 +707,14 @@ function main () {
 
 					if (ironGolem) {
 						if (ironGolem.hp <= Math.floor(128 * Config.IronGolemChicken / 100)) { // ironGolem.hpmax is bugged with BO
-							D2Bot.printToConsole("Irom Golem Chicken in " + Pather.getAreaName(me.area), 9);
+							if (!Developer.hideChickens) {
+								D2Bot.printToConsole("Irom Golem Chicken in " + Pather.getAreaName(me.area), 9);
+							}
+
+							if (Developer.logPerformance) {
+								Tracker.Update();
+							}
+
 							D2Bot.updateChickens();
 							this.exit();
 
@@ -779,7 +729,14 @@ function main () {
 
 					if (mercHP > 0 && merc && merc.mode !== 12) {
 						if (mercHP < Config.MercChicken) {
-							D2Bot.printToConsole("Merc Chicken in " + Pather.getAreaName(me.area), 9);
+							if (!Developer.hideChickens) {
+								D2Bot.printToConsole("Merc Chicken in " + Pather.getAreaName(me.area), 9);
+							}
+
+							if (Developer.logPerformance) {
+								Tracker.Update();
+							}
+
 							D2Bot.updateChickens();
 							this.exit();
 
@@ -823,6 +780,10 @@ function main () {
 				Experience.log();
 			}
 
+			if (Developer.logPerformance) {
+				Tracker.Update();
+			}
+
 			this.checkPing(false); // In case of quitlist triggering first
 			this.exit();
 
@@ -831,9 +792,20 @@ function main () {
 
 		if (debugInfo.area !== Pather.getAreaName(me.area)) {
 			debugInfo.area = Pather.getAreaName(me.area);
-
-			//D2Bot.store(JSON.stringify(debugInfo));
 			DataFile.updateStats("debugInfo", JSON.stringify(debugInfo));
+		}
+
+		if (Developer.Overlay) {
+			if (Developer.logPerformance) {
+				Overlay.update();
+
+				if (me.act !== myAct) {
+					Overlay.flush();
+					myAct = me.act;
+				}
+			} else {
+				D2Bot.printToConsole('Overlay cannot work without Developer.logPerformance = true;', 4);
+			}
 		}
 
 		delay(20);

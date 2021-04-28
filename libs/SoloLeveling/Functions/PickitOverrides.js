@@ -2,6 +2,7 @@
 *	@filename	PickitOverrides.js
 *	@author		theBGuy, isid0re
 *	@desc		Pickit.js fixes to improve functionality
+*	@credits	based on existing pickit.js from PBP autoplays (Sonic, AutoSorc, etc)
 */
 
 if (!isIncluded("common/Pickit.js")) {
@@ -16,8 +17,8 @@ if (!isIncluded("SoloLeveling/Functions/MiscOverrides.js")) {
 	include("SoloLeveling/Functions/MiscOverrides.js");
 }
 
-if (!isIncluded("bots/SoloLeveling.js")) {
-	include("bots/SoloLeveling.js");
+if (!isIncluded("SoloLeveling/Functions/ProtoTypesOverrides.js")) {
+	include("SoloLeveling/Functions/ProtoTypesOverrides.js");
 }
 
 Pickit.checkItem = function (unit) {
@@ -51,6 +52,20 @@ Pickit.checkItem = function (unit) {
 		};
 	}
 
+	if (NTIP.GetTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && !unit.getFlag(0x10)) {
+		return {
+			result: -1,
+			line: null
+		};
+	}
+
+	if (NTIP.GetTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && unit.getFlag(0x10)) {
+		return {
+			result: NTIP.CheckItem(unit),
+			line: "Autocharm Tier: " + NTIP.GetTier(unit)
+		};
+	}
+
 	if ((NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && !unit.getFlag(0x10)) {
 		return {
 			result: -1,
@@ -59,14 +74,14 @@ Pickit.checkItem = function (unit) {
 	}
 
 	if ((NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && unit.getFlag(0x10)) {
-		if (Item.autoEquipCheck(unit) && NTIP.GetTier(unit) > 1) {
+		if (Item.autoEquipCheck(unit)) {
 			return {
 				result: 1,
 				line: "Autoequip Tier: " + NTIP.GetTier(unit)
 			};
 		}
 
-		if (Item.autoEquipCheckMerc(unit) && NTIP.GetMercTier(unit) > 1) {
+		if (Item.autoEquipCheckMerc(unit)) {
 			return {
 				result: 1,
 				line: "Autoequip MercTier: " + NTIP.GetMercTier(unit)
@@ -198,7 +213,7 @@ Pickit.pickItem = function (unit, status, keptLine) {
 		this.name = unit.name;
 		this.color = Pickit.itemColor(unit);
 		this.gold = unit.getStat(14);
-		this.useTk = Config.UseTelekinesis && me.classid === 1 && me.getSkill(43, 1) && (this.type === 4 || this.type === 22 || (this.type > 75 && this.type < 82)) &&
+		this.useTk = Config.UseTelekinesis && me.sorceress && me.getSkill(43, 1) && (this.type === 4 || this.type === 22 || (this.type > 75 && this.type < 82)) &&
 					getDistance(me, unit) > 5 && getDistance(me, unit) < 20 && !checkCollision(me, unit, 0x4);
 		this.picked = false;
 	}

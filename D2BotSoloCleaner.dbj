@@ -1,23 +1,25 @@
 /**
 *	@filename	D2BotSoloCleaner.dbj
-*	@author		Whoever did the original D2BotAccountCleaner.dbj
-*	@desc		This is a modifed D2BotAccountCleaner to also delete extra files leftover after deleting a char to
-*					be specifically used with SoloLeveling. It has also been modified to work with single player
+*	@author		theBGuy
+*	@credits 	Whoever did the original D2BotAccountCleaner.dbj
+*	@desc		Modified D2BotAccountCleaner, The purpose of this entryscript is to delete old characters and optional related files
 */
 
 var StarterConfig = {
-	DataCleaner:		true,	// Clean data files associated with running SoloLeveling. A must, if using Performance.js or the Overlay system and wish to use profile over.
-	SaveFiles:			false,	// Save important files to new folder inside libs/SoloLeveling/Data/ Must set to true if running Performance.js and wish to save related files for performance review.
-	DelayBetweenAccounts: rand(10,25), //Seconds to wait before cleaning next account
-	SwitchKeyDelay: 0, // Seconds to wait before switching a used/banned key or after realm down
-
-	CrashDelay: rand(60, 120), // Seconds to wait after a d2 window crash
-	RealmDownDelay: rand(3, 6), // Minutes to wait after getting Realm Down message
-	UnableToConnectDelay: rand(5, 8), // Minutes to wait after Unable To Connect message
-	CDKeyInUseDelay: rand(5, 8), // Minutes to wait before connecting again if CD-Key is in use. SwitchKeys overrides this!
-	ConnectingTimeout: rand(30, 60), // Seconds to wait before cancelling the 'Connecting...' screen
-	PleaseWaitTimeout: rand(30, 60), // Seconds to wait before cancelling the 'Please Wait...' screen
-	WaitInLineTimeout: rand(30, 60) // Seconds to wait before cancelling the 'Waiting in Line...' screen
+	// New Stuff - DataCleaner to delete old files associated with running SoloLeveling, SaveFiles to save important files to SoloLeveling/Data/ for performance review
+	DataCleaner:		true,	// Highly recommened to run this, if using either peformance tracking or the overlay system
+	SaveFiles:		false,	// Highly recommened to run this if using the peformance tracking system
+	
+	// Old Stuff
+	DelayBetweenAccounts: 	rand(10,25), //Seconds to wait before cleaning next account, if doing 10+ accounts recommended to increase this delay to rand(30, 60) prevent R/D
+	SwitchKeyDelay: 	0, // Seconds to wait before switching a used/banned key or after realm down
+	CrashDelay: 		rand(60, 120), // Seconds to wait after a d2 window crash
+	RealmDownDelay: 	rand(3, 6), // Minutes to wait after getting Realm Down message
+	UnableToConnectDelay: 	rand(5, 8), // Minutes to wait after Unable To Connect message
+	CDKeyInUseDelay: 	rand(5, 8), // Minutes to wait before connecting again if CD-Key is in use. SwitchKeys overrides this!
+	ConnectingTimeout: 	rand(30, 60), // Seconds to wait before cancelling the 'Connecting...' screen
+	PleaseWaitTimeout: 	rand(30, 60), // Seconds to wait before cancelling the 'Please Wait...' screen
+	WaitInLineTimeout: 	rand(30, 60) // Seconds to wait before cancelling the 'Waiting in Line...' screen
 };
 
 var AccountsToClean = {
@@ -48,22 +50,23 @@ var profiles = [
 		"SCL-ZON123",
 		"hcnl-pal123",
 	Enter your lines under here*/
+
 ];
 
-function moveFiles() {
-	if(!profiles.length){
-		D2Bot.printToConsole("SoloCleaner: No profiles entered. Exiting moveFiles. Moving on to characters", 6);
+function dataCleaner() {
+	if (!profiles.length){
+		D2Bot.printToConsole("SoloCleaner: No profiles entered to clean. If this was a mistake, fill out profile information under NEW STUFF. Exiting dataCleaner and moving on to clean characters...", 6);
 		return;
 	}
 
 	var charClass, charType;
 	var path, folder;
 
-	for(let i = 0; i < profiles.length; i++) {
+	for (let i = 0; i < profiles.length; i++) {
 		let buildCheck = profiles[i].toUpperCase();
 		buildCheck = profiles[i].split("-"); // SCL-ZON123
 		
-		if(buildCheck[0].indexOf("CC", "cc") === -1) { // not CC so not classic - true
+		if (buildCheck[0].indexOf("CC", "cc") === -1) { // not CC so not classic - true
 			charType = "Expansion";
 		} else{
 			charType = "Classic";
@@ -71,43 +74,35 @@ function moveFiles() {
 		
 		buildCheck[1] = buildCheck[1].toString().substring(0, 3); // removes numbers ZON for switch
 		buildCheck[1] = buildCheck[1].toUpperCase();
-		print(buildCheck[1]);
 
 		switch (buildCheck[1]) {
 		case "ZON":
-		case "zon":
 			charClass = "amazon";
 			break;
 		case "SOR":
-		case "sor":
 			charClass = "sorceress";
 			break;
 		case "NEC":
-		case "nec":
 			charClass = "necromancer";
 			break;
 		case "PAL":
-		case "pal":
 			charClass = "paladin";
 			break;
 		case "BAR":
-		case "bar":
 			charClass = "barbarian";
 			break;
 		case "DRU":
-		case "dru":
 			charClass = "druid";
 			break;
 		case "SIN":
-		case "sin":
 			charClass = "assassin";
 			break;
 		default:
-			D2Bot.printToConsole("SoloCleaner: Failed to get charClass. Please check that your profile was entered correctly.", 6);
+			D2Bot.printToConsole("SoloCleaner: Failed to get charClass. Please check that your profile was entered correctly under NEW STUFF.", 6);
 			return;
 		}
 
-		if(StarterConfig.SaveFiles) {
+		if (StarterConfig.SaveFiles) {
 			if (!FileTools.exists("libs/SoloLeveling/Data/" + charType)) {
 				folder = dopen("libs/SoloLeveling/Data");
 				folder.create(charType);
@@ -134,30 +129,38 @@ function moveFiles() {
 		}
 				
 		if (FileTools.exists("data/" + profiles[i] + ".json")) {
-			if(StarterConfig.SaveFiles){
+			if (StarterConfig.SaveFiles){
 				FileTools.copy("data/" + profiles[i] + ".json", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/dataFile.json");
 			}
 			
 			FileTools.remove("data/" + profiles[i] + ".json");
 		}
 		
-		if (FileTools.exists("libs/SoloLeveling/Performance/" + profiles[i] + ".json")) {
-			if(StarterConfig.SaveFiles) {
-				FileTools.copy("libs/SoloLeveling/Performance/" + profiles[i] + ".json", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/performanceFile.json");
+		if (FileTools.exists("libs/SoloLeveling/Data/" + profiles[i] + ".GameTime" + ".json")) {
+			if (StarterConfig.SaveFiles) {
+				FileTools.copy("libs/SoloLeveling/Data/" + profiles[i] + ".GameTime" + ".json", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/GameTime.json");
 			}
 			
-			FileTools.remove("libs/SoloLeveling/Performance/" + profiles[i] + ".json");
+			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".GameTime" + ".json");
 		}
 		
-		if (FileTools.exists("libs/SoloLeveling/Data/" + profiles[i] + ".json")) {
-			if(StarterConfig.SaveFiles) {
-				FileTools.copy("libs/SoloLeveling/Data/" + profiles[i] + ".json", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/recordingFile.json");
+		if (FileTools.exists("libs/SoloLeveling/Data/" + profiles[i] + ".LevelingPerformance" + ".csv")) {
+			if (StarterConfig.SaveFiles) {
+				FileTools.copy("libs/SoloLeveling/Data/" + profiles[i] + ".LevelingPerformance" + ".csv", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/LevelingPerformance.csv");
 			}
 			
-			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".json");
+			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".LevelingPerformance" + ".csv");
+		}
+
+		if (FileTools.exists("libs/SoloLeveling/Data/" + profiles[i] + ".ScriptPerformance" + ".csv")) {
+			if (StarterConfig.SaveFiles) {
+				FileTools.copy("libs/SoloLeveling/Data/" + profiles[i] + ".ScriptPerformance" + ".csv", "libs/SoloLeveling/Data/" + charType + "/" + charClass + "/" + j.toString() + "/ScriptPerformance.csv");
+			}
+			
+			FileTools.remove("libs/SoloLeveling/Data/" + profiles[i] + ".ScriptPerformance" + ".csv");
 		}
 		
-		if(StarterConfig.SaveFiles) {
+		if (StarterConfig.SaveFiles) {
 			D2Bot.printToConsole("SoloCleaner: Files saved to -> libs/SoloLeveling/Data/" + charType + "/" + charClass, 6);
 		}
 
@@ -395,8 +398,8 @@ function main() {
 
 	DataFile.updateStats("debugInfo", JSON.stringify({currScript: "none", area: "out of game"}));
 
-	if(StarterConfig.DataCleaner) {
-		moveFiles();
+	if (StarterConfig.DataCleaner) {
+		dataCleaner();
 	}
 
 	parseInfo();
@@ -475,10 +478,11 @@ MainSwitch:
 		currAcc = currAcc.split("/");
 		charList = chars[0];
 		obj.currAcc = currAcc[0];
+		currAcc[2] = currAcc[2].toLowerCase();
 
 		D2Bot.printToConsole("SoloCleaner: Cleaning account " + currAcc[0] + " ; char list : " + charList, 6);
 		FileTools.writeText("logs/AccountCleaner.json", JSON.stringify(obj));
-		if(currAcc[2] === "singleplayer"){
+		if (currAcc[2] === "singleplayer"){
 			ControlAction.click(2,0,599,800,600);
 			break;
 		}
@@ -596,7 +600,7 @@ MainSwitch:
 	case 12: // Character Select
 	case 42:
 		// Single Player screen fix
-		if(currAcc[2] !== "singleplayer"){
+		if (currAcc[2] !== "singleplayer"){
 			if (getLocation() === 12 && !getControl(4, 626, 100, 151, 44)) {
 				ControlAction.click(6, 33, 572, 128, 35);
 

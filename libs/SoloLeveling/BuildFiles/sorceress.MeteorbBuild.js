@@ -1,6 +1,7 @@
-/**
- *    @filename   Sorceress.MeteorbBuild.js
- *    @desc      Sorceress meteorb build for after respecOne
+/*
+ *    @filename   	Sorceress.MeteorbBuild.js
+ *	  @author	  	isid0re
+ *    @desc      	Sorceress meteorb build for after respecOne
  */
 
 var build = {
@@ -8,6 +9,9 @@ var build = {
 	skillstab: 8, //fire
 	wantedskills: [64, 56, 65], // frozen orb, meteor, cold mastery
 	usefulskills: [47, 61, 42], // fireball, fire mastery, static
+	mercAuraName: "Holy Freeze",
+	mercAuraWanted: 114,
+	mercDiff: 1,
 	stats: [
 		["strength", 48], ["vitality", 165], ["strength", 61], ["vitality", 252], ["strength", 84], ["dexterity", "block"], ["vitality", "all"]
 	],
