@@ -279,6 +279,10 @@ function deleteAndRemakeChar (info) {
 	//Delete old files - leaving csv file's for now as I don't think they interfere with the overlay
 	FileTools.remove("data/" + me.profile + ".json");
 	FileTools.remove("libs/SoloLeveling/Data/" + me.profile + ".GameTime" + ".json");
+	
+	if (Developer.logPerformance) {	//Re-initalize tracker
+		Tracker.initialize();
+	}
 
 	D2Bot.printToConsole("Deleted: " + info.charName + ". Now remaking...", 6);
 
