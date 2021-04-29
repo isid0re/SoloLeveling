@@ -162,6 +162,7 @@ function LoadConfig () {
 		"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//armor
 		"[name] == lacqueredplate && [quality] == set # [coldresist] >= 1 # [tier] == 100000", //tals armor
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [itemallskills] == 2 && [lifeleech] >= 8 && [fireresist] >= 65 # [tier] == 100000", //Chains of Honor
 		"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//shield
 		"[name] == roundshield && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 180 # [tier] == 100000", //mosers
@@ -183,6 +184,11 @@ function LoadConfig () {
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"me.charlvl > 14 && [Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
+		//End-game gear - High level runewords and items
+		"[Type] == Polearm && [flag] == runeword && [class] == elite # [convictionaura] == 12 # [merctier] == 100000", 		//Infinity
+		"[Type] == Polearm && [flag] == runeword && [class] == elite # [concentrationaura] >= 16 # [merctier] == 100000", 	//Pride
+		"[type] == armor && [class] == elite # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
+		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100",	//Eth Andy's
 	];
 	NTIP.arrayLooping(autoequipmercTiers);
 
