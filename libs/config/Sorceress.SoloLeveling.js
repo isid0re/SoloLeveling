@@ -187,6 +187,7 @@ function LoadConfig () {
 		//End-game gear - High level runewords and items
 		"[Type] == Polearm && [flag] == runeword && [class] == elite # [convictionaura] == 12 # [merctier] == 100000", 		//Infinity
 		"[Type] == Polearm && [flag] == runeword && [class] == elite # [concentrationaura] >= 16 # [merctier] == 100000", 	//Pride
+		"([Type] == Polearm || [Type] == Spear) && [flag] == runeword && [class] == elite # [ias] >= 60 && [enhanceddamage] >= 350 # [merctier] == 100000", //BoTD
 		"[type] == armor && [class] == elite # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
 		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100",	//Eth Andy's
 	];
