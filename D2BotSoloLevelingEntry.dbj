@@ -1011,6 +1011,7 @@ function locationAction (location) {
 
 		if (deadCheck) {
 			deleteAndRemakeChar(setUp);
+			deadCheck = false;
 		}                    
 
 		if (setUp) {
