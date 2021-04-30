@@ -265,6 +265,24 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
 		}
 
+		if (me.ladder > 0 && Item.getEquippedItemMerc(4).tier < 100000 && (SetUp.finalBuild === "Lightning" || SetUp.finalBuild === "Blova")) {
+			if (me.getItem(640)) { //Ber rune
+					var Inf = [
+						"([Name] == giantthresher) && [Flag] == Ethereal && [Quality] == Normal # [Sockets] == 0 # [MaxQuantity] == 1",
+						"([Name] == giantthresher) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
+						"[Name] == BerRune",
+						"[Name] == MalRune",
+						"[Name] == IstRune",
+					];
+					NTIP.arrayLooping(Inf);
+
+					Config.Recipes.push([Recipe.Socket.Weapon, "Giant Thresher"]);
+
+					Config.Runewords.push([Runeword.Infinity, "Giant Thresher"]);
+					Config.KeepRunewords.push("[type] == polearm # [convictionaura] == 12");
+				}
+		}
+
 		if (me.ladder > 0 && Item.getEquippedItem(4).tier < 777) { // Spirit Sword
 			if (!Check.haveItem("sword", "runeword", "Spirit") && !me.hell) {
 				var SpiritSword = [
