@@ -429,11 +429,11 @@ Misc.gamePacket = function (bytes) {// various game events
 	case 0x4e: // merc list packet
 		id = (bytes[2] << 8) + bytes[1];
 
-		if (mercId.indexOf(id) !== -1) {
-			mercId.length = 0;
+		if (Merc.Id.indexOf(id) !== -1) {
+			Merc.Id.length = 0;
 		}
 
-		mercId.push(id);
+		Merc.Id.push(id);
 		break;
 	case 0x5d: // golden bird quest
 		jadefigurine = getUnit(4, 546);
