@@ -143,11 +143,13 @@ var Merc = {
 			}
 		}
 
-		if (me.diff !== mercDiff && me.normal && !mercenary.getSkill(tempMercAura, 1)) {
+		mercenary = Merc.getMercFix();
+
+		if (me.diff !== mercDiff && me.normal && mercenary && !mercenary.getSkill(tempMercAura, 1)) {
 			print('ÿc9SoloLevelingÿc0: temp merc not available. will try later');
 		}
 
-		if (me.diff === mercDiff && !mercenary.getSkill(mercAuraWanted, 1)) {
+		if (me.diff === mercDiff && mercenary && !mercenary.getSkill(mercAuraWanted, 1)) {
 			print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
 		}
 

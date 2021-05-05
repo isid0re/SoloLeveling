@@ -150,7 +150,7 @@ var tierscore = function (item) {
 			needsCBF = !me.getSkill(54, 0),
 			body = me.getItems()
 				.filter(item => [1].indexOf(item.location) > -1 ) // limit search to equipped body parts
-				.sort((a, b) => a.location - b.location); // Sort on body, low to high.
+				.sort((a, b) => a.bodylocation - b.bodylocation); // Sort on body, low to high.
 
 		if (needsCBF && item.getStatEx(cbfItem)) {
 			let haveCBF = false;

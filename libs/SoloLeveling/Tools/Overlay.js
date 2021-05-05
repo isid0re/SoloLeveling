@@ -127,10 +127,10 @@ var Overlay = {
 					this.getHook("BloodRaven").hook.text = "Blood Raven: " + (me.getQuest(2, 0) ? "ÿc2Complete" : "ÿc1Incomplete");
 				}
 
-				if (!this.getHook("Tristam")) {
-					this.add("Tristam");
+				if (!this.getHook("Tristram")) {
+					this.add("Tristram");
 				} else {
-					this.getHook("Tristam").hook.text = "Tristam: " + (me.getQuest(4, 0) ? "ÿc2Complete" : "ÿc1Incomplete");
+					this.getHook("Tristram").hook.text = "Tristram: " + (me.getQuest(4, 0) ? "ÿc2Complete" : "ÿc1Incomplete");
 				}
 
 				if (!this.getHook("Countess")) {
@@ -416,10 +416,10 @@ var Overlay = {
 				});
 
 				break;
-			case "Tristam":
+			case "Tristram":
 				this.hooks.push({
-					name: "Tristam",
-					hook: new Text("Tristam: " + (me.getQuest(4, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 45, 4, 13, 0)
+					name: "Tristram",
+					hook: new Text("Tristram: " + (me.getQuest(4, 0) ? "ÿc2Complete" : "ÿc1Incomplete"), Overlay.questX, Overlay.questY + Overlay.resfixY + 45, 4, 13, 0)
 				});
 
 				break;
@@ -600,7 +600,7 @@ var Overlay = {
 		let hide = [0x01, 0x02, 0x05, 0x0C, 0x0F, 0x14, 0x19, 0x1A, 0x24];
 
 		while (!me.gameReady) {
-			delay(10);
+			delay(100);
 		}
 
 		for (let flag = 0; flag < hide.length; flag++) {

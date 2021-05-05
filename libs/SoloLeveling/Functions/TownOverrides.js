@@ -437,7 +437,6 @@ Town.buyPotions = function () {
 		return true;
 	}
 
-
 	if (me.normal && Pather.accessToAct(2) && !Pather.accessToAct(3) && me.act < 2) {
 		this.goToTown(2);
 	}
@@ -446,11 +445,7 @@ Town.buyPotions = function () {
 		this.goToTown(3);
 	}
 
-	if (me.normal && Pather.accessToAct(4) && !Pather.accessToAct(5) && me.act < 4) {
-		this.goToTown(4);
-	}
-
-	if (me.normal && Pather.accessToAct(5) && (me.getQuest(35, 0) || me.getQuest(35, 1)) && me.act < 5) {
+	if (me.normal && Pather.accessToAct(4) && me.act < 4) {
 		this.goToTown(4);
 	}
 

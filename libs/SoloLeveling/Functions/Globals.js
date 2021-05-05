@@ -13,7 +13,7 @@ var Difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 var SetUp = {
 	scripts: [
-		"den", "bloodraven", "tristam", "countess", "jail", /*"smith",*/ "pits", "andariel", "cows", // Act 1
+		"den", "bloodraven", "tristram", "countess", "jail", /*"smith",*/ "pits", "andariel", "cows", // Act 1
 		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
 		"templeruns", "eye", "heart", "brain", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
@@ -218,9 +218,9 @@ var Check = {
 			}
 
 			break;
-		case "tristam": //tristam
-			if (!me.normal && (me.classic && me.diablo || me.baal) || !me.tristam) {
-				SetUp.sequences.push("tristam");
+		case "tristram": //tristram
+			if (!me.normal && (me.classic && me.diablo || me.baal) || !me.tristram) {
+				SetUp.sequences.push("tristram");
 			}
 
 			break;

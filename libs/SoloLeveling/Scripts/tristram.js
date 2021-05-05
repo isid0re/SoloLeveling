@@ -1,13 +1,13 @@
 /*
-*	@filename	Tristam.js
+*	@filename	Tristram.js
 *	@author		isid0re
 *	@desc		rescue cain quest sequence
 */
 
-function tristam () {
+function tristram () {
 	Town.townTasks();
-	print('ÿc9SoloLevelingÿc0: starting tristam');
-	me.overhead("tristam");
+	print('ÿc9SoloLevelingÿc0: starting tristram');
+	me.overhead("tristram");
 
 	if (!Misc.checkQuest(4, 4) && !me.getItem(525)) {
 		if (!me.getItem(524)) {

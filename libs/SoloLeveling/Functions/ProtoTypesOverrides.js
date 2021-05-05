@@ -450,10 +450,10 @@ Object.defineProperty(Unit.prototype, 'smith', {
 	}
 });
 
-Object.defineProperty(Unit.prototype, 'tristam', {
+Object.defineProperty(Unit.prototype, 'tristram', {
 	get: function () {
 		if (this.type > 0) {
-			throw new Error("Unit.tristam: Must be used with player units.");
+			throw new Error("Unit.tristram: Must be used with player units.");
 		}
 
 		return this.getQuest(4, 0);
