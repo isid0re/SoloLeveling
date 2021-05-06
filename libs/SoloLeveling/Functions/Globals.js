@@ -13,9 +13,9 @@ var Difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 var SetUp = {
 	scripts: [
-		"den", "bloodraven", "tristram", "countess", "jail", /*"smith",*/ "pits", "andariel", "cows", // Act 1
-		"radament", "cube", "amulet", "summoner", "staff", "ancienttunnels", "tombs", "duriel", // Act 2
-		"templeruns", "eye", "heart", "brain", "travincal", "mephisto", // Act 3
+		"den", "bloodraven", "tristram", "countess", /*"jail", "smith",*/ "pits", "andariel", "cows", // Act 1
+		"cube", "radament", "amulet", "summoner", "ancienttunnels", "staff", "duriel", "tombs",// Act 2
+		"eye", "heart", "brain", "templeruns", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
 		"shenk", "savebarby", "anya", "ancients", "baal", // Act 5
 	],
@@ -37,10 +37,10 @@ var SetUp = {
 	},
 
 	sequences: [],
-	levelCap: [35, 65, 100][me.diff],
+	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
-	respecOne: [ 0, 28, 26, 25, 24, 24, 30][me.classid],
+	respecOne: [ 0, 28, 26, 19, 24, 24, 30][me.classid],
 
 	respecTwo: function () {
 		let respec;
@@ -219,7 +219,7 @@ var Check = {
 
 			break;
 		case "tristram": //tristram
-			if (!me.normal && (me.classic && me.diablo || me.baal) || !me.tristram) {
+			if (!me.normal && !me.tristram && (me.classic && me.diablo || me.baal)) {
 				SetUp.sequences.push("tristram");
 			}
 
@@ -381,7 +381,7 @@ var Check = {
 
 			break;
 		case "cows": //cows
-			if (!me.cows && (me.classic && me.diablo || me.baal)) {
+			if (!me.normal && !me.cows && (me.classic && me.diablo || me.baal)) {
 				SetUp.sequences.push("cows");
 			}
 

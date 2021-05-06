@@ -1,5 +1,5 @@
 /**
- *    @filename		paladin.HammerdinBuild.js
+ *    @filename		paladin.levelingBuild.js
  *	  @author	  	isid0re
  *    @desc			paladin build for hammerdin.
  * 					skills based on https://www.diabloii.net/forums/threads/max-damage-hammerdin-guide-by-captain_bogus-repost.127596/
@@ -14,22 +14,35 @@ var build = {
 	mercAuraWanted: 114,
 	mercDiff: 1,
 	stats: [
-		["strength", 47], ["dexterity", 27], ["vitality", 166], ["dexterity", 39], ["strength", 61], ["vitality", 241], ["strength", 89], ["vitality", 330], ["dexterity", "block"], ["vitality", "all"]
+		["vitality", 60], ["dexterity", 30], ["strength", 27],
+		["vitality", 91], ["dexterity", 44], ["strength", 30],
+		["vitality", 96], ["dexterity", 59], ["strength", 60],
+		["vitality", 109], ["dexterity", 77], ["strength", 89],
+		["vitality", 137], ["dexterity", 89],
+		["vitality", 173], ["dexterity", 103],
+		["vitality", 208], ["dexterity", 118],
+		["vitality", 243], ["dexterity", 133],
+		["vitality", 279], ["dexterity", 147],
+		["vitality", "all"]
 	],
 	skills: [
 		[98, 1], // might
-		[99, 1], // prayer
-		[117, 1], // holy shield
 		[97, 1], // smite
+		[99, 1], // prayer
 		[101, 1], // holy bolt
 		[104, 1], // defiance
 		[107, 1], // charge
 		[108, 1], // blessed aim
 		[109, 1], // cleansing
+		[108, 6], // blessed aim
+		[112, 1], // blessed hammers
+		[113, 1], // concentration
+		[115, 1], // vigor
 		[108, 7], // blessed aim
+		[112, 2], // blessed hammers
 		[113, 2], // concentration
 		[115, 2], // vigor
-		[112, 6], // blessed hammers
+		[112, 7], // blessed hammers
 		[117, 1], // holy shield
 		[120, 1], // mediation
 		[112, 12], // blessed hammers
