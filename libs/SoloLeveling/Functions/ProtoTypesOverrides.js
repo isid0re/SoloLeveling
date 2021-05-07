@@ -561,6 +561,15 @@ Object.defineProperty(Unit.prototype, 'duriel', {
 	}
 });
 
+Object.defineProperty(Unit.prototype, 'goldenbird', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.goldenbird: Must be used with player units.");
+		}
+
+		return this.getQuest(20, 0);
+	}
+});
 
 Object.defineProperty(Unit.prototype, 'eye', {
 	get: function () {
