@@ -183,7 +183,7 @@ Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
 };
 
 Pather.changeAct = function () {
-	let npc, code,	prevAct = me.act;
+	let tick, code, prevAct = me.act, targetAct;
 
 	if (!me.inTown) {
 		Town.goToTown();
@@ -191,38 +191,33 @@ Pather.changeAct = function () {
 
 	switch (prevAct) {
 	case 1:
-		Town.move(NPC.Warriv);
-		npc = getUnit(1, NPC.Warriv);
+		Town.npcInteract("warriv");
 		code = 0x0D36;
+		targetAct = 2;
 
 		break;
 	case 2:
-		Town.move(NPC.Meshif);
-		npc = getUnit(1, NPC.Meshif);
+		Town.npcInteract("meshif");
 		code = 0x0D38;
+		targetAct = 3;
 
 		break;
 	case 4:
-		Town.move(NPC.Tyrael);
-		npc = getUnit(1, NPC.Tyrael);
+		Town.npcInteract("tyrael");
 		code = 0x58D2;
+		targetAct = 5;
 
+		break;
+	default:
 		break;
 	}
 
-	Packet.flash(me.gid);
-	delay(1 + me.ping * 2);
+	if (Misc.useMenu(code)) {
+		tick = getTickCount();
 
-	if (!npc || !npc.openMenu() || !Misc.useMenu(code)) {
-		me.cancel();
-	}
-
-	let i, tick = getTickCount(), targetAct = prevAct + 1;
-
-	for (i = 0; i < 12; i += 1) {
-		while (getTickCount() - tick < Math.max(Math.round((i + 1) * 1000 / (i / 5 + 1)), me.ping * 2)) {
+		while (getTickCount() - tick < 10000) {
 			if (me.act === targetAct) {
-				delay(100);
+				delay(100 + me.ping);
 
 				return true;
 			}
@@ -231,7 +226,7 @@ Pather.changeAct = function () {
 		}
 	}
 
-	return true;
+	throw new Error("SoloLeveling: Failed to change Act");
 };
 
 Pather.moveTo = function (x, y, retry, clearPath, pop) {

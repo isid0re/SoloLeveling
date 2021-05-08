@@ -20,7 +20,6 @@ var Tracker = {
 	GTPath: "libs/SoloLeveling/Data/" + me.profile + ".GameTime.json",
 	LPPath: "libs/SoloLeveling/Data/" + me.profile + ".LevelingPerformance.csv",
 	SPPath: "libs/SoloLeveling/Data/" + me.profile + ".ScriptPerformance.csv",
-	CurrScript: "",
 
 	initialize: function () {
 		//File Structure
@@ -53,7 +52,7 @@ var Tracker = {
 
 	logLeveling: function (obj) {
 		if (typeof obj === "object" && obj.hasOwnProperty("event") && obj["event"] === "level up") {
-			Tracker.Leveling(Tracker.CurrScript);
+			Tracker.Leveling();
 		}
 	},
 
@@ -81,7 +80,7 @@ var Tracker = {
 		return true;
 	},
 
-	Leveling: function (subscript) {
+	Leveling: function () {
 		var GameTracker = Developer.readObj(Tracker.GTPath),
 			newTick = me.gamestarttime > GameTracker.LastSave ? me.gamestarttime : GameTracker.LastSave,
 			totalTick = GameTracker.LastSave,
@@ -93,7 +92,7 @@ var Tracker = {
 			areaName = Pather.getAreaName(me.area),
 			currentBuild = SetUp.getBuild(),
 			newSave = getTickCount(),
-			string = Developer.formatTime(newTotal) + "," + Developer.formatTime(splitTime) + "," + subscript + "," + diffString + "," + areaName + "," + me.charlvl + "," + currentBuild + "\n";
+			string = Developer.formatTime(newTotal) + "," + Developer.formatTime(splitTime) + "," + diffString + "," + areaName + "," + me.charlvl + "," + currentBuild + "\n";
 
 		GameTracker.Total = newTotal;
 		GameTracker.InGame = newIG;

@@ -26,17 +26,10 @@ function den () {
 	Precast.doPrecast(true);
 	Attack.clear(50);
 	Pather.moveToExit(8, true);
-	Attack.clearLevel();
 
-	if (!me.getItem(518)) {
-		Pather.moveToExit([2, 3], true);
-		Pather.getWP(3);
-		Pather.useWaypoint(1);
-	} else {
-		Town.goToTown();
+	while (me.area === 8) {
+		Attack.clearLevel();
 	}
-
-	Town.npcInteract("akara");
 
 	return true;
 }

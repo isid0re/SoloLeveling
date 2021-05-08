@@ -360,7 +360,6 @@ Misc.getExpShrine = function (...expLocs) {
 	return true;
 };
 
-
 Misc.gamePause = function () {
 	let script = getScript("default.dbj");
 
@@ -378,11 +377,12 @@ Misc.gamePause = function () {
 };
 
 Misc.gamePacket = function (bytes) {// various game events
-	let id, diablo, jadefigurine, tick;
+	let jadefigurine, diablo, tick, wave, waveMonster;
 
 	switch (bytes[0]) {
 	case 0x89: // den completion lights
 		if (me.area === 8) {
+			Misc.gamePause();
 			Pickit.pickItems();
 
 			if (!me.getItem(518)) {
@@ -394,6 +394,32 @@ Misc.gamePacket = function (bytes) {// various game events
 			}
 
 			Town.npcInteract("akara");
+			Misc.gamePause();
+		}
+
+		break;
+	case 0x5d: // golden bird quest
+		jadefigurine = getUnit(4, 546);
+
+		if (jadefigurine) {
+			Misc.gamePause();
+			Town.organizeInventory();
+			Pickit.pickItem(jadefigurine);
+
+			if (me.getItem(546)) {
+				print("ÿc9SoloLevelingÿc0: starting jade figurine");
+				me.overhead('jade figurine');
+			}
+
+			if (!me.inTown) {
+				Town.goToTown();
+			}
+
+			Town.unfinishedQuests();
+			Town.heal();
+			Town.move("portalspot");
+			Pather.usePortal(null, me.name);
+			Misc.gamePause();
 		}
 
 		break;
@@ -401,6 +427,7 @@ Misc.gamePacket = function (bytes) {// various game events
 		if (bytes[6] === 193 && !me.getSkill(54, 0)) {
 			diablo = getUnit(1, 243);
 			tick = getTickCount();
+			Misc.gamePause();
 
 			while (getTickCount() - tick < 2000) {
 				if (me.y <= diablo.y) { // above D
@@ -423,66 +450,48 @@ Misc.gamePacket = function (bytes) {// various game events
 					}
 				}
 			}
-		}
 
-		break;
-	case 0x5d: // golden bird quest
-		jadefigurine = getUnit(4, 546);
-		Pickit.pickItems();
-
-		if (jadefigurine) {
-			if (Storage.Inventory.CanFit(jadefigurine)) {
-				Pickit.pickItem(jadefigurine);
-			} else {
-				Town.clearJunk();
-				Town.organizeInventory();
-				Pickit.pickItem(jadefigurine);
-			}
-		}
-
-		if (me.getItem(546)) {
-			print("ÿc9SoloLevelingÿc0: starting jade figurine");
-			me.overhead('jade figurine');
-
-			if (!me.inTown) {
-				Town.goToTown();
-			}
-
-			Town.unfinishedQuests();
-			Town.heal();
-			Town.move("portalspot");
-			Pather.usePortal(null, me.name);
+			Misc.gamePause();
 		}
 
 		break;
 	case 0xa4: //baalwave
-		tick = getTickCount();
+		if (me.hell) {
+			waveMonster = ((bytes[1]) | (bytes[2] << 8));
+			wave = [23, 381, 557, 558, 571].indexOf(waveMonster);
 
-		while (getTickCount() - tick < 5650) { //prep
-			Pather.moveTo(15092, 5073);
-			Config.NoTele = true;
+			if (wave > -1) {
+				Misc.gamePause();
+				tick = getTickCount();
+				print('ÿc9SoloLevelingÿc0: baal wave #' + (wave + 1));
+				me.overhead("wave " + (wave + 1));
+
+				while (getTickCount() - tick < 6500) { //prep
+					Pather.moveTo(15092, 5073);
+				}
+
+				Config.NoTele = true;
+				tick = getTickCount();
+
+				while (getTickCount() - tick < 5000) { // 5 second delay (5000ms)
+					Pather.moveTo(15098, 5082);	// leave throne
+				}
+
+				tick = getTickCount();
+				Pather.moveTo(15099, 5078); // reenter throne
+
+				while (getTickCount() - tick < 2000) {// 2 second delay (2000ms)
+					Pather.moveTo(15098, 5082);
+				}
+
+				Pather.moveTo(15098, 5073);
+				Config.NoTele = false;
+				Misc.gamePause();
+			}
 		}
 
-		tick = getTickCount();
-
-		while (getTickCount() - tick < 5000) { // 5 second delay (5000ms)
-			Pather.moveTo(15098, 5082);	// leave throne
-		}
-
-		tick = getTickCount();
-		Pather.moveTo(15099, 5078); // reenter throne
-
-		while (getTickCount() - tick < 2000) {// 2 second delay (2000ms)
-			Pather.moveTo(15098, 5082);
-		}
-
-		Pather.moveTo(15098, 5073);
-		Config.NoTele = false;
-
-		if (JSON.stringify(bytes[0] === 176)) {
-			break;
-		}
-
+		break;
+	default:
 		break;
 	}
 };
