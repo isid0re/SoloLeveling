@@ -14,7 +14,7 @@ var Difficulty = ['Normal', 'Nightmare', 'Hell'];
 var SetUp = {
 	scripts: [
 		"den", "bloodraven", "tristram", "countess", /*"jail", "smith",*/ "pits", "andariel", "cows", // Act 1
-		"cube", "radament", "amulet", "summoner", "ancienttunnels", "staff", "duriel", "tombs",// Act 2
+		"cube", "radament", "amulet", "summoner", "ancienttunnels", "staff", "duriel", "tombs", // Act 2
 		"eye", "heart", "brain", "templeruns", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
 		"shenk", "savebarby", "anya", "ancients", "baal", // Act 5
@@ -36,7 +36,6 @@ var SetUp = {
 		});
 	},
 
-	sequences: [],
 	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
@@ -202,193 +201,195 @@ var Check = {
 		switch (sequenceName.toLowerCase()) {
 		case "den": //den
 			if (!me.den) {
-				SetUp.sequences.push("den");
+				return true;
 			}
 
 			break;
 		case "bloodraven": //bloodaraven
 			if (me.normal && !me.bloodraven || me.hell && !me.getSkill(54, 0)) {
-				SetUp.sequences.push("bloodraven");
+				return true;
 			}
 
 			break;
 		case "smith": //tools of the trade
 			if (me.normal && !me.smith) {
-				SetUp.sequences.push("smith");
+				return true;
 			}
 
 			break;
 		case "tristram": //tristram
 			if (!me.normal && !me.tristram && (me.classic && me.diablo || me.baal)) {
-				SetUp.sequences.push("tristram");
+				return true;
 			}
 
 			break;
 		case "countess": //countess
 			if (me.classic && !me.countess || needRunes) { // classic quest completed normal || have runes for difficulty
-				SetUp.sequences.push("countess");
+				return true;
 			}
 
 			break;
 		case "jail": //jail runs
 			if (me.charlvl < 15) {
-				SetUp.sequences.push("jail");
+				return true;
 			}
 
 			break;
 		case "pits": //pits
 			if (me.hell) {
-				SetUp.sequences.push("pits");
+				return true;
 			}
 
 			break;
 		case "andariel": //andy
 			if (me.hell || !me.classic && me.nightmare || !me.andariel && (me.normal || me.nightmare)) {
-				SetUp.sequences.push("andariel");
+				return true;
 			}
 
 			break;
 		case "cube": //cube
 			if (Pather.accessToAct(2) && !me.cube) {
-				SetUp.sequences.push("cube");
+				return true;
 			}
 
 			break;
 		case "radament": //radament
 			if (Pather.accessToAct(2) && !me.radament) {
-				SetUp.sequences.push("radament");
+				return true;
 			}
 
 			break;
 		case "staff": //staff
 			if (Pather.accessToAct(2) && !me.shaft && !me.staff && !me.horadricstaff) {
-				SetUp.sequences.push("staff");
+				return true;
 			}
 
 			break;
 		case "amulet": //ammy
 			if (Pather.accessToAct(2) && !me.amulet && !me.staff && !me.horadricstaff) {
-				SetUp.sequences.push("amulet");
+				return true;
 			}
 
 			break;
 		case "ancienttunnels": // ancient tunnels
 			if (Pather.accessToAct(2) && me.hell && !me.paladin) { // no pally in hell magic immunes
-				SetUp.sequences.push("ancienttunnels");
+				return true;
 			}
 
 			break;
 		case "summoner": //summoner
 			if (Pather.accessToAct(2) && (!me.hell && !me.summoner || me.hell)) {
-				SetUp.sequences.push("summoner");
+				return true;
 			}
 
 			break;
 		case "tombs": //tombs
 			if (Pather.accessToAct(2) && me.normal && me.charlvl < 25) {
-				SetUp.sequences.push("tombs");
+				return true;
 			}
 
 			break;
 		case "duriel": //duriel
 			if (Pather.accessToAct(2) && !me.duriel) {
-				SetUp.sequences.push("duriel");
+				return true;
 			}
 
 			break;
 		case "eye": // eye
 			if (Pather.accessToAct(3) && !me.eye && !me.khalimswill && !me.travincal) {
-				SetUp.sequences.push("eye");
+				return true;
 			}
 
 			break;
 		case "templeruns": //temple runs
 			if (Pather.accessToAct(3) && (me.normal && me.charlvl < 25 || me.nightmare && me.charlvl < 50 || me.hell)) {
-				SetUp.sequences.push("templeruns");
+				return true;
 			}
 
 			break;
 		case "heart": //heart
 			if (Pather.accessToAct(3) && !me.heart && !me.khalimswill && !me.travincal) {
-				SetUp.sequences.push("heart");
+				return true;
 			}
 
 			break;
 		case "brain": //brain
 			if (Pather.accessToAct(3) && !me.brain && !me.khalimswill && !me.travincal) {
-				SetUp.sequences.push("brain");
+				return true;
 			}
 
 			break;
 		case "travincal": //travincal
 			if (Pather.accessToAct(3) && (me.charlvl < 25 || !me.travincal)) {
-				SetUp.sequences.push("travincal");
+				return true;
 			}
 
 			break;
 		case "mephisto": //mephisto
 			if (Pather.accessToAct(3) && (!me.normal || me.normal && !me.mephisto)) {
-				SetUp.sequences.push("mephisto");
+				return true;
 			}
 
 			break;
 		case "izual": // izzy
 			if (Pather.accessToAct(4) && !me.izual) {
-				SetUp.sequences.push("izual");
+				return true;
 			}
 
 			break;
 		case "diablo": //diablo
 			if (Pather.accessToAct(4)) {
-				SetUp.sequences.push("diablo");
+				return true;
 			}
 
 			break;
 		case "hellforge": // hellforge
 			if (Pather.accessToAct(4) && !me.normal && !me.hellforge) {
-				SetUp.sequences.push("hellforge");
+				return true;
 			}
 
 			break;
 		case "shenk": // shenk
 			if (!me.classic && Pather.accessToAct(5)) {
-				SetUp.sequences.push("shenk");
+				return true;
 			}
 
 			break;
 		case "savebarby": //barbies
 			if (!me.classic && Pather.accessToAct(5) && me.normal && !me.savebarby) {
-				SetUp.sequences.push("savebarby");
+				return true;
 			}
 
 			break;
 		case "anya": //anya
 			if (!me.classic && Pather.accessToAct(5)) {
-				SetUp.sequences.push("anya");
+				return true;
 			}
 
 			break;
 		case "ancients": //ancients
 			if (!me.classic && Pather.accessToAct(5) && !me.ancients) {
-				SetUp.sequences.push("ancients");
+				return true;
 			}
 
 			break;
 		case "baal": //baal
 			if (!me.classic && Pather.accessToAct(5)) {
-				SetUp.sequences.push("baal");
+				return true;
 			}
 
 			break;
 		case "cows": //cows
 			if (!me.normal && !me.cows && (me.classic && me.diablo || me.baal)) {
-				SetUp.sequences.push("cows");
+				return true;
 			}
 
 			break;
+		default:
+			break;
 		}
 
-		return true;
+		return false;
 	},
 
 	Gold: function () {

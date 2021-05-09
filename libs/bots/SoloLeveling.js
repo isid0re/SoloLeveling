@@ -21,6 +21,8 @@ function SoloLeveling () {
 		NTIP.arrayLooping(nipItems.General);
 		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
 		NTIP.arrayLooping(nipItems.Selling);
+		print('ÿc9SoloLevelingÿc0: start run');
+		me.overhead('starting run');
 
 		if (me.charlvl === 1) {
 			let buckler = me.getItem(328);
@@ -37,23 +39,13 @@ function SoloLeveling () {
 			me.cancel();
 		}
 
-		me.overhead('preparing run sequence');
-		print("ÿc9SoloLevelingÿc0: preparing run sequence");
-
-		for (let run = 0; run < SetUp.scripts.length; run++) {
-			Check.Task(SetUp.scripts[run]);
-		}
-
-		print('ÿc9SoloLevelingÿc0: start run');
-		me.overhead('starting run');
-
 		return true;
 	};
 
-	this.runsequence = function () {
+	this.runScripts = function () {
 		let j, k, updatedDifficulty = Check.nextDifficulty();
 
-		for (k = 0; k < SetUp.sequences.length; k += 1) {
+		for (k = 0; k < SetUp.scripts.length; k += 1) {
 			if (!me.inTown) {
 				Town.goToTown();
 			}
@@ -63,31 +55,35 @@ function SoloLeveling () {
 				D2Bot.setProfile(null, null, null, updatedDifficulty);
 			}
 
-			if (!isIncluded("SoloLeveling/Scripts/" + SetUp.sequences[k] + ".js")) {
-				include("SoloLeveling/Scripts/" + SetUp.sequences[k] + ".js");
-			}
+			if (Check.Task(SetUp.scripts[k])) {
+				if (!isIncluded("SoloLeveling/Scripts/" + SetUp.scripts[k] + ".js")) {
+					include("SoloLeveling/Scripts/" + SetUp.scripts[k] + ".js");
+				}
 
-			let tick = getTickCount();
+				let tick = getTickCount();
 
-			for (j = 0; j < 5; j += 1) {
-				if (this[SetUp.sequences[k]]()) {
-					break;
+				for (j = 0; j < 5; j += 1) {
+					if (this[SetUp.scripts[k]]()) {
+						break;
+					}
+				}
+
+				if (j === 5) {
+					me.overhead("script " + SetUp.scripts[k] + " failed.");
+				}
+
+				if (Developer.logPerformance) {
+					Tracker.Script(tick, SetUp.scripts[k]);
 				}
 			}
-
-			if (j === 5) {
-				me.overhead("sequence " + SetUp.sequences[k] + " failed.");
-			}
-
-			if (Developer.logPerformance) {
-				Tracker.Script(tick, SetUp.sequences[k]);
-			}
 		}
+
+		return true;
 	};
 
 	// Start Running Script
 	this.setup();
-	this.runsequence();
+	this.runScripts();
 	scriptBroadcast('quit');
 
 	return true;

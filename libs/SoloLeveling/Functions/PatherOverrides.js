@@ -213,16 +213,18 @@ Pather.changeAct = function () {
 	}
 
 	if (Misc.useMenu(code)) {
-		tick = getTickCount();
+		for (let i = 0; i < 4; i += 1) {
+			tick = getTickCount();
 
-		while (getTickCount() - tick < 10000) {
-			if (me.act === targetAct) {
-				delay(100 + me.ping);
+			while (getTickCount() - tick < 3000) {
+				if (me.inTown && (me.act !== prevAct || me.act === targetAct)) {
+					delay(100);
 
-				return true;
+					return true;
+				}
+
+				delay(10);
 			}
-
-			delay(10);
 		}
 	}
 
