@@ -404,4 +404,63 @@ var Quest = {
 
 		return true;
 	},
+
+	holePunch: function (itemID) {
+		if (me.classic || !Misc.checkQuest(35, 1)) { // not expansion || used larzuk reward
+			return true;
+		}
+
+		me.overhead("hole punch");
+
+		let selected = me.getItems(itemID)
+			.filter(item =>
+				item.classid === itemID //
+				&& item.getStat(194) === 0 //no sockets
+				&& (item.quality === 2 || item.quality === 3) // Normal, Superior only
+				&& [3, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
+			)
+			.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
+			.first();
+
+		if (selected) {
+			if (!Storage.Inventory.CanFit(selected)) { // not able to keep
+
+				return false;
+			}
+
+			if (selected.location === 7 && Storage.Inventory.CanFit(selected)) { //move selected to inventory
+				Town.move('stash');
+				Storage.Inventory.MoveTo(selected);
+				me.cancel;
+			}
+
+			//socket item
+			Town.goToTown(5);
+			Town.npcInteract("larzuk");
+			delay(10 + me.ping * 2);
+
+			if (!Misc.useMenu(0x58DC)) {
+				return false;
+			}
+
+			selected.toCursor();
+			submitItem();
+			delay(500 + me.ping);
+			selected = false; //reset item gid
+			selected = me.findItem(itemID, 0, 3);
+
+			if (selected) {
+				if (Storage.Stash.CanFit(selected)) { //move selected back to stash
+					Town.move('stash');
+					Storage.Stash.MoveTo(selected);
+					me.cancel;
+					print('ÿc9SoloLevelingÿc0: used hole punch on ' + selected.name);
+
+					return true;
+				}
+			}
+		}
+
+		return false;
+	},
 };
