@@ -576,18 +576,29 @@ Town.shopItems = function () {
 };
 
 Town.unfinishedQuests = function () {
-	//tools of the trade
-	let malus = me.getItem(89);
+	let malus = me.getItem(89), leg = me.getItem(88), book = me.getItem(552), pol = me.getItem(545), tome = me.getItem(548), kw = me.getItem(174), hammer = me.getItem(90), soulstone = me.getItem(551), sor = me.getItem(646);
 
-	if (malus) {
+	//Act 1
+	if (malus) { //tools of the trade
 		Town.goToTown(1);
 		Town.npcInteract("charsi");
 	}
 
-	//Radament skill book
-	let book = me.getItem(552);
+	if (leg) { // drop wirts leg at startup to avoid selling and d/c
+		Town.goToTown(1);
 
-	if (book) {
+		if (leg.location === 7) {
+			Town.move('stash');
+			Storage.Inventory.MoveTo(leg);
+			delay(300 + me.ping);
+			me.cancel();
+		}
+
+		leg.drop();
+	}
+
+	//Act 2
+	if (book) { //Radament skill book
 		if (book.location === 7) {
 			this.openStash();
 			delay(300 + me.ping);
@@ -602,7 +613,7 @@ Town.unfinishedQuests = function () {
 		}
 	}
 
-	// golden bird
+	//Act 3
 	if (me.getItem(546)) { // golden bird
 		Town.goToTown(3);
 		Town.npcInteract("meshif");
@@ -614,8 +625,6 @@ Town.unfinishedQuests = function () {
 	}
 
 	if (me.getItem(545)) { // potion of life
-		let pol = me.getItem(545);
-
 		if (pol.location === 7) {
 			this.openStash();
 			delay(300 + me.ping);
@@ -630,10 +639,7 @@ Town.unfinishedQuests = function () {
 		}
 	}
 
-	//LamEssen's Tome
-	let tome = me.getItem(548);
-
-	if (tome) {
+	if (tome) { //LamEssen's Tome
 		if (tome.location === 7) {
 			Town.move('stash');
 			Storage.Inventory.MoveTo(tome);
@@ -645,10 +651,7 @@ Town.unfinishedQuests = function () {
 		print('ÿc9SoloLevelingÿc0: LamEssen Tome completed');
 	}
 
-	//remove Khalim's Will if quest not completed and restarting run.
-	let kw = me.getItem(174);
-
-	if (kw) {
+	if (kw) { //remove Khalim's Will if quest not completed and restarting run.
 		if (Item.getEquippedItem(4).classid === 174) {
 			Town.clearInventory();
 			delay(500 + me.ping * 2);
@@ -658,26 +661,8 @@ Town.unfinishedQuests = function () {
 		}
 	}
 
-	// drop wirts leg at startup to avoid selling and d/c
-	let leg = me.getItem(88);
-
-	if (leg) {
-		Town.goToTown(1);
-
-		if (leg.location === 7) {
-			Town.move('stash');
-			Storage.Inventory.MoveTo(leg);
-			delay(300 + me.ping);
-			me.cancel();
-		}
-
-		leg.drop();
-	}
-
-	// drop hellforge hammer and soulstone at startup to avoid selling and d/c
-	let hammer = me.getItem(90);
-
-	if (hammer) {
+	//Act 4
+	if (hammer) { // drop hellforge hammer and soulstone at startup to avoid selling and d/c
 		Town.goToTown(1);
 
 		if (hammer.location === 7) {
@@ -689,8 +674,6 @@ Town.unfinishedQuests = function () {
 
 		hammer.drop();
 	}
-
-	let soulstone = me.getItem(551);
 
 	if (soulstone) {
 		Town.goToTown(1);
@@ -705,11 +688,23 @@ Town.unfinishedQuests = function () {
 		soulstone.drop();
 	}
 
-	// anya scroll of resistance
-	let sor = me.getItem(646);
+	//Act 5
+	if (!Check.haveItem("polearm", "runeword", "Insight") && !Item.getEquippedItemMerc(3).prefixnum === 20568 && me.getItem(58)) { // Larzuk reward
+		Quest.holePunch(58); // insight voulge
+	}
+
+	if (!Check.haveItem("sword", "runeword", "Spirit") && (me.getItem(29) || me.getItem(30))) {
+		if (me.getItem(29)) { // spirit crystal sword
+			Quest.holePunch(29);
+		}
+
+		if (me.getItem(30)) { // spirit broad sword
+			Quest.holePunch(30);
+		}
+	}
 
 	if (sor) {
-		if (sor.location === 7) {
+		if (sor.location === 7) { // anya scroll of resistance
 			this.openStash();
 			delay(300 + me.ping);
 		}
@@ -937,7 +932,47 @@ Town.organizeInventory = function () {
 };
 
 Town.clearInventory = function () {
-	var i, result, item, items = [];
+	var i, col, result, item, beltSize,
+		items = [];
+
+	// Return potions to belt
+	item = me.getItem(-1, 0);
+
+	if (item) {
+		do {
+			if (item.location === 3 && [76, 77, 78].indexOf(item.itemType) > -1) {
+				items.push(copyUnit(item));
+			}
+		} while (item.getNext());
+
+		beltSize = Storage.BeltSize();
+		col = this.checkColumns(beltSize);
+
+		// Sort from HP to RV
+		items.sort(function (a, b) {
+			return a.itemType - b.itemType;
+		});
+
+		while (items.length) {
+			item = items.shift();
+
+			for (i = 0; i < 4; i += 1) {
+				if (item.code.indexOf(Config.BeltColumn[i]) > -1 && col[i] > 0) {
+					if (col[i] === beltSize) { // Pick up the potion and put it in belt if the column is empty
+						if (item.toCursor()) {
+							clickItem(0, i, 0, 2);
+						}
+					} else {
+						clickItem(2, item.x, item.y, item.location); // Shift-click potion
+					}
+
+					delay(me.ping + 200);
+
+					col = this.checkColumns(beltSize);
+				}
+			}
+		}
+	}
 
 	// Cleanup remaining potions
 	item = me.getItem(-1, 0);
