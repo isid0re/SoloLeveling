@@ -97,8 +97,8 @@ var tierscore = function (item) {
 
 	var casterWeights = {
 		//breakpoint stats
-		FCR: 5,
-		IAS: 0,
+		FCR: me.assassin ? 2 : 5,
+		IAS: me.assassin ? 5 : 0,
 		// Attack
 		MINDMG:	0, // min damage
 		MAXDMG: 0, // max damage

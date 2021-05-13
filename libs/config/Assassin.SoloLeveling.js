@@ -156,6 +156,7 @@ function LoadConfig () {
 
 	var autoequipTiers = [ // autoequip setup
 		//weapon
+		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 200000", // HotO
 		"[name] == greatertalons && [quality] == unique && [flag] != ethereal # [enhanceddamage] >= 150 && [lifeleech] >= 5 # [tier] == 100000", //bartuc's
 		"([type] == knife || [type] == sword && [flag] == runeword || ([type] == handtohand || [type] == assassinclaw) && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
@@ -168,6 +169,7 @@ function LoadConfig () {
 		"[Name] == SharkskinBoots && [Quality] == Unique && [Flag] != Ethereal # [MaxHP] >= 65 # [tier] == 100000", //waterwalks
 		"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//armor
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 200000", //Enigma
 		"[Type] == armor && [flag] != ethereal && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [tier] == 100000", // treachery armor
 		"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//shield
@@ -185,10 +187,16 @@ function LoadConfig () {
 	];
 	NTIP.arrayLooping(autoequipTiers);
 
-	var autoequipmercTiers = [ // autoequipmerc setup
+	var autoequipmercTiers = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"me.charlvl > 14 && [Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
+		//End-game gear - High level runewords and items
+		"[Type] == Polearm && [flag] == runeword && [class] == elite # [convictionaura] == 12 # [merctier] == 100000", 		//Infinity
+		"[Type] == Polearm && [flag] == runeword && [class] == elite # [concentrationaura] >= 16 # [merctier] == 100000", 	//Pride
+		"([Type] == Polearm || [Type] == Spear) && [flag] == runeword && [class] == elite # [ias] >= 60 && [enhanceddamage] >= 350 # [merctier] == 100000", //BoTD
+		"[type] == armor && [class] == elite # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
+		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100",	//Eth Andy's
 	];
 	NTIP.arrayLooping(autoequipmercTiers);
 
@@ -269,6 +277,57 @@ function LoadConfig () {
 
 			Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
 			Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
+		}
+
+		if (!Check.haveItem("mace", "runeword", "Heart of the Oak")) {
+			var HotO = [
+				"[Name] == ThulRune # # [MaxQuantity] == 1",
+				"[Name] == PulRune",
+				"[Name] == KoRune # # [MaxQuantity] == 1",
+				"[Name] == VexRune",
+			];
+			NTIP.arrayLooping(HotO);
+
+			if (me.getItem(635)) {
+				NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+			}
+
+			if (!me.getItem(635)) {
+				Config.Recipes.push([Recipe.Rune, "Um Rune"]);
+				Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
+				Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
+				Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
+			}
+
+			Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
+			Config.Runewords.push([Runeword.HeartoftheOak, "Flail"]);
+			Config.KeepRunewords.push("[Type] == mace # [FCR] == 40");
+		}
+
+		if (!Check.haveItem("armor", "runeword", "Enigma")) { // Enigma
+			var Enigma = [
+				"[Name] == JahRune",
+				"[Name] == IthRune # # [MaxQuantity] == 1",
+				"[Name] == BerRune",
+			];
+			NTIP.arrayLooping(Enigma);
+
+			if (!me.getItem(639)) {
+				Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
+			}
+
+			if (!me.getItem(640)) {
+				Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // ber to jah
+			}
+
+			if (me.getItem(639) && me.getItem(640)) {
+				Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
+				Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);
+				Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
+				Config.Runewords.push([Runeword.Enigma, "ScarabHusk", Roll.NonEth]);
+			}
+
+			Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
 		}
 
 		if (me.ladder > 0 && Item.getEquippedItem(4).tier < 777) { // Spirit Sword
