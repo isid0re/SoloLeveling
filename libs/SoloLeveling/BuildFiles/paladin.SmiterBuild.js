@@ -1,7 +1,7 @@
 /**
  *    @filename   paladin.SmiterBuild.js
  *	  @author	  isid0re
- *    @desc       End-game smiter build for after repsecTwo
+ *    @desc       End-game smiter build
  */
 
 var build = {
@@ -13,7 +13,7 @@ var build = {
 	mercAuraWanted: 114,
 	mercDiff: 1,
 	stats: [
-		["strength", 115], ["dexterity", 136], ["vitality", "300"], ["dexterity", "block"], ["vitality", "all"]
+		["strength", 115], ["dexterity", 136], ["vitality", 300], ["dexterity", "block"], ["vitality", "all"]
 	],
 	skills: [
 		[97, 20], //smite
