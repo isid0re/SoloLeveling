@@ -241,7 +241,7 @@ function LoadConfig () {
 
 	/* LOD gear */
 	if (!me.classic) {
-		switch (SetUp.finalBuild) { // finalbuilld autoequip setuip
+		switch (SetUp.finalBuild) { // finalbuilld autoequip setup
 		case 'Smiter':
 			var finalMELEE = [
 				//weapon
