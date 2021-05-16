@@ -14,6 +14,7 @@
 * 	Vitality	= 3
 *
 */
+
 js_strict(true);
 
 if (!isIncluded("common/Cubing.js")) {
