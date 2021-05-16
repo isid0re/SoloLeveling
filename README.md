@@ -20,6 +20,8 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 | Currently N/A | Blizzard | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
 | | BlizzBaller |   Bone | Smiter| | Elemental |
 | | Meteorb |    Summon | |
+| | Blova | |
+| | Lightning | |
 
 ## Install Guide
 | Step | Instructions | |
