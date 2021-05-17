@@ -1,4 +1,4 @@
-![SoloLeveling](https://i.imgur.com/Nz04onp.png)
+![SoloLeveling](https://i.imgur.com/6UMDGFk.png)
 
 SoloLeveling is an automated leveling script for any Diablo 2 characters using Kolbot. The overall goal of the project is to be the easiest and fastest leveling script for any character class.
 
