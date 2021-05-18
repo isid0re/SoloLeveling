@@ -74,6 +74,12 @@ Item.getBodyLoc = function (item) {
 	case 85: //
 	case 86: //
 	case 87: //
+		if (me.barbarian) {
+			bodyLoc = [4, 5];
+
+			break;
+		}
+
 		bodyLoc = 4;
 
 		break;

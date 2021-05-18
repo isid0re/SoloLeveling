@@ -18,7 +18,7 @@ var Overlay = {
 	resfixY: me.screensize ? 0 : -120,
 	questX: 12,
 	questY: 302,
-	dashboardX: 400,
+	dashboardX: 410,
 	dashboardY: 480,
 	text: {
 		hooks: [],
@@ -339,14 +339,14 @@ var Overlay = {
 			case "dashboard":
 				this.hooks.push({
 					name: "dashboard",
-					hook: new Box(Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY, 340, 65, 0x0, 1, 2)
+					hook: new Box(Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY, 370, 65, 0x0, 1, 2)
 				});
 
 				break;
 			case "dashboardframe":
 				this.hooks.push({
 					name: "dashboardframe",
-					hook: new Frame(Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY, 340, 65, 2)
+					hook: new Frame(Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY, 370, 65, 2)
 				});
 
 				break;

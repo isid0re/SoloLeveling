@@ -1,5 +1,5 @@
 /*
- *    @filename   	barbarian.SingerBuild.js
+ *    @filename   	barbarian.Singer.js
  *	  @author	  	isid0re
  *    @desc       	Warcry (Singer/Shout) build
  *    @credits		ebner20

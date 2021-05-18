@@ -34,6 +34,8 @@ function main () {
 		delay(50);
 	}
 
+	clearAllEvents() // remove any event listeners from game crash
+
 	if (!getScript("tools/heartbeat.js")) {
 		load("tools/heartbeat.js");
 	}
