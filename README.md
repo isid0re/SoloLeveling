@@ -1,4 +1,4 @@
-![SoloLeveling](https://i.imgur.com/Nz04onp.png)
+![SoloLeveling](https://i.imgur.com/6UMDGFk.png)
 
 SoloLeveling is an automated leveling script for any Diablo 2 characters using Kolbot. The overall goal of the project is to be the easiest and fastest leveling script for any character class.
 
@@ -20,6 +20,8 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 | Currently N/A | Blizzard | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
 | | BlizzBaller |   Bone | Smiter| | Elemental |
 | | Meteorb |    Summon | |
+| | Blova | |
+| | Lightning | |
 
 ## Install Guide
 | Step | Instructions | |
@@ -82,3 +84,5 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 ## License
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
 
+## Banner Image 
+The banner for SoloLeveling was graciously provided by [Patricia Dias](https://www.behance.net/patricia_dias).
