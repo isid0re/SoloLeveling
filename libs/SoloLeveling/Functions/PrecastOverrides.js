@@ -87,17 +87,20 @@ Precast.doPrecast = function (force) {
 
 			if (me.getSkill(155, 0) && (!me.getState(51) || force)) {
 				Skill.cast(155, 0); // Battle Command
-				delay(me.ping + 100);
-				Skill.cast(155, 0); // Cast twice. It works on itself
-
+				
+				if (Skill.getManaCost(155) < me.mp) {
+					delay(me.ping + 20);
+					Skill.cast(155, 0); // Cast twice. It works on itself
+				}
+				
 			}
 
-			if (me.getSkill(149, 0) && (!me.getState(32) || force)) {
+			if (me.getSkill(149, 0) && (!me.getState(32) || force) && Skill.getManaCost(149) < me.mp) {
 				Skill.cast(149, 0); // Battle Orders
 
 			}
 
-			if (me.getSkill(138, 0) && (!me.getState(26) || force)) {
+			if (me.getSkill(138, 0) && (!me.getState(26) || force) && Skill.getManaCost(138) < me.mp) {
 				Skill.cast(138, 0); // Shout
 
 			}
