@@ -85,9 +85,9 @@ Precast.doPrecast = function (force) {
 
 			Attack.weaponSwitch(this.getBetterSlot(149));
 
-			if (me.getSkill(155, 0) && (!me.getState(51) || force)) {
+			if (me.getSkill(155, 0) && (!me.getState(51) || force) && Skill.getManaCost(155) < me.mp) {
 				Skill.cast(155, 0); // Battle Command
-				
+
 				if (Skill.getManaCost(155) < me.mp) {
 					delay(me.ping + 20);
 					Skill.cast(155, 0); // Cast twice. It works on itself
