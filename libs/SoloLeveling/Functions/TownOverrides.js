@@ -114,7 +114,6 @@ Town.doChores = function (repair = false) {
 	Item.autoEquip();
 	Merc.hireMerc();
 	Merc.equipMerc();
-	this.clearInventory();
 	this.stash();
 	this.clearJunk();
 

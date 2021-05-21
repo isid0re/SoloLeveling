@@ -1,7 +1,7 @@
 /*
  *    @filename   amazon.JavazonBuild.js
  *	  @author	  isid0re
- *    @desc       Javazon build for after respecOne
+ *    @desc       Javazon build
  */
 
 var build = {

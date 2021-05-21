@@ -10,7 +10,7 @@
 
 var CustomConfig, configCheck = me.profile.toUpperCase().split("-");
 
-if (!!configCheck[1]) {
+if (getScript("D2BotSoloLevelingEntry.dbj") && !!configCheck[1]) {
 	if (me.classid === 0 && configCheck[1].toString().substring(0, 3).includes("ZON")) {
 		CustomConfig = {
 			"Amazon.SoloLeveling": me.profile,
