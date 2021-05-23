@@ -39,18 +39,20 @@ var SetUp = {
 	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
-	respecOne: [ 0, 28, 26, 19, 24, 24, 30][me.classid],
+	respecOne: [ 30, 28, 26, 19, 24, 24, 30][me.classid],
 
 	respecTwo: function () {
 		let respec;
 
 		switch (me.gametype) {
 		case 0:
-			respec = [0, 75, 75, 85, 0, 75, 75][me.classid];
+			respec = [75, 75, 75, 85, 0, 75, 75][me.classid];
 			break;
 
 		case 1:
 			switch (this.finalBuild) {
+			case "Witchyzon":
+				break;
 			case "Javazon":
 			case "Lightning":
 			case "Blova":

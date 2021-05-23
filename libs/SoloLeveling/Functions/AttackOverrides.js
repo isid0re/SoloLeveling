@@ -86,3 +86,65 @@ Attack.killTarget = function (name) {
 Attack.openChests = function () { // don't open chests when attacking
 	return true;
 };
+
+Attack.replenishArrows = function () {
+	let equippedProjectile, inventoryProjectile, equippedPercent = 100,
+		equippedWeapon = me.getItems()
+			.filter(item =>
+				[1].indexOf(item.location) > -1 // Needs to be equipped
+				&& [4].indexOf(item.bodylocation) > -1 // Needs to be weapon
+			)
+			.first();
+
+	if (equippedWeapon) {
+		switch (equippedWeapon.itemType) {
+		case 27: // bow
+		case 85: // amazon bow
+			equippedProjectile = me.getItems()
+				.filter(item =>
+					item.classid === 526
+				&& [1].indexOf(item.location) > -1 // Needs to be equipped
+				)
+				.first();
+
+			inventoryProjectile = me.getItems()
+				.filter(item =>
+					item.classid === 526
+				&& [3].indexOf(item.location) > -1 // Needs to be in the inventory
+				)
+				.first();
+
+			break;
+		case 35: // crossbow
+			equippedProjectile = me.getItems()
+				.filter(item =>
+					item.classid === 528
+				&& [1].indexOf(item.location) > -1 // Needs to be equipped
+				)
+				.first();
+
+			inventoryProjectile = me.getItems()
+				.filter(item =>
+					item.classid === 528
+				&& [3].indexOf(item.location) > -1 // Needs to be in the inventory
+				)
+				.first();
+
+			break;
+		default:
+			return false;
+		}
+
+		if (equippedProjectile) {
+			equippedPercent = equippedProjectile.getStat(70) * 100 / (getBaseStat("items", equippedProjectile.classid, "maxstack") + equippedProjectile.getStat(254));
+		}
+
+		if (inventoryProjectile && equippedPercent <= Config.RepairPercent) {
+			Item.equip(inventoryProjectile, 5);
+
+			return true;
+		}
+	}
+
+	return false;
+};
