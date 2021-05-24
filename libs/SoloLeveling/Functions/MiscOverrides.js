@@ -163,8 +163,6 @@ Misc.townCheck = function () {
 		return false;
 	}
 
-	Attack.replenishArrows();
-
 	if (Config.TownCheck && !me.inTown) {
 		try {
 			if (me.charlvl > 2 && me.gold > 500) {

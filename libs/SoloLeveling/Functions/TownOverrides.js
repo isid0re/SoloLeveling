@@ -1333,3 +1333,55 @@ Town.visitTown = function (repair = false) {
 
 	return true;
 };
+
+Town.needRepair = function () {
+	var quiver, bowCheck, quantity, inventoryQuiver,
+		repairAction = [],
+		canAfford = me.gold >= me.getRepairCost();
+
+	// Arrow/Bolt check
+	bowCheck = Attack.usingBow();
+
+	if (bowCheck) {
+		switch (bowCheck) {
+		case "bow":
+			quiver = me.getItem("aqv", 1); // Equipped arrow quiver
+			inventoryQuiver = me.getItem("aqv");
+
+			break;
+		case "crossbow":
+			quiver = me.getItem("cqv", 1); // Equipped bolt quiver
+			inventoryQuiver = me.getItem("cqv");
+
+			break;
+		}
+
+		if (!quiver) { // Out of arrows/bolts
+			if (inventoryQuiver) {
+				Item.equip(inventoryQuiver, 5);
+			} else {
+				repairAction.push("buyQuiver");
+			}
+		} else {
+			quantity = quiver.getStat(70);
+
+			if (typeof quantity === "number" && quantity * 100 / getBaseStat("items", quiver.classid, "maxstack") <= Config.RepairPercent) {
+				if (inventoryQuiver) {
+					Item.equip(inventoryQuiver, 5);
+				} else {
+					repairAction.push("buyQuiver");
+				}
+			}
+		}
+	}
+
+	if (canAfford) { // Repair durability/quantity/charges
+		if (this.getItemsForRepair(Config.RepairPercent, true).length > 0) {
+			repairAction.push("repair");
+		}
+	} else {
+		print("ÿc4Town: ÿc1Can't afford repairs.");
+	}
+
+	return repairAction;
+};
