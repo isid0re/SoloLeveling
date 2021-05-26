@@ -1,7 +1,7 @@
 /*
- *    @filename   amazon.LightBuild.js
- *	  @author	  theBGuy
- *    @desc       amazon build for after respecOne
+ *    @filename   amazon.LevelingBuild.js
+ *	  @author	  isid0re
+ *    @desc       customized javazon for nm and hell before final respec
  */
 
 var build = {
@@ -20,30 +20,30 @@ var build = {
 		["strength", 156], ["vitality", "all"],
 	],
 	skills: [
-		[10, 1, false], // Jab 1 // -> charlvl 2
-		[8, 1, false], // Inner Sight 1 // -> charlvl 3
-		[9, 2, false], // Critical Strike 2 // -> charlvl 5
-		[14, 1, false], // Power Strike 1 // -> charlvl 6
-		[13, 1, false], // Dodge 1 // -> charlvl 7
-		[14, 4, false], // Power Strike 4 // -> charlvl 11
-		[17, 1, false], // Slow Missles 1 // -> charlvl 12
-		[18, 1, false], // Avoid 1 // -> charlvl 13
-		[14, 8, false], // Power Strike 8 // -> charlvl 17
-		[24, 1, false], // Charged Strike 1 // -> charlvl 18
-		[23, 1, false], // Penetrate 1 // -> charlvl 18
-		[24, 5, false], // Charged Strike 5 // -> charlvl 23
-		[29, 1, false], // Evade 1 // charLvl 24
-		[28, 1, false], // Decoy 1 // -> charlvl 25
-		[24, 9, false], // Charged Strike 9 // -> charlvl 29
-		[32, 1, false], // Valkyrie 1 // -> charlvl 30
-		[34, 1, false], // Lightning Strike 1 // -> charlvl 31
-		[24, 20, false], // Charged Strike 20 // -> charlvl 42
-		[28, 5, false], // Decoy 5 // -> charlvl 47
-		[34, 20, false], // Lightning Strike 20 // -> charlvl 63
-		[35, 15, false], // Lightning Fury 20 // -> charlvl ? 
-		[25, 20, true], // Plague Javelin 10 // -> charlvl ?
-		[35, 20, false], // Lightning Fury 20 // -> charlvl ? 
-		[32, 17, false], // Valkyrie 20 // -> charlvl ? 
-		[14, 20, false], // Power Strike 20 // -> charlvl ?
+		[9, 1], // Critical Strike
+		[23, 1], // Penetrate
+		[33, 5], // Pierce
+		[10, 1], // Jab
+		[14, 1], // Power Strike
+		[15, 1], // Poison Javelin
+		[20, 1], // Lightning Bolt
+		[25, 1], // Plague Javelin
+		[35, 5], // Lightning Fury
+		[24, 17], // Charged Strike
+		[35, 6], // Lightning Fury
+		[24, 18], // Charged Strike
+		[35, 7], // Lightning Fury
+		[24, 19], // Charged Strike
+		[35, 8], // Lightning Fury
+		[24, 20], // Charged Strike
+		[35, 20], // Lightning Fury
+		[14, 12], // Power Strike
+		[13, 1], // Dodge
+		[18, 1], // Avoid
+		[32, 1, false], // Valkyrie
+		[29, 1], // Evade
+		[14, 20], // Power Strike
+		[34, 20], // Lightning Strike
+		[20, 20], // Lightning Bolt
 	]
 };

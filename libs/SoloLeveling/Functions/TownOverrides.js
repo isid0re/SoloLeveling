@@ -388,6 +388,7 @@ Town.buyPotions = function () {
 			mp: 0
 		};
 
+	this.clearBelt(); // fix wrong pot on pickup before town in belt
 	beltSize = Storage.BeltSize();
 	col = this.checkColumns(beltSize);
 
@@ -1360,7 +1361,8 @@ Town.needRepair = function () {
 			if (inventoryQuiver) {
 				Item.equip(inventoryQuiver, 5);
 			} else {
-				repairAction.push("buyQuiver");
+				repairAction.push("buyQuiver"); // equip
+				repairAction.push("buyQuiver"); // inventory
 			}
 		} else {
 			quantity = quiver.getStat(70);
@@ -1369,7 +1371,8 @@ Town.needRepair = function () {
 				if (inventoryQuiver) {
 					Item.equip(inventoryQuiver, 5);
 				} else {
-					repairAction.push("buyQuiver");
+					repairAction.push("buyQuiver"); // equip
+					repairAction.push("buyQuiver"); // inventory
 				}
 			}
 		}
