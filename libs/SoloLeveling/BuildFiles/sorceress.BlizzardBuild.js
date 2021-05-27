@@ -32,5 +32,26 @@ var build = {
 		[55, 20], // gspike
 		[39, 20], // ice bolt
 		[65, 20] // cold mastery
+	],
+	autoEquipTiers: [ // autoequip final gear
+		//weapon
+		"[name] == swirlingcrystal && [quality] == set && [flag] != ethereal # [skilllightningmastery]+[skillfiremastery]+[skillcoldmastery] >= 3 # [tier] == 100000", //tals orb
+		//Helmet
+		"[name] == deathmask && [quality] == set && [flag] != ethereal # [coldresist] == 15 && [lightresist] == 15 # [tier] == 100000", //tals mask
+		//belt
+		"[name] == meshbelt && [quality] == set && [flag] != ethereal # [itemmagicbonus] >= 10 # [tier] == 100000", //tals belt
+		//boots
+		"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 30 # [tier] == 100000", //war traveler
+		//armor
+		"[name] == lacqueredplate && [quality] == set # [coldresist] >= 1 # [tier] == 100000", //tals armor
+		//shield
+		"[name] == roundshield && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 180 # [tier] == 100000", //mosers
+		//gloves
+		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000", //magefist
+		//ammy
+		"[name] == amulet && [quality] == set # [lightresist] == 33 # [tier] == 100000", //tals ammy
+		//rings
+		"[Type] == Ring	&& [Quality] == Unique # [Dexterity] >= 20 # [tier] == 100000", //ravenfrost
+		"[Type] == Ring && [Quality] == Unique # [ItemMagicBonus] >= 30 # [tier] == 100000", //nagelring
 	]
 };

@@ -894,7 +894,6 @@ Town.organizeStash = function () {
 
 	if (!Storage.Stash.CanFit(stashFit)) {
 		me.cancel();
-		me.overhead('organize stash');
 
 		let sorted, items = me.findItems(-1, 0, 7);
 
@@ -915,7 +914,6 @@ Town.organizeInventory = function () {
 
 	if (!Storage.Inventory.CanFit(invfit)) {
 		me.cancel();
-		me.overhead('organize inventory');
 
 		let inv, items = me.findItems(-1, 0, 3);
 

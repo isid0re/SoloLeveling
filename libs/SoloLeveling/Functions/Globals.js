@@ -533,6 +533,7 @@ var Check = {
 			mercAuraName: build.mercAuraName,
 			mercAuraWanted: build.mercAuraWanted,
 			mercDiff: build.mercDiff,
+			finalGear: build.autoEquipTiers,
 		};
 	},
 };

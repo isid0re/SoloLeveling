@@ -59,5 +59,27 @@ var build = {
 		[251, 20], // fireblast
 		[261, 20], // charged bolt sentry
 		[279, 9], // shadow master
+	],
+	autoEquipTiers: [ // autoequip final gear
+		//weapon
+		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 200000", // HotO
+		"[name] == greatertalons && [quality] == unique && [flag] != ethereal # [enhanceddamage] >= 150 && [lifeleech] >= 5 # [tier] == 100000", //bartuc's
+		//Helmet
+		"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000", // harlequin's crest
+		//belt
+		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
+		//boots
+		"[Name] == SharkskinBoots && [Quality] == Unique && [Flag] != Ethereal # [MaxHP] >= 65 # [tier] == 100000", //waterwalks
+		//armor
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
+		//shield
+		"[type] == shield && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		//gloves
+		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000", //magefist
+		//ammy
+		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
+		//rings
+		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
+		"[Type] == Ring	&& [Quality] == Unique # [Dexterity] >= 20 # [tier] == 100000", //ravenfrost
 	]
 };

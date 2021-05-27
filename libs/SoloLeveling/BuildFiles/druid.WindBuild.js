@@ -36,5 +36,25 @@ var build = {
 		[235, 20, false], //Max cyclone armor
 		[226, 20, false], //Max oak Sage
 		[240, 20], //Max twister
+	],
+	autoEquipTiers: [ // autoequip final gear
+		//weapon
+		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000", // HotO
+		//Helmet
+		"[Name] == SkySpirit && [Quality] == Unique # [PassiveFirePierce] >= 10 # [tier] == 100000", // ravenlore
+		//belt
+		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
+		//boots
+		"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 50 # [tier] == 100000", //war traveler
+		//armor
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
+		//shield
+		"[Name] == Monarch && [Flag] != Ethereal && [flag] == runeword # [fcr] >= 35 # [tier] == 100000", //spirit shield
+		//gloves
+		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000", //magefist
+		//ammy
+		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
+		//rings
+		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
 	]
 };

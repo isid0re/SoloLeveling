@@ -34,5 +34,26 @@ var build = {
 		[45, 20], // ice blast
 		[55, 5], // gspike
 		[39, 14], // ice bolt
+	],
+	autoEquipTiers: [ // autoequip final gear
+		//weapon
+		"[name] == dimensionalshard && [quality] == unique # [fcr] == 20 # [tier] == 110000", //deaths fathom
+		//Helmet
+		"[name] == diadem && [quality] == unique # [fcr] == 25 # [tier] == 110000", //griffons
+		//belt
+		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 110000", //arach's
+		//boots
+		"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 30 # [tier] == 100000", //war traveler
+		//armor
+		"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 110000", //CoH
+		//shield
+		"[type] == shield # [fcr] >= 35 && [maxmana] >= 89 # [tier] == 110000", //spirit
+		//gloves
+		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000", //magefist
+		//ammy
+		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 110000", //maras
+		//rings
+		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 110000", //soj
+		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 3 # [tier] == 110000", //bk ring
 	]
 };

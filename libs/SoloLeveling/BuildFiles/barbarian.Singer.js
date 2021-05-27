@@ -6,7 +6,7 @@
  */
 
 var build = {
-	caster: false,
+	caster: true,
 	skillstab: 32, // Combat
 	wantedskills: [154, 138], //warcry, shout
 	usefulskills: [148, 153], //increased speed, natural resistance
@@ -49,5 +49,24 @@ var build = {
 		[145, 20, false], //Iron Skin
 		[142, 10, false], //Find Item
 		[155, 20, false] //Battle Command
+	],
+	autoEquipTiers: [ // autoequip final gear
+		//weapon
+		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000", // HotO x2 dual weild
+		//Helmet
+		"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000", // harlequin's crest
+		//belt
+		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
+		//boots
+		"[Name] == MeshBoots && [Quality] == Unique && [Flag] != Ethereal # [frw] >= 30 # [tier] == 100000", //silkweave
+		//armor
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
+		//gloves
+		"[name] == gauntlets && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 10 # [tier] == 100000", //frostburns
+		//ammy
+		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
+		//rings
+		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
+		"[type] == ring && [quality] == unique # [lifeleech] >= 3 && [maxstamina] == 50 # [tier] == 100000", // bul-kathos' wedding band
 	]
 };

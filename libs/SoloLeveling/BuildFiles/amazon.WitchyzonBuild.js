@@ -1,7 +1,7 @@
 /*
- *    @filename   amazon.JavazonBuild.js
+ *    @filename   amazon.WitchyzonBuild.js
  *	  @author	  isid0re
- *    @desc       Javazon build
+ *    @desc       Witchwild String Bowazon build
  */
 
 var build = {
@@ -27,21 +27,20 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[name] == ceremonialjavelin && [quality] == unique && [flag] == ethereal # [javelinandspearskilltab] == 2 # [tier] == 110000", //deaths fathom
+		"[name] == diamondbow && [quality] == unique # [fireresist] == 40 # [tier] == 110000", // WitchWild String up'd
 		//Helmet
-		"[name] == diadem && [quality] == unique && [flag] != ethereal # [fcr] == 25 # [tier] == 110000", //griffons
+		"[name] == casque && [quality] == unique  && [flag] != ethereal # [ias] == 10 && [lifeleech] >= 5 # [tier] == 110000", //griffons
 		//boots
-		"[name] == scarabshellboots && [quality] == unique && [flag] != ethereal # [strength]+[vitality] >= 20 # [tier] == 100000", //sandstorm treks
+		"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 30 # [tier] == 100000", //war traveler
 		//belt
-		"[name] == warbelt && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 110000", //thundergod's vigor
+		"[name] == vampirefangbelt && [quality] == unique && [flag] != ethereal # [lifeleech] >= 5 # [tier] == 110000", //arach's
 		//armor
 		"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 110000", //CoH
-		//shield
-		"[type] == shield # [fcr] >= 35 && [maxmana] >= 89 # [tier] == 110000", //spirit
+		//shield - N/A
 		//ammy
-		"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 110000", // highlords
+		"[type] == amulet && [quality] == unique # [dexterity] == 25 # [tier] == 110000", // cat's eye
 		//rings
 		"[type] == ring && [quality] == unique # [dexterity] == 20 && [tohit] == 250 # [tier] == # [tier] == 110000", // raven frost
-		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 5 # [tier] == 110000", //bk ring
+		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 3 # [tier] == 110000", //bk ring
 	]
 };
