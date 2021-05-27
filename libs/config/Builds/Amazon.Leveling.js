@@ -40,7 +40,9 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.AttackSkill = [-1, 35, 24, 35, 24, 10, 10];
 			Config.LowManaSkill = [0, -1];
-
+			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
+			Config.HPBuffer = 2;
+			Config.MPBuffer = 6;
 		}
 	},
 

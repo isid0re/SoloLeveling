@@ -43,6 +43,9 @@ var AutoBuildTemplate = {
 			Config.UseTraps = true;
 			Config.Traps = [271, 271, 271, 276, 276];
 			Config.BossTraps = [271, 271, 271, 271, 271];
+			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
+			Config.HPBuffer = 2;
+			Config.MPBuffer = 6;
 
 		}
 	},
@@ -52,7 +55,6 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 256, 251, 256, 251, -1, -1];
-
 
 		}
 	},

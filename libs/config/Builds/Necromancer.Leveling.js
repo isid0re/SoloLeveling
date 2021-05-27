@@ -44,6 +44,9 @@ var AutoBuildTemplate = {
 			Config.Curse[1] = 66; // Other monsters curse.
 			Config.ExplodeCorpses = 74; // Explode corpses.
 			Config.Golem = "Clay"; // Golem.
+			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
+			Config.HPBuffer = 2;
+			Config.MPBuffer = 6;
 		}
 	},
 

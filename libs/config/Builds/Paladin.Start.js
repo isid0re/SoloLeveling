@@ -40,6 +40,9 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.AttackSkill = [0, 0, 0, 0, 0, 0, 0];
 			Config.LowManaSkill = [0, 0];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
+			Config.BeltColumn = ["hp", "hp", "hp", "hp"];
+			Config.HPBuffer = 8;
 		}
 	},
 
@@ -49,6 +52,7 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 98, 0, 98, 0, 0];
 			Config.LowManaSkill = [0, 98];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -57,6 +61,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 98, 0, 98, 0, 100];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -65,6 +70,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 98, 0, 98, 0, 100];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -73,6 +79,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 98, 0, 98, 0, 100];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -81,6 +88,10 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 102, 0, 102, 0, 98];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
+			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
+			Config.HPBuffer = 2;
+			Config.MPBuffer = 6;
 		}
 	},
 
@@ -89,6 +100,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 102, 0, 102, 0, 98];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -97,6 +109,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 102, 0, 102, 0, 98];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -105,6 +118,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 102, 0, 102, 0, 98];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -113,6 +127,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 102, 0, 102, 0, 98];
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 

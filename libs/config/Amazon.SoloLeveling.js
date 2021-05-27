@@ -50,8 +50,8 @@ function LoadConfig () {
 	Config.PrimarySlot = 0;
 	Config.PacketCasting = 1;
 	Config.WaypointMenu = true;
-	Config.Cubing = me.gametype === 1 ? me.getItem(549) : false;
-	Config.MakeRunewords = me.gametype === 1 ? true : false;
+	Config.Cubing = !me.classic ? me.getItem(549) : false;
+	Config.MakeRunewords = !me.classic ? true : false;
 
 	/* General logging. */
 	Config.ItemInfo = false;
@@ -145,13 +145,13 @@ function LoadConfig () {
 	/* AutoEquip configuration. */
 	Config.AutoEquip = true;
 
-	var autoequipTiers = [ // autoequip setup
+	var levelingTiers = [ // autoequip setup
 		//weapon
 		"me.charlvl < 30 && ([Type] == bow || [Type] == amazonbow) && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-		"me.charlvl < 30 && [Type] == bowquiver # # [MaxQuantity] == 1",
+		"me.charlvl < 30 && [Type] == bowquiver # # [MaxQuantity] == 2",
 		"me.charlvl > 29 && ([Type] == javelin || [Type] == amazonspear || [Type] == amazonjavelin) && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
-		"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal #  [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//belt
 		"[type] == belt && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//boots
@@ -167,12 +167,15 @@ function LoadConfig () {
 		//rings
 		"[Type] == Ring && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 	];
-	NTIP.arrayLooping(autoequipTiers);
+	NTIP.arrayLooping(levelingTiers);
 
 	var autoequipmercTiers = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"me.charlvl > 14 && [Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
+		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
+		"[type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [merctier] == 50000",	//Treachery
+		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Eth Andy's
 	];
 	NTIP.arrayLooping(autoequipmercTiers);
 
@@ -226,29 +229,11 @@ function LoadConfig () {
 	/* LOD gear */
 	if (!me.classic) {
 		let WWS;
+		let finalGear = Check.Build().finalGear;
+		NTIP.arrayLooping(finalGear);
 
 		switch (SetUp.finalBuild) { // finalbuilld autoequip setup
 		case 'Witchyzon':
-			var witchyzonTiers = [ // autoequip setup
-				//weapon
-				"[name] == diamondbow && [quality] == unique # [fireresist] == 40 # [tier] == 110000", // WitchWild String up'd
-				//Helmet
-				"[name] == casque && [quality] == unique  && [flag] != ethereal # [ias] == 10 && [lifeleech] >= 5 # [tier] == 110000", //griffons
-				//boots
-				"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 30 # [tier] == 100000", //war traveler
-				//belt
-				"[name] == vampirefangbelt && [quality] == unique && [flag] != ethereal # [lifeleech] >= 5 # [tier] == 110000", //arach's
-				//armor
-				"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 110000", //CoH
-				//shield - N/A
-				//ammy
-				"[type] == amulet && [quality] == unique # [dexterity] == 25 # [tier] == 110000", // cat's eye
-				//rings
-				"[type] == ring && [quality] == unique # [dexterity] == 20 && [tohit] == 250 # [tier] == # [tier] == 110000", // raven frost
-				"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 3 # [tier] == 110000", //bk ring
-			];
-			NTIP.arrayLooping(witchyzonTiers);
-
 			WWS = me.getItems()
 				.filter(item =>
 					item.classid === 268 // diamond bow (witchwhild string up'd)
@@ -265,27 +250,6 @@ function LoadConfig () {
 
 			break;
 		case 'Javazon':
-			var javazonTiers = [ // autoequip setup
-				//weapon
-				"[name] == ceremonialjavelin && [quality] == unique && [flag] == ethereal # [javelinandspearskilltab] == 2 # [tier] == 110000", //deaths fathom
-				//Helmet
-				"[name] == diadem && [quality] == unique && [flag] != ethereal # [fcr] == 25 # [tier] == 110000", //griffons
-				//boots
-				"[name] == scarabshellboots && [quality] == unique && [flag] != ethereal # [strength]+[vitality] >= 20 # [tier] == 100000", //sandstorm treks
-				//belt
-				"[name] == warbelt && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 110000", //thundergod's vigor
-				//armor
-				"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 110000", //CoH
-				//shield
-				"[type] == shield # [fcr] >= 35 && [maxmana] >= 89 # [tier] == 110000", //spirit
-				//ammy
-				"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 110000", // highlords
-				//rings
-				"[type] == ring && [quality] == unique # [dexterity] == 20 && [tohit] == 250 # [tier] == # [tier] == 110000", // raven frost
-				"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 3 # [tier] == 110000", //bk ring
-			];
-			NTIP.arrayLooping(javazonTiers);
-
 			if (me.ladder > 0 && !Item.getEquippedItemMerc(4).prefixnum === 20566) { //infinity
 				var Inf = [
 					"[Name] == BerRune",
@@ -451,14 +415,12 @@ function LoadConfig () {
 
 			var apShields = [
 				"me.normal && [Name] == LargeShield && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-				"!me.hell && [Name] == KiteShield && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 				"([Name] == DragonShield || [Name] == Scutum) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(apShields);
 
 			Config.Runewords.push([Runeword.AncientsPledge, "Dragon Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Scutum"]);
-			Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
 
 			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");

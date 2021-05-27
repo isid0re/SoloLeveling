@@ -37,8 +37,6 @@ function LoadConfig () {
 	Scripts.SoloLeveling = true;
 
 	/* General configuration. */
-	var chooseBuffer = me.charlvl < 6 ? 0 : me.charlvl < SetUp.respecOne ? 1 : me.charlvl < SetUp.respecTwo() ? 2 : 3;
-
 	Config.MinGameTime = 400;
 	Config.MaxGameTime = 7200;
 	Config.MiniShopBot = true;
@@ -52,8 +50,8 @@ function LoadConfig () {
 	Config.PrimarySlot = 0;
 	Config.PacketCasting = 1;
 	Config.WaypointMenu = true;
-	Config.Cubing = me.gametype === 1 ? me.getItem(549) : false;
-	Config.MakeRunewords = me.gametype === 1 ? true : false;
+	Config.Cubing = !me.classic ? me.getItem(549) : false;
+	Config.MakeRunewords = !me.classic ? true : false;
 
 	/* General logging. */
 	Config.ItemInfo = false;
@@ -89,21 +87,16 @@ function LoadConfig () {
 	Config.RejuvBuffer = 0;
 
 	/* Belt configuration. */
-	var beltPots = [/* new char belt */["hp", "hp", "hp", "hp"], /* startbuild belt */["hp", "hp", "mp", "mp"], /* levelingbuild belt */["hp", "hp", "mp", "mp"], /* Final belt */["hp", "mp", "mp", "rv"]][chooseBuffer];
-
-	Config.BeltColumn = beltPots;
+	Config.BeltColumn = ["hp", "mp", "rv", "rv"];
 	Config.MinColumn[0] = Config.BeltColumn[0] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[1] = Config.BeltColumn[1] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[2] = Config.BeltColumn[2] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 	Config.MinColumn[3] = Config.BeltColumn[3] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 
 	/* Inventory buffers and lock configuration. */
-	var bufferHP = [12, 3, 3, 0][chooseBuffer];
-	var bufferMP = [0, 6, 6, 0][chooseBuffer];
-	var bufferRV = [4, 4, 4, 4][chooseBuffer];
-	Config.HPBuffer = bufferHP;
-	Config.MPBuffer = bufferMP;
-	Config.RejuvBuffer = bufferRV;
+	Config.HPBuffer = 0;
+	Config.MPBuffer = 0;
+	Config.RejuvBuffer = 4;
 	Config.Inventory[0] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[1] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[2] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
@@ -155,7 +148,7 @@ function LoadConfig () {
 	/* AutoEquip configuration. */
 	Config.AutoEquip = true;
 
-	var autoequipTiers = [ // autoequip setup
+	var levelingTiers = [ // autoequip setup
 		//weapon
 		"([Type] == Scepter || [Type] == Mace && [Quality] >= Magic || [Type] == Sword && ([Quality] >= Magic || [flag] == runeword) || [Type] == knife && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
@@ -175,18 +168,15 @@ function LoadConfig () {
 		//rings
 		"[Type] == Ring && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 	];
-	NTIP.arrayLooping(autoequipTiers);
+	NTIP.arrayLooping(levelingTiers);
 
 	var autoequipmercTiers = [
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"me.charlvl > 14 && [Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		//End-game gear - High level runewords and items
-		"[Type] == Polearm && [flag] == runeword && [class] == elite # [convictionaura] == 12 # [merctier] == 100000", 		//Infinity
-		"[Type] == Polearm && [flag] == runeword && [class] == elite # [concentrationaura] >= 16 # [merctier] == 100000", 	//Pride
-		"([Type] == Polearm || [Type] == Spear) && [flag] == runeword && [class] == elite # [ias] >= 60 && [enhanceddamage] >= 350 # [merctier] == 100000", //BoTD
-		"[type] == armor && [class] == elite # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
-		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100",	//Eth Andy's
+		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000", //Fortitude
+		"[type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [merctier] == 50000", //Treachery
+		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000", //Eth Andy's
 	];
 	NTIP.arrayLooping(autoequipmercTiers);
 
@@ -241,31 +231,11 @@ function LoadConfig () {
 
 	/* LOD gear */
 	if (!me.classic) {
+		let finalGear = Check.Build().finalGear;
+		NTIP.arrayLooping(finalGear);
+
 		switch (SetUp.finalBuild) { // finalbuilld autoequip setup
 		case 'Smiter':
-			var finalMELEE = [
-				//weapon
-				"[Type] == sword && [flag] == runeword # [ias] >= 30 # [tier] == 100000", //Grief
-				//helmet
-				"[name] == wingedhelm && [quality] == set && [flag] != ethereal # [fhr] >= 30 # [tier] == 100000", // gface
-				//belt
-				"[name] == warbelt && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160  # [tier] == 100000", //tgods
-				//boots
-				"[name] == lightplatedboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 50 # [tier] == 100000", //goblin toes
-				//armor
-				"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
-				//shield
-				"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal  # [EnhancedDefense] >= 150 # [tier] == 100000", //hoz
-				//gloves
-				"[name] == vampirebonegloves && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 100 && [strength] >= 12 && [lifeleech] >= 9  # [tier] == 100000", // drac's
-				//ammy
-				"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 100000", //highlords
-				//rings
-				"[type] == ring && [quality] == unique # [tohit] >= 180 && [dexterity] >= 15 # [tier] == 99000", // ravenfrost
-				"[type] == ring && [quality] == unique # [lifeleech] >= 3 && [maxstamina] == 50 # [tier] == 100000", // bul-kathos' wedding band
-			];
-			NTIP.arrayLooping(finalMELEE);
-
 			if (!Check.haveItem("sword", "runeword", "Grief")) {
 				var Grief = [
 					"[Name] == EthRune # # [MaxQuantity] == 1",
@@ -283,29 +253,6 @@ function LoadConfig () {
 
 			break;
 		case 'Hammerdin':
-			var finalCASTER = [
-				//weapon
-				"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000", // HotO
-				//helmet -- shako
-				"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000", // harlequin's crest
-				//belt
-				"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
-				//boots -- using War Traveler's
-				"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 50 # [tier] == 100000", //war traveler
-				//armor -- using Enigma
-				"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
-				//shield
-				"[Name] == GildedShield && [Quality] == unique && [flag] != ethereal # [EnhancedDefense] >= 150 # [tier] == 100000", //hoz
-				//gloves -- using Magefist
-				"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000",
-				//ammy
-				"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
-				//rings
-				"[name] == ring && [quality] == unique # [maxhp] >= 40 && [magicdamagereduction] >= 12 # [tier] == 99000", // dwarfstar
-				"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
-			];
-			NTIP.arrayLooping(finalCASTER);
-
 			if (!Check.haveItem("mace", "runeword", "Heart of the Oak")) {
 				var HotO = [
 					"[Name] == ThulRune # # [MaxQuantity] == 1",
@@ -331,6 +278,8 @@ function LoadConfig () {
 				Config.KeepRunewords.push("[Type] == mace # [FCR] == 40");
 			}
 
+			break;
+		default:
 			break;
 		}
 

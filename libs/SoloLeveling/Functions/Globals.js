@@ -52,6 +52,7 @@ var SetUp = {
 		case 1:
 			switch (this.finalBuild) {
 			case "Witchyzon":
+				respec = Item.getEquippedItem(4).tier === 100000 ? me.charlvl : 100;
 				break;
 			case "Javazon":
 			case "Lightning":
@@ -68,10 +69,13 @@ var SetUp = {
 			case "Poison":
 			case "Summon":
 			case "Hammerdin":
+			case "Elemental":
 			case "Wind":
 			case "Trapsin":
+			case "Singer":
 				respec = Check.haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
 				break;
+			case "Whirlwind":
 			case "Smiter":
 				respec = Check.haveItem("sword", "runeword", "Grief") ? me.charlvl : 100;
 				break;

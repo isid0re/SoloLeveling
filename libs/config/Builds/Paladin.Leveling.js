@@ -40,6 +40,9 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.AttackSkill = [-1, 112, 113, 112, 113, 101, 113];
 			Config.LowManaSkill = [0, 113];
+			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
+			Config.HPBuffer = 2;
+			Config.MPBuffer = 6;
 
 			if (me.hell && !Pather.accessToAct(5)) {
 				Config.SkipImmune = ["magic"];

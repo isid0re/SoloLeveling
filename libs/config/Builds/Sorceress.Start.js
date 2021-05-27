@@ -42,7 +42,7 @@ var AutoBuildTemplate = {
 			Config.SkipImmune = ["lightning"];
 			Config.BeltColumn = ["hp", "hp", "hp", "hp"];
 			Config.HPBuffer = 2;
-			Config.MPBuffer = 10;
+			Config.MPBuffer = 6;
 		}
 	},
 
@@ -111,7 +111,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [44, 38, -1, 38, -1, 0, 0];
-
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -120,7 +120,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [44, 38, -1, 38, -1, 0, 0];
-
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
@@ -129,7 +129,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [44, 38, -1, 38, -1, 0, 0];
-
+			Config.TownCheck = me.findItem("tbk", 0, 3);
 		}
 	},
 
