@@ -33,6 +33,14 @@ function travincal () {
 	Attack.clear(10); // clear area around orb
 
 	if (!me.travincal) { // khalim's will quest not complete
+		if (!me.getItem(173)) { // cleared council didn't pick flail
+			let flail = getUnit(4, 173);
+
+			Pather.moveToUnit(flail);
+			Pickit.pickItems();
+			Pather.moveToPreset(83, 2, 404);
+		}
+
 		if (!me.getItem(174) && me.getItem(173)) { // cube flail to will
 			Quest.cubeItems(174, 553, 554, 555, 173);
 			delay(250 + me.ping);

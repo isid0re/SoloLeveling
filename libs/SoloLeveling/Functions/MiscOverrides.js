@@ -398,31 +398,6 @@ Misc.gamePacket = function (bytes) {// various game events
 		}
 
 		break;
-	case 0x5d: // golden bird quest
-		jadefigurine = getUnit(4, 546);
-
-		if (jadefigurine) {
-			Misc.gamePause();
-			Town.organizeInventory();
-			Pickit.pickItem(jadefigurine);
-
-			if (me.getItem(546)) {
-				print("ÿc9SoloLevelingÿc0: starting jade figurine");
-				me.overhead('jade figurine');
-			}
-
-			if (!me.inTown) {
-				Town.goToTown();
-			}
-
-			Town.unfinishedQuests();
-			Town.heal();
-			Town.move("portalspot");
-			Pather.usePortal(null, me.name);
-			Misc.gamePause();
-		}
-
-		break;
 	case 0x4c: // diablo lightning dodge
 		if (bytes[6] === 193 && !me.getSkill(54, 0)) {
 			diablo = getUnit(1, 243);

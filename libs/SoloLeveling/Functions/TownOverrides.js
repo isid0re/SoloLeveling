@@ -576,7 +576,7 @@ Town.shopItems = function () {
 };
 
 Town.unfinishedQuests = function () {
-	let malus = me.getItem(89), leg = me.getItem(88), book = me.getItem(552), pol = me.getItem(545), tome = me.getItem(548), kw = me.getItem(174), hammer = me.getItem(90), soulstone = me.getItem(551), sor = me.getItem(646);
+	let malus = me.getItem(89), leg = me.getItem(88), book = me.getItem(552), tome = me.getItem(548), kw = me.getItem(174), hammer = me.getItem(90), soulstone = me.getItem(551);
 
 	//Act 1
 	if (malus) { //tools of the trade
@@ -606,8 +606,6 @@ Town.unfinishedQuests = function () {
 
 		if (book.interact()) {
 			print('ÿc9SoloLevelingÿc0: used Radament skill book');
-		} else if (clickItem(1, book)) {
-			print('ÿc9SoloLevelingÿc0: used Radament skill book');
 		} else {
 			print('ÿc9SoloLevelingÿc0: failed to used Radament skill book');
 		}
@@ -615,6 +613,8 @@ Town.unfinishedQuests = function () {
 
 	//Act 3
 	if (me.getItem(546)) { // golden bird
+		print("ÿc9SoloLevelingÿc0: starting jade figurine");
+		me.overhead('jade figurine');
 		Town.goToTown(3);
 		Town.npcInteract("meshif");
 	}
@@ -625,14 +625,14 @@ Town.unfinishedQuests = function () {
 	}
 
 	if (me.getItem(545)) { // potion of life
+		let pol = me.getItem(545);
+
 		if (pol.location === 7) {
 			this.openStash();
 			delay(300 + me.ping);
 		}
 
 		if (pol.interact()) {
-			print('ÿc9SoloLevelingÿc0: used potion of life');
-		} else if (clickItem(1, pol)) {
 			print('ÿc9SoloLevelingÿc0: used potion of life');
 		} else {
 			print('ÿc9SoloLevelingÿc0: failed to used potion of life');
@@ -703,15 +703,15 @@ Town.unfinishedQuests = function () {
 		}
 	}
 
-	if (sor) {
+	if (me.getItem(646)) {
+		let sor = me.getItem(646);
+
 		if (sor.location === 7) { // anya scroll of resistance
 			this.openStash();
 			delay(300 + me.ping);
 		}
 
 		if (sor.interact()) {
-			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
-		} else if (clickItem(1, sor)) {
 			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
 		} else {
 			print('ÿc9SoloLevelingÿc0: failed to used scroll of resistance');
