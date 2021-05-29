@@ -85,6 +85,9 @@ var SetUp = {
 			case "Wolf":
 				respec = Check.haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
 				break;
+			case "Plaguewolf":
+				respec = Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
+				break;
 			}
 		}
 

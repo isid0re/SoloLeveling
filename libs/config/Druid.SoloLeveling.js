@@ -237,73 +237,138 @@ function LoadConfig () {
 		let finalGear = Check.Build().finalGear;
 		NTIP.arrayLooping(finalGear);
 
-		if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
-			var CTA = [
-				"[Name] == AmnRune # # [MaxQuantity] == 1",
-				"[Name] == RalRune # # [MaxQuantity] == 1",
-				"[Name] == MalRune",
-				"[Name] == IstRune",
-				"[Name] == OhmRune",
-			];
-			NTIP.arrayLooping(CTA);
+		switch (SetUp.finalBuild) { // finalbuild setup
+		case 'Wind':
+		case 'Elemental':
+			if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
+				var CTA = [
+					"[Name] == AmnRune # # [MaxQuantity] == 1",
+					"[Name] == RalRune # # [MaxQuantity] == 1",
+					"[Name] == MalRune",
+					"[Name] == IstRune",
+					"[Name] == OhmRune",
+				];
+				NTIP.arrayLooping(CTA);
 
-			if (me.getItem(636)) { // have Ohm before collecting base
-				NTIP.addLine("[Name] == CrystalSword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");
+				if (me.getItem(636)) { // have Ohm before collecting base
+					NTIP.addLine("[Name] == CrystalSword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");
+				}
+
+				Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
+				Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
 			}
 
-			Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
-			Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
+			if (!Check.haveItem("mace", "runeword", "Heart of the Oak")) { // HoTO
+				var HotO = [
+					"[Name] == ThulRune # # [MaxQuantity] == 1",
+					"[Name] == PulRune",
+					"[Name] == KoRune # # [MaxQuantity] == 1",
+					"[Name] == VexRune",
+				];
+				NTIP.arrayLooping(HotO);
+
+				if (me.getItem(635)) {
+					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+				}
+
+				if (!me.getItem(635)) {
+					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
+				}
+
+				Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
+				Config.Runewords.push([Runeword.HeartoftheOak, "Flail"]);
+				Config.KeepRunewords.push("[Type] == mace # [FCR] == 40");
+			}
+
+			if (!Check.haveItem("armor", "runeword", "Enigma")) { // Enigma
+				var Enigma = [
+					"[Name] == JahRune",
+					"[Name] == IthRune # # [MaxQuantity] == 1",
+					"[Name] == BerRune",
+				];
+				NTIP.arrayLooping(Enigma);
+
+				if (!me.getItem(639)) {
+					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
+				}
+
+				if (!me.getItem(640)) {
+					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // ber to jah
+				}
+
+				if (me.getItem(639) && me.getItem(640)) {
+					Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
+					Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);
+					Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
+					Config.Runewords.push([Runeword.Enigma, "ScarabHusk", Roll.NonEth]);
+				}
+
+				Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
+			}
+
+			break;
+		case 'Plaguewolf':
+			//Config.Recipes.push([Recipe.Unique.Weapon.ToElite, "Quaterstaff", Roll.NonEth]); // Upgrade Ribcracker to Elite
+
+			if (!Check.haveItem("armor", "runeword", "Chains of Honor")) { // CoH
+				if (!Check.haveItem("armor", "runeword", "Chains of Honor") && me.hell) {
+					var CoH = [
+						"[Name] == DolRune # # [MaxQuantity] == 1",
+						"[Name] == UmRune",
+						"[Name] == BerRune",
+						"[Name] == IstRune",
+						"[Name] == ArchonPlate && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
+					];
+					NTIP.arrayLooping(CoH);
+				}
+
+				if (!me.getItem(639)) {
+					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
+				}
+
+				Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate", Roll.NonEth]);
+				Config.Runewords.push([Runeword.ChainsofHonor, "Archon Plate"]);
+				Config.KeepRunewords.push("[type] == armor # [fireresist] == 65 && [hpregen] == 7");
+			}
+
+			if (!Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("armor", "runeword", "Chains of Honor")) {	//Only start making grief after CoH is made
+				var Grief = [
+					"[Name] == EthRune # # [MaxQuantity] == 1",
+					"[Name] == TirRune # # [MaxQuantity] == 1",
+					"[Name] == LoRune # # [MaxQuantity] == 1",
+					"[Name] == MalRune # # [MaxQuantity] == 1",
+					"[Name] == RalRune # # [MaxQuantity] == 1",
+					"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(Grief);
+
+				Config.Runewords.push([Runeword.Grief, "Phase Blade"]);
+				Config.KeepRunewords.push("[Type] == sword # [ias] >= 30");
+			}
+
+			break;
+		default:
+			break;
 		}
 
-		if (!Check.haveItem("mace", "runeword", "Heart of the Oak")) { // HoTO
-			var HotO = [
-				"[Name] == ThulRune # # [MaxQuantity] == 1",
-				"[Name] == PulRune",
-				"[Name] == KoRune # # [MaxQuantity] == 1",
-				"[Name] == VexRune",
-			];
-			NTIP.arrayLooping(HotO);
-
-			if (me.getItem(635)) {
-				NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
+		if (me.ladder > 0 && Item.getEquippedItem(5).tier < 1000) { // Spirit shield
+			if (!Check.haveItem("shield", "runeword", "Spirit") && me.hell) {
+				var SpiritShield = [
+					"[Name] == TalRune # # [MaxQuantity] == 1",
+					"[Name] == ThulRune # # [MaxQuantity] == 1",
+					"[Name] == OrtRune # # [MaxQuantity] == 1",
+					"[Name] == AmnRune # # [MaxQuantity] == 1",
+					"[Name] == Monarch && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(SpiritShield);
 			}
 
-			if (!me.getItem(635)) {
-				Config.Recipes.push([Recipe.Rune, "Um Rune"]);
-				Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
-				Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
-				Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
-			}
-
-			Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
-			Config.Runewords.push([Runeword.HeartoftheOak, "Flail"]);
-			Config.KeepRunewords.push("[Type] == mace # [FCR] == 40");
-		}
-
-		if (!Check.haveItem("armor", "runeword", "Enigma")) { // Enigma
-			var Enigma = [
-				"[Name] == JahRune",
-				"[Name] == IthRune # # [MaxQuantity] == 1",
-				"[Name] == BerRune",
-			];
-			NTIP.arrayLooping(Enigma);
-
-			if (!me.getItem(639)) {
-				Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
-			}
-
-			if (!me.getItem(640)) {
-				Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // ber to jah
-			}
-
-			if (me.getItem(639) && me.getItem(640)) {
-				Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
-				Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);
-				Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
-				Config.Runewords.push([Runeword.Enigma, "ScarabHusk", Roll.NonEth]);
-			}
-
-			Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
+			Config.Recipes.push([Recipe.Socket.Shield, "Monarch", Roll.NonEth]);
+			Config.Runewords.push([Runeword.Spirit, "Monarch"]);
+			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 35 && [maxmana] >= 89");
 		}
 
 		if (me.ladder > 0 && Item.getEquippedItem(4).tier < 777) { // Spirit Sword
@@ -333,23 +398,6 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Spirit, "Broad Sword"]);
 
 			Config.KeepRunewords.push("[type] == sword # [fcr] >= 25 && [maxmana] >= 89");
-		}
-
-		if (me.ladder > 0 && Item.getEquippedItem(5).tier < 1000) { // Spirit shield
-			if (!Check.haveItem("shield", "runeword", "Spirit") && me.hell) {
-				var SpiritShield = [
-					"[Name] == TalRune # # [MaxQuantity] == 1",
-					"[Name] == ThulRune # # [MaxQuantity] == 1",
-					"[Name] == OrtRune # # [MaxQuantity] == 1",
-					"[Name] == AmnRune # # [MaxQuantity] == 1",
-					"[Name] == Monarch && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(SpiritShield);
-			}
-
-			Config.Recipes.push([Recipe.Socket.Shield, "Monarch", Roll.NonEth]);
-			Config.Runewords.push([Runeword.Spirit, "Monarch"]);
-			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 25 && [maxmana] >= 89");
 		}
 
 		if (me.ladder > 0 && Item.getEquippedItemMerc(4).tier < 3600) { // Merc Insight
