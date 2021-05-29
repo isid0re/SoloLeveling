@@ -61,33 +61,8 @@ function main () {
 		}
 	}
 
-	if (getScript("D2BotAutoPerm.dbj")) {
-		return true;
-	}	
-
-	if (getScript("D2BotShopDrop.dbj")) {
-		return true;
-	}
-	
-	// don't load default for dropper/mules
-	if (getScript("D2BotDropper.dbj") || getScript("D2BotMule.dbj") || getScript("D2BotDrop.dbj")) {
-		if (!FileTools.exists("tools/AreaWatcher.js")) {
-			load("tools/AreaWatcher.js");
-			var badAreas = [2];
-			
-			while(true) {
-				try {
-					if (badAreas.indexOf(me.area) >= 0) {
-						D2Bot.printToConsole("Saved from suicide walk!");
-						D2Bot.restart();
-					}
-				} catch (e) {
-					D2Bot.restart();
-				}
-				delay(1000);
-			}
-		}
-		
+	// don't load default for mules
+	if (getScript("D2BotMule.dbj")) {
 		return true;
 	}
 
