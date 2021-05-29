@@ -187,6 +187,7 @@ var nipItems = {
 		"[Name] == ShaftOfTheHoradricStaff",
 		"[Name] == TopOfTheHoradricStaff",
 		"[Name] == HoradricStaff",
+		"[Name] == ajadefigurine",
 		"[Name] == TheGoldenBird",
 		"[Name] == potionoflife",
 		"[Name] == lamesen'stome",
@@ -439,15 +440,17 @@ var Check = {
 		let diffCompleted = !me.classic && me.baal ? true : me.classic && me.diablo ? true : false;
 
 		if (diffCompleted) {
-			if (lvlReq && !lowRes) {
-				diffShift = me.diff + 1;
-				D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + Difficulty[diffShift]);
-			} else if (lvlReq && lowRes) {
-				D2Bot.printToConsole('SoloLeveling: ' + Difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + Check.Resistance().FR + ' | CR: ' + Check.Resistance().CR + ' | LR: ' + Check.Resistance().LR);
-
-				if (me.charlvl >= SetUp.levelCap + 5) {
+			if (lvlReq) {
+				if (!lowRes) {
 					diffShift = me.diff + 1;
-					D2Bot.printToConsole('SoloLeveling: Over leveled. Starting: ' + Difficulty[diffShift]);
+					D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + Difficulty[diffShift]);
+				} else {
+					if (me.charlvl >= SetUp.levelCap + 5) {
+						diffShift = me.diff + 1;
+						D2Bot.printToConsole('SoloLeveling: Over leveled. Starting: ' + Difficulty[diffShift]);
+					} else {
+						D2Bot.printToConsole('SoloLeveling: ' + Difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + Check.Resistance().FR + ' | CR: ' + Check.Resistance().CR + ' | LR: ' + Check.Resistance().LR);
+					}
 				}
 			}
 		}

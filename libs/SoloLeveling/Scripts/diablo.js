@@ -320,13 +320,13 @@ function diablo () {
 	Attack.killTarget(243); //diablo
 	Pickit.pickItems();
 
-	if (me.gametype === 0) {
+	if (me.classic) {
 		return true;
 	}
 
-	if (Misc.checkQuest(28, 0)) {
+	try {
 		Pather.changeAct();
-	} else {
+	} catch (err) {
 		Town.npcInteract("tyrael");
 		me.cancel();
 		delay(500 + me.ping);

@@ -377,7 +377,7 @@ Misc.gamePause = function () {
 };
 
 Misc.gamePacket = function (bytes) {// various game events
-	let jadefigurine, diablo, tick, wave, waveMonster;
+	let diablo, tick, wave, waveMonster;
 
 	switch (bytes[0]) {
 	case 0x89: // den completion lights
