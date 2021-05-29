@@ -85,6 +85,12 @@ var SetUp = {
 			case "Wolf":
 				respec = Check.haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
 				break;
+
+
+
+			case "Auradin":
+				respec = Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream") ? me.charlvl : 100;
+				break;			
 			}
 		}
 

@@ -279,6 +279,80 @@ function LoadConfig () {
 			}
 
 			break;
+		case 'Auradin':
+			if (me.ladder > 0 !Check.haveItem("auricshields", "runeword", "Dream")) { // Dream shield
+				var DreamShield = [
+					"[Name] == IoRune # # [MaxQuantity] == 1",
+					"[Name] == JahRune",
+					"[Name] == PulRune",
+					"[Name] == SacredTarge && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] >= 45 && [Sockets] == 3 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(DreamShield);
+
+				Config.Runewords.push([Runeword.Dream, "Sacred Targe"]);
+				Config.KeepRunewords.push("[type] == auricshields # [holyshockaura] >= 15");
+			}
+
+			if (me.ladder > 0 !Check.haveItem("helm", "runeword", "Dream")) { // Dream helm
+				var DreamHelm = [
+					"[Name] == IoRune # # [MaxQuantity] == 1",
+					"[Name] == JahRune",
+					"[Name] == PulRune",
+					"[Name] == BoneVisage && [Flag] != Ethereal && [Quality] == Superior # [enhanceddefense] >= 15 && [Sockets] == 3 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(DreamHelm);
+
+				Config.Runewords.push([Runeword.Dream, "Bone Visage"]);
+				Config.KeepRunewords.push("[type] == helm # [holyshockaura] >= 15");
+			}
+
+			if (me.ladder > 0 && !Check.haveItem("armor", "runeword", "Dragon") && Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream")) { // Dragon
+				var Dragon = [
+					"[Name] == SurRune",
+					"[Name] == LoRune",
+					"[Name] == SolRune # # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(Dragon);
+
+				if (!me.getItem(638)) {
+					Config.Recipes.push([Recipe.Rune, "Lo Rune"]); // Lo to Sur
+				}
+
+				if (me.getItem(639) && me.getItem(640)) {
+					Config.Runewords.push([Runeword.Enigma, "Archon Plate", Roll.NonEth]);
+				}
+
+				Config.KeepRunewords.push("[type] == armor # [holyfireaura] >= 14");
+			}
+
+			if (!Check.haveItem("sword", "runeword", "Hand of Justice") && Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream")) {
+				var HoJ = [
+					"[Name] == SurRune",
+					"[Name] == ChamRune",
+					"[Name] == AmnRune # # [MaxQuantity] == 1",
+					"[Name] == LoRune",
+					"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(HoJ);
+
+				Config.Runewords.push([Runeword.HandofJustice, "Phase Blade"]);
+				Config.KeepRunewords.push("[Type] == sword # [holyfireaura] >= 16");
+			}
+
+			if (!Check.haveItem("sword", "runeword", "Crescent Moon") && !Check.haveItem("sword", "runeword", "Hand of Justice") && Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream")) {
+				var CrescentMoon = [
+					"[Name] == ShaelRune # # [MaxQuantity] == 1",
+					"[Name] == UmRune",
+					"[Name] == TirRune # # [MaxQuantity] == 1",
+					"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(CrescentMoon);
+
+				Config.Runewords.push([Runeword.CrescentMoon, "Phase Blade"]);
+				Config.KeepRunewords.push("[Type] == sword # [ias] >= 20 && [itempierceltng] >= 35");
+			}
+
+			break;
 		default:
 			break;
 		}

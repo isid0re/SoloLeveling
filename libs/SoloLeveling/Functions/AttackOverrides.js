@@ -86,3 +86,79 @@ Attack.killTarget = function (name) {
 Attack.openChests = function () { // don't open chests when attacking
 	return true;
 };
+
+Attack.IsAuradin = false;
+
+Attack.init = function () {
+	if (Config.Wereform) {
+		include("common/Attacks/wereform.js");
+	} else if (Config.CustomClassAttack && FileTools.exists('libs/common/Attacks/'+Config.CustomClassAttack+'.js')) {
+		print('Loading custom attack file');
+		include('common/Attacks/'+Config.CustomClassAttack+'.js')
+	} else {
+		include("common/Attacks/" + this.classes[me.classid] + ".js");
+	}
+
+	if (Config.AttackSkill[1] < 0 || Config.AttackSkill[3] < 0) {
+		showConsole();
+		print("ÿc1Bad attack config. Don't expect your bot to attack.");
+	}
+
+	if (me.gametype === 1) {
+		this.checkInfinity();
+		this.getCharges();
+		this.getPrimarySlot();
+		this.checkIsAuradin();
+	}
+};
+
+Attack.checkIsAuradin = function () {
+	let i, item;
+
+	// Check player Dragon or Dream
+	item = me.getItem(-1, 1);
+
+	if (item) {
+		do {
+			if (item.getPrefix(20533) || item.getPrefix(20535)) {
+				this.IsAuradin = true;
+
+				return true;
+			}
+		} while (item.getNext());
+	}
+
+	return false;
+};
+
+Attack.checkResist = function (unit, val, maxres) {
+	// Ignore player resistances
+	if (unit.type === 0) {
+		return true;
+	}
+
+	var damageType = typeof val === "number" ? this.getSkillElement(val) : val;
+
+	if (maxres === undefined) {
+		maxres = 100;
+	}
+
+	// Static handler
+	if (val === 42 && this.getResist(unit, damageType) < 100) {
+		return (unit.hp * 100 / 128) > Config.CastStatic;
+	}
+
+	if (this.infinity && ["fire", "lightning", "cold"].indexOf(damageType) > -1 && unit.getState) { // baal in throne room doesn't have getState
+		if (!unit.getState(28)) {
+			return this.getResist(unit, damageType) < 117;
+		}
+
+		return this.getResist(unit, damageType) < maxres;
+	}
+
+	if (this.IsAuradin && ["physical"].indexOf(damageType) > -1 && unit.getState) { // baal in throne room doesn't have getState
+		return true;
+	}
+
+	return this.getResist(unit, damageType) < maxres;
+};
