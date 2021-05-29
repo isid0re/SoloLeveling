@@ -114,7 +114,6 @@ Town.doChores = function (repair = false) {
 	Item.autoEquip();
 	Merc.hireMerc();
 	Merc.equipMerc();
-	this.clearInventory();
 	this.stash();
 	this.clearJunk();
 
@@ -389,6 +388,7 @@ Town.buyPotions = function () {
 			mp: 0
 		};
 
+	this.clearBelt(); // fix wrong pot on pickup before town in belt
 	beltSize = Storage.BeltSize();
 	col = this.checkColumns(beltSize);
 
@@ -576,7 +576,7 @@ Town.shopItems = function () {
 };
 
 Town.unfinishedQuests = function () {
-	let malus = me.getItem(89), leg = me.getItem(88), book = me.getItem(552), pol = me.getItem(545), tome = me.getItem(548), kw = me.getItem(174), hammer = me.getItem(90), soulstone = me.getItem(551), sor = me.getItem(646);
+	let malus = me.getItem(89), leg = me.getItem(88), book = me.getItem(552), tome = me.getItem(548), kw = me.getItem(174), hammer = me.getItem(90), soulstone = me.getItem(551);
 
 	//Act 1
 	if (malus) { //tools of the trade
@@ -606,8 +606,6 @@ Town.unfinishedQuests = function () {
 
 		if (book.interact()) {
 			print('ÿc9SoloLevelingÿc0: used Radament skill book');
-		} else if (clickItem(1, book)) {
-			print('ÿc9SoloLevelingÿc0: used Radament skill book');
 		} else {
 			print('ÿc9SoloLevelingÿc0: failed to used Radament skill book');
 		}
@@ -615,6 +613,8 @@ Town.unfinishedQuests = function () {
 
 	//Act 3
 	if (me.getItem(546)) { // golden bird
+		print("ÿc9SoloLevelingÿc0: starting jade figurine");
+		me.overhead('jade figurine');
 		Town.goToTown(3);
 		Town.npcInteract("meshif");
 	}
@@ -625,14 +625,14 @@ Town.unfinishedQuests = function () {
 	}
 
 	if (me.getItem(545)) { // potion of life
+		let pol = me.getItem(545);
+
 		if (pol.location === 7) {
 			this.openStash();
 			delay(300 + me.ping);
 		}
 
 		if (pol.interact()) {
-			print('ÿc9SoloLevelingÿc0: used potion of life');
-		} else if (clickItem(1, pol)) {
 			print('ÿc9SoloLevelingÿc0: used potion of life');
 		} else {
 			print('ÿc9SoloLevelingÿc0: failed to used potion of life');
@@ -703,15 +703,15 @@ Town.unfinishedQuests = function () {
 		}
 	}
 
-	if (sor) {
+	if (me.getItem(646)) {
+		let sor = me.getItem(646);
+
 		if (sor.location === 7) { // anya scroll of resistance
 			this.openStash();
 			delay(300 + me.ping);
 		}
 
 		if (sor.interact()) {
-			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
-		} else if (clickItem(1, sor)) {
 			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
 		} else {
 			print('ÿc9SoloLevelingÿc0: failed to used scroll of resistance');
@@ -894,7 +894,6 @@ Town.organizeStash = function () {
 
 	if (!Storage.Stash.CanFit(stashFit)) {
 		me.cancel();
-		me.overhead('organize stash');
 
 		let sorted, items = me.findItems(-1, 0, 7);
 
@@ -915,7 +914,6 @@ Town.organizeInventory = function () {
 
 	if (!Storage.Inventory.CanFit(invfit)) {
 		me.cancel();
-		me.overhead('organize inventory');
 
 		let inv, items = me.findItems(-1, 0, 3);
 
@@ -1333,4 +1331,58 @@ Town.visitTown = function (repair = false) {
 	}
 
 	return true;
+};
+
+Town.needRepair = function () {
+	var quiver, bowCheck, quantity, inventoryQuiver,
+		repairAction = [],
+		canAfford = me.gold >= me.getRepairCost();
+
+	// Arrow/Bolt check
+	bowCheck = Attack.usingBow();
+
+	if (bowCheck) {
+		switch (bowCheck) {
+		case "bow":
+			quiver = me.getItem("aqv", 1); // Equipped arrow quiver
+			inventoryQuiver = me.getItem("aqv");
+
+			break;
+		case "crossbow":
+			quiver = me.getItem("cqv", 1); // Equipped bolt quiver
+			inventoryQuiver = me.getItem("cqv");
+
+			break;
+		}
+
+		if (!quiver) { // Out of arrows/bolts
+			if (inventoryQuiver) {
+				Item.equip(inventoryQuiver, 5);
+			} else {
+				repairAction.push("buyQuiver"); // equip
+				repairAction.push("buyQuiver"); // inventory
+			}
+		} else {
+			quantity = quiver.getStat(70);
+
+			if (typeof quantity === "number" && quantity * 100 / getBaseStat("items", quiver.classid, "maxstack") <= Config.RepairPercent) {
+				if (inventoryQuiver) {
+					Item.equip(inventoryQuiver, 5);
+				} else {
+					repairAction.push("buyQuiver"); // equip
+					repairAction.push("buyQuiver"); // inventory
+				}
+			}
+		}
+	}
+
+	if (canAfford) { // Repair durability/quantity/charges
+		if (this.getItemsForRepair(Config.RepairPercent, true).length > 0) {
+			repairAction.push("repair");
+		}
+	} else {
+		print("ÿc4Town: ÿc1Can't afford repairs.");
+	}
+
+	return repairAction;
 };

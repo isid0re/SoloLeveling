@@ -42,6 +42,9 @@ var AutoBuildTemplate = {
 			Config.LowManaSkill = [0, 0];
 			Config.SummonAnimal = "Grizzly";
 			Config.SummonSpirit = "Oak Sage";
+			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
+			Config.HPBuffer = 2;
+			Config.MPBuffer = 6;
 		}
 	},
 

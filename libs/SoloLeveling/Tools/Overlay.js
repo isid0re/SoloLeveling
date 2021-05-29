@@ -18,7 +18,7 @@ var Overlay = {
 	resfixY: me.screensize ? 0 : -120,
 	questX: 12,
 	questY: 302,
-	dashboardX: 400,
+	dashboardX: 410,
 	dashboardY: 480,
 	text: {
 		hooks: [],
@@ -339,14 +339,14 @@ var Overlay = {
 			case "dashboard":
 				this.hooks.push({
 					name: "dashboard",
-					hook: new Box(Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY, 340, 65, 0x0, 1, 2)
+					hook: new Box(Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY, 370, 65, 0x0, 1, 2)
 				});
 
 				break;
 			case "dashboardframe":
 				this.hooks.push({
 					name: "dashboardframe",
-					hook: new Frame(Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY, 340, 65, 2)
+					hook: new Frame(Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY, 370, 65, 2)
 				});
 
 				break;
@@ -597,22 +597,26 @@ var Overlay = {
 	},
 
 	update: function () {
-		let hide = [0x01, 0x02, 0x05, 0x0C, 0x0F, 0x14, 0x19, 0x1A, 0x24];
+		function status () {
+			let hide = [0x01, 0x02, 0x05, 0x0C, 0x0F, 0x14, 0x19, 0x1A, 0x24];
+
+			for (let flag = 0; flag < hide.length; flag++) {
+				if (getUIFlag(hide[flag])) {
+					Overlay.text.enabled = false;
+					break;
+				} else {
+					Overlay.text.enabled = true;
+				}
+			}
+
+			Overlay.text.check();
+		}
 
 		while (!me.gameReady) {
-			delay(100);
+			delay(50);
 		}
 
-		for (let flag = 0; flag < hide.length; flag++) {
-			if (getUIFlag(hide[flag])) {
-				this.text.enabled = false;
-				break;
-			} else {
-				this.text.enabled = true;
-			}
-		}
-
-		this.text.check();
+		return me.dead ? false : status();
 	},
 
 	flush: function () {

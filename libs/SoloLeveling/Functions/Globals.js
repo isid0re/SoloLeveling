@@ -39,18 +39,21 @@ var SetUp = {
 	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
-	respecOne: [ 0, 28, 26, 19, 24, 24, 30][me.classid],
+	respecOne: [ 30, 28, 26, 19, 24, 24, 30][me.classid],
 
 	respecTwo: function () {
 		let respec;
 
 		switch (me.gametype) {
 		case 0:
-			respec = [0, 75, 75, 85, 0, 75, 75][me.classid];
+			respec = [75, 75, 75, 85, 0, 75, 75][me.classid];
 			break;
 
 		case 1:
 			switch (this.finalBuild) {
+			case "Witchyzon":
+				respec = Item.getEquippedItem(4).tier === 100000 ? me.charlvl : 100;
+				break;
 			case "Javazon":
 			case "Lightning":
 			case "Blova":
@@ -66,10 +69,13 @@ var SetUp = {
 			case "Poison":
 			case "Summon":
 			case "Hammerdin":
+			case "Elemental":
 			case "Wind":
 			case "Trapsin":
+			case "Singer":
 				respec = Check.haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
 				break;
+			case "Whirlwind":
 			case "Smiter":
 				respec = Check.haveItem("sword", "runeword", "Grief") ? me.charlvl : 100;
 				break;
@@ -181,6 +187,7 @@ var nipItems = {
 		"[Name] == ShaftOfTheHoradricStaff",
 		"[Name] == TopOfTheHoradricStaff",
 		"[Name] == HoradricStaff",
+		"[Name] == ajadefigurine",
 		"[Name] == TheGoldenBird",
 		"[Name] == potionoflife",
 		"[Name] == lamesen'stome",
@@ -433,15 +440,17 @@ var Check = {
 		let diffCompleted = !me.classic && me.baal ? true : me.classic && me.diablo ? true : false;
 
 		if (diffCompleted) {
-			if (lvlReq && !lowRes) {
-				diffShift = me.diff + 1;
-				D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + Difficulty[diffShift]);
-			} else if (lvlReq && lowRes) {
-				D2Bot.printToConsole('SoloLeveling: ' + Difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + Check.Resistance().FR + ' | CR: ' + Check.Resistance().CR + ' | LR: ' + Check.Resistance().LR);
-
-				if (me.charlvl >= SetUp.levelCap + 5) {
+			if (lvlReq) {
+				if (!lowRes) {
 					diffShift = me.diff + 1;
-					D2Bot.printToConsole('SoloLeveling: Over leveled. Starting: ' + Difficulty[diffShift]);
+					D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + Difficulty[diffShift]);
+				} else {
+					if (me.charlvl >= SetUp.levelCap + 5) {
+						diffShift = me.diff + 1;
+						D2Bot.printToConsole('SoloLeveling: Over leveled. Starting: ' + Difficulty[diffShift]);
+					} else {
+						D2Bot.printToConsole('SoloLeveling: ' + Difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + Check.Resistance().FR + ' | CR: ' + Check.Resistance().CR + ' | LR: ' + Check.Resistance().LR);
+					}
 				}
 			}
 		}
@@ -531,6 +540,7 @@ var Check = {
 			mercAuraName: build.mercAuraName,
 			mercAuraWanted: build.mercAuraWanted,
 			mercDiff: build.mercDiff,
+			finalGear: build.autoEquipTiers,
 		};
 	},
 };

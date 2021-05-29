@@ -1,14 +1,14 @@
-/**
- *    @filename   	Sorceress.LightningBuild.js
- *	  @author	  	theBGuy
- *    @desc     	Sorceress lightning build for after respecTwo
+/*
+ *    @filename   	Sorceress.BlovaBuild.js
+ *	  @author	  	isid0re
+ *    @desc      	Sorceress blizzard nova build
  */
 
 var build = {
 	caster: true,
-	skillstab: 9, //light
-	wantedskills: [53, 49], // Chain-light, lightning
-	usefulskills: [63, 38, 48], // light-mastery, charged bolt, nova
+	skillstab: 10, //cold
+	wantedskills: [59, 48], // blizzard, nova
+	usefulskills: [63, 65, 55], // light-mastery, cold mastery
 	mercAuraName: "Holy Freeze",
 	mercAuraWanted: 114,
 	mercDiff: 1,
@@ -17,17 +17,23 @@ var build = {
 	],
 	skills: [
 		[37, 1], // warmth
+		[40, 1], // Frozen Armor
+		[39, 1], // ice bolt
+		[45, 1], // ice blast
 		[42, 1], // Static
 		[43, 1], // telekensis
-		[54, 1], //Teleport
-		[40, 1], // Frozen Armor
-		[57, 1], // Thunder-Storm
-		[63, 1], // light-mastery
-		[49, 20, false], // lightning
-		[53, 20, false], // chain lightning
-		[63, 20], // light-mastery
+		[44, 1], // Frost nova
+		[54, 1], // Teleport
+		[55, 1], // gspike
+		[59, 1], // blizzard
+		[65, 1], // cold mastery
 		[48, 20], // nova
-		[38, 20], // charged bolt
+		[63, 20], // light-mastery
+		[59, 20], // blizzard
+		[65, 5], // cold mastery
+		[45, 20], // ice blast
+		[55, 5], // gspike
+		[39, 14], // ice bolt
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
