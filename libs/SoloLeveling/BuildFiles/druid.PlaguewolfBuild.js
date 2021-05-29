@@ -28,7 +28,7 @@ var build = {
 		//"[name] == stalagmite && [quality] == unique # [enhanceddamage] >= 200 && [ias] >= 50 # [tier] == 110000", //upped ribcracker
 		"[Type] == sword && [flag] == runeword # [ias] >= 30 # [tier] == 110000", //Grief
 		//Shield
-		"[name] == monarch && [quality] == unique # [damageresist] >= 35",	//Stormshield
+		"[name] == monarch && [quality] == unique # [damageresist] >= 35 # [tier] == 110000",	//Stormshield
 		//Helmet
 		"[name] == totemicmask && [quality] == unique # [druidskills] == 2 && [shapeshiftingskilltab] == 2 # [tier] == 110000 + tierscore(item)", //Jalal's mane
 		//belt
