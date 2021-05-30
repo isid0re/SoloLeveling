@@ -310,9 +310,8 @@ function LoadConfig () {
 			}
 
 			break;
+		case 'Wolf':
 		case 'Plaguewolf':
-			//Config.Recipes.push([Recipe.Unique.Weapon.ToElite, "Quaterstaff", Roll.NonEth]); // Upgrade Ribcracker to Elite
-
 			if (!Check.haveItem("armor", "runeword", "Chains of Honor")) { // CoH
 				if (!Check.haveItem("armor", "runeword", "Chains of Honor") && me.hell) {
 					var CoH = [
@@ -334,19 +333,27 @@ function LoadConfig () {
 				Config.KeepRunewords.push("[type] == armor # [fireresist] == 65 && [hpregen] == 7");
 			}
 
-			if (!Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("armor", "runeword", "Chains of Honor")) {	//Only start making grief after CoH is made
-				var Grief = [
-					"[Name] == EthRune # # [MaxQuantity] == 1",
-					"[Name] == TirRune # # [MaxQuantity] == 1",
-					"[Name] == LoRune # # [MaxQuantity] == 1",
-					"[Name] == MalRune # # [MaxQuantity] == 1",
-					"[Name] == RalRune # # [MaxQuantity] == 1",
-					"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(Grief);
+			if (SetUp.finalBuild === 'Plaguewolf') {
+				if (!Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("armor", "runeword", "Chains of Honor")) {	//Only start making grief after CoH is made
+					var Grief = [
+						"[Name] == EthRune # # [MaxQuantity] == 1",
+						"[Name] == TirRune # # [MaxQuantity] == 1",
+						"[Name] == LoRune # # [MaxQuantity] == 1",
+						"[Name] == MalRune # # [MaxQuantity] == 1",
+						"[Name] == RalRune # # [MaxQuantity] == 1",
+						"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
+					];
+					NTIP.arrayLooping(Grief);
 
-				Config.Runewords.push([Runeword.Grief, "Phase Blade"]);
-				Config.KeepRunewords.push("[Type] == sword # [ias] >= 30");
+					Config.Runewords.push([Runeword.Grief, "Phase Blade"]);
+					Config.KeepRunewords.push("[Type] == sword # [ias] >= 30");
+				}
+			} else {
+				if (Check.haveItem("armor", "runeword", "Chains of Honor")) {	//Make sure to have CoH first
+					NTIP.addLine("[name] == Quaterstaff && [quality] == unique # [enhanceddamage] == 300 && [ias] >= 50 # [MaxQuantity] == 1");	//Perfect ribcracker
+				}
+
+				Config.Recipes.push([Recipe.Unique.Weapon.ToElite, "Quaterstaff", Roll.NonEth]); // Upgrade Ribcracker to Elite
 			}
 
 			break;
