@@ -83,7 +83,7 @@ var SetUp = {
 				respec = Check.haveItem("weapon", "runeword", "Grief") && Check.haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
 				break;
 			case "Wolf":
-				respec = Check.haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+				respec = Item.getEquippedItem(4).tier >= 110000 && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
 				break;
 			case "Plaguewolf":
 				respec = Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
