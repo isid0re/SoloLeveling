@@ -103,7 +103,7 @@ function LoadConfig () {
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	/* Pickit configuration. */
-	Config.PickRange = me.hell ? 40 : 20;
+	Config.PickRange = 40;
 	Config.FastPick = false;
 	Config.CainID.Enable = false;
 	Config.FieldID = false;
