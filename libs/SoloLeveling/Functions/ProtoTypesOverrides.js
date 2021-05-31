@@ -760,3 +760,13 @@ Object.defineProperty(Unit.prototype, 'respec', {
 		return this.getQuest(41, 0);
 	}
 });
+
+Object.defineProperty(Unit.prototype, 'ladderEnabled', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ladderEnabled: Must be used with player units.");
+		}
+
+		return (this.ladder > 0 || !this.realm);
+	}
+});
