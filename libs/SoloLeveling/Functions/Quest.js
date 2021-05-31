@@ -378,7 +378,7 @@ var Quest = {
 	},
 
 	characterRespec: function () {// Akara reset for build change
-		if (me.respec || SetUp.getBuild() === SetUp.finalBuild) {
+		if (me.respec || SetUp.currentBuild === SetUp.finalBuild) {
 			return true;
 		}
 
@@ -392,6 +392,8 @@ var Quest = {
 			if (!Misc.useMenu(0x2ba0) || !Misc.useMenu(3401)) {
 				return false;
 			}
+
+			DataFile.updateStats("currentBuild", SetUp.getBuild());
 
 			delay(750 + me.ping * 2);
 			Town.clearBelt();
