@@ -72,6 +72,12 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 - **SCCNL-PAL** would make a softcore classic nonladder paladin
 - **HCCNL-SORC** would make a hardcore classic nonladder sorceress
 
+## **NOTE:**
+- Bot follows a set leveling path of Start -> Leveling -> FinalBuild. What this means is that the FinalBuild you pick will not change what the bot starts off as, only what it will end up being.
+- The bot will move on from Normal at a minimum level of 33 as long as resistance requirments are met or a maximum level of 38
+- The bot will move on from Nightmare at a minimum level of 65 as long as resistance requirments are met or a maximum level of 70
+- In order to run more than one bot of same type, i.e SCL-PAL add numbers to the end SCL-PAL1, SCL-PAL2, ... and so on
+
 ## Discord
 Join me on Discord. Link is here: https://discord.gg/q7tME8RAHh
 
