@@ -52,9 +52,9 @@ function hellforge () {
 	Misc.openChest(forge);
 	delay(250 + me.ping * 2);
 	Quest.smashSomething(376);
-	Item.autoEquip();
-	delay(2500 + me.ping);
+	delay(4500 + me.ping);
 	Pickit.pickItems();
+	Item.autoEquip();
 	Town.npcInteract("cain");
 
 	return true;

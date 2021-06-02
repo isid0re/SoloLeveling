@@ -82,7 +82,3 @@ Attack.killTarget = function (name) {
 
 	return true;
 };
-
-Attack.openChests = function () { // don't open chests when attacking
-	return true;
-};
