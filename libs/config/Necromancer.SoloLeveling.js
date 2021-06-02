@@ -104,7 +104,7 @@ function LoadConfig () {
 	Config.Inventory[3] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 
 	/* Pickit configuration. */
-	Config.PickRange = me.hell ? 40 : 20;
+	Config.PickRange = 40;
 	Config.FastPick = false;
 	Config.CainID.Enable = false;
 	Config.FieldID = false;
@@ -187,8 +187,8 @@ function LoadConfig () {
 	Config.FBR = 255;
 	Config.IAS = 255;
 
-
 	/* Attack configuration. */
+	Skill.usePvpRange = true;
 	Config.AttackSkill = [0, 0, 0, 0, 0, 0, 0];
 	Config.LowManaSkill = [0, 0];
 	Config.MaxAttackCount = 1000;
