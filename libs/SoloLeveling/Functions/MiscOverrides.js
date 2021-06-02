@@ -398,7 +398,7 @@ Misc.gamePacket = function (bytes) {// various game events
 		}
 
 		break;
-	case 0x4c: // diablo lightning dodge
+/*	case 0x4c: // diablo lightning dodge
 		if (bytes[6] === 193 && !me.getSkill(54, 0)) {
 			diablo = getUnit(1, 243);
 			tick = getTickCount();
@@ -429,7 +429,7 @@ Misc.gamePacket = function (bytes) {// various game events
 			Misc.gamePause();
 		}
 
-		break;
+		break;	*/
 	case 0xa4: //baalwave
 		if (me.hell) {
 			waveMonster = ((bytes[1]) | (bytes[2] << 8));

@@ -378,7 +378,7 @@ var Quest = {
 	},
 
 	characterRespec: function () {// Akara reset for build change
-		if (me.respec || SetUp.getBuild() === SetUp.finalBuild) {
+		if (me.respec) {
 			return true;
 		}
 
@@ -410,8 +410,6 @@ var Quest = {
 			return true;
 		}
 
-		me.overhead("hole punch");
-
 		let selected = me.getItems(itemID)
 			.filter(item =>
 				item.classid === itemID //
@@ -433,6 +431,8 @@ var Quest = {
 				Storage.Inventory.MoveTo(selected);
 				me.cancel;
 			}
+
+			me.overhead("hole punch");
 
 			//socket item
 			Town.goToTown(5);
