@@ -280,7 +280,7 @@ function LoadConfig () {
 
 			break;
 		case 'Auradin':
-			if (me.ladder > 0 !Check.haveItem("auricshields", "runeword", "Dream")) { // Dream shield
+			if (me.ladder > 0 && !Check.haveItem("auricshields", "runeword", "Dream")) { // Dream shield
 				var DreamShield = [
 					"[Name] == IoRune # # [MaxQuantity] == 1",
 					"[Name] == JahRune",
@@ -293,7 +293,7 @@ function LoadConfig () {
 				Config.KeepRunewords.push("[type] == auricshields # [holyshockaura] >= 15");
 			}
 
-			if (me.ladder > 0 !Check.haveItem("helm", "runeword", "Dream")) { // Dream helm
+			if (me.ladder > 0 && !Check.haveItem("helm", "runeword", "Dream")) { // Dream helm
 				var DreamHelm = [
 					"[Name] == IoRune # # [MaxQuantity] == 1",
 					"[Name] == JahRune",
