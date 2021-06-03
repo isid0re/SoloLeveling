@@ -289,6 +289,12 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(DreamShield);
 
+				if (!me.getItem(640)) {		// Jah Rune
+					Config.Recipes.push([Recipe.Rune, "Lo Rune"]); // Lo to Sur
+					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // Sur to Ber
+					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // Ber to Jah
+				}
+
 				Config.Runewords.push([Runeword.Dream, "Sacred Targe"]);
 				Config.KeepRunewords.push("[type] == auricshields # [holyshockaura] >= 15");
 			}
@@ -301,6 +307,12 @@ function LoadConfig () {
 					"[Name] == BoneVisage && [Flag] != Ethereal && [Quality] == Superior # [enhanceddefense] >= 15 && [Sockets] == 3 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(DreamHelm);
+
+				if (!me.getItem(640)) {		// Jah Rune
+					Config.Recipes.push([Recipe.Rune, "Lo Rune"]); // Lo to Sur
+					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // Sur to Ber
+					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // Ber to Jah
+				}
 
 				Config.Runewords.push([Runeword.Dream, "Bone Visage"]);
 				Config.KeepRunewords.push("[type] == helm # [holyshockaura] >= 15");
@@ -319,7 +331,7 @@ function LoadConfig () {
 				}
 
 				if (me.getItem(639) && me.getItem(640)) {
-					Config.Runewords.push([Runeword.Enigma, "Archon Plate", Roll.NonEth]);
+					Config.Runewords.push([Runeword.Dragon, "Archon Plate", Roll.NonEth]);
 				}
 
 				Config.KeepRunewords.push("[type] == armor # [holyfireaura] >= 14");
@@ -334,6 +346,14 @@ function LoadConfig () {
 					"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(HoJ);
+
+				if (!me.getItem(637) && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Lo Rune - Only do this if already have CTA
+					Config.Recipes.push([Recipe.Rune, "Ohm Rune"]); // Ohm to Lo
+				}
+
+				if (!me.getItem(641)) {		// Cham Rune
+					Config.Recipes.push([Recipe.Rune, "Jah Rune"]); // Jah to Cham
+				}
 
 				Config.Runewords.push([Runeword.HandofJustice, "Phase Blade"]);
 				Config.KeepRunewords.push("[Type] == sword # [holyfireaura] >= 16");
