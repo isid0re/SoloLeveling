@@ -219,7 +219,7 @@ var Check = {
 
 			break;
 		case "bloodraven": //bloodaraven
-			if (me.normal && !me.bloodraven || me.hell && !me.getSkill(54, 0)) {
+			if (me.normal && !me.bloodraven || me.hell && me.getSkill(54, 0)) {
 				return true;
 			}
 
@@ -249,7 +249,7 @@ var Check = {
 
 			break;
 		case "pits": //pits
-			if (me.hell) {
+			if (me.hell && me.amazon) {
 				return true;
 			}
 
@@ -315,7 +315,7 @@ var Check = {
 
 			break;
 		case "templeruns": //temple runs
-			if (Pather.accessToAct(3) && (me.normal && me.charlvl < 25 || me.nightmare && me.charlvl < 50 || me.hell)) {
+			if (Pather.accessToAct(3) && (me.normal && me.charlvl < 25 || me.nightmare && (me.charlvl < 50 || !me.lamessen) || me.hell)) {
 				return true;
 			}
 
@@ -481,7 +481,7 @@ var Check = {
 
 			break;
 		case 2: //hell
-			if (!me.baal) {
+			if (!me.baal && !me.amazon || me.amazon) {
 				needRunes = false;
 			}
 
