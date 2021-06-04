@@ -951,22 +951,24 @@ Town.clearInventory = function () {
 			return a.itemType - b.itemType;
 		});
 
-		for (i = 0; i < 4; i += 1) {
-			while (items.length > 0) {
-				if (items[0].code.indexOf(Config.BeltColumn[i]) > -1 && col[i] > 0) {
+		while (items.length) {
+			item = items.shift();
+
+			for (i = 0; i < 4; i += 1) {
+				if (item.code.indexOf(Config.BeltColumn[i]) > -1 && col[i] > 0) {
 					if (col[i] === beltSize) { // Pick up the potion and put it in belt if the column is empty
-						if (items[0].toCursor()) {
+						if (item.toCursor()) {
 							clickItem(0, i, 0, 2);
-							col[i] = col[i] - 1;
 						}
 					} else {
-						clickItem(2, items[0].x, items[0].y, items[0].location); // Shift-click potion
+						clickItem(2, item.x, item.y, item.location); // Shift-click potion
 					}
 
-					delay(me.ping + 150);
-				}
+					delay(me.ping + 200);
 
-				items.shift();
+					col = this.checkColumns(beltSize);
+					break;
+				}
 			}
 		}
 	}
