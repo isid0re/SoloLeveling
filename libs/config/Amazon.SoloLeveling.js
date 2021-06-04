@@ -68,6 +68,7 @@ function LoadConfig () {
 	Config.UseMerc = true;
 	Config.MercWatch = true;
 	Config.StashGold = me.charlvl * 100;
+	Config.ClearInvOnStart = false;
 
 	/* Chicken configuration. */
 	Config.LifeChicken = me.playertype ? 60 : 10;
@@ -396,6 +397,26 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Lore, "Death Mask"]);
 			Config.Runewords.push([Runeword.Lore, "Full Helm"]);
 			Config.KeepRunewords.push("([type] == circlet || [type] == helm) # [LightResist] >= 25");
+		}
+
+		if (me.normal && Item.getEquippedItem(4).tier < 300) { // zephyr
+			if (!Check.haveItem("bow", "runeword", "Zephyr")) {
+				if (!me.getItem(618)) {
+					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+				}
+
+				var zephyr = [
+					"[Name] == OrtRune # # [MaxQuantity] == 1",
+					"[Name] == EthRune # # [MaxQuantity] == 1",
+					"me.normal && ([Name] == hunter'sbow || [Name] == longbow) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(zephyr);
+
+				Config.Runewords.push([Runeword.Zephyr, "Hunter's Bow"]);
+				Config.Runewords.push([Runeword.Zephyr, "Long Bow"]);
+
+				Config.KeepRunewords.push("[type] == bow # [IAS] == 25");
+			}
 		}
 
 		if (Item.getEquippedItem(5).tier < 500) { // Ancients' Pledge

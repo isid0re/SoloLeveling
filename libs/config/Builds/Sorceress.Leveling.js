@@ -39,7 +39,6 @@ var AutoBuildTemplate = {
 		//StatPoints: [-1,-1,-1,-1,-1],						// This doesn't matter. We don't have stat points to spend at lvl 1
 		Update: function () {
 			Config.AttackSkill = [-1, 59, 47, 59, 47, 56, 55];
-			Config.LowManaSkill = [0, 0];
 			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
 			Config.HPBuffer = 2;
 			Config.MPBuffer = 6;
