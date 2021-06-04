@@ -235,6 +235,9 @@ function LoadConfig () {
 
 	/* LOD gear */
 	if (!me.classic) {
+		let finalGear = Check.Build().finalGear;
+		NTIP.arrayLooping(finalGear);
+
 		switch (SetUp.finalBuild) { // finalbuilld autoequip setup
 		case 'Blova':
 		case 'Lightning':
