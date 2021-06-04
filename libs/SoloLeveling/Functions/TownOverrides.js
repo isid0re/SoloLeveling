@@ -951,23 +951,22 @@ Town.clearInventory = function () {
 			return a.itemType - b.itemType;
 		});
 
-		while (items.length) {
-			item = items.shift();
-
-			for (i = 0; i < 4; i += 1) {
-				if (item.code.indexOf(Config.BeltColumn[i]) > -1 && col[i] > 0) {
+		for (i = 0; i < 4; i += 1) {
+			while (items.length > 0) {
+				if (items[0].code.indexOf(Config.BeltColumn[i]) > -1 && col[i] > 0) {
 					if (col[i] === beltSize) { // Pick up the potion and put it in belt if the column is empty
-						if (item.toCursor()) {
+						if (items[0].toCursor()) {
 							clickItem(0, i, 0, 2);
+							col[i] = col[i] - 1;
 						}
 					} else {
-						clickItem(2, item.x, item.y, item.location); // Shift-click potion
+						clickItem(2, items[0].x, items[0].y, items[0].location); // Shift-click potion
 					}
 
-					delay(me.ping + 200);
-
-					col = this.checkColumns(beltSize);
+					delay(me.ping + 150);
 				}
+
+				items.shift();
 			}
 		}
 	}
@@ -1009,6 +1008,8 @@ Town.clearInventory = function () {
 
 	for (i = 0; !!items && i < items.length; i += 1) {
 		if ([18, 41, 76, 77, 78].indexOf(items[i].itemType) === -1 && // Don't drop tomes, keys or potions
+			items[i].classid !== 88 && // wirt's leg
+			items[i].classid !== 89 && // horadric malus
 			items[i].classid !== 524 && // Scroll of Inifuss
 			items[i].classid !== 525 && // Key to Cairn Stones
 			items[i].classid !== 549 && // Horadric Cube
@@ -1025,6 +1026,8 @@ Town.clearInventory = function () {
 			items[i].classid !== 555 && // Khalim's Brain
 			items[i].classid !== 173 && // Khalim's Flail
 			items[i].classid !== 174 && // Khalim's Will
+			items[i].classid !== 551 && // Mephisto's Soulstone
+			items[i].classid !== 90 && // Hellforge Hammer
 			items[i].classid !== 644 && // Malah's Potion
 			items[i].classid !== 646 && // Scroll of Resistance
 			(items[i].classid !== 603 && items[i].quality !== 7) && // Anni

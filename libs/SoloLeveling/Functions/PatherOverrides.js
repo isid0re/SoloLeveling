@@ -19,6 +19,14 @@ NodeAction.killMonsters = function (arg) {
 		}
 	}
 
+	if ([8, 3, 4, 38, 5, 6, 27, 28, 33, 37, 56, 57, 60, 45, 58, 66, 67, 68, 69, 70, 71, 72].indexOf(me.area) > -1) {
+		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30);
+
+		if (monList) {
+			Attack.clearList(monList);
+		}
+	}
+
 	if (!me.inTown) {
 		Attack.clear(7, 0);
 	}
@@ -63,11 +71,13 @@ NodeAction.killMonsters = function (arg) {
 };
 
 NodeAction.popChests = function () {
+	let range = Pather.useTeleport() ? 25 : 15;
+
 	if (Config.OpenChests) {
-		Misc.openChests(10);
+		Misc.openChests(range);
 	}
 
-	Misc.useWell(10);
+	Misc.useWell(range);
 };
 
 Pather.checkWP = function (area) {
