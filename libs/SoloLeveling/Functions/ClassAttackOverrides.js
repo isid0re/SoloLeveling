@@ -272,6 +272,7 @@ case 2: // Necromancer
 		case 206: // Foul Crow Nest
 		case 207: // BloodHawkNest
 		case 208: // BlackVultureNest
+		case 228: // sarcophagus
 		case 258: // Water Watcher
 		case 261: // Water Watcher
 		case 266: // Flavie
