@@ -41,6 +41,10 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [-1, 112, 113, 112, 113, 101, 113];
 			Config.LowManaSkill = [0, 113];
 			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
+			Config.MinColumn[0] = Config.BeltColumn[0] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
+			Config.MinColumn[1] = Config.BeltColumn[1] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
+			Config.MinColumn[2] = Config.BeltColumn[2] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
+			Config.MinColumn[3] = Config.BeltColumn[3] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 			Config.HPBuffer = 2;
 			Config.MPBuffer = 6;
 
