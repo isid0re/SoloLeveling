@@ -60,7 +60,7 @@ var build = {
 		//ammy
 		"[name] == amulet && [quality] == set # [lightresist] == 33 # [tier] == 100000", //tals ammy
 		//rings
-		"[Type] == Ring	&& [Quality] == Unique # [Dexterity] >= 20 # [tier] == 100000", //ravenfrost
-		"[Type] == Ring && [Quality] == Unique # [ItemMagicBonus] >= 30 # [tier] == 100000", //nagelring
+		"[type] == ring && [quality] == unique # [dexterity] >= 20 # [tier] == 100000", //ravenfrost
+		"[type] == ring && [quality] == unique # [itemmagicbonus] >= 30 # [tier] == 100000", //nagelring
 	]
 };
