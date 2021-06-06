@@ -17,9 +17,9 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 ## Available Characters and Builds
 | Amazon | Sorceress | Necromancer | Paladin | Barbarian | Druid | Assassin |
 |:------:|:-------:|:-------:|:------:|:------:|:------:|:-----:|
-| Javazon | Blizzard | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
+| Javazon | Cold | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
 | | BlizzBaller |   Bone | Smiter| | Elemental |
-| | Meteorb | Summon | |
+| | Meteor | Summon | |
 | | Blova | |
 | | Lightning | |
 
@@ -71,7 +71,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 
 | Suffix | Description|
 |:----|:--|
-|ZON| Amazon Class **NOT CURRENTLY AVAILABLE**|
+|ZON| Amazon Class|
 |SORC| Sorceress Class|
 |NECRO| Necromancer Class|
 |PAL| Paladin Class|
