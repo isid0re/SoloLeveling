@@ -69,23 +69,17 @@ function main () {
 	
 	// don't load default for dropper/mules
 	if (getScript("D2BotDropper.dbj") || getScript("D2BotMule.dbj") || getScript("D2BotDrop.dbj")) {
-		if (FileTools.exists("tools/AreaWatcher.js")) {
-			load("tools/AreaWatcher.js");
-			var badAreas = [2];
-			
-			while(true) {
-				try {
-					if (badAreas.indexOf(me.area) >= 0) {
-						D2Bot.printToConsole("Saved from suicide walk!");
-						D2Bot.restart();
-					}
-				} catch (e) {
+		while(true) {
+			try {
+				if (me.area === 2) {
+					D2Bot.printToConsole("Saved from suicide walk!");
 					D2Bot.restart();
 				}
-				delay(1000);
+			} catch (e) {
+				D2Bot.restart();
 			}
+			delay(1000);
 		}
-		
 		return true;
 	}
 
