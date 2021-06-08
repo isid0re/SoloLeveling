@@ -10,8 +10,8 @@ function radament () {
 	me.overhead("radament");
 
 	if (!Pather.checkWP(48)) {
-		Pather.moveTo(5222, 5180);
-		Pather.useUnit(5, 20, 47);
+		Town.goToTown(2);
+		Pather.moveToExit(47, true);
 		Pather.getWP(48);
 	} else {
 		Pather.useWaypoint(48);

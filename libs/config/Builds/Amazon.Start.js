@@ -1,4 +1,4 @@
-//	/d2bs/kolbot/libs/config/Builds/Assassin.Start.js
+//	/d2bs/kolbot/libs/config/Builds/Amazon.Start.js
 
 /**
 *

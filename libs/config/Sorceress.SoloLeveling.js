@@ -8,8 +8,8 @@
 *		1. Go into the D2BS console manager.
 *		2. Select the Bots profile
 *		3. In the info tag box enter one of the following choices:
-*			Meteorb
-*			Blizzard
+*			Meteor
+*			Cold
 *			BlizzBaller
 *			Blova
 *			Lighting
@@ -167,18 +167,12 @@ function LoadConfig () {
 		"[Type] == Amulet && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//rings
 		"[Type] == Ring && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-	];
-	NTIP.arrayLooping(levelingTiers);
-
-	var autoequipmercTiers = [
+		//merc
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"me.charlvl > 14 && [Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000", //Fortitude
-		"[type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [merctier] == 50000", //Treachery
-		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000", //Eth Andy's
 	];
-	NTIP.arrayLooping(autoequipmercTiers);
+	NTIP.arrayLooping(levelingTiers);
 
 	/* FastMod configuration. */
 	Config.FCR = 255;

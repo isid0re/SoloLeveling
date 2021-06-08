@@ -49,5 +49,8 @@ var build = {
 		//rings
 		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 110000", //soj
 		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 3 # [tier] == 110000", //bk ring
+		//merc
+		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
+		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Eth Andy's
 	]
 };

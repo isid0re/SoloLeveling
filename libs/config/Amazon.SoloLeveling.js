@@ -147,7 +147,7 @@ function LoadConfig () {
 
 	var levelingTiers = [ // autoequip setup
 		//weapon
-		"me.charlvl < 30 && ([Type] == bow || [Type] == amazonbow) && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"me.charlvl < 30 && ([Type] == bow || [Type] == amazonbow) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		"me.charlvl < 30 && [Type] == bowquiver # # [MaxQuantity] == 2",
 		"me.charlvl > 29 && ([Type] == javelin || [Type] == amazonjavelin) && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
@@ -166,18 +166,12 @@ function LoadConfig () {
 		"[Type] == Amulet && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//rings
 		"[Type] == Ring && [Quality] >= Magic # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-	];
-	NTIP.arrayLooping(levelingTiers);
-
-	var autoequipmercTiers = [
+		//merc
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"me.charlvl > 14 && [Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
-		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
-		"[type] == armor && [flag] == runeword # [ias] == 45 && [coldresist] == 30 # [merctier] == 50000",	//Treachery
-		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Eth Andy's
 	];
-	NTIP.arrayLooping(autoequipmercTiers);
+	NTIP.arrayLooping(levelingTiers);
 
 	/* FastMod configuration. */
 	Config.FCR = 255;
@@ -371,6 +365,26 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == polearm # [meditationaura] >= 12");
 		}
 
+		if (me.normal && Item.getEquippedItem(4).tier < 251) { // zephyr
+			if (!Check.haveItem("bow", "runeword", "Zephyr")) {
+				if (!me.getItem(618)) {
+					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
+				}
+
+				var zephyr = [
+					"[Name] == OrtRune # # [MaxQuantity] == 1",
+					"[Name] == EthRune # # [MaxQuantity] == 1",
+					"me.normal && ([Name] == hunter'sbow || [Name] == longbow) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(zephyr);
+
+				Config.Runewords.push([Runeword.Zephyr, "Hunter's Bow"]);
+				Config.Runewords.push([Runeword.Zephyr, "Long Bow"]);
+
+				Config.KeepRunewords.push("[type] == bow # [IAS] == 25");
+			}
+		}
+
 		if (Item.getEquippedItem(1).tier < 315) { // Lore
 			if (!Check.haveItem("helm", "runeword", "Lore")) {
 				var loreRunes = [
@@ -399,26 +413,6 @@ function LoadConfig () {
 			Config.KeepRunewords.push("([type] == circlet || [type] == helm) # [LightResist] >= 25");
 		}
 
-		if (me.normal && Item.getEquippedItem(4).tier < 300) { // zephyr
-			if (!Check.haveItem("bow", "runeword", "Zephyr")) {
-				if (!me.getItem(618)) {
-					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
-				}
-
-				var zephyr = [
-					"[Name] == OrtRune # # [MaxQuantity] == 1",
-					"[Name] == EthRune # # [MaxQuantity] == 1",
-					"me.normal && ([Name] == hunter'sbow || [Name] == longbow) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(zephyr);
-
-				Config.Runewords.push([Runeword.Zephyr, "Hunter's Bow"]);
-				Config.Runewords.push([Runeword.Zephyr, "Long Bow"]);
-
-				Config.KeepRunewords.push("[type] == bow # [IAS] == 25");
-			}
-		}
-
 		if (Item.getEquippedItem(5).tier < 500) { // Ancients' Pledge
 			if (!Check.haveItem("shield", "runeword", "Ancients' Pledge") && !me.hell) {
 				if (me.normal && !me.getItem(618)) {
@@ -444,6 +438,31 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
 
 			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
+		}
+
+		if (Item.getEquippedItem(3).tier < 700) { // Peace
+			if (!Check.haveItem("armor", "runeword", "Peace") && !me.hell) {
+				var peaceRunes = [
+					"[Name] == ShaelRune # # [MaxQuantity] == 1",
+					"[Name] == ThulRune # # [MaxQuantity] == 1",
+					"[Name] == AmnRune # # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(peaceRunes);
+			}
+
+			NTIP.addLine("([Name] == BreastPlate || [Name] == demonhidearmor || [Name] == DuskShroud || [Name] == GhostArmor ||[Name] == LightPlate || [Name] == MagePlate || [Name] == SerpentskinArmor || [Name] == trellisedarmor || [Name] == WyrmHide) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1");
+
+			Config.Runewords.push([Runeword.Peace, "demonhide armor"]);
+			Config.Runewords.push([Runeword.Peace, "Dusk Shroud"]);
+			Config.Runewords.push([Runeword.Peace, "Ghost Armor"]);
+			Config.Runewords.push([Runeword.Peace, "Light Plate"]);
+			Config.Runewords.push([Runeword.Peace, "Mage Plate"]);
+			Config.Runewords.push([Runeword.Peace, "Serpentskin Armor"]);
+			Config.Runewords.push([Runeword.Peace, "trellised armor"]);
+			Config.Runewords.push([Runeword.Peace, "WyrmHide"]);
+			Config.Runewords.push([Runeword.Peace, "Breast Plate"]);
+
+			Config.KeepRunewords.push("[type] == armor # [coldresist] == 30");
 		}
 
 		if (!Item.getEquippedItemMerc(3).prefixnum === 20653) { // Merc Treachery
@@ -482,30 +501,6 @@ function LoadConfig () {
 
 			Config.KeepRunewords.push("[Type] == armor # [ias] == 45 && [coldresist] == 30");
 
-		}
-
-		if (Item.getEquippedItem(3).tier < 700) { // Peace
-			if (!Check.haveItem("armor", "runeword", "Peace") && !me.hell) {
-				var peaceRunes = [
-					"[Name] == ShaelRune # # [MaxQuantity] == 1",
-					"[Name] == ThulRune # # [MaxQuantity] == 1",
-					"[Name] == AmnRune # # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(peaceRunes);
-			}
-
-			NTIP.addLine("([Name] == demonhidearmor || [Name] == DuskShroud || [Name] == GhostArmor ||[Name] == LightPlate || [Name] == MagePlate || [Name] == SerpentskinArmor || [Name] == trellisedarmor || [Name] == WyrmHide) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1");
-
-			Config.Runewords.push([Runeword.Peace, "demonhide armor"]);
-			Config.Runewords.push([Runeword.Peace, "Dusk Shroud"]);
-			Config.Runewords.push([Runeword.Peace, "Ghost Armor"]);
-			Config.Runewords.push([Runeword.Peace, "Light Plate"]);
-			Config.Runewords.push([Runeword.Peace, "Mage Plate"]);
-			Config.Runewords.push([Runeword.Peace, "Serpentskin Armor"]);
-			Config.Runewords.push([Runeword.Peace, "trellised armor"]);
-			Config.Runewords.push([Runeword.Peace, "WyrmHide"]);
-
-			Config.KeepRunewords.push("[type] == armor # [coldresist] == 30");
 		}
 
 		if (Item.getEquippedItem(3).tier < 634) { // Smoke
