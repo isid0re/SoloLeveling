@@ -289,12 +289,6 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(DreamShield);
 
-				if (!me.getItem(640)) {		// Jah Rune
-					Config.Recipes.push([Recipe.Rune, "Lo Rune"]); // Lo to Sur
-					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // Sur to Ber
-					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // Ber to Jah
-				}
-
 				Config.Runewords.push([Runeword.Dream, "Sacred Targe"]);
 				Config.KeepRunewords.push("[type] == auricshields # [holyshockaura] >= 15");
 			}
@@ -308,14 +302,25 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(DreamHelm);
 
+				Config.Runewords.push([Runeword.Dream, "Bone Visage"]);
+				Config.KeepRunewords.push("[type] == helm # [holyshockaura] >= 15");
+			}
+
+			if (!Check.haveItem("auricshields", "runeword", "Dream") || !Check.haveItem("helm", "runeword", "Dream") && me.ladder > 0) {
 				if (!me.getItem(640)) {		// Jah Rune
+					if (Check.haveItem("sword", "runeword", "Call To Arms")) {
+						Config.Recipes.push([Recipe.Rune, "Mal Rune"]); // Mal to Ist
+						Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
+						Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
+						Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
+						Config.Recipes.push([Recipe.Rune, "Ohm Rune"]); // Ohm to Lo
+					}
+
 					Config.Recipes.push([Recipe.Rune, "Lo Rune"]); // Lo to Sur
 					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // Sur to Ber
 					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // Ber to Jah
 				}
 
-				Config.Runewords.push([Runeword.Dream, "Bone Visage"]);
-				Config.KeepRunewords.push("[type] == helm # [holyshockaura] >= 15");
 			}
 
 			if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
@@ -333,11 +338,11 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(Dragon);
 
-				if (!me.getItem(638)) {
+				if (!me.getItem(638)) {		// Sur Rune
 					Config.Recipes.push([Recipe.Rune, "Lo Rune"]); // Lo to Sur
 				}
 
-				if (me.getItem(639) && me.getItem(640)) {
+				if (me.getItem(637) && me.getItem(638)) {
 					Config.Runewords.push([Runeword.Dragon, "Archon Plate", Roll.NonEth]);
 				}
 
@@ -355,6 +360,10 @@ function LoadConfig () {
 				NTIP.arrayLooping(HoJ);
 
 				if (!me.getItem(637) && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Lo Rune - Only do this if already have CTA
+					Config.Recipes.push([Recipe.Rune, "Mal Rune"]); // Mal to Ist
+					Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
+					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
+					Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
 					Config.Recipes.push([Recipe.Rune, "Ohm Rune"]); // Ohm to Lo
 				}
 
