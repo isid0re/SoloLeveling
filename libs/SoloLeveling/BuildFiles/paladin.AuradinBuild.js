@@ -20,9 +20,9 @@ var build = {
 		[106, 4], 	// Zeal
 		[100, 20], 	// Resist Fire
 		[110, 20], 	// Resist Lighting
+		[124, 1], 	// Redemption
 		[117, 10], 	// Holy Shield
 		[125, 20], 	// Salvation
-		[124, 1], 	// Redemption
 		[117, 15], 	// Holy Shield
 	],
 	autoEquipTiers: [ // autoequip final gear
