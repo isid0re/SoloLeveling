@@ -417,7 +417,7 @@ case 5: // Druid
 		return 1;
 	};
 
-	if (SetUp.finalBuild === "Plaguewolf" && me.charlvl >= SetUp.respecTwo()) {	//Make sure to only load this after finalBuild respec
+	if (["Plaguewolf", "Wolf"].indexOf(SetUp.finalBuild) > -1 && me.charlvl >= SetUp.respecTwo()) {	//Make sure to only load this after finalBuild respec
 		if (!isIncluded("common/Attacks/Wereform.js")) {
 			include("common/Attacks/Wereform.js");
 		}
