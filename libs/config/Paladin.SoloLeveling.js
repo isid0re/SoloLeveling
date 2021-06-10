@@ -286,10 +286,11 @@ function LoadConfig () {
 					"[Name] == IoRune # # [MaxQuantity] == 1",
 					"[Name] == JahRune",
 					"[Name] == PulRune",
-					"[Name] == SacredTarge && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] >= 45 && [Sockets] == 3 # [MaxQuantity] == 1",
+					"[Name] == SacredTarge && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [fireresist] >= 45 && ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(DreamShield);
 
+				Config.Recipes.push([Recipe.Socket.Shield, "Sacred Targe", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Dream, "Sacred Targe"]);
 				Config.KeepRunewords.push("[type] == auricshields # [holyshockaura] >= 15");
 			}
