@@ -41,6 +41,8 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [-1, 106, 123, 106, 123, -1, -1];
 			Config.LowManaSkill = [-1, -1];
 
+			Config.SkipImmune = ["lightning and fire and physical"];	// Don't think this ever happens but should skip if it does
+
 			Config.BeltColumn = ["hp", "hp", "mp", "rv"];
 			Config.MinColumn[0] = Config.BeltColumn[0] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
 			Config.MinColumn[1] = Config.BeltColumn[1] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
