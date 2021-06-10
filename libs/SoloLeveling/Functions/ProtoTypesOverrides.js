@@ -770,3 +770,333 @@ Object.defineProperty(Unit.prototype, 'ladderEnabled', {
 		return (this.ladder > 0 || !this.realm);
 	}
 });
+
+Object.defineProperty(Unit.prototype, 'el', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.el: Must be used with player units.");
+		}
+
+		return this.getItem(610);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'eld', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.eld: Must be used with player units.");
+		}
+
+		return this.getItem(611);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'tir', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.tir: Must be used with player units.");
+		}
+
+		return this.getItem(612);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'nef', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.nef: Must be used with player units.");
+		}
+
+		return this.getItem(613);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'eth', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.eth: Must be used with player units.");
+		}
+
+		return this.getItem(614);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'ith', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ith: Must be used with player units.");
+		}
+
+		return this.getItem(615);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'tal', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.tal: Must be used with player units.");
+		}
+
+		return this.getItem(616);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'ral', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ral: Must be used with player units.");
+		}
+
+		return this.getItem(617);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'ort', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ort: Must be used with player units.");
+		}
+
+		return this.getItem(618);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'thul', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.thul: Must be used with player units.");
+		}
+
+		return this.getItem(619);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'amn', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.amn: Must be used with player units.");
+		}
+
+		return this.getItem(620);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'sol', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.sol: Must be used with player units.");
+		}
+
+		return this.getItem(621);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'shael', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.shael: Must be used with player units.");
+		}
+
+		return this.getItem(622);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'dol', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.dol: Must be used with player units.");
+		}
+
+		return this.getItem(623);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'hel', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.hel: Must be used with player units.");
+		}
+
+		return this.getItem(624);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'io', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.io: Must be used with player units.");
+		}
+
+		return this.getItem(625);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'lum', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.lum: Must be used with player units.");
+		}
+
+		return this.getItem(626);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'ko', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ko: Must be used with player units.");
+		}
+
+		return this.getItem(627);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'fal', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.fal: Must be used with player units.");
+		}
+
+		return this.getItem(628);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'lem', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.lem: Must be used with player units.");
+		}
+
+		return this.getItem(629);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'pul', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.pul: Must be used with player units.");
+		}
+
+		return this.getItem(630);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'um', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.um: Must be used with player units.");
+		}
+
+		return this.getItem(631);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'mal', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.mal: Must be used with player units.");
+		}
+
+		return this.getItem(632);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'ist', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ist: Must be used with player units.");
+		}
+
+		return this.getItem(633);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'gul', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.gul: Must be used with player units.");
+		}
+
+		return this.getItem(634);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'vex', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.vex: Must be used with player units.");
+		}
+
+		return this.getItem(635);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'ohm', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ohm: Must be used with player units.");
+		}
+
+		return this.getItem(636);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'lo', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.lo: Must be used with player units.");
+		}
+
+		return this.getItem(637);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'sur', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.sur: Must be used with player units.");
+		}
+
+		return this.getItem(638);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'ber', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.ber: Must be used with player units.");
+		}
+
+		return this.getItem(639);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'jah', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.jah: Must be used with player units.");
+		}
+
+		return this.getItem(640);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'cham', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.cham: Must be used with player units.");
+		}
+
+		return this.getItem(641);
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'zod', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.zod: Must be used with player units.");
+		}
+
+		return this.getItem(642);
+	}
+});
