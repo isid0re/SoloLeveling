@@ -247,6 +247,13 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(Grief);
 
+				if (!me.getItem(637) && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Lo Rune - Only do this if already have CTA
+					Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
+					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
+					Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
+					Config.Recipes.push([Recipe.Rune, "Ohm Rune"]); // Ohm to Lo
+				}
+
 				Config.Runewords.push([Runeword.Grief, "Phase Blade"]);
 				Config.KeepRunewords.push("[Type] == sword # [ias] >= 30");
 			}
@@ -262,11 +269,11 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(HotO);
 
-				if (me.getItem(635)) {
+				if (me.getItem(635)) {		// Vex Rune
 					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
 				}
 
-				if (!me.getItem(635)) {
+				if (!me.getItem(635)) {		// Vex Rune
 					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
