@@ -318,6 +318,13 @@ function LoadConfig () {
 				Config.KeepRunewords.push("[type] == helm # [holyshockaura] >= 15");
 			}
 
+			if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
+				if (!me.getItem(636)) { // Ohm Rune
+					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
+					Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
+				}
+			}
+
 			if (me.ladder > 0 && !Check.haveItem("armor", "runeword", "Dragon") && Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream")) { // Dragon
 				var Dragon = [
 					"[Name] == SurRune",

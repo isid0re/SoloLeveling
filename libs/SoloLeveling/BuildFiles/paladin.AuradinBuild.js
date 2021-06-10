@@ -32,7 +32,7 @@ var build = {
 		//helmet
 		"[Type] == helm && [flag] == runeword # [holyshockaura] >= 15 # [tier] == 110000", //Dream Helm
 		//belt
-		"[name] == MithrilCoil && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 && [damageresist] >= 10  # [tier] == 110000 + tierscore(item)", //Verdungos
+		"[name] == mithrilcoil && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 && [damageresist] >= 10  # [tier] == 110000 + tierscore(item)", //Verdungos
 		//boots
 		"[name] == warboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 110000 + tierscore(item)", //Gore Rider
 		//armor
