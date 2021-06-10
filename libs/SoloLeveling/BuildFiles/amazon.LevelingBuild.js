@@ -18,20 +18,21 @@ var build = {
 	skills: [
 		[9, 1], // Critical Strike
 		[23, 1], // Penetrate
-		[33, 5, false], // Pierce
 		[10, 1], // Jab
 		[14, 1], // Power Strike
 		[15, 1], // Poison Javelin
 		[20, 1], // Lightning Bolt
 		[25, 1], // Plague Javelin
+		[24, 13, false], // Charged Strike
+		[33, 5, false], // Pierce
 		[35, 8, false], // Lightning Fury
 		[24, 20, false], // Charged Strike
 		[35, 20, false], // Lightning Fury
 		[14, 12], // Power Strike
 		[13, 1], // Dodge
 		[18, 1], // Avoid
-		[32, 1, false], // Valkyrie
 		[29, 1], // Evade
+		[32, 1, false], // Valkyrie
 		[14, 20], // Power Strike
 		[34, 20], // Lightning Strike
 		[20, 20], // Lightning Bolt

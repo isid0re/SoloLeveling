@@ -141,7 +141,7 @@ case 1: // Sorceress
 						Pather.moveToUnit(unit);
 					}
 
-					if (Attack.checkResist(unit, "lightning") && me.getSkill(42, 1) && Math.round(unit.hp * 100 / unit.hpmax) > Attack.getStaticAmount()) {
+					if (Attack.checkResist(unit, "lightning") && me.getSkill(42, 1) && Math.round(unit.hp * 100 / unit.hpmax) > Config.CastStatic) {
 						Skill.cast(42, 0);
 					}
 
@@ -272,6 +272,7 @@ case 2: // Necromancer
 		case 206: // Foul Crow Nest
 		case 207: // BloodHawkNest
 		case 208: // BlackVultureNest
+		case 228: // sarcophagus
 		case 258: // Water Watcher
 		case 261: // Water Watcher
 		case 266: // Flavie

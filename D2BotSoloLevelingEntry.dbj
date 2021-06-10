@@ -681,9 +681,14 @@ function locationAction (location) {
 							setUp.account = DataFile.getStats().AcctName;
 							setUp.password = DataFile.getStats().AcctPswd;
 
-							if (!ControlAction.loginAccount(setUp)) { // generated account login from stored datafile info
-								D2Bot.printToConsole('SoloLeveling: Error logging in. please update your profile settings and start again', 6);
-								D2Bot.stop();
+							for (let i = 0; i < 5; i++) {
+								if (ControlAction.loginAccount(setUp)) {
+									break;
+								}
+
+								ControlAction.timeoutDelay("Unable to Connect", StarterConfig.UnableToConnectDelay * 6e4);
+								setUp.account = DataFile.getStats().AcctName;
+								setUp.password = DataFile.getStats().AcctPswd;
 							}
 						}
 					}

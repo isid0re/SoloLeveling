@@ -39,7 +39,7 @@ var SetUp = {
 	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
-	respecOne: [ 30, 28, 26, 19, 24, 24, 30][me.classid],
+	respecOne: [ 25, 28, 26, 19, 24, 24, 30][me.classid],
 
 	respecTwo: function () {
 		let respec;
@@ -59,8 +59,8 @@ var SetUp = {
 			case "Blova":
 				respec = Attack.checkInfinity() ? me.charlvl : 100;
 				break;
-			case "Meteorb":
-			case "Blizzard":
+			case "Cold":
+			case "Meteor":
 			case "BlizzBaller":
 				respec = (Item.getEquippedItem(1).tier + Item.getEquippedItem(2).tier +
 						Item.getEquippedItem(3).tier + Item.getEquippedItem(4).tier) >= 400000 ? me.charlvl : 100;	//Tal ammy, belt, armor, and wep
@@ -249,7 +249,7 @@ var Check = {
 
 			break;
 		case "pits": //pits
-			if (me.hell && me.amazon) {
+			if (me.hell) {
 				return true;
 			}
 
@@ -471,7 +471,7 @@ var Check = {
 
 		switch (me.diff) {
 		case 0: //normal
-			//have runes or stealth
+			//have runes or stealth and zephyr/ancients pledge
 			if (me.getItem("talrune") && me.getItem("ethrune") || this.haveItem("armor", "runeword", "Stealth")) {
 				needRunes = false;
 			}
