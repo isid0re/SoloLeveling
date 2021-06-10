@@ -141,7 +141,7 @@ case 1: // Sorceress
 						Pather.moveToUnit(unit);
 					}
 
-					if (Attack.checkResist(unit, "lightning") && me.getSkill(42, 1) && Math.round(unit.hp * 100 / unit.hpmax) > Attack.getStaticAmount()) {
+					if (Attack.checkResist(unit, "lightning") && me.getSkill(42, 1) && Math.round(unit.hp * 100 / unit.hpmax) > Config.CastStatic) {
 						Skill.cast(42, 0);
 					}
 
