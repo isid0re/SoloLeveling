@@ -313,16 +313,14 @@ function LoadConfig () {
 		case 'Wolf':
 		case 'Plaguewolf':
 			if (!Check.haveItem("armor", "runeword", "Chains of Honor")) { // CoH
-				if (!Check.haveItem("armor", "runeword", "Chains of Honor") && me.hell) {
-					var CoH = [
-						"[Name] == DolRune # # [MaxQuantity] == 1",
-						"[Name] == UmRune",
-						"[Name] == BerRune",
-						"[Name] == IstRune",
-						"[Name] == ArchonPlate && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
-					];
-					NTIP.arrayLooping(CoH);
-				}
+				var CoH = [
+					"[Name] == DolRune # # [MaxQuantity] == 1",
+					"[Name] == UmRune",
+					"[Name] == BerRune",
+					"[Name] == IstRune",
+					"[Name] == ArchonPlate && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(CoH);
 
 				if (!me.getItem(639)) {		// Ber Rune
 					Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
