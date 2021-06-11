@@ -418,6 +418,7 @@ var Check = {
 			frRes = me.getStat(39) - resPenalty,
 			lrRes = me.getStat(41) - resPenalty,
 			crRes = me.getStat(43) - resPenalty;
+			prRes = me.getStat(45) - resPenalty;
 
 		if ((frRes >= 0) && (lrRes >= 0) && (crRes >= 0)) {
 			resStatus = true;
@@ -430,6 +431,7 @@ var Check = {
 			FR: frRes,
 			CR: crRes,
 			LR: lrRes,
+			PR: prRes,
 		};
 	},
 
