@@ -18,12 +18,12 @@ var build = {
 	skills: [
 		[123, 20], 	//Conviction
 		[106, 4], 	// Zeal
-		[100, 20], 	// Resist Fire
 		[110, 20], 	// Resist Lighting
-		[124, 1], 	// Redemption
-		[117, 10], 	// Holy Shield
 		[125, 20], 	// Salvation
+		[100, 20], 	// Resist Fire
+		[124, 1], 	// Redemption
 		[117, 15], 	// Holy Shield
+		[106, 10], 	// Zeal
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon

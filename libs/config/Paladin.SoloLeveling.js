@@ -375,6 +375,8 @@ function LoadConfig () {
 
 				Config.Runewords.push([Runeword.HandofJustice, "Phase Blade"]);
 				Config.KeepRunewords.push("[Type] == sword # [holyfireaura] >= 16");
+
+				NTIP.addLine("[Name] == PhaseBlade && [Flag] != Ethereal && [Quality] == unique # [enhanceddamage] >= 230 && [sanctuaryaura] >= 10 # [tier] == 115000");	// Azurewrath
 			}
 
 			if (!Check.haveItem("sword", "runeword", "Crescent Moon") && !Check.haveItem("sword", "runeword", "Hand of Justice") && Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream")) {
@@ -388,6 +390,8 @@ function LoadConfig () {
 
 				Config.Runewords.push([Runeword.CrescentMoon, "Phase Blade"]);
 				Config.KeepRunewords.push("[Type] == sword # [ias] >= 20 && [itempierceltng] >= 35");
+
+				NTIP.addLine("[Name] == PhaseBlade && [Flag] != Ethereal && [Quality] == unique # [enhanceddamage] >= 150 && [itemabsorblightpercent] == 25 # [tier] == 105000");	// Lightsabre
 			}
 
 			break;
