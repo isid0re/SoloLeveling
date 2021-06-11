@@ -606,7 +606,7 @@ Misc.gamePacket = function (bytes) {// various game events
 
 		break;	*/
 	case 0xa4: //baalwave
-		if (me.hell) {
+		if (me.hell && !Attack.IsAuradin) {
 			waveMonster = ((bytes[1]) | (bytes[2] << 8));
 			wave = [23, 381, 557, 558, 571].indexOf(waveMonster);
 
