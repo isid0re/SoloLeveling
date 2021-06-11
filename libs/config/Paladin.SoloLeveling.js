@@ -391,6 +391,24 @@ function LoadConfig () {
 				NTIP.addLine("[Name] == PhaseBlade && [Flag] != Ethereal && [Quality] == unique # [enhanceddamage] >= 150 && [itemabsorblightpercent] == 25 # [tier] == 105000");	// Lightsabre
 			}
 
+			if (Check.haveItem("sword", "runeword", "Hand of Justice") && Check.haveItem("armor", "runeword", "Dragon") && Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream") && 
+				!Item.getEquippedItemMerc(3).prefixnum === 20547) {
+				var Fortitude = [
+					"[Name] == ElRune # # [MaxQuantity] == 1",
+					"[Name] == SolRune",
+					"[Name] == DolRune # # [MaxQuantity] == 1",
+					"[Name] == LoRune",
+					"[name] == archonplate && [quality] == normal && [flag] == ethereal # [sockets] == 0 && [defense] >= 700",
+					"[type] == armor && [quality] == normal && [class] == elite && [flag] == ethereal # [sockets] == 4 && [defense] >= 1000",
+				];
+				NTIP.arrayLooping(Fortitude);
+
+				Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate", Roll.Eth]); // Socket ethereal Archon Plate
+				Config.Runewords.push([Runeword.Fortitude, "Archon Plate", Roll.Eth]);
+
+				Config.KeepRunewords.push("[type] == armor # [enhanceddamage] >= 300 && [enhanceddefense] >= 200");
+			}
+
 			break;
 		default:
 			break;
@@ -501,7 +519,7 @@ function LoadConfig () {
 			];
 			NTIP.arrayLooping(Insight);
 
-			if (!me.hell && !Item.getEquippedItemMerc(3).prefixnum === 20568) {
+			if (!me.hell && !Item.getEquippedItemMerc(4).prefixnum === 20568) {
 				NTIP.addLine("[Name] == voulge && [flag] != ethereal && [Quality] == Normal && [Level] >= 26 && [Level] <= 40 # [Sockets] == 0 # [MaxQuantity] == 1");
 			}
 
