@@ -19,7 +19,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 |:------:|:-------:|:-------:|:------:|:------:|:------:|:-----:|
 | Javazon | Cold | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
 | Witchyzon | BlizzBaller |   Bone | Smiter| | Elemental |
-| | Meteor | Summon | |
+| | Meteorb | Summon | |
 | | Blova | |
 | | Lightning | |
 
