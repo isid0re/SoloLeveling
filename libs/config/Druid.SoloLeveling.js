@@ -358,10 +358,13 @@ function LoadConfig () {
 				}
 			} else {
 				if (Check.haveItem("armor", "runeword", "Chains of Honor")) {	//Make sure to have CoH first
-					NTIP.addLine("[name] == Quaterstaff && [quality] == unique # [enhanceddamage] == 300 && [ias] >= 50 # [MaxQuantity] == 1");	//Perfect ribcracker
+					Config.Recipes.push([Recipe.Unique.Weapon.ToElite, "Quarterstaff", Roll.NonEth]); // Upgrade Ribcracker to Elite
 				}
 
-				Config.Recipes.push([Recipe.Unique.Weapon.ToElite, "Quaterstaff", Roll.NonEth]); // Upgrade Ribcracker to Elite
+				if (!Check.haveItem("stalagmite", "unique", "Ribcracker")) {
+					NTIP.addLine("[name] == quarterstaff && [quality] == unique # [enhanceddamage] == 300 && [ias] >= 50 # [MaxQuantity] == 1");	//Perfect ribcracker
+					NTIP.addLine("[name] == stalagmite && [quality] == unique # [enhanceddamage] == 300 && [ias] >= 50 # [MaxQuantity] == 1");	//Perfect upped ribcracker
+				}
 			}
 
 			break;

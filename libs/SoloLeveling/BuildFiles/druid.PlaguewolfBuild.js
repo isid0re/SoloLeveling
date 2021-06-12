@@ -9,6 +9,9 @@ var build = {
 	skillstab: 41, // shape-shifting
 	wantedskills: [223, 224, 248], // werewolf, lycanthropy, fury
 	usefulskills: [246, 247], // spirit of the barbs, summon grizzly
+	mercAuraName: "Might",
+	mercAuraWanted: 98,
+	mercDiff: 1,
 	stats: [
 		["strength", 156], ["dexterity", 136], ["vitality", "all"]
 	],
@@ -25,7 +28,6 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		//"[name] == stalagmite && [quality] == unique # [enhanceddamage] >= 200 && [ias] >= 50 # [tier] == 110000", //upped ribcracker
 		"[Type] == sword && [flag] == runeword # [ias] >= 30 # [tier] == 110000", //Grief
 		//Shield
 		"[name] == monarch && [quality] == unique # [damageresist] >= 35 # [tier] == 110000",	//Stormshield
