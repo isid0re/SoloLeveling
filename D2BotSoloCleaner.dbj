@@ -7,6 +7,7 @@
 
 var StarterConfig = {
 	// New Stuff - DataCleaner to delete old files associated with running SoloLeveling, SaveFiles to save important files to SoloLeveling/Data/ for performance review
+	// DataCleaner and SaveFiles can both be used for cleaning/saving files without having to delete associated characters
 	DataCleaner:		true,	// Highly recommened to run this, if using either peformance tracking or the overlay system
 	SaveFiles:		false,	// Highly recommened to run this if using the peformance tracking system
 	
@@ -23,24 +24,26 @@ var StarterConfig = {
 };
 
 var AccountsToClean = {
-		/* Format:
-			"account1/password1/realm": ["charname1", "charname2"],
-			"account2/password2/realm": ["charnameX", "charnameY"],
-			"account3/password3/realm": ["all"]
+	/* Format:
+		"account1/password1/realm": ["charname1", "charname2"],
+		"account2/password2/realm": ["charnameX", "charnameY"],
+		"account3/password3/realm": ["all"]
 
-			To clean a full account, put "account/password/realm": ["all"]
+		To clean a full account, put "account/password/realm": ["all"]
 
-			realm = useast, uswest, europe, asia, or singleplayer
+		realm = useast, uswest, europe, asia, or singleplayer
 
-			for singleplayer enter null into both account and password
+		for singleplayer enter null into both account and password
 
-			Individual entries are separated with a comma.
-		*/
+		Individual entries are separated with a comma.
+	*/
 
-		/*	Example:
-			"MyAcc1/tempPass/useast": ["soloSorc"],
-			"null/null/singleplayer": ["solobarb"],
-		Enter your lines under here*/
+	/*	Example:
+		"MyAcc1/tempPass/useast": ["soloSorc"],
+		"null/null/singleplayer": ["solobarb"],
+	*/
+
+	//Enter your lines under here
 		
 };
 	
@@ -49,12 +52,13 @@ var profiles = [
 	/* Format. Enter in profile exactly the way it appears in D2Bot#
 		"SCL-ZON123",
 		"hcnl-pal123",
-	Enter your lines under here*/
+	*/
+	//Enter your lines under here
 
 ];
 
 function dataCleaner() {
-	if (!profiles.length){
+	if (!profiles.length) {
 		D2Bot.printToConsole("SoloCleaner: No profiles entered to clean. If this was a mistake, fill out profile information under NEW STUFF. Exiting dataCleaner and moving on to clean characters...", 6);
 		return;
 	}
