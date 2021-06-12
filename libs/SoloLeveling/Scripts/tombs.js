@@ -5,10 +5,11 @@
 */
 
 function tombs () {
-	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting tombs');
 	me.overhead("tombs");
+
 	let tombID = [66, 67, 68, 69, 70, 71, 72];
+	Town.townTasks();
 
 	for (let number = 0; number < tombID.length; number += 1) {
 		if (!Pather.checkWP(46)) {
@@ -18,33 +19,30 @@ function tombs () {
 		}
 
 		Precast.doPrecast(true);
-		Pather.moveToExit(tombID[number], true, true);
 
-		if (me.area === tombID[number]) {
+		if (Pather.moveToExit(tombID[number], true, true)) {
 			me.overhead("Tomb #" + (number + 1));
 
-			try {
-				let gbox = getPresetUnit(me.area, 2, 397);
-				let orifice = getPresetUnit(me.area, 2, 152);
+			let gbox = getPresetUnit(me.area, 2, 397);
+			let orifice = getPresetUnit(me.area, 2, 152);
 
-				if (gbox) {
-					if (Pather.moveToPreset(me.area, 2, 397, 0, 0, true)) {
-						break;
-					}
-				} else if (orifice) {
-					if (Pather.moveToPreset(me.area, 2, 152, 0, 0, true)) {
-						break;
-					}
+			if (gbox) {
+				if (Pather.moveToPreset(me.area, 2, 397, 0, 0, true)) {
+					break;
 				}
-			} catch (e) {
-				print('ÿc9SoloLevelingÿc0: Failed to move to ' + Pather.getAreaName(tombID[number]));
+			}
+
+			if (orifice) {
+				if (Pather.moveToPreset(me.area, 2, 152, 0, 0, true)) {
+					break;
+				}
 			}
 
 			Attack.clear(50);
 			Pickit.pickItems();
 		}
 
-		Town.doChores();
+		Town.goToTown();
 	}
 
 	return true;

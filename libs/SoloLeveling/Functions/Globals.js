@@ -39,7 +39,7 @@ var SetUp = {
 	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
-	respecOne: [ 30, 28, 26, 19, 24, 24, 30][me.classid],
+	respecOne: [ 25, 28, 26, 19, 24, 24, 30][me.classid],
 
 	respecTwo: function () {
 		let respec;
@@ -52,18 +52,17 @@ var SetUp = {
 		case 1:
 			switch (this.finalBuild) {
 			case "Witchyzon":
-				respec = Item.getEquippedItem(4).tier === 100000 ? me.charlvl : 100;
+				respec = Check.haveItem("bow", "unique", "Witchwild String") ? me.charlvl : 100;
 				break;
 			case "Javazon":
 			case "Lightning":
 			case "Blova":
 				respec = Attack.checkInfinity() ? me.charlvl : 100;
 				break;
+			case "Cold":
 			case "Meteorb":
-			case "Blizzard":
-			case "BlizzBaller":
-				respec = (Item.getEquippedItem(1).tier + Item.getEquippedItem(2).tier +
-						Item.getEquippedItem(3).tier + Item.getEquippedItem(4).tier) >= 400000 ? me.charlvl : 100;	//Tal ammy, belt, armor, and wep
+			case "Blizzballer":
+				respec = Check.haveItem("amulet", "set", "Tal Rasha's Adjudication") && Check.haveItem("belt", "set", "Tal Rasha's Fine Spun Cloth") && Check.haveItem("armor", "set", "Tal Rasha's Guardianship") && Check.haveItem("orb", "set", "Tal Rasha's Lidless Eye") ? me.charlvl : 100; //Tal ammy, belt, armor, and wep
 				break;
 			case "Bone":
 			case "Poison":
@@ -216,7 +215,7 @@ var Check = {
 
 			break;
 		case "bloodraven": //bloodaraven
-			if (me.normal && !me.bloodraven || me.hell && !me.getSkill(54, 0)) {
+			if (me.normal && !me.bloodraven || me.hell && me.getSkill(54, 0)) {
 				return true;
 			}
 
@@ -312,7 +311,7 @@ var Check = {
 
 			break;
 		case "templeruns": //temple runs
-			if (Pather.accessToAct(3) && (me.normal && me.charlvl < 25 || me.nightmare && me.charlvl < 50 || me.hell)) {
+			if (Pather.accessToAct(3) && (me.normal && me.charlvl < 25 || me.nightmare && (me.charlvl < 50 || !me.lamessen) || me.hell)) {
 				return true;
 			}
 
@@ -468,7 +467,7 @@ var Check = {
 
 		switch (me.diff) {
 		case 0: //normal
-			//have runes or stealth
+			//have runes or stealth and zephyr/ancients pledge
 			if (me.getItem("talrune") && me.getItem("ethrune") || this.haveItem("armor", "runeword", "Stealth")) {
 				needRunes = false;
 			}
@@ -478,7 +477,7 @@ var Check = {
 
 			break;
 		case 2: //hell
-			if (!me.baal) {
+			if (!me.baal && !me.amazon || me.amazon) {
 				needRunes = false;
 			}
 
@@ -493,6 +492,9 @@ var Check = {
 			print("ÿc9SoloLevelingÿc0: No alias for type '" + type + "'");
 		}
 
+		type = type.toLowerCase();
+		flag = flag.toLowerCase();
+
 		if (iName !== undefined) {
 			iName = iName.toLowerCase();
 		}
@@ -503,6 +505,10 @@ var Check = {
 		for (let i = 0; i < items.length && !itemCHECK; i++) {
 
 			switch (flag) {
+			case 'set':
+				itemCHECK = !!(items[i].quality === 5) && items[i].fname.toLowerCase().includes(iName);
+			case 'unique':
+				itemCHECK = !!(items[i].quality === 7) && items[i].fname.toLowerCase().includes(iName);
 			case 'crafted':
 				itemCHECK = !!(items[i].getFlag(NTIPAliasQuality["crafted"]));
 				break;

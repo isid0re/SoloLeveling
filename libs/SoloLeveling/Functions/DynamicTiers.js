@@ -14,6 +14,7 @@ var mercscore = function (item) {
 		ELEDMG: 2, // elemental damage
 		AR:	0.5, // attack rating
 		CB: 3, // crushing blow
+		OW: 3, // open wounds
 		LL: 1.5, //lifeleach
 		// regen
 		HPREGEN: 2,
@@ -23,13 +24,18 @@ var mercscore = function (item) {
 		STR: 1.5,
 		DEX: 1.5,
 		ALL: 180, // + all skills
-		FR: 3.5, // fire resist
-		LR: 4, // lightning resist
-		CR: 2, // cold resist
+		FR: 2, // fire resist
+		LR: 2, // lightning resist
+		CR: 1.5, // cold resist
 		PR: 1, // poison resist
 	};
 
 	let mercRating = 1;
+
+	if (item.prefixnum === 20653) { //treachery
+		mercRating += item.getStatEx(201, 2) * 1000; // fade
+	}
+
 	mercRating += item.getStatEx(151, 120) * 100; // meditation aura
 	mercRating += item.getStatEx(151, 123) * 1000; // conviction aura
 	mercRating += item.getStatEx(93) * mercWeights.IAS; // add IAS
@@ -40,6 +46,7 @@ var mercscore = function (item) {
 	mercRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55) + (item.getStatEx(57) * 125 / 512)) * mercWeights.ELEDMG; // add elemental damage
 	mercRating += item.getStatEx(19) * mercWeights.AR; // add AR
 	mercRating += item.getStatEx(136) * mercWeights.CB; // add crushing blow
+	mercRating += item.getStatEx(135) * mercWeights.OW; // add open wounds
 	mercRating += item.getStatEx(60) * mercWeights.LL; // add LL
 	mercRating += item.getStatEx(74) * mercWeights.HPREGEN; // add hp regeneration
 	mercRating += item.getStatEx(99) * mercWeights.FHR; // add faster hit recovery
@@ -97,8 +104,8 @@ var tierscore = function (item) {
 
 	var casterWeights = {
 		//breakpoint stats
-		FCR: me.assassin ? 2 : 5,
-		IAS: me.assassin ? 5 : 0,
+		FCR: 5,
+		IAS: 0,
 		// Attack
 		MINDMG:	0, // min damage
 		MAXDMG: 0, // max damage
@@ -107,6 +114,7 @@ var tierscore = function (item) {
 		ELEDMG: 0, // elemental damage
 		AR:	0, // attack rating
 		CB: 0, // crushing blow
+		OW: 0, // open wounds
 		// leaching
 		LL:	0, //lifeleach
 		ML:	0, //manaleach
@@ -117,16 +125,17 @@ var tierscore = function (item) {
 
 	var meleeWeights = {
 		//breakpoint stats
-		FCR: 0,
+		FCR: 1,
 		IAS: 3.5,
 		// Attack
 		MINDMG:	3, // min damage
 		MAXDMG: 3, // max damage
-		SECMINDMG: 3, // secondary min damage
-		SECMAXDMG: 3, // secondary max damage
+		SECMINDMG: 2, // secondary min damage
+		SECMAXDMG: 2, // secondary max damage
 		ELEDMG: 1, // elemental damage
 		AR:	0.5, // attack rating
-		CB: 5, // crushing blow
+		CB: 3, // crushing blow
+		OW: 3, // open wounds
 		// leaching
 		LL: 1.5, //lifeleach
 		ML:	1.5, //manaleach
@@ -273,6 +282,8 @@ var tierscore = function (item) {
 		buildRating += item.getStatEx(24) * buildWeights.SECMAXDMG; // add MAX damage
 		buildRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55) + (item.getStatEx(57) * 125 / 256)) * buildWeights.ELEDMG; // add elemental damage PSN damage adjusted for damage per frame (125/256)
 		buildRating += item.getStatEx(19) * buildWeights.AR; // add AR
+		buildRating += item.getStatEx(136) * buildWeights.CB; // add crushing blow
+		buildRating += item.getStatEx(135) * buildWeights.OW; // add open wounds
 		buildRating += item.getStatEx(60) * buildWeights.LL; // add LL
 		buildRating += item.getStatEx(62) * buildWeights.ML; // add ML
 		buildRating += item.getStatEx(74) * buildWeights.HPREGEN; // add hp regeneration

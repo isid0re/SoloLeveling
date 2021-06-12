@@ -1,4 +1,4 @@
-//	/d2bs/kolbot/libs/config/Builds/Sorceress.Blizzard.js
+//	/d2bs/kolbot/libs/config/Builds/Sorceress.Cold.js
 
 /**
 *
@@ -40,7 +40,6 @@ var AutoBuildTemplate = {
 		//StatPoints: [-1,-1,-1,-1,-1],						// This doesn't matter. We don't have stat points to spend at lvl 1
 		Update: function () {
 			Config.AttackSkill = [-1, 59, 45, 59, 55, -1, -1];
-			Config.LowManaSkill = [0, 0];
 			Config.SkipImmune = ["cold"];
 		}
 	},

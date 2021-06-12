@@ -146,6 +146,147 @@ if (Developer.forcePacketCasting) {
 	};
 }
 
+Skill.getRange = function (skillId) {
+	switch (skillId) {
+	case 0: // Normal Attack
+		return Attack.usingBow() ? 20 : 3;
+	case 1: // Kick
+	case 5: // Left Hand Swing
+	case 10: // Jab
+	case 14: // Power Strike
+	case 19: // Impale
+	case 24: // Charged Strike
+	case 30: // Fend
+	case 34: // Lightning Strike
+	case 46: // Blaze
+	case 73: // Poison Dagger
+	case 96: // Sacrifice
+	case 97: // Smite
+	case 106: // Zeal
+	case 111: // Vengeance
+	case 112: // Blessed Hammer
+	case 116: // Conversion
+	case 126: // Bash
+	case 131: // Find Potion
+	case 133: // Double Swing
+	case 139: // Stun
+	case 142: // Find Item
+	case 144: // Concentrate
+	case 147: // Frenzy
+	case 150: // Grim Ward
+	case 152: // Berserk
+	case 232: // Feral Rage
+	case 233: // Maul
+	case 238: // Rabies
+	case 239: // Fire Claws
+	case 242: // Hunger
+	case 248: // Fury
+	case 255: // Dragon Talon
+	case 260: // Dragon Claw
+	case 270: // Dragon Tail
+		return 3;
+	case 146: // Battle Cry
+	case 154: // War Cry
+		return 4;
+	case 44: // Frost Nova
+	case 240: // Twister
+	case 245: // Tornado
+	case 500: // Summoner
+		return 5;
+	case 38: // Charged Bolt
+		if (this.usePvpRange) {
+			return 11;
+		}
+
+		return 6;
+	case 48: // Nova
+		if (this.usePvpRange) {
+			return 11;
+		}
+
+		return 7;
+	case 151: // Whirlwind
+		return 7;
+	case 92: // Poison Nova
+		return 8;
+	case 249: // Armageddon
+		return 9;
+	case 15: // Poison Javelin
+	case 25: // Plague Javelin
+	case 101: // Holy Bolt
+	case 107: // Charge
+	case 130: // Howl
+	case 225: // Firestorm
+	case 229: // Molten Boulder
+	case 243: // Shock Wave
+		return 10;
+	case 8: // Inner Sight
+	case 17: // Slow Missiles
+		return 13;
+	case 35: // Lightning Fury
+	case 64: // Frozen Orb
+	case 67: // Teeth
+	case 234: // Fissure
+	case 244: // Volcano
+	case 251: // Fire Blast
+	case 256: // Shock Web
+	case 257: // Blade Sentinel
+	case 266: // Blade Fury
+		return 15;
+	case 7: // Fire Arrow
+	case 12: // Multiple Shot
+	case 16: // Exploding Arrow
+	case 22: // Guided Arrow
+	case 27: // Immolation Arrow
+	case 31: // Freezing Arrow
+	case 95: // Revive
+	case 121: // Fist of the Heavens
+	case 140: // Double Throw
+	case 253: // Psychic Hammer
+	case 275: // Dragon Flight
+		return 20;
+	case 91: // Lower Resist
+		return 50;
+	// Variable range
+	case 42: // Static Field
+		return Math.floor((me.getSkill(42, 1) + 4) * 2 / 3);
+	case 132: // Leap
+		var leap = [4, 7, 8, 10, 11, 12, 12, 13, 14, 14, 14, 14, 15, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 16, 17];
+
+		return leap[Math.min(me.getSkill(132, 1) - 1, 24)];
+	case 230: // Arctic Blast
+		var arctic = [5, 6, 6, 6, 6, 7, 7, 8, 8, 8, 8, 9, 9, 10, 10, 10, 10, 11, 11, 12];
+
+		return arctic[Math.min(me.getSkill(230, 1) - 1, 19)];
+	case 49: // Lightning
+	case 84: // Bone Spear
+	case 93: // Bone Spirit
+		if (this.usePvpRange) {
+			return 30;
+		}
+
+		return 15;
+	case 47: // Fire Ball
+	case 51: // Fire Wall
+	case 53: // Chain Lightning
+	case 56: // Meteor
+	case 59: // Blizzard
+	case 273: // Mind Blast
+		if (this.usePvpRange) {
+			return 30;
+		}
+
+		return 20;
+	}
+
+	// Every other skill
+	if (this.usePvpRange) {
+		return 30;
+	}
+
+	return 20;
+};
+
 Misc.checkQuest = function (id, state) {
 	sendPacket(1, 0x40);
 	delay(500 + me.ping);
@@ -227,6 +368,50 @@ Misc.townCheck = function () {
 	return false;
 };
 
+Misc.openChest = function(unit) {
+	// Skip invalid and Countess chests
+	if (!unit || unit.x === 12526 || unit.x === 12565) {
+		return false;
+	}
+
+	// already open
+	if (unit.mode) {
+		return true;
+	}
+
+	// locked chest, no keys
+	if (me.classid !== 6 && unit.islocked && !me.findItem(543, 0, 3)) {
+		return false;
+	}
+
+	var i, tick;
+
+	for (i = 0; i < 7; i += 1) {
+		if (Pather.moveTo(unit.x + 1, unit.y + 2, 3) && getDistance(me, unit.x + 1, unit.y + 2) < 5) {
+			//Misc.click(0, 0, unit);
+			sendPacket(1, 0x13, 4, unit.type, 4, unit.gid);
+		}
+
+		tick = getTickCount();
+
+		while (getTickCount() - tick < 1000) {
+			if (unit.mode) {
+				return true;
+			}
+
+			delay(10);
+		}
+
+		Packet.flash(me.gid);
+	}
+
+	if (!me.idle) {
+		Misc.click(0, 0, me.x, me.y); // Click to stop walking in case we got stuck
+	}
+
+	return false;
+};
+
 Misc.openChests = function (range) {
 	var unit,
 		unitList = [],
@@ -244,16 +429,6 @@ Misc.openChests = function (range) {
 	}
 
 	unit = getUnit(2);
-
-	// Skip invalid and Countess chests
-	if (!unit || unit.x === 12526 || unit.x === 12565) {
-		return false;
-	}
-
-	// already open
-	if (unit.mode) {
-		return true;
-	}
 
 	if (unit) {
 		do {
@@ -398,7 +573,7 @@ Misc.gamePacket = function (bytes) {// various game events
 		}
 
 		break;
-	case 0x4c: // diablo lightning dodge
+		/*	case 0x4c: // diablo lightning dodge
 		if (bytes[6] === 193 && !me.getSkill(54, 0)) {
 			diablo = getUnit(1, 243);
 			tick = getTickCount();
@@ -429,7 +604,7 @@ Misc.gamePacket = function (bytes) {// various game events
 			Misc.gamePause();
 		}
 
-		break;
+		break;	*/
 	case 0xa4: //baalwave
 		if (me.hell) {
 			waveMonster = ((bytes[1]) | (bytes[2] << 8));

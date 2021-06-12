@@ -6,7 +6,6 @@
 */
 
 function templeruns () {
-	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting temple runs');
 	me.overhead("temple runs");
 
@@ -33,9 +32,9 @@ function templeruns () {
 			} else {
 				Attack.clearLevel(0xF);
 			}
-
-			Town.goToTown();
 		}
+
+		Town.goToTown();
 	}
 
 	return true;
