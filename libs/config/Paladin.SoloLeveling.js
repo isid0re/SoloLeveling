@@ -381,9 +381,18 @@ function LoadConfig () {
 					"[Name] == ShaelRune # # [MaxQuantity] == 1",
 					"[Name] == UmRune",
 					"[Name] == TirRune # # [MaxQuantity] == 1",
-					"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+					"[Name] == PhaseBlade && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 3) # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(CrescentMoon);
+
+				if (!me.getItem(631)) {		// Um Rune
+					Config.Recipes.push([Recipe.Rune, "Ko Rune"]); // Ko to Fal
+					Config.Recipes.push([Recipe.Rune, "Fal Rune"]); // Fal to Lem
+					Config.Recipes.push([Recipe.Rune, "Lem Rune"]); // Lem to Pul
+					Config.Recipes.push([Recipe.Rune, "Pul Rune"]); // Pul to Um
+				}
+
+				Config.Recipes.push([Recipe.Socket.Weapon, "Phase Blade", Roll.NonEth]);
 
 				Config.Runewords.push([Runeword.CrescentMoon, "Phase Blade"]);
 				Config.KeepRunewords.push("[Type] == sword # [ias] >= 20 && [itempierceltng] >= 35");
