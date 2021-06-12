@@ -442,7 +442,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
 		}
 
-		if (!Check.haveItem("armor", "runeword", "Enigma")) { // Enigma
+		if (!Check.haveItem("armor", "runeword", "Enigma") && ["Hammerdin", "Smiter"].indexOf(SetUp.finalBuild) > -1) { // Enigma - Don't make if not Smiter or Hammerdin
 			var Enigma = [
 				"[Name] == JahRune",
 				"[Name] == IthRune # # [MaxQuantity] == 1",
