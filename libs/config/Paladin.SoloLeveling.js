@@ -367,6 +367,7 @@ function LoadConfig () {
 				}
 
 				if (!me.getItem(641)) {		// Cham Rune
+					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // Ber to Jah
 					Config.Recipes.push([Recipe.Rune, "Jah Rune"]); // Jah to Cham
 				}
 
