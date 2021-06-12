@@ -8,7 +8,7 @@
 *		1. Go into the D2BS console manager.
 *		2. Select the Bots profile
 *		3. In the info tag box enter one of the following choices:
-*			Meteor
+*			Meteorb
 *			Cold
 *			BlizzBaller
 *			Blova
