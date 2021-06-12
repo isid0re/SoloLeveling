@@ -54,7 +54,7 @@ if (getScript("D2BotSoloLevelingEntry.dbj") && !!configCheck[1]) {
 			};
 		}	
 	} catch(e) {
-		print("ÿc1" + e + "\nÿc0If you are seeing this message you likely did not read the readMe on the github page. First the most common problem is not using this version of kolbot -> github.com/blizzhackers/kolbot");
+		print("ÿc1" + e + "\nÿc0If you are seeing this message you likely did not read the readMe on the github page. First, the most common problem is not using this version of kolbot -> github.com/blizzhackers/kolbot");
 		print("The second most common error is an incorrect profile name format and third is incorrect Info Tag in d2bot#. Please return to the SoloLeveling main github page and read the readMe\n");
 	}
 }
