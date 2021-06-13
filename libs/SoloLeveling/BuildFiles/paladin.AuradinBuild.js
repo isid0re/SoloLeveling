@@ -27,7 +27,8 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[Type] == sword && [flag] == runeword # [ias] >= 20 && [itempierceltng] >= 35 # [tier] == 110000", //Crescent Moon
+		"[Type] == sword && [flag] == runeword # [passivecoldpierce] >= 24 # [tier] == 102500", //Voice of Reason
+		"[Type] == sword && [flag] == runeword # [ias] >= 20 && [passiveltngpierce] >= 35 # [tier] == 110000", //Crescent Moon
 		"[Type] == sword && [flag] == runeword # [holyfireaura] >= 16 # [tier] == 120000", //HoJ
 		//helmet
 		"[Type] == helm && [flag] == runeword # [holyshockaura] >= 15 # [tier] == 110000", //Dream Helm

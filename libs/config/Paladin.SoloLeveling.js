@@ -396,9 +396,29 @@ function LoadConfig () {
 				Config.Recipes.push([Recipe.Socket.Weapon, "Phase Blade", Roll.NonEth]);
 
 				Config.Runewords.push([Runeword.CrescentMoon, "Phase Blade"]);
-				Config.KeepRunewords.push("[Type] == sword # [ias] >= 20 && [itempierceltng] >= 35");
+				Config.KeepRunewords.push("[Type] == sword # [ias] >= 20 && [passiveltngpierce] >= 35");
 
 				NTIP.addLine("[Name] == PhaseBlade && [Flag] != Ethereal && [Quality] == unique # [enhanceddamage] >= 150 && [itemabsorblightpercent] == 25 # [tier] == 105000");	// Lightsabre
+			}
+
+			if (!Check.haveItem("sword", "runeword", "Voice of Reason") && !Check.haveItem("sword", "runeword", "Crescent Moon") && !Check.haveItem("sword", "runeword", "Hand of Justice") && Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream")) {
+				var VoR = [
+					"[Name] == LemRune",
+					"[Name] == KoRune # # [MaxQuantity] == 1",
+					"[Name] == ELRune # # [MaxQuantity] == 1",
+					"[Name] == EldRune # # [MaxQuantity] == 1",
+					"[Name] == PhaseBlade && [Quality] == Normal # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(VoR);
+
+				if (!me.getItem(629)) {		// Lem Rune
+					Config.Recipes.push([Recipe.Rune, "Fal Rune"]); // Fal to Lem
+				}
+
+				Config.Recipes.push([Recipe.Socket.Weapon, "Phase Blade", Roll.NonEth]);
+
+				Config.Runewords.push([Runeword.VoiceofReason, "Phase Blade"]);
+				Config.KeepRunewords.push("[type] == sword # [passivecoldpierce] == 24 && [dexterity] == 10");
 			}
 
 			if (Check.haveItem("sword", "runeword", "Hand of Justice") && Check.haveItem("armor", "runeword", "Dragon") && Check.haveItem("auricshields", "runeword", "Dream") && Check.haveItem("helm", "runeword", "Dream") && 
