@@ -523,7 +523,7 @@ var Check = {
 			case "pelt":
 			case "armor":
 			case "shield":
-			case "auricshield":
+			case "auricshields":
 			case "voodooheads":
 			case "gloves":
 			case "belt":
