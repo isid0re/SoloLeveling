@@ -542,7 +542,7 @@ var Check = {
 			case "scepter":
 			case "spear":
 			case "amazonspear":
-			case "stave":
+			case "staff":
 			case "sword":
 			case "wand":
 			case "assassinclaw":
