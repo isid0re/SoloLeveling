@@ -485,8 +485,8 @@ var Check = {
 	},
 
 	haveItem: function (type, flag, iName) {
-		if (type && !NTIPAliasType[type]) {
-			print("ÿc9SoloLevelingÿc0: No alias for type '" + type + "'");
+		if (type && !NTIPAliasType[type] && !NTIPAliasClassID[type]) {
+			print("ÿc9SoloLevelingÿc0: No NTIPalias for '" + type + "'");
 		}
 
 		type = type.toLowerCase();
@@ -496,6 +496,7 @@ var Check = {
 			iName = iName.toLowerCase();
 		}
 
+		let typeCHECK = false;
 		let items = me.getItems();
 		let itemCHECK = false;
 
@@ -504,8 +505,10 @@ var Check = {
 			switch (flag) {
 			case 'set':
 				itemCHECK = !!(items[i].quality === 5) && items[i].fname.toLowerCase().includes(iName);
+				break;
 			case 'unique':
 				itemCHECK = !!(items[i].quality === 7) && items[i].fname.toLowerCase().includes(iName);
+				break;
 			case 'crafted':
 				itemCHECK = !!(items[i].getFlag(NTIPAliasQuality["crafted"]));
 				break;
@@ -514,8 +517,45 @@ var Check = {
 				break;
 			}
 
+			switch (type) {
+			case "helm":
+			case "primalhelm":
+			case "pelt":
+			case "armor":
+			case "shield":
+			case "auricshield":
+			case "voodooheads":
+			case "gloves":
+			case "belt":
+			case "boots":
+			case "ring":
+			case "amulet":
+			case "axe":
+			case "bow":
+			case "amazonbow":
+			case "crossbow":
+			case "dagger":
+			case "javelin":
+			case "amazonjavelin":
+			case "mace":
+			case "polearm":
+			case "scepter":
+			case "spear":
+			case "amazonspear":
+			case "stave":
+			case "sword":
+			case "wand":
+			case "assassinclaw":
+			case "weapon":
+				typeCHECK = items[i].itemType === NTIPAliasType[type];
+				break;
+			default:
+				typeCHECK = items[i].classid === NTIPAliasClassID[type];
+				break;
+			}
+
 			if (type) {
-				itemCHECK = itemCHECK && (items[i].itemType === NTIPAliasType[type]);
+				itemCHECK = itemCHECK && typeCHECK;
 			}
 		}
 
