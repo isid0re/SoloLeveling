@@ -354,7 +354,7 @@ function LoadConfig () {
 					"[Name] == ChamRune",
 					"[Name] == AmnRune # # [MaxQuantity] == 1",
 					"[Name] == LoRune",
-					"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
+					"[Name] == PhaseBlade && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(HoJ);
 
