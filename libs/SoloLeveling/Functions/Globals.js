@@ -13,9 +13,9 @@ var Difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 var SetUp = {
 	scripts: [
-		"den", "bloodraven", "tristram", "countess", /*"jail", "smith",*/ "pits", "andariel", "cows", // Act 1
-		"cube", "radament", "amulet", "summoner", "ancienttunnels", "staff", "duriel", "tombs", // Act 2
-		"eye", "heart", "brain", "templeruns", "travincal", "mephisto", // Act 3
+		"den", "bloodraven", "tristram", "countess", /*"smith",*/ "pits", "andariel", "cows", // Act 1
+		"cube", "radament", "amulet", "summoner", "tombs", "ancienttunnels", "staff", "duriel", // Act 2
+		"templeruns", "eye", "heart", "brain", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
 		"shenk", "savebarby", "anya", "ancients", "baal", // Act 5
 	],
@@ -212,7 +212,7 @@ var Check = {
 
 			break;
 		case "bloodraven": //bloodaraven
-			if (me.normal && !me.bloodraven || me.hell && me.getSkill(54, 0)) {
+			if (me.normal && !me.bloodraven) {
 				return true;
 			}
 
@@ -230,13 +230,7 @@ var Check = {
 
 			break;
 		case "countess": //countess
-			if (me.classic && !me.countess || needRunes) { // classic quest completed normal || have runes for difficulty
-				return true;
-			}
-
-			break;
-		case "jail": //jail runs
-			if (me.charlvl < 15) {
+			if (me.classic && !me.countess || !me.classic && needRunes) { // classic quest completed normal || have runes for difficulty
 				return true;
 			}
 
@@ -248,7 +242,7 @@ var Check = {
 
 			break;
 		case "andariel": //andy
-			if (me.hell || !me.classic && me.nightmare || !me.andariel && (me.normal || me.nightmare)) {
+			if (me.classic && me.hell || !me.classic && !me.normal || !me.andariel) {
 				return true;
 			}
 
@@ -284,7 +278,7 @@ var Check = {
 
 			break;
 		case "summoner": //summoner
-			if (Pather.accessToAct(2) && (!me.hell && !me.summoner || me.hell)) {
+			if (Pather.accessToAct(2) && !me.summoner) {
 				return true;
 			}
 
@@ -308,7 +302,7 @@ var Check = {
 
 			break;
 		case "templeruns": //temple runs
-			if (Pather.accessToAct(3) && (me.normal && me.charlvl < 25 || me.nightmare && (me.charlvl < 50 || !me.lamessen) || me.hell)) {
+			if (Pather.accessToAct(3) && (!me.lamessen || me.nightmare && me.charlvl < 50 || me.hell)) {
 				return true;
 			}
 
@@ -332,7 +326,7 @@ var Check = {
 
 			break;
 		case "mephisto": //mephisto
-			if (Pather.accessToAct(3) && (!me.normal || me.normal && !me.mephisto)) {
+			if (Pather.accessToAct(3) && (!me.normal || !me.mephisto)) {
 				return true;
 			}
 
@@ -466,17 +460,20 @@ var Check = {
 
 		switch (me.diff) {
 		case 0: //normal
-			//have runes or stealth and zephyr/ancients pledge
+			//have runes or stealth and ancients pledge
 			if (me.getItem("talrune") && me.getItem("ethrune") || this.haveItem("armor", "runeword", "Stealth")) {
 				needRunes = false;
 			}
 
 			break;
 		case 1: //nightmare
+			if (me.getItem("talrune") && me.getItem("thulrune") && me.getItem("ortrune") && me.getItem("amnrune") || this.haveItem("sword", "runeword", "Spirit")) {
+				needRunes = false;
+			}
 
 			break;
 		case 2: //hell
-			if (!me.baal && !me.amazon || me.amazon) {
+			if (!me.baal || me.sorceress) {
 				needRunes = false;
 			}
 
