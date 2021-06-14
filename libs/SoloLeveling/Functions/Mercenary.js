@@ -111,7 +111,7 @@ var Merc = {
 
 		if (mercSelected !== mercAuraWanted && me.diff === mercDiff || mercSelected !== tempMercAura && me.normal) { // replace merc
 			me.overhead('replacing merc');
-			Town.organizeInventory();
+			Town.sortInventory();
 			Item.removeItemsMerc(); // strip temp merc gear
 			delay(500 + me.ping);
 		}
