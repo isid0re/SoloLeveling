@@ -769,6 +769,14 @@ Town.equipSWAP = function () {
 Town.buyPots = function (quantity, type) {
 	let npc, jugs;
 
+	if (type === "Thawing" && Check.Resistance().CR >= 75) {	// Don't buy if already at max res
+		return true;
+	}
+
+	if (type === "Antidote" && Check.Resistance().PR >= 75) {	// Don't buy if already at max res
+		return true;
+	}
+
 	switch (me.area) {
 	case 1:
 		Town.move(NPC.Akara);

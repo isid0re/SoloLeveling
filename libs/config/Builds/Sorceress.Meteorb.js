@@ -1,4 +1,4 @@
-//	/d2bs/kolbot/libs/config/Builds/Sorceress.Meteor.js
+//	/d2bs/kolbot/libs/config/Builds/Sorceress.Meteorb.js
 
 /**
 *
