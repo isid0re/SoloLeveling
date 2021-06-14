@@ -53,8 +53,8 @@ Town.townTasks = function () {
 	Merc.equipMerc();
 	this.stash();
 	this.clearJunk();
-	this.organizeStash();
-	this.organizeInventory();
+	this.sortInventory();
+	this.sortStash();
 	Quest.characterRespec();
 
 	for (i = 0; i < cancelFlags.length; i += 1) {
@@ -121,7 +121,7 @@ Town.doChores = function (repair = false) {
 		this.clearScrolls();
 	}
 
-	this.organizeInventory();
+	this.sortInventory();
 	Quest.characterRespec();
 
 	for (i = 0; i < cancelFlags.length; i += 1) {
@@ -854,6 +854,23 @@ Town.drinkPots = function () {
 	return true;
 };
 
+Town.canStash = function (item) {
+	var ignoredClassids = [91, 174]; // Some quest items that have to be in inventory or equipped
+
+	if (this.ignoredItemTypes.indexOf(item.itemType) > -1 || ignoredClassids.indexOf(item.classid) > -1) {
+		return false;
+	}
+
+	if (!Storage.Stash.CanFit(item)) {
+		this.sortStash(true);	//Force sort
+		if (!Storage.Stash.CanFit(item)) {	//Re-check after sorting
+			return false;
+		}
+	}
+
+	return true;
+};
+
 Town.stash = function (stashGold) {
 	if (stashGold === undefined) {
 		stashGold = true;
@@ -892,47 +909,18 @@ Town.stash = function (stashGold) {
 	return true;
 };
 
-Town.organizeStash = function () {
-	if (Storage.Stash.UsedSpacePercent() < 65) {
-		return true;
-	}
-
-	Town.move('stash');
-	let stashFit = { sizex: 6, sizey: 8 };
-
-	if (!Storage.Stash.CanFit(stashFit)) {
-		me.cancel();
-
-		let sorted, items = me.findItems(-1, 0, 7);
-
-		items.sort(function (a, b) {
-			return (b.sizex * b.sizey - a.sizex * a.sizey);
-		});
-
-		for (sorted = 0; sorted < items.length; sorted += 1) {
-			moveTo.Stash(items[sorted], true);
-		}
-	}
+Town.sortInventory = function() {
+	Storage.Inventory.SortItems(SetUp.sortSettings.ItemsSortedFromLeft, SetUp.sortSettings.ItemsSortedFromRight);
 
 	return true;
 };
 
-Town.organizeInventory = function () {
-	let invfit = { sizex: 4, sizey: 4 };
-
-	if (!Storage.Inventory.CanFit(invfit)) {
-		me.cancel();
-
-		let inv, items = me.findItems(-1, 0, 3);
-
-		items.sort(function (a, b) {
-			return (b.sizex * b.sizey - a.sizex * a.sizey);
-		});
-
-		for (inv = 0; inv < items.length; inv += 1) {
-			moveTo.Inventory(items[inv], true);
-		}
+Town.sortStash = function (force) {
+	if (Storage.Stash.UsedSpacePercent() < 65 || !force) {
+		return true;
 	}
+
+	Storage.Stash.SortItems();
 
 	return true;
 };

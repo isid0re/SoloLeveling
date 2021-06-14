@@ -36,6 +36,25 @@ var SetUp = {
 		});
 	},
 
+	//Storage Settings
+ 	sortSettings: {
+		ItemsSortedFromLeft: [], // default: everything not in Config.ItemsSortedFromRight
+		ItemsSortedFromRight: [
+			// (NOTE: default pickit is fastest if the left side is open)
+			603, 604, 605, // sort charms from the right
+			519, 518, 543, // sort tomes and keys to the right
+			515, 516, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596 // sort all inventory potions from the right
+		],
+		PrioritySorting: true,
+		ItemsSortedFromLeftPriority: [/*605, 604, 603, 519, 518*/], // (NOTE: the earlier in the index, the further to the Left)
+		ItemsSortedFromRightPriority: [
+			// (NOTE: the earlier in the index, the further to the Right)
+			605, 604, 603, // sort charms from the right, GC > LC > SC
+			519, 518, 543
+			
+		],
+	},
+
 	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
