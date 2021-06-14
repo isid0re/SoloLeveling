@@ -23,12 +23,9 @@ NodeAction.killMonsters = function (arg) {
 		monList = Attack.getMob([58, 59, 60, 61, 101, 102, 103, 104], 0, 30);
 
 		if (monList) {
+			Attack.clear(7, 0);
 			Attack.clearList(monList);
 		}
-	}
-
-	if (!me.inTown) {
-		Attack.clear(7, 0);
 	}
 
 	if ([39].indexOf(me.area) > -1) {

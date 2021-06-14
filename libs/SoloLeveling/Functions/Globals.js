@@ -13,9 +13,9 @@ var Difficulty = ['Normal', 'Nightmare', 'Hell'];
 
 var SetUp = {
 	scripts: [
-		"den", "bloodraven", "tristram", "countess", /*"jail", "smith",*/ "pits", "andariel", "cows", // Act 1
-		"cube", "radament", "amulet", "summoner", "ancienttunnels", "staff", "duriel", "tombs", // Act 2
-		"eye", "heart", "brain", "templeruns", "travincal", "mephisto", // Act 3
+		"den", "bloodraven", "tristram", "countess", /*"smith",*/ "pits", "andariel", "cows", // Act 1
+		"cube", "radament", "amulet", "summoner", "tombs", "ancienttunnels", "staff", "duriel", // Act 2
+		"templeruns", "eye", "heart", "brain", "travincal", "mephisto", // Act 3
 		"izual", "hellforge", "diablo", //Act 4
 		"shenk", "savebarby", "anya", "ancients", "baal", // Act 5
 	],
@@ -215,7 +215,7 @@ var Check = {
 
 			break;
 		case "bloodraven": //bloodaraven
-			if (me.normal && !me.bloodraven || me.hell && me.getSkill(54, 0)) {
+			if (me.normal && !me.bloodraven) {
 				return true;
 			}
 
@@ -233,13 +233,7 @@ var Check = {
 
 			break;
 		case "countess": //countess
-			if (me.classic && !me.countess || needRunes) { // classic quest completed normal || have runes for difficulty
-				return true;
-			}
-
-			break;
-		case "jail": //jail runs
-			if (me.charlvl < 15) {
+			if (me.classic && !me.countess || !me.classic && needRunes) { // classic quest completed normal || have runes for difficulty
 				return true;
 			}
 
@@ -251,7 +245,7 @@ var Check = {
 
 			break;
 		case "andariel": //andy
-			if (me.hell || !me.classic && me.nightmare || !me.andariel && (me.normal || me.nightmare)) {
+			if (me.classic && me.hell || !me.classic && !me.normal || !me.andariel) {
 				return true;
 			}
 
@@ -287,7 +281,7 @@ var Check = {
 
 			break;
 		case "summoner": //summoner
-			if (Pather.accessToAct(2) && (!me.hell && !me.summoner || me.hell)) {
+			if (Pather.accessToAct(2) && !me.summoner) {
 				return true;
 			}
 
@@ -311,7 +305,7 @@ var Check = {
 
 			break;
 		case "templeruns": //temple runs
-			if (Pather.accessToAct(3) && (me.normal && me.charlvl < 25 || me.nightmare && (me.charlvl < 50 || !me.lamessen) || me.hell)) {
+			if (Pather.accessToAct(3) && (!me.lamessen || me.nightmare && me.charlvl < 50 || me.hell)) {
 				return true;
 			}
 
@@ -335,7 +329,7 @@ var Check = {
 
 			break;
 		case "mephisto": //mephisto
-			if (Pather.accessToAct(3) && (!me.normal || me.normal && !me.mephisto)) {
+			if (Pather.accessToAct(3) && (!me.normal || !me.mephisto)) {
 				return true;
 			}
 
@@ -419,7 +413,8 @@ var Check = {
 			resPenalty = me.classic ? [0, 20, 50, 50][me.diff + 1] : [ 0, 40, 100, 100][me.diff + 1],
 			frRes = me.getStat(39) - resPenalty,
 			lrRes = me.getStat(41) - resPenalty,
-			crRes = me.getStat(43) - resPenalty;
+			crRes = me.getStat(43) - resPenalty,
+			prRes = me.getStat(45) - resPenalty;
 
 		if ((frRes >= 0) && (lrRes >= 0) && (crRes >= 0)) {
 			resStatus = true;
@@ -432,6 +427,7 @@ var Check = {
 			FR: frRes,
 			CR: crRes,
 			LR: lrRes,
+			PR: prRes,
 		};
 	},
 
@@ -467,17 +463,20 @@ var Check = {
 
 		switch (me.diff) {
 		case 0: //normal
-			//have runes or stealth and zephyr/ancients pledge
+			//have runes or stealth and ancients pledge
 			if (me.getItem("talrune") && me.getItem("ethrune") || this.haveItem("armor", "runeword", "Stealth")) {
 				needRunes = false;
 			}
 
 			break;
 		case 1: //nightmare
+			if (me.getItem("talrune") && me.getItem("thulrune") && me.getItem("ortrune") && me.getItem("amnrune") || this.haveItem("sword", "runeword", "Spirit")) {
+				needRunes = false;
+			}
 
 			break;
 		case 2: //hell
-			if (!me.baal && !me.amazon || me.amazon) {
+			if (!me.baal || me.sorceress) {
 				needRunes = false;
 			}
 
@@ -488,8 +487,8 @@ var Check = {
 	},
 
 	haveItem: function (type, flag, iName) {
-		if (type && !NTIPAliasType[type]) {
-			print("ÿc9SoloLevelingÿc0: No alias for type '" + type + "'");
+		if (type && !NTIPAliasType[type] && !NTIPAliasClassID[type]) {
+			print("ÿc9SoloLevelingÿc0: No NTIPalias for '" + type + "'");
 		}
 
 		type = type.toLowerCase();
@@ -499,6 +498,7 @@ var Check = {
 			iName = iName.toLowerCase();
 		}
 
+		let typeCHECK = false;
 		let items = me.getItems();
 		let itemCHECK = false;
 
@@ -507,8 +507,10 @@ var Check = {
 			switch (flag) {
 			case 'set':
 				itemCHECK = !!(items[i].quality === 5) && items[i].fname.toLowerCase().includes(iName);
+				break;
 			case 'unique':
 				itemCHECK = !!(items[i].quality === 7) && items[i].fname.toLowerCase().includes(iName);
+				break;
 			case 'crafted':
 				itemCHECK = !!(items[i].getFlag(NTIPAliasQuality["crafted"]));
 				break;
@@ -517,8 +519,45 @@ var Check = {
 				break;
 			}
 
+			switch (type) {
+			case "helm":
+			case "primalhelm":
+			case "pelt":
+			case "armor":
+			case "shield":
+			case "auricshields":
+			case "voodooheads":
+			case "gloves":
+			case "belt":
+			case "boots":
+			case "ring":
+			case "amulet":
+			case "axe":
+			case "bow":
+			case "amazonbow":
+			case "crossbow":
+			case "dagger":
+			case "javelin":
+			case "amazonjavelin":
+			case "mace":
+			case "polearm":
+			case "scepter":
+			case "spear":
+			case "amazonspear":
+			case "staff":
+			case "sword":
+			case "wand":
+			case "assassinclaw":
+			case "weapon":
+				typeCHECK = items[i].itemType === NTIPAliasType[type];
+				break;
+			default:
+				typeCHECK = items[i].classid === NTIPAliasClassID[type];
+				break;
+			}
+
 			if (type) {
-				itemCHECK = itemCHECK && (items[i].itemType === NTIPAliasType[type]);
+				itemCHECK = itemCHECK && typeCHECK;
 			}
 		}
 
