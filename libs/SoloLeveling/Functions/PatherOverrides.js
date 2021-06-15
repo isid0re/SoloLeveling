@@ -367,6 +367,8 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 
 				if (fail > 0) {
 					Packet.flash(me.gid);
+					Attack.clear(5);
+					Misc.openChests(2);
 
 					if (fail >= retry) {
 						break;
