@@ -10,6 +10,7 @@
 *		3. In the info tag box enter one of the following choices:
 *			Hammerdin
 *			Smiter
+*			Auradin
 *		4. Save the profile and start
 */
 
@@ -323,6 +324,10 @@ function LoadConfig () {
 			}
 
 			if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
+				if (!me.getItem(632) && Item.getEquippedItem(4).tier >= 110000) {
+					Config.Recipes.push([Recipe.Rune, "Um Rune"]); // Um to Mal
+				}
+				
 				if (!me.getItem(636)) { // Ohm Rune
 					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
 					Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
@@ -432,6 +437,14 @@ function LoadConfig () {
 					"[type] == armor && [quality] == normal && [class] == elite && [flag] == ethereal # [sockets] == 4 && [defense] >= 1000",
 				];
 				NTIP.arrayLooping(Fortitude);
+
+				if (!me.getItem(637) && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Lo Rune - Only do this if already have CTA
+					Config.Recipes.push([Recipe.Rune, "Mal Rune"]); // Mal to Ist
+					Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
+					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
+					Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
+					Config.Recipes.push([Recipe.Rune, "Ohm Rune"]); // Ohm to Lo
+				}
 
 				Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate", Roll.Eth]); // Socket ethereal Archon Plate
 				Config.Runewords.push([Runeword.Fortitude, "Archon Plate", Roll.Eth]);
