@@ -10,7 +10,6 @@
 *		3. In the info tag box enter one of the following choices:
 *			Hammerdin
 *			Smiter
-*			Auradin
 *		4. Save the profile and start
 */
 
@@ -239,7 +238,7 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(Grief);
 
-				if (!me.getItem("lorune") && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Only do this if already have CTA
+				if (!me.getItem(637) && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Lo Rune - Only do this if already have CTA
 					Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
 					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
 					Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
@@ -261,11 +260,11 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(HotO);
 
-				if (me.getItem("vexrune")) {
+				if (me.getItem(635)) {		// Vex Rune
 					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
 				}
 
-				if (!me.getItem("vexrune")) {
+				if (!me.getItem(635)) {		// Vex Rune
 					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
@@ -307,7 +306,7 @@ function LoadConfig () {
 			}
 
 			if (!Check.haveItem("auricshields", "runeword", "Dream") || !Check.haveItem("helm", "runeword", "Dream") && me.ladder > 0) {
-				if (!me.getItem("jahrune")) {
+				if (!me.getItem(640)) {		// Jah Rune
 					if (Check.haveItem("sword", "runeword", "Call To Arms")) {
 						Config.Recipes.push([Recipe.Rune, "Mal Rune"]); // Mal to Ist
 						Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
@@ -324,11 +323,7 @@ function LoadConfig () {
 			}
 
 			if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
-				if (!me.getItem("malrune") && Item.getEquippedItem(4).tier >= 110000) {
-					Config.Recipes.push([Recipe.Rune, "Um Rune"]); // Um to Mal
-				}
-
-				if (!me.getItem("ohmrune")) { // Ohm Rune
+				if (!me.getItem(636)) { // Ohm Rune
 					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
 					Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
 				}
@@ -342,11 +337,11 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(Dragon);
 
-				if (!me.getItem("surrune")) {
+				if (!me.getItem(638)) {		// Sur Rune
 					Config.Recipes.push([Recipe.Rune, "Lo Rune"]); // Lo to Sur
 				}
 
-				if (me.getItem("lorune") && me.getItem("surrune")) {
+				if (me.getItem(637) && me.getItem(638)) {
 					Config.Runewords.push([Runeword.Dragon, "Archon Plate", Roll.NonEth]);
 				}
 
@@ -363,7 +358,7 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(HoJ);
 
-				if (!me.getItem("lorune") && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Only do this if already have CTA
+				if (!me.getItem(637) && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Lo Rune - Only do this if already have CTA
 					Config.Recipes.push([Recipe.Rune, "Mal Rune"]); // Mal to Ist
 					Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
 					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
@@ -371,7 +366,7 @@ function LoadConfig () {
 					Config.Recipes.push([Recipe.Rune, "Ohm Rune"]); // Ohm to Lo
 				}
 
-				if (!me.getItem("chamrune")) {
+				if (!me.getItem(641)) {		// Cham Rune
 					Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // Ber to Jah
 					Config.Recipes.push([Recipe.Rune, "Jah Rune"]); // Jah to Cham
 				}
@@ -391,7 +386,7 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(CrescentMoon);
 
-				if (!me.getItem("umrune")) {
+				if (!me.getItem(631)) {		// Um Rune
 					Config.Recipes.push([Recipe.Rune, "Ko Rune"]); // Ko to Fal
 					Config.Recipes.push([Recipe.Rune, "Fal Rune"]); // Fal to Lem
 					Config.Recipes.push([Recipe.Rune, "Lem Rune"]); // Lem to Pul
@@ -416,7 +411,7 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(VoR);
 
-				if (!me.getItem("lemrune")) {
+				if (!me.getItem(629)) {		// Lem Rune
 					Config.Recipes.push([Recipe.Rune, "Fal Rune"]); // Fal to Lem
 				}
 
@@ -437,14 +432,6 @@ function LoadConfig () {
 					"[type] == armor && [quality] == normal && [class] == elite && [flag] == ethereal # [sockets] == 4 && [defense] >= 1000",
 				];
 				NTIP.arrayLooping(Fortitude);
-
-				if (!me.getItem("lorune") && Check.haveItem("sword", "runeword", "Call To Arms")) {		// Only do this if already have CTA
-					Config.Recipes.push([Recipe.Rune, "Mal Rune"]); // Mal to Ist
-					Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Ist to Gul
-					Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Gul to Vex
-					Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Vex to Ohm
-					Config.Recipes.push([Recipe.Rune, "Ohm Rune"]); // Ohm to Lo
-				}
 
 				Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate", Roll.Eth]); // Socket ethereal Archon Plate
 				Config.Runewords.push([Runeword.Fortitude, "Archon Plate", Roll.Eth]);
@@ -467,7 +454,7 @@ function LoadConfig () {
 			];
 			NTIP.arrayLooping(CTA);
 
-			if (me.getItem("ohmrune")) { // have Ohm before collecting base
+			if (me.getItem(636)) { // have Ohm before collecting base
 				NTIP.addLine("[Name] == CrystalSword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");
 			}
 
@@ -483,15 +470,15 @@ function LoadConfig () {
 			];
 			NTIP.arrayLooping(Enigma);
 
-			if (!me.getItem("berrune")) {
+			if (!me.getItem(639)) {
 				Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
 			}
 
-			if (!me.getItem("jahrune")) {
+			if (!me.getItem(640)) {
 				Config.Recipes.push([Recipe.Rune, "Ber Rune"]); // ber to jah
 			}
 
-			if (me.getItem("berrune") && me.getItem("jahrune")) {
+			if (me.getItem(639) && me.getItem(640)) {
 				Config.Runewords.push([Runeword.Enigma, "Mage Plate", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Enigma, "DuskShroud", Roll.NonEth]);
 				Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
@@ -511,7 +498,7 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(SpiritSword);
 
-				if (!me.getItem("amnrune")) {
+				if (!me.getItem(620)) { //Amn Rune
 					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
@@ -618,7 +605,7 @@ function LoadConfig () {
 
 		if (Item.getEquippedItem(5).tier < 500) { // Ancients' Pledge
 			if (!Check.haveItem("shield", "runeword", "Ancients' Pledge") && !me.hell) {
-				if (me.normal && !me.getItem("ortrune")) {
+				if (me.normal && !me.getItem(618)) {
 					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 				}
 
@@ -685,7 +672,7 @@ function LoadConfig () {
 
 		if (Item.getEquippedItem(3).tier < 634) { // Smoke
 			if (!Check.haveItem("armor", "runeword", "Smoke") && !me.hell) {
-				if (!me.getItem("lumrune")) { // Cube to Lum Rune
+				if (!me.getItem(626)) { // Cube to Lum Rune
 					Config.Recipes.push([Recipe.Rune, "Io Rune"]); // cube Io to Lum
 				}
 
