@@ -173,7 +173,7 @@ var Quest = {
 					Storage.Inventory.MoveTo(hstaff);
 				} else {
 					Town.clearJunk();
-					Town.organizeInventory();
+					Town.sortInventory();
 
 					if (hstaff.location === 6) {
 						Cubing.openCube();
