@@ -509,27 +509,28 @@ Misc.getWell = function (unit) {
 	return false;
 };
 
-Misc.getExpShrine = function (...expLocs) {
+Misc.getExpShrine = function (shrineLocs) {
 	if (me.getState(137)) {
 		return true;
 	}
 
-	for (let expLoc of expLocs) {
-		if (!Pather.checkWP(expLoc)) {
-			Pather.getWP(expLoc);
+	for (let get = 0; get < shrineLocs.length; get++) {
+		if (!Pather.checkWP(shrineLocs[get])) {
+			Pather.getWP(shrineLocs[get]);
 		} else {
-			Pather.useWaypoint(expLoc);
+			Pather.useWaypoint(shrineLocs[get]);
 		}
 
 		Precast.doPrecast(true);
+		Misc.getShrinesInArea(shrineLocs[get], 15, true);
 
-		if (me.getState(137) || Misc.getShrinesInArea(expLoc, 15, true)) {
+		if (me.getState(137)) {
 			break;
 		}
-	}
 
-	if (!me.inTown) {
-		Town.goToTown();
+		if (!me.inTown) {
+			Town.goToTown();
+		}
 	}
 
 	return true;
