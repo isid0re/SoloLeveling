@@ -224,7 +224,7 @@ var Check = {
 
 			break;
 		case "tristram": //tristram
-			if (!me.normal && !me.tristram && (me.classic && me.diablo || me.baal)) {
+			if (me.normal && me.charlvl < 15 || !me.normal && !me.tristram && (me.classic && me.diablo || me.baal)) {
 				return true;
 			}
 
@@ -461,13 +461,13 @@ var Check = {
 		switch (me.diff) {
 		case 0: //normal
 			//have runes or stealth and ancients pledge
-			if (me.getItem("talrune") && me.getItem("ethrune") || this.haveItem("armor", "runeword", "Stealth")) {
+			if (me.getItem(616) && me.getItem(614) || this.haveItem("armor", "runeword", "Stealth")) {
 				needRunes = false;
 			}
 
 			break;
 		case 1: //nightmare
-			if (me.getItem("talrune") && me.getItem("thulrune") && me.getItem("ortrune") && me.getItem("amnrune") || this.haveItem("sword", "runeword", "Spirit")) {
+			if (me.getItem(616) && me.getItem(619) && me.getItem(618) && me.getItem(620) || !me.paladin && this.haveItem("sword", "runeword", "Spirit") || me.paladin && this.haveItem("sword", "runeword", "Spirit") && this.haveItem("auricshields", "runeword", "Spirit")) {
 				needRunes = false;
 			}
 

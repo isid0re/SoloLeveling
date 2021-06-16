@@ -77,12 +77,12 @@ function LoadConfig () {
 	Config.LifeChicken = me.playertype ? 60 : 10;
 	Config.ManaChicken = 0;
 	Config.MercChicken = 0;
-	Config.TownHP = 0;
+	Config.TownHP = me.playertype ? 0 : Config.TownCheck ? 35 : 0;
 	Config.TownMP = 0;
 
 	/* Potions configuration. */
 	Config.UseHP = me.playertype ? 90 : 75;
-	Config.UseRejuvHP = me.playertype ? 65 : 40;
+	Config.UseRejuvHP = me.playertype ? 65 : 50;
 	Config.UseMP = me.playertype ? 75 : 55;
 	Config.UseMercHP = 75;
 
@@ -429,14 +429,11 @@ function LoadConfig () {
 
 			var apShields = [
 				"me.normal && [Name] == LargeShield && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-				"!me.hell && [Name] == KiteShield && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-				"([Name] == DragonShield || [Name] == Scutum) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+				"[Name] == Scutum && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(apShields);
 
-			Config.Runewords.push([Runeword.AncientsPledge, "Dragon Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Scutum"]);
-			Config.Runewords.push([Runeword.AncientsPledge, "Kite Shield"]);
 			Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
 
 			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
