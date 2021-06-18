@@ -278,20 +278,46 @@ function LoadConfig () {
 				Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 35 && [maxmana] >= 89");
 			}
 
-			if (!Check.haveItem("armor", "runeword", "Chains of Honor")) { // CoH
-				if (!Check.haveItem("armor", "runeword", "Chains of Honor") && me.hell) {
-					var CoH = [
-						"[Name] == DolRune # # [MaxQuantity] == 1",
-						"[Name] == UmRune",
-						"[Name] == BerRune",
-						"[Name] == IstRune",
-						"[Name] == ArchonPlate && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
-					];
-					NTIP.arrayLooping(CoH);
+			if (!Check.haveItem("mace", "runeword", "Heart of the Oak")) {
+				var HotO = [
+					"[Name] == ThulRune # # [MaxQuantity] == 1",
+					"[Name] == PulRune",
+					"[Name] == KoRune # # [MaxQuantity] == 1",
+					"[Name] == VexRune",
+				];
+				NTIP.arrayLooping(HotO);
+
+				if (me.getItem(635)) {
+					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
 				}
+
+				if (!me.getItem(635)) {
+					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
+				}
+
+				Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
+				Config.Runewords.push([Runeword.HeartoftheOak, "Flail"]);
+				Config.KeepRunewords.push("[Type] == mace # [fcr] == 40");
+			}
+
+			if (!Check.haveItem("armor", "runeword", "Chains of Honor")) { // CoH
+				var CoH = [
+					"[Name] == DolRune # # [MaxQuantity] == 1",
+					"[Name] == UmRune",
+					"[Name] == BerRune",
+					"[Name] == IstRune",
+				];
+				NTIP.arrayLooping(CoH);
 
 				if (!me.getItem(639)) {
 					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
+				}
+
+				if (me.getItem(639)) {
+					NTIP.addLine("[Name] == ArchonPlate && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1");
 				}
 
 				Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate", Roll.NonEth]);

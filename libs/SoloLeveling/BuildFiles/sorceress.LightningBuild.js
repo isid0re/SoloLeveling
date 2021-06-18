@@ -31,7 +31,7 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[name] == dimensionalshard && [quality] == unique # [fcr] == 20 # [tier] == 110000", //deaths fathom
+		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 110000", // HotO
 		//Helmet
 		"[name] == diadem && [quality] == unique # [fcr] == 25 # [tier] == 110000", //griffons
 		//belt
