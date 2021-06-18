@@ -386,8 +386,13 @@ var Container = function (name, width, height, location) {
 	this.MoveToSpot = function(item, x, y) {
 		var n, nDelay, cItem, cube;
 		
-		//Cube -> Stash, must place item in inventory first
-		if (item.location === 6 && this.location === 7 && !Storage.Inventory.MoveTo(item)) {
+		//Cube -> Stash, If stash is not our current location but item is in the cube open stash
+		if (item.location === 6 && this.location !== 7 && !Town.openStash()) {
+			return false;
+		}
+		
+		//Cube -> Stash, If stash is our current location must place item in inventory first
+		if (item.location === 6 && this.location == 7 && !Storage.Inventory.MoveTo(item)) {
 			return false;
 		}
 
@@ -402,7 +407,7 @@ var Container = function (name, width, height, location) {
 		}
 
 		//Make sure stash is open
-		if (this.location === 7 && !Town.openStash()) {
+		if (item.location === 7 && this.location !== 7 && !Town.openStash()) {
 			return false;
 		}
 
