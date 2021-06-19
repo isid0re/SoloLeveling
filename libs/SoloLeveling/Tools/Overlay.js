@@ -596,7 +596,7 @@ var Overlay = {
 		}
 	},
 
-	update: function () {
+	update: function (msg = false) {
 		function status () {
 			let hide = [0x01, 0x02, 0x03, 0x04, 0x05, 0x09, 0x0C, 0x0D, 0x0F, 0x14, 0x18, 0x19, 0x1A, 0x21, 0x24];
 
@@ -616,9 +616,7 @@ var Overlay = {
 			delay(250);
 		}
 
-		let gameCheck = getScript("default.dbj");
-
-		return (!me.dead || gameCheck.running) ? status() : false;
+		return msg ? false : status();
 	},
 
 	flush: function () {
