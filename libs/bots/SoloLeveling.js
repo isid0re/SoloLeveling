@@ -61,6 +61,7 @@ function SoloLeveling () {
 				}
 
 				let tick = getTickCount();
+				let currentExp = me.getStat(13);
 
 				for (j = 0; j < 5; j += 1) {
 					if (this[SetUp.scripts[k]]()) {
@@ -68,12 +69,12 @@ function SoloLeveling () {
 					}
 				}
 
-				if (j === 5) {
-					me.overhead("script " + SetUp.scripts[k] + " failed.");
+				if (Developer.logPerformance) {
+					Tracker.Script(tick, SetUp.scripts[k], currentExp);
 				}
 
-				if (Developer.logPerformance) {
-					Tracker.Script(tick, SetUp.scripts[k]);
+				if (j === 5) {
+					me.overhead("script " + SetUp.scripts[k] + " failed.");
 				}
 			}
 		}

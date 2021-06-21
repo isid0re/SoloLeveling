@@ -23,8 +23,8 @@ var Tracker = {
 
 	initialize: function () {
 		//File Structure
-		var LPHeader = "Total Time,Split Time,Sequence,Difficulty,Area,Character Level,Current Build" + "\n"; //Leveling Performance
-		var SPHeader = "Total Time,Sequence Time,Sequence,Quest Complete,Difficulty,EXP%,Character Level,Current Build" + "\n"; //Script Performance
+		var LPHeader = "Total Time,InGame Time,Split Time,Area,Character Level,Gained EXP,Gained EXP/Minute,Difficulty,Fire Resist,Cold Resist,Light Resist,Poison Resist,Current Build" + "\n"; //Leveling Performance
+		var SPHeader = "Total Time,InGame Time,Sequence Time,Sequence,Character Level,Gained EXP,Gained EXP/Minute,Difficulty,Fire Resist,Cold Resist,Light Resist,Poison Resist,Current Build" + "\n"; //Script Performance
 		let FirstSave = getTickCount();
 		var GameTracker = {
 			"Total": 0,
@@ -56,20 +56,23 @@ var Tracker = {
 		}
 	},
 
-	Script: function (starttime, subscript) {
+	Script: function (starttime, subscript, startexp) {
 		var GameTracker = Developer.readObj(Tracker.GTPath),
-			newTick = me.gamestarttime > GameTracker.LastSave ? me.gamestarttime : GameTracker.LastSave,
+			newTick = me.gamestarttime >= GameTracker.LastSave ? me.gamestarttime : GameTracker.LastSave,
 			totalTick = GameTracker.LastSave,
 			newIG = GameTracker.InGame + Developer.Timer(newTick),
 			newTotal = GameTracker.Total + Developer.Timer(totalTick),
 			scriptTime = Developer.Timer(starttime),
-			questName = me + "." + subscript,
-			questComplete = questName ? true : false,
 			diffString = Difficulty[me.diff],
-			gainPCT = Experience.gainPercent() / 100,
+			gainAMT = me.getStat(13) - startexp,
+			gainTime = gainAMT / (scriptTime / 60000),
 			currentBuild = SetUp.getBuild(),
 			newSave = getTickCount(),
-			string = Developer.formatTime(newTotal) + "," + Developer.formatTime(scriptTime) + "," + subscript + "," + questComplete + "," + diffString + "," + gainPCT + "," + me.charlvl + "," + currentBuild + "\n";
+			FR = me.getStat(39),
+			CR = me.getStat(43),
+			LR = me.getStat(41),
+			PR = me.getStat(45),
+			string = Developer.formatTime(newTotal) + "," + Developer.formatTime(newIG) + "," + Developer.formatTime(scriptTime) + "," + subscript + "," + me.charlvl + "," + gainAMT + "," + gainTime + "," + diffString + "," + FR + "," + CR + "," + LR + "," + PR + "," + currentBuild + "\n";
 
 		GameTracker.Total = newTotal;
 		GameTracker.InGame = newIG;
@@ -92,7 +95,13 @@ var Tracker = {
 			areaName = Pather.getAreaName(me.area),
 			currentBuild = SetUp.getBuild(),
 			newSave = getTickCount(),
-			string = Developer.formatTime(newTotal) + "," + Developer.formatTime(splitTime) + "," + diffString + "," + areaName + "," + me.charlvl + "," + currentBuild + "\n";
+			gainAMT = me.getStat(13) - Experience.totalExp[me.charlvl - 1],
+			gainTime = gainAMT / (splitTime / 60000),
+			FR = me.getStat(39),
+			CR = me.getStat(43),
+			LR = me.getStat(41),
+			PR = me.getStat(45),
+			string = Developer.formatTime(newTotal) + "," + Developer.formatTime(newIG) + "," + Developer.formatTime(splitTime) + "," + areaName + "," + me.charlvl + "," + gainAMT + "," + gainTime + "," + diffString + "," + FR + "," + CR + "," + LR + "," + PR + "," + currentBuild + "\n";
 
 		GameTracker.Total = newTotal;
 		GameTracker.InGame = newIG;

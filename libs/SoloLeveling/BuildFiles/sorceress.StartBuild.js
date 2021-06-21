@@ -15,21 +15,25 @@ var build = {
 	stats: [
 		["vitality", 25],
 		["strength", 15],
-		["energy", 50],
-		["vitality", 50],
+		["energy", 60],
+		["vitality", 40],
 		["strength", 35],
 		["vitality", "all"]
 	],
 	skills: [
-		[38, 1], // charged Bolt
-		[37, 1], // Warmth
-		[44, 1, false], // Frost Nova
-		[38, 6], // Charge Bolt
+		[38, 4], // charged Bolt 5
+		[43, 1], // Telekinesis 6
+		[44, 1], // Frost Nova 6/7
+		[42, 4], // Static
+		[48, 7], // Nova
+		[54, 1], // Teleport
 		[40, 1], // Frozen Armor
-		[42, 1], // Static
-		[54, 1, false], // Telekinesis
-		//[54, 1, false], // Teleport
-		[38, 20], // Charged Bolt
-		[49, 20], // lightning
+		[42, 6], // Static
+		[39, 1], // ice bolt
+		[45, 1], // ice blast
+		[55, 1], // gspike
+		[59, 6], // blizzard
+		[65, 1], // cold mastery
+		[59, 8], // blizzard
 	]
 };
