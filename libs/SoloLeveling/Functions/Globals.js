@@ -278,7 +278,7 @@ var Check = {
 
 			break;
 		case "ancienttunnels": // ancient tunnels
-			if (Pather.accessToAct(2) && me.hell && (!me.paladin || (me.paladin && me.charlvl >= SetUp.respecTwo() && SetUp.finalBuild === "Auradin"))) { // no pally in hell magic immunes unless reached final build and final build is auradin
+			if (Pather.accessToAct(2) && me.hell && (!me.paladin || Attack.IsAuradin)) { // no pally in hell magic immunes unless is auradin
 				return true;
 			}
 
