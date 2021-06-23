@@ -107,6 +107,36 @@ var Container = function (name, width, height, location) {
 		return true;
 	};
 
+	this.cubeSpot = function (name) {
+		if (name !== "Stash") {
+			return true;
+		}
+		
+		let cube = me.getItem(549);
+
+		if (!cube) {
+			return false;
+		}
+
+		if (cube && cube.location === 7 && cube.x === 0 && cube.y === 0) {
+			return true;	// Cube is in correct location
+		}
+
+		let makeCubeSpot = this.MakeSpot(cube, {x: 0, y: 0}, true); // NOTE: passing these in buffer order [h/x][w/y]
+
+		if (makeCubeSpot) {
+			if (makeCubeSpot === -1) {
+				return false; // this item cannot be moved
+			}
+
+			if (!this.MoveToSpot(cube, makeCubeSpot.y, makeCubeSpot.x)) {
+				return false; // we couldnt move the item
+			}
+		} 
+
+		return true;
+	};
+
 	/* Container.CanFit(item)
 	 *	Checks to see if we can fit the item in the buffer.
 	 */
@@ -121,15 +151,9 @@ var Container = function (name, width, height, location) {
 	this.SortItems = function (itemIdsLeft, itemIdsRight) {
 		print("Sorting " + this.name + " ... ");
 
-		//var tick = getTickCount(),
-		//	cube = me.findItem(549);
-
-		//Town.openStash();
-
-		//if (this.location === 7 && cube) sendPacket(1, 0x27, 4, me.findItem(-1, -1, me.findItems(-1, -1, 3) == false ? 1 : 3).gid, 4, cube.gid);
-		//if (this.location === 7 && !cube) Town.openStash();
-
 		Storage.Reload();
+
+		this.cubeSpot(this.name);
 
 		var x, y, item, nPos;
 
@@ -145,7 +169,7 @@ var Container = function (name, width, height, location) {
 				item = this.itemList[this.buffer[x][y] - 1];
 
 				if ( item.classid === 549 && item.location === 7 && item.x === 0 && item.y === 0) {
-					continue; // dont touch the cube if its in the right spot
+					continue; // dont touch the cube
 				}
 
 				var ix = item.y, iy = item.x; // x and y are backwards!
@@ -499,6 +523,8 @@ var Container = function (name, width, height, location) {
 				}
 			}
 		}
+
+		print("Used space: " + usedSpace * 100 / totalSpace);
 
 		return usedSpace * 100 / totalSpace;
 	};
