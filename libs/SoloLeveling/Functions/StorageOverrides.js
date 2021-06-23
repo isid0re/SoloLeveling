@@ -144,8 +144,8 @@ var Container = function (name, width, height, location) {
 
 				item = this.itemList[this.buffer[x][y] - 1];
 
-				if ( item.classid === 549 ) {
-					continue; // dont touch the cube
+				if ( item.classid === 549 && item.location === 7 && item.x === 0 && item.y === 0) {
+					continue; // dont touch the cube if its in the right spot
 				}
 
 				var ix = item.y, iy = item.x; // x and y are backwards!
