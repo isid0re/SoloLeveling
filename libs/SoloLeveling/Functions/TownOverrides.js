@@ -919,8 +919,13 @@ Town.sortInventory = function() {
 	return true;
 };
 
+// Thank you Yame for testing
 Town.sortStash = function (force) {
-	if (Storage.Stash.UsedSpacePercent() < 65 || !force) {
+	if (force === undefined) {
+		force = false;
+	}
+
+	if (Storage.Stash.UsedSpacePercent() < 50 && !force) {
 		return true;
 	}
 
