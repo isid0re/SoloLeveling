@@ -74,7 +74,7 @@ function LoadConfig () {
 	Config.LifeChicken = me.playertype ? 60 : 10;
 	Config.ManaChicken = 0;
 	Config.MercChicken = 0;
-	Config.TownHP = 0;
+	Config.TownHP = me.playertype ? 0 : Config.TownCheck ? 35 : 0;
 	Config.TownMP = 0;
 
 	/* Potions configuration. */
@@ -312,23 +312,27 @@ function LoadConfig () {
 		}
 
 		if (!Check.haveItem("armor", "runeword", "Chains of Honor")) { // CoH
-			if (!Check.haveItem("armor", "runeword", "Chains of Honor") && me.hell) {
-				var CoH = [
-					"[Name] == DolRune # # [MaxQuantity] == 1",
-					"[Name] == UmRune",
-					"[Name] == BerRune",
-					"[Name] == IstRune",
-					"[Name] == ArchonPlate && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(CoH);
-			}
+			var CoH = [
+				"[Name] == DolRune # # [MaxQuantity] == 1",
+				"[Name] == UmRune",
+				"[Name] == BerRune",
+				"[Name] == IstRune",
+				"([Name] == ArchonPlate || [Name] == DuskShroud || [Name] == WyrmHide) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # ([Sockets] == 0 || [Sockets] == 4) # [MaxQuantity] == 1",
+			];
+			NTIP.arrayLooping(CoH);
 
 			if (!me.getItem(639)) {
 				Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
 			}
 
 			Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud", Roll.NonEth]);
+			Config.Recipes.push([Recipe.Socket.Armor, "WyrmHide", Roll.NonEth]);
+
 			Config.Runewords.push([Runeword.ChainsofHonor, "Archon Plate"]);
+			Config.Runewords.push([Runeword.ChainsofHonor, "Dusk Shroud"]);
+			Config.Runewords.push([Runeword.ChainsofHonor, "WyrmHide"]);
+
 			Config.KeepRunewords.push("[type] == armor # [fireresist] == 65 && [hpregen] == 7");
 		}
 
@@ -445,9 +449,9 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == armor # [coldresist] == 30");
 		}
 
-		if (!Item.getEquippedItemMerc(3).prefixnum === 20653) { // Merc Treachery
+		if (Item.getEquippedItemMerc(3).prefixnum !== 20653) { // Merc Treachery
 			var Treachery = [
-				"([Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+				"([Name] == BreastPlate || [Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 				"!me.normal && ([Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] == Normal && [Flag] == Ethereal # [Sockets] == 0 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Treachery);
@@ -465,6 +469,7 @@ function LoadConfig () {
 			Config.Recipes.push([Recipe.Socket.Armor, "WyrmHide"]);
 			Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
 
+			Config.Runewords.push([Runeword.Treachery, "Breast Plate"]);
 			Config.Runewords.push([Runeword.Treachery, "Mage Plate"]);
 			Config.Runewords.push([Runeword.Treachery, "Hellforge Plate"]);
 			Config.Runewords.push([Runeword.Treachery, "Kraken Shell"]);
@@ -480,7 +485,6 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Treachery, "Dusk Shroud"]);
 
 			Config.KeepRunewords.push("[Type] == armor # [ias] == 45 && [coldresist] == 30");
-
 		}
 
 		if (Item.getEquippedItem(3).tier < 634) { // Smoke

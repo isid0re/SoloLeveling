@@ -74,7 +74,7 @@ function LoadConfig () {
 	Config.LifeChicken = me.playertype ? 60 : 10;
 	Config.ManaChicken = 0;
 	Config.MercChicken = 0;
-	Config.TownHP = 0;
+	Config.TownHP = me.playertype ? 0 : Config.TownCheck ? 35 : 0;
 	Config.TownMP = 0;
 
 	/* Potions configuration. */
@@ -436,9 +436,9 @@ function LoadConfig () {
 			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
 		}
 
-		if (!Item.getEquippedItemMerc(3).prefixnum === 20653) { // Merc Treachery
+		if (Item.getEquippedItemMerc(3).prefixnum !== 20653) { // Merc Treachery
 			var Treachery = [
-				"([Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+				"([Name] == BreastPlate || [Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
 				"!me.normal && ([Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] == Normal && [Flag] == Ethereal # [Sockets] == 0 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Treachery);
@@ -456,6 +456,7 @@ function LoadConfig () {
 			Config.Recipes.push([Recipe.Socket.Armor, "WyrmHide"]);
 			Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
 
+			Config.Runewords.push([Runeword.Treachery, "Breast Plate"]);
 			Config.Runewords.push([Runeword.Treachery, "Mage Plate"]);
 			Config.Runewords.push([Runeword.Treachery, "Hellforge Plate"]);
 			Config.Runewords.push([Runeword.Treachery, "Kraken Shell"]);
@@ -471,7 +472,6 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Treachery, "Dusk Shroud"]);
 
 			Config.KeepRunewords.push("[Type] == armor # [ias] == 45 && [coldresist] == 30");
-
 		}
 
 		if (Item.getEquippedItem(3).tier < 634) { // Smoke
