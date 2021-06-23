@@ -235,7 +235,7 @@ function LoadConfig () {
 		switch (SetUp.finalBuild) { // finalbuilld autoequip setup
 		case 'Blova':
 		case 'Lightning':
-			if (me.ladder > 0 && !Item.getEquippedItemMerc(4).prefixnum === 20566) { //infinity
+			if (me.ladder > 0 && Item.getEquippedItemMerc(4).prefixnum !== 20566) { //infinity
 				var Inf = [
 					"[Name] == BerRune",
 					"[Name] == MalRune",
