@@ -243,6 +243,15 @@ function LoadConfig () {
 				Config.Recipes.push([Recipe.Unique.Weapon.ToElite, "Short Siege Bow", Roll.NonEth]);
 			}
 
+			if (WWS) {
+				var arrows = [
+					"[name] == arrows # # [tier] == 100000", //max tier to avoid shield swap
+					"[Type] == bowquiver # # [MaxQuantity] == 2",
+					"[type] == shield # # [tier] == -1",
+				];
+				NTIP.arrayLooping(arrows);
+			}
+
 			break;
 		case 'Javazon':
 			if (me.ladder > 0 && !Item.getEquippedItemMerc(4).prefixnum === 20566) { //infinity
