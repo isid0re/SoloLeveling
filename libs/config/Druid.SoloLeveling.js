@@ -243,13 +243,8 @@ function LoadConfig () {
 				NTIP.arrayLooping(CTA);
 
 				if (me.getItem(636)) { // have Ohm before collecting base
-					NTIP.addLine("[Name] == CrystalSword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");																				
+					NTIP.addLine("[Name] == CrystalSword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");
 				}
-
-				if (me.getItem(636)) { // have Ohm before collecting base
-					NTIP.addLine("[Name] == CrystalSword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");																				
-				}
-
 
 				Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
 				Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
@@ -265,14 +260,14 @@ function LoadConfig () {
 				NTIP.arrayLooping(HotO);
 
 				if (me.getItem(635)) {
-					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");														  
+					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1");
 				}
 
 				if (!me.getItem(635)) {
-					Config.Recipes.push([Recipe.Rune, "Um Rune"]);				   
-					Config.Recipes.push([Recipe.Rune, "Mal Rune"]);										 
+					Config.Recipes.push([Recipe.Rune, "Um Rune"]);
+					Config.Recipes.push([Recipe.Rune, "Mal Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Ist Rune"]);
-					Config.Recipes.push([Recipe.Rune, "Gul Rune"]);														   
+					Config.Recipes.push([Recipe.Rune, "Gul Rune"]);
 				}
 
 				Config.Runewords.push([Runeword.HeartoftheOak, "Knout"]);
@@ -290,7 +285,7 @@ function LoadConfig () {
 				NTIP.arrayLooping(Enigma);
 
 				if (!me.getItem(639)) {
-					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber																					
+					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
 				}
 
 				if (!me.getItem(640)) {
@@ -303,7 +298,7 @@ function LoadConfig () {
 					Config.Runewords.push([Runeword.Enigma, "WyrmHide", Roll.NonEth]);
 					Config.Runewords.push([Runeword.Enigma, "ScarabHusk", Roll.NonEth]);
 				}
-        
+
 				Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
 			}
 
