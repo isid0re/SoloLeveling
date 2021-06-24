@@ -84,9 +84,6 @@ function LoadConfig () {
 	Config.UseRejuvHP = me.playertype ? 65 : 40;
 	Config.UseMP = me.playertype ? 75 : 55;
 	Config.UseMercHP = 75;
-	Config.HPBuffer = 0;
-	Config.MPBuffer = 0;
-	Config.RejuvBuffer = 0;
 
 	/* Belt configuration. */
 	Config.BeltColumn = ["hp", "mp", "mp", "rv"];
