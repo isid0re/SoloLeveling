@@ -246,11 +246,6 @@ function LoadConfig () {
 					NTIP.addLine("[Name] == CrystalSword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");																				
 				}
 
-				if (me.getItem(636)) { // have Ohm before collecting base
-					NTIP.addLine("[Name] == CrystalSword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");																				
-				}
-
-
 				Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
 				Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
 			}
