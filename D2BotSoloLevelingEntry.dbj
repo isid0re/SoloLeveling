@@ -1185,17 +1185,16 @@ function main () {
 					DataFile.updateStats("ingameTick");
 				}
 
-				myExp = me.getStat(13) > 0 ? Experience.progress() : 0;
-				myGold = me.getStat(14) + me.getStat(15);
-				resPenalty = me.gametype === 0 ? [ 0, 20, 50][me.diff] : [ 0, 40, 100][me.diff];
-				frRes = Math.min(75, me.getStat(39) - resPenalty);
-				crRes = Math.min(75, me.getStat(43) - resPenalty);
-				lrRes = Math.min(75, me.getStat(41) - resPenalty);
-				prRes = Math.min(75, me.getStat(45) - resPenalty);
-				areaName = getArea().name;
-				diffName = ['Normal', 'Nightmare', 'Hell'][me.diff];
-
 				if (me.ingame) {
+					myExp = me.getStat(13) > 0 ? Experience.progress() : 0;
+					myGold = me.getStat(14) + me.getStat(15);
+					resPenalty = me.gametype === 0 ? [ 0, 20, 50][me.diff] : [ 0, 40, 100][me.diff];
+					frRes = Math.min(75, me.getStat(39) - resPenalty);
+					crRes = Math.min(75, me.getStat(43) - resPenalty);
+					lrRes = Math.min(75, me.getStat(41) - resPenalty);
+					prRes = Math.min(75, me.getStat(45) - resPenalty);
+					areaName = getArea().name;
+					diffName = ['Normal', 'Nightmare', 'Hell'][me.diff];
 					D2Bot.updateStatus("Lvl: " + me.charlvl + " (" + myExp + "%) | Diff: " + diffName + " | Area: " + areaName + " | Gold: " + myGold + " | FR: " + frRes + " | CR: " + crRes + " | LR: " + lrRes + " | PR: " + prRes + " " + timer(gameStart));
 				}
 			}

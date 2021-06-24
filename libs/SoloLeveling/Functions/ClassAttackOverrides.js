@@ -33,6 +33,14 @@ case 1: // Sorceress
 
 			Skill.cast(Config.AttackSkill[0], Skill.getHand(Config.AttackSkill[0]), unit);
 
+			if (me.getSkill(42, 1)) {
+				for (let castStatic = 0; castStatic < 2; castStatic++) {
+					if ((Skill.getManaCost(42) * 3) < me.mp) {
+						Skill.cast(42, 0);
+					}
+				}
+			}
+
 			return true;
 		}
 
@@ -417,6 +425,107 @@ case 5: // Druid
 
 		return 1;
 	};
+
+	if (["Plaguewolf", "Wolf"].indexOf(SetUp.finalBuild) > -1 && me.charlvl >= SetUp.respecTwo()) {	//Make sure to only load this after finalBuild respec
+		if (!isIncluded("common/Attacks/Wereform.js")) {
+			include("common/Attacks/Wereform.js");
+		}
+
+		ClassAttack.doCast = function (unit, timedSkill, untimedSkill) {
+			var i;
+
+			// No valid skills can be found
+			if (timedSkill < 0 && untimedSkill < 0) {
+				return 2;
+			}
+
+			if (timedSkill > -1 && (!me.getState(121) || !Skill.isTimed(timedSkill))) {
+				if (Skill.getRange(timedSkill) < 4 && !Attack.validSpot(unit.x, unit.y)) {
+					return 0;
+				}
+
+				// Teleport closer
+				if (Math.ceil(getDistance(me, unit)) > 10) {
+					if (Pather.useTeleport()) {
+						Misc.unShift();
+					}
+
+					if (!Attack.getIntoPosition(unit, 10, 0x4)) {
+						return 0;
+					}
+				}
+
+				Misc.shapeShift(Config.Wereform);
+
+				if (Math.round(getDistance(me, unit)) > Skill.getRange(timedSkill) || checkCollision(me, unit, 0x4)) {
+					if (!Attack.getIntoPosition(unit, Skill.getRange(timedSkill), 0x4, true)) {
+						return 0;
+					}
+				}
+
+				if (!unit.dead) {
+					Skill.cast(timedSkill, Skill.getHand(timedSkill), unit);
+				}
+
+				if (untimedSkill > -1 && (untimedSkill === 232 || untimedSkill === 238)) {		//Feral rage or Rabies
+					if (Math.round(getDistance(me, unit)) > Skill.getRange(untimedSkill) || checkCollision(me, unit, 0x4)) {
+						if (!Attack.getIntoPosition(unit, Skill.getRange(untimedSkill), 0x4, true)) {
+							return 0;
+						}
+					}
+
+					if (!unit.dead) {
+						Skill.cast(untimedSkill, Skill.getHand(untimedSkill), unit);
+					}
+
+					return 1;
+				}
+
+				return 1;
+			}
+
+			if (untimedSkill > -1) {
+				if (Skill.getRange(untimedSkill) < 4 && !Attack.validSpot(unit.x, unit.y)) {
+					return 0;
+				}
+
+				// Teleport closer
+				if (Math.ceil(getDistance(me, unit)) > 10) {
+					if (Pather.useTeleport()) {
+						Misc.unShift();
+					}
+
+					if (!Attack.getIntoPosition(unit, 10, 0x4)) {
+						return 0;
+					}
+				}
+
+				Misc.shapeShift(Config.Wereform);
+
+				if (Math.round(getDistance(me, unit)) > Skill.getRange(untimedSkill) || checkCollision(me, unit, 0x4)) {
+					if (!Attack.getIntoPosition(unit, Skill.getRange(untimedSkill), 0x4, true)) {
+						return 0;
+					}
+				}
+
+				if (!unit.dead) {
+					Skill.cast(untimedSkill, Skill.getHand(untimedSkill), unit);
+				}
+
+				return 1;
+			}
+
+			for (i = 0; i < 25; i += 1) {
+				if (!me.getState(121)) {
+					break;
+				}
+
+				delay(40);
+			}
+
+			return 1;
+		}
+	}
 
 	break;
 case 6: // Assasin

@@ -604,11 +604,8 @@ Town.unfinishedQuests = function () {
 			delay(300 + me.ping);
 		}
 
-		if (book.interact()) {
-			print('ÿc9SoloLevelingÿc0: used Radament skill book');
-		} else {
-			print('ÿc9SoloLevelingÿc0: failed to used Radament skill book');
-		}
+		book.interact();
+		print('ÿc9SoloLevelingÿc0: used Radament skill book');
 	}
 
 	//Act 3
@@ -632,11 +629,8 @@ Town.unfinishedQuests = function () {
 			delay(300 + me.ping);
 		}
 
-		if (pol.interact()) {
-			print('ÿc9SoloLevelingÿc0: used potion of life');
-		} else {
-			print('ÿc9SoloLevelingÿc0: failed to used potion of life');
-		}
+		pol.interact();
+		print('ÿc9SoloLevelingÿc0: used potion of life');
 	}
 
 	if (tome) { //LamEssen's Tome
@@ -711,11 +705,8 @@ Town.unfinishedQuests = function () {
 			delay(300 + me.ping);
 		}
 
-		if (sor.interact()) {
-			print('ÿc9SoloLevelingÿc0: used scroll of resistance');
-		} else {
-			print('ÿc9SoloLevelingÿc0: failed to used scroll of resistance');
-		}
+		sor.interact();
+		print('ÿc9SoloLevelingÿc0: used scroll of resistance');
 	}
 
 	return true;
