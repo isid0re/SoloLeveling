@@ -82,3 +82,14 @@ Attack.killTarget = function (name) {
 
 	return true;
 };
+
+Attack.clearLocations = function (list) {
+	for (let x = 0; x < list.length; x++) {
+		Attack.clear(20);
+		Pather.moveTo(list[x][0], list[x][1]);
+		Attack.clear(20);
+		Pickit.pickItems();
+	}
+
+	return true;
+};

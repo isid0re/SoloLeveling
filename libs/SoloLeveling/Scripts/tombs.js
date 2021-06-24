@@ -27,15 +27,11 @@ function tombs () {
 			let orifice = getPresetUnit(me.area, 2, 152);
 
 			if (gbox) {
-				if (Pather.moveToPreset(me.area, 2, 397, 0, 0, true)) {
-					break;
-				}
+				Pather.moveToPreset(me.area, 2, 397);
 			}
 
 			if (orifice) {
-				if (Pather.moveToPreset(me.area, 2, 152, 0, 0, true)) {
-					break;
-				}
+				Pather.moveToPreset(me.area, 2, 152);
 			}
 
 			Attack.clear(50);

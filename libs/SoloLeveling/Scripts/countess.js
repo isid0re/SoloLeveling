@@ -9,19 +9,6 @@ function countess () {
 	print('ÿc9SoloLevelingÿc0: starting countess');
 	me.overhead("countess");
 
-	if (me.charlvl < 9) {
-		if (!Pather.checkWP(4)) {
-			Pather.getWP(4);
-		} else {
-			Pather.useWaypoint(4);
-		}
-
-		Precast.doPrecast(true);
-		Pather.moveToPreset(4, 2, 17, 0, 0, false, true);
-		Attack.clear(15, 0x7);
-		Town.goToTown();
-	}
-
 	if (!Pather.checkWP(6)) {
 		Pather.getWP(6);
 	} else {
