@@ -52,6 +52,7 @@
 		//armor
 		"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 100000", //CoH
 		//arrows
+		"[name] == arrows # # [tier] == 100000", //max tier to avoid shield swap
 		"[Type] == bowquiver # # [MaxQuantity] == 2",
 		//ammy
 		"[type] == amulet && [quality] == unique # [dexterity] == 25 # [tier] == 110000", // cat's eye

@@ -52,7 +52,7 @@ var SetUp = {
 		case 1:
 			switch (this.finalBuild) {
 			case "Witchyzon":
-				respec = Check.haveItem("bow", "unique", "Witchwild String") ? me.charlvl : 100;
+				respec = Check.haveItem("diamondbow", "unique", "Witchwild String") ? me.charlvl : 100;
 				break;
 			case "Javazon":
 			case "Lightning":
