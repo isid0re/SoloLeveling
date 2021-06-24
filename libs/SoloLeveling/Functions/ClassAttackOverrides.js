@@ -33,6 +33,14 @@ case 1: // Sorceress
 
 			Skill.cast(Config.AttackSkill[0], Skill.getHand(Config.AttackSkill[0]), unit);
 
+			if (me.getSkill(42, 1)) {
+				for (let castStatic = 0; castStatic < 2; castStatic++) {
+					if ((Skill.getManaCost(42) * 3) < me.mp) {
+						Skill.cast(42, 0);
+					}
+				}
+			}
+
 			return true;
 		}
 

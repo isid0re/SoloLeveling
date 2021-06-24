@@ -200,11 +200,6 @@ Skill.getRange = function (skillId) {
 
 		return 6;
 	case 48: // Nova
-		if (this.usePvpRange) {
-			return 11;
-		}
-
-		return 7;
 	case 151: // Whirlwind
 		return 7;
 	case 92: // Poison Nova
@@ -368,7 +363,7 @@ Misc.townCheck = function () {
 	return false;
 };
 
-Misc.openChest = function(unit) {
+Misc.openChest = function (unit) {
 	// Skip invalid and Countess chests
 	if (!unit || unit.x === 12526 || unit.x === 12565) {
 		return false;

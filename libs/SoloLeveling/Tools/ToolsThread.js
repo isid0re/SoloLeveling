@@ -798,7 +798,7 @@ function main () {
 
 		if (Developer.Overlay) {
 			if (Developer.logPerformance) {
-				Overlay.update();
+				Overlay.update(quitFlag);
 
 				if (me.act !== myAct) {
 					Overlay.flush();
