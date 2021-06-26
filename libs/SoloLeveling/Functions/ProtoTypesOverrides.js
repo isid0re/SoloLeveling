@@ -761,16 +761,6 @@ Object.defineProperty(Unit.prototype, 'respec', {
 	}
 });
 
-Object.defineProperty(Unit.prototype, 'ladderEnabled', {
-	get: function () {
-		if (this.type > 0) {
-			throw new Error("Unit.ladderEnabled: Must be used with player units.");
-		}
-
-		return (this.ladder > 0 || !this.realm);
-	}
-});
-
 Object.defineProperty(Unit.prototype, 'el', {
 	get: function () {
 		if (this.type > 0) {
