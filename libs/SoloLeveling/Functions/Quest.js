@@ -295,7 +295,7 @@ var Quest = {
 			Pickit.pickItem(questItem);
 		} else {
 			Town.clearJunk();
-			Town.organizeInventory();
+			Town.sortInventory();
 			Pickit.pickItem(questItem);
 			Pickit.pickItems();
 		}
