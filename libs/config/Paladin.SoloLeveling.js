@@ -322,7 +322,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
 		}
 
-		if (me.ladder > 0 && Item.getEquippedItem(4).tier < 777) { // Spirit Sword
+		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItem(4).tier < 777) { // Spirit Sword
 			if (!Check.haveItem("sword", "runeword", "Spirit") && !me.hell) {
 				var SpiritSword = [
 					"[Name] == TalRune # # [MaxQuantity] == 1",
@@ -351,7 +351,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == sword # [fcr] >= 25 && [maxmana] >= 89");
 		}
 
-		if (me.ladder > 0 && Item.getEquippedItem(5).tier < 1000) { // Spirit shield
+		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItem(5).tier < 1000) { // Spirit shield
 			if (!Check.haveItem("auricshields", "runeword", "Spirit")) {
 				var SpiritShield = [
 					"[Name] == TalRune # # [MaxQuantity] == 1",
@@ -375,7 +375,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 25 && [maxmana] >= 89");
 		}
 
-		if (me.ladder > 0 && Item.getEquippedItemMerc(4).tier < 3600) { // Merc Insight
+		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItemMerc(4).tier < 3600) { // Merc Insight
 			var Insight = [
 				"([Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe || [Name] == giantthresher) && [Flag] == Ethereal && [Quality] == Normal # [Sockets] == 0 # [MaxQuantity] == 1",
 				"!me.hell && ([Name] == voulge || [Name] == scythe || [Name] == poleaxe || [Name] == halberd || [Name] == warscythe || [Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",

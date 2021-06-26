@@ -254,7 +254,7 @@ function LoadConfig () {
 
 			break;
 		case 'Javazon':
-			if (me.ladder > 0 && !Item.getEquippedItemMerc(4).prefixnum === 20566) { //infinity
+			if ((me.ladder || Developer.addLadderRW) && !Item.getEquippedItemMerc(4).prefixnum === 20566) { //infinity
 				var Inf = [
 					"[Name] == BerRune",
 					"[Name] == MalRune",
@@ -280,7 +280,7 @@ function LoadConfig () {
 				Config.KeepRunewords.push("[type] == polearm # [convictionaura] >= 13");
 			}
 
-			if (me.ladder > 0 && Item.getEquippedItem(5).tier < 1000) { // Spirit shield
+			if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItem(5).tier < 1000) { // Spirit shield
 				if (!Check.haveItem("shield", "runeword", "Spirit") && me.hell) {
 					var SpiritShield = [
 						"[Name] == TalRune # # [MaxQuantity] == 1",
@@ -345,7 +345,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == armor # [fireresist] == 65 && [hpregen] == 7");
 		}
 
-		if (me.ladder > 0 && Item.getEquippedItemMerc(4).tier < 3600) { // Merc Insight
+		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItemMerc(4).tier < 3600) { // Merc Insight
 			var Insight = [
 				"([Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe || [Name] == giantthresher) && [Flag] == Ethereal && [Quality] == Normal # [Sockets] == 0 # [MaxQuantity] == 1",
 				"!me.hell && ([Name] == voulge || [Name] == scythe || [Name] == poleaxe || [Name] == halberd || [Name] == warscythe || [Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
