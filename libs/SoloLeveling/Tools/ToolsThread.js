@@ -774,6 +774,19 @@ function main () {
 			quitFlag = true;
 		}
 
+		if (Developer.Overlay) {
+			if (Developer.logPerformance) {
+				Overlay.update(quitFlag);
+
+				if (me.act !== myAct) {
+					Overlay.flush();
+					myAct = me.act;
+				}
+			} else {
+				D2Bot.printToConsole('Overlay cannot work without Developer.logPerformance = true;', 4);
+			}
+		}
+
 		if (quitFlag && canQuit && (typeof quitListDelayTime === "undefined" || getTickCount() >= quitListDelayTime)) {
 			print("ÿc8Run duration ÿc2" + ((getTickCount() - me.gamestarttime) / 1000));
 
@@ -794,19 +807,6 @@ function main () {
 		if (debugInfo.area !== Pather.getAreaName(me.area)) {
 			debugInfo.area = Pather.getAreaName(me.area);
 			DataFile.updateStats("debugInfo", JSON.stringify(debugInfo));
-		}
-
-		if (Developer.Overlay) {
-			if (Developer.logPerformance) {
-				Overlay.update(quitFlag);
-
-				if (me.act !== myAct) {
-					Overlay.flush();
-					myAct = me.act;
-				}
-			} else {
-				D2Bot.printToConsole('Overlay cannot work without Developer.logPerformance = true;', 4);
-			}
 		}
 
 		delay(20);
