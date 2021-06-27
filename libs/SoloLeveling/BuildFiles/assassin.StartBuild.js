@@ -5,7 +5,7 @@
  */
 
 var build = {
-	caster: true,
+	caster: false,
 	skillstab: 48, // traps
 	wantedskills: [251, 262], // fireblast, wake of fire
 	usefulskills: [252], // claw mastery

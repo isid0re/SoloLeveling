@@ -227,7 +227,7 @@ Unit.prototype.getStatEx = function (id, subid) {
 			if (temp.hasOwnProperty(id)) {
 				if (temp[id] instanceof Array) {
 					for (i = 0; i < temp[id].length; i += 1) {
-						if (temp[id][i] !== undefined) {
+						if (temp[id][i] !== undefined && temp[id][i].skill !== undefined) { // fix reference to undefined property temp[id][i].skill.
 							return temp[id][i].skill;
 						}
 					}

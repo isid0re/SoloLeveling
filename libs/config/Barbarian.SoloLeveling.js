@@ -289,7 +289,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
 		}
 
-		if (me.ladder > 0 && Item.getEquippedItem(12).tier < 1000) { // Spirit shield
+		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItem(12).tier < 1000) { // Spirit shield
 			if (!Check.haveItem("shield", "runeword", "Spirit") && me.hell) {
 				var SpiritShield = [
 					"[Name] == TalRune # # [MaxQuantity] == 1",
@@ -338,7 +338,7 @@ function LoadConfig () {
 
 
 
-		if (me.ladder > 0 && Item.getEquippedItemMerc(4).tier < 3600) { // Merc Insight
+		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItemMerc(4).tier < 3600) { // Merc Insight
 			var Insight = [
 				"([Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe || [Name] == giantthresher) && [Flag] == Ethereal && [Quality] == Normal # [Sockets] == 0 # [MaxQuantity] == 1",
 				"!me.hell && ([Name] == voulge || [Name] == scythe || [Name] == poleaxe || [Name] == halberd || [Name] == warscythe || [Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
@@ -429,7 +429,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
 		}
 
-		if (Item.getEquippedItemMerc(3).prefix !== 20547) { // Merc Fortitude
+		if (Item.getEquippedItemMerc(3).prefixnum !== 20547) { // Merc Fortitude
 			var fort = [
 				"[Name] == ElRune # # [MaxQuantity] == 1",
 				"[Name] == SolRune # # [MaxQuantity] == 1",
@@ -453,20 +453,20 @@ function LoadConfig () {
 			Config.Recipes.push([Recipe.Socket.Armor, "WyrmHide"]);
 			Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
 
-			Config.Runewords.push([Runeword.Fortitdue, "Breast Plate"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Mage Plate"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Hellforge Plate"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Kraken Shell"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Archon Plate"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Balrog Skin"]);
-			Config.Runewords.push([Runeword.Fortitdue, "BoneWeave"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Great Hauberk"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Loricated Mail"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Diamond Mail"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Wire Fleece"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Scarab Husk"]);
-			Config.Runewords.push([Runeword.Fortitdue, "WyrmHide"]);
-			Config.Runewords.push([Runeword.Fortitdue, "Dusk Shroud"]);
+			Config.Runewords.push([Runeword.Fortitude, "Breast Plate"]);
+			Config.Runewords.push([Runeword.Fortitude, "Mage Plate"]);
+			Config.Runewords.push([Runeword.Fortitude, "Hellforge Plate"]);
+			Config.Runewords.push([Runeword.Fortitude, "Kraken Shell"]);
+			Config.Runewords.push([Runeword.Fortitude, "Archon Plate"]);
+			Config.Runewords.push([Runeword.Fortitude, "Balrog Skin"]);
+			Config.Runewords.push([Runeword.Fortitude, "BoneWeave"]);
+			Config.Runewords.push([Runeword.Fortitude, "Great Hauberk"]);
+			Config.Runewords.push([Runeword.Fortitude, "Loricated Mail"]);
+			Config.Runewords.push([Runeword.Fortitude, "Diamond Mail"]);
+			Config.Runewords.push([Runeword.Fortitude, "Wire Fleece"]);
+			Config.Runewords.push([Runeword.Fortitude, "Scarab Husk"]);
+			Config.Runewords.push([Runeword.Fortitude, "WyrmHide"]);
+			Config.Runewords.push([Runeword.Fortitude, "Dusk Shroud"]);
 
 			Config.KeepRunewords.push("[type] == armor # [enhanceddefense] >= 200 && [enhanceddamage] >= 300");
 		}

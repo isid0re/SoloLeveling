@@ -52,7 +52,7 @@ var SetUp = {
 		case 1:
 			switch (this.finalBuild) {
 			case "Witchyzon":
-				respec = Check.haveItem("bow", "unique", "Witchwild String") ? me.charlvl : 100;
+				respec = Check.haveItem("diamondbow", "unique", "Witchwild String") ? me.charlvl : 100;
 				break;
 			case "Javazon":
 			case "Lightning":
@@ -82,7 +82,10 @@ var SetUp = {
 				respec = Check.haveItem("weapon", "runeword", "Grief") && Check.haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
 				break;
 			case "Wolf":
-				respec = Check.haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+				respec = Check.haveItem("stalagmite", "unique", "Ribcracker") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
+				break;
+			case "Plaguewolf":
+				respec = Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
 				break;
 
 
