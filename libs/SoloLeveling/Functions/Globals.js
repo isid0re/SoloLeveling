@@ -62,7 +62,7 @@ var SetUp = {
 			case "Cold":
 			case "Meteorb":
 			case "Blizzballer":
-				respec = Check.haveItem("amulet", "set", "Tal Rasha's Adjudication") && Check.haveItem("belt", "set", "Tal Rasha's Fine Spun Cloth") && Check.haveItem("armor", "set", "Tal Rasha's Guardianship") && Check.haveItem("orb", "set", "Tal Rasha's Lidless Eye") ? me.charlvl : 100; //Tal ammy, belt, armor, and wep
+				respec = Check.haveItem("amulet", "set", "Tal Rasha's Adjudication") && Check.haveItem("belt", "set", "Tal Rasha's Fine-Spun Cloth") && Check.haveItem("armor", "set", "Tal Rasha's Guardianship") && Check.haveItem("swirlingcrystal", "set", "Tal Rasha's Lidless Eye") ? me.charlvl : 100; //Tal ammy, belt, armor, and wep
 				break;
 			case "Bone":
 			case "Poison":
