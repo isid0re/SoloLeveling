@@ -144,7 +144,7 @@ function cows () {
 	this.getLeg();
 	Town.doChores();
 	this.openPortal(39, 88, 518);
-	Town.buyBooks();
+	Town.buyBook();
 	Misc.getExpShrine([4, 5, 6]);
 	Town.move("stash");
 	Pather.usePortal(39);

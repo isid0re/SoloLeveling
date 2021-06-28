@@ -1,7 +1,8 @@
 /*
 *	@filename	Quest.js
 *	@author		isid0re
-*	@desc		Miscellaneous quest tasks for leveling
+*	@desc		Miscellaneous quest tasks for leveling adapted from blizzhackers autosmurf
+*	@credits	Dark-f, JeanMax for original functions
 */
 
 var Quest = {
