@@ -1,8 +1,9 @@
 /*
 *	@filename	StorageOverrides.js
-*	@author		theBGuy
-*	@desc		Storage.js fixes to improve functionality
-*	@credits	esd1 from his PR on blizzhackers
+*	@author		theBGuy, isid0re (added sorting via packets)
+*	@desc		adaptation of sorting code pull request to blizzhackers for sololeveling
+*				https://github.com/blizzhackers/kolbot/pull/211/commits/b3c6838f0b8873ac9f1e3ac5ef859a0c9d6ea098#diff-3d38e3e851d831e9c3793584659cb39bf05b86a0e177002276a9ed91fc19027e
+*	@credits	esd1 (sort items author), McGod (original storage.js author), kolton (small kolbot related edits), AimtoKill (compatibility testing)
 */
 
 if (!isIncluded("common/Storage.js")) {
@@ -29,9 +30,6 @@ var Container = function (name, width, height, location) {
 		}
 	}
 
-	/* Container.Mark(item)
-	 *	Marks the item in the buffer, and adds it to the item list.
-	 */
 	this.Mark = function (item) {
 		var x, y;
 
@@ -54,9 +52,6 @@ var Container = function (name, width, height, location) {
 		return true;
 	};
 
-	/* Container.isLocked(item)
-	 *	Checks if the item is in a locked spot
-	 */
 	this.IsLocked = function (item, baseRef) {
 		var h, w, reference;
 
@@ -104,6 +99,7 @@ var Container = function (name, width, height, location) {
 
 		this.itemList = [];
 		this.openPositions = this.height * this.width;
+
 		return true;
 	};
 
@@ -111,7 +107,7 @@ var Container = function (name, width, height, location) {
 		if (name !== "Stash") {
 			return true;
 		}
-		
+
 		let cube = me.getItem(549);
 
 		if (!cube) {
@@ -132,25 +128,16 @@ var Container = function (name, width, height, location) {
 			if (!this.MoveToSpot(cube, makeCubeSpot.y, makeCubeSpot.x)) {
 				return false; // we couldnt move the item
 			}
-		} 
+		}
 
 		return true;
 	};
 
-	/* Container.CanFit(item)
-	 *	Checks to see if we can fit the item in the buffer.
-	 */
 	this.CanFit = function (item) {
 		return (!!this.FindSpot(item));
 	};
 
-	/* Container.SortItems(Ids, Ids)
-	 *	sorts items to the left [and right] based on classid.
-	 *  default: all items go left
-	 */
 	this.SortItems = function (itemIdsLeft, itemIdsRight) {
-		print("Sorting " + this.name + " ... ");
-
 		Storage.Reload();
 
 		this.cubeSpot(this.name);
@@ -175,7 +162,7 @@ var Container = function (name, width, height, location) {
 				var ix = item.y, iy = item.x; // x and y are backwards!
 
 				if ( this.location !== item.location ) {
-					D2Bot.printToConsole("Storage.js>SortItems WARNING: Detected a non-storage item in the list: " + item.name + " at "+ ix + "," + iy, 6);
+					D2Bot.printToConsole("StorageOverrides.js>SortItems WARNING: Detected a non-storage item in the list: " + item.name + " at " + ix + "," + iy, 6);
 					continue; // dont try to touch non-storage items | TODO: prevent non-storage items from getting this far
 				}
 
@@ -188,12 +175,12 @@ var Container = function (name, width, height, location) {
 				}
 
 				if ( item.type !== 4 ) {
-					D2Bot.printToConsole("Storage.js>SortItems WARNING: Detected a non-item in the list: " + item.name + " at " + ix + "," + iy, 6);
+					D2Bot.printToConsole("StorageOverrides.js>SortItems WARNING: Detected a non-item in the list: " + item.name + " at " + ix + "," + iy, 6);
 					continue; // dont try to touch non-items | TODO: prevent non-items from getting this far
 				}
 
 				if ( item.mode === 3 ) {
-					D2Bot.printToConsole("Storage.js>SortItems WARNING: Detected a ground item in the list: " + item.name + " at " + ix + "," + iy, 6);
+					D2Bot.printToConsole("StorageOverrides.js>SortItems WARNING: Detected a ground item in the list: " + item.name + " at " + ix + "," + iy, 6);
 					continue; // dont try to touch ground items | TODO: prevent ground items from getting this far
 				}
 
@@ -209,8 +196,6 @@ var Container = function (name, width, height, location) {
 					continue; // skip if no better spot found
 				}
 
-				// print("Move " + item.name + " from " + ix + "," + iy + " to " + nPos.y + "," + nPos.x);
-
 				if (!this.MoveToSpot(item, nPos.y, nPos.x)) {
 					continue; // we couldnt move the item
 				}
@@ -223,20 +208,13 @@ var Container = function (name, width, height, location) {
 			}
 		}
 
-		print("Sorting " + this.name + " done ");
-		//me.cancel();
+		this.Dump();
 
 		return true;
 	};
 
-	/* Container.FindSpot(item, reverseX, reverseY, priorityClassIds)
-	 *	Finds a spot available in the buffer to place the item.
-	 *  reverseX - find a spot from right-to-left instead of left-to-right
-	 *  reverseY - find a spot from bottom-to-top instead of top-to-bottom
-	 *  priorityClassIds - uses MakeSpot to give items priority spots
-	 */
 	this.FindSpot = function (item, reverseX, reverseY, priorityClassIds) {
-		var x, y, nx, ny,
+		var x, y, nx, ny, makeSpot,
 			startX, startY, endX, endY, xDir = 1, yDir = 1;
 
 		//Make sure it's a valid item
@@ -280,14 +258,14 @@ var Container = function (name, width, height, location) {
 						&& !this.IsLocked(this.itemList[this.buffer[x][y] - 1], Config.Inventory) // don't try to make a spot by moving locked items! TODO: move this to the start of loop
 						&& (priorityClassIds.indexOf(bufferItemClass) === -1
 						|| priorityClassIds.indexOf(item.classid) < priorityClassIds.indexOf(bufferItemClass))) { // item in this spot needs to move!
-						var makeSpot = this.MakeSpot(item, {x: x, y: y}); // NOTE: passing these in buffer order [h/x][w/y]
+						makeSpot = this.MakeSpot(item, {x: x, y: y}); // NOTE: passing these in buffer order [h/x][w/y]
 
 						if (item.classid !== bufferItemClass // higher priority item
 							|| (item.classid === bufferItemClass && item.quality > bufferItemQuality) // same class, higher quality item
 							|| (item.classid === bufferItemClass && item.quality === bufferItemQuality && item.gfx > bufferItemGfx) // same quality, higher graphic item
 							|| (Config.AutoEquip && item.classid === bufferItemClass && item.quality === bufferItemQuality && item.gfx === bufferItemGfx // same graphic, higher tier item
 								&& NTIP.GetTier(item) > NTIP.GetTier(this.itemList[this.buffer[x][y] - 1]))) {
-							var makeSpot = this.MakeSpot(item, {x: x, y: y}); // NOTE: passing these in buffer order [h/x][w/y]
+							makeSpot = this.MakeSpot(item, {x: x, y: y}); // NOTE: passing these in buffer order [h/x][w/y]
 
 							if (makeSpot) {
 								if (makeSpot === -1) {
@@ -326,11 +304,6 @@ var Container = function (name, width, height, location) {
 		return false;
 	};
 
-	/* Container.MakeSpot(item, location)
-	 *	Makes a spot available in the buffer to place the item.
-	 *  NOTE: [x][y] is used in this function to match the the buffer [h][w]
-	 * 		  as being iterated in FindSpot, and sizex and sizey are reversed
-	 */
 	this.MakeSpot = function (item, location, force) {
 		var x, y, endx, endy, tmpLocation,
 			itemsToMove = [],
@@ -349,10 +322,8 @@ var Container = function (name, width, height, location) {
 
 		// Make sure the item could even fit at the desired location
 		if (!location //|| !(location.x >= 0) || !(location.y >= 0)
-			|| ((location.y + (item.sizex - 1)) > (this.width  - 1))
+			|| ((location.y + (item.sizex - 1)) > (this.width - 1))
 			|| ((location.x + (item.sizey - 1)) > (this.height - 1))) {
-			// print(item.name + " could never fit at " + location.y + "," + location.x, 6);
-
 			return false; // location invalid or item could not ever fit in the location
 		}
 
@@ -361,7 +332,6 @@ var Container = function (name, width, height, location) {
 		// Do not continue if the container doesn't have enough openPositions.
 		// TODO: esd1 - this could be extended to use Stash for moving things if inventory is too tightly packed
 		if (item.sizex * item.sizey > this.openPositions) {
-			// print(item.name + " is too big to fit/move in container: " + this.name + " (openPositions: " + this.openPositions + ")", 6);
 			return -1; // return a non-false answer to FindSpot so it doesn't keep looking
 		}
 
@@ -376,7 +346,6 @@ var Container = function (name, width, height, location) {
 				} else if (item.gid === this.itemList[this.buffer[x][y] - 1].gid) {
 					continue; // ignore same gid
 				} else {
-					// print(this.itemList[this.buffer[x][y] - 1].name + " needs to move from " + y + "," + x, 6);
 					itemsToMove.push(copyUnit(this.itemList[this.buffer[x][y] - 1])); // track items that need to move
 				}
 			}
@@ -385,6 +354,7 @@ var Container = function (name, width, height, location) {
 		// Move any item(s) out of the way
 		if (itemsToMove) {
 			var i;
+
 			for (i = 0; i < itemsToMove.length; i++) {
 				var reverseX = !(SetUp.sortSettings.ItemsSortedFromRight.indexOf(item.classid) > -1);
 				tmpLocation = this.FindSpot(itemsToMove[i], reverseX, false);
@@ -407,9 +377,9 @@ var Container = function (name, width, height, location) {
 		return ({x: location.x, y: location.y});
 	};
 
-	this.MoveToSpot = function(item, x, y) {
+	this.MoveToSpot = function (item, x, y) {
 		var n, nDelay, cItem, cube;
-		
+
 		//Cube -> Stash, must place item in inventory first
 		if (item.location === 6 && this.location === 7 && !Storage.Inventory.MoveTo(item)) {
 			return false;
@@ -430,46 +400,46 @@ var Container = function (name, width, height, location) {
 			return false;
 		}
 
-		//Pick to cursor if not already.
-		if (!Packet.itemToCursor(item)) {
-			return false;
-		}
+		if (Packet.itemToCursor(item)) {
+			for (n = 0; n < 5; n += 1) {
+				switch (this.location) {
+				case 3: // inventory
+					sendPacket(1, 0x18, 4, item.gid, 4, x, 4, y, 4, 0x00);
+					break;
+				case 6: // cube
+					cItem = getUnit(100);
+					cube = me.getItem(549);
 
-		//Loop three times to try and place it.
-		for (n = 0; n < 5; n += 1) {
-			if (this.location === 6) { // place item into cube
-				cItem = getUnit(100);
-				cube = me.getItem(549);
+					if (cItem !== null && cube !== null) {
+						sendPacket(1, 0x2a, 4, cItem.gid, 4, cube.gid);
+					}
 
-				if (cItem !== null && cube !== null) {
-					sendPacket(1, 0x2a, 4, cItem.gid, 4, cube.gid);
-				}
-			} else {
-				clickItem(0, x, y, this.location);
-			}
-
-			nDelay = getTickCount();
-
-			while ((getTickCount() - nDelay) < Math.max(1000, me.ping * 3 + 500)) {
-				if (!me.itemoncursor) {
-					print("Successfully placed " + item.name + " at X: " + x + " Y: " + y);
-					delay(200);
-
-					return true;
+					break;
+				case 7: // stash
+					sendPacket(1, 0x18, 4, item.gid, 4, x, 4, y, 4, 0x04);
+					break;
+				default:
+					clickItem(0, x, y, this.location);
+					break;
 				}
 
-				delay(10);
+				nDelay = getTickCount();
+
+				while ((getTickCount() - nDelay) < Math.max(1000, me.ping * 2 + 200)) {
+					if (!me.itemoncursor) {
+						return true;
+					}
+
+					delay(10 + me.ping);
+				}
 			}
 		}
 
-		return true;
+		return false;
 	};
 
-	/* Container.MoveTo(item)
-	 *	Takes any item and moves it into given buffer.
-	 */
 	this.MoveTo = function (item) {
-		var nPos, n, nDelay, cItem, cube;
+		var nPos;
 
 		try {
 			//Can we even fit it in here?
@@ -478,37 +448,34 @@ var Container = function (name, width, height, location) {
 			if (!nPos) {
 				return false;
 			}
-			
+
 			return this.MoveToSpot(item, nPos.y, nPos.x);
 		} catch (e) {
-			print("Storage.Container.MoveTo catched error : "  + e + " - " +e.toSource());
+			print("Storage.Container.MoveTo caught error : " + e + " - " + e.toSource());
+
 			return false;
 		}
 	};
 
-	/* Container.Dump()
-	 *	Prints all known information about container.
-	 */
 	this.Dump = function () {
 		var x, y, string;
 
-		print(this.name + " has the width of " + this.width + " and the height of " + this.height);
-		print(this.name + " has " + this.itemList.length + " items inside, and has " + this.openPositions + " spots left.");
 
-		for (x = 0; x < this.height; x += 1) {
-			string = "";
+		if (this.UsedSpacePercent() > 50) {
+			for (x = 0; x < this.height; x += 1) {
+				string = "";
 
-			for (y = 0; y < this.width; y += 1) {
-				string += (this.buffer[x][y] > 0) ? "ÿc1x" : "ÿc0o";
+				for (y = 0; y < this.width; y += 1) {
+					string += (this.buffer[x][y] > 0) ? "ÿc1x" : "ÿc0o";
+				}
+
+				print(string);
 			}
-
-			print(string);
 		}
+
+		print("ÿc9SoloLevelingÿc0: " + this.name + " has used " + this.UsedSpacePercent().toFixed(2) + "% of its total space");
 	};
 
-	/* Container.UsedSpacePercent()
-	 *	Returns percentage of the container used.
-	 */
 	this.UsedSpacePercent = function () {
 		var x, y,
 			usedSpace = 0,
@@ -524,14 +491,9 @@ var Container = function (name, width, height, location) {
 			}
 		}
 
-		print("Used space: " + usedSpace * 100 / totalSpace);
-
 		return usedSpace * 100 / totalSpace;
 	};
 
-	/* Container.compare(reference)
-	 *	Compare given container versus the current one, return all new items in current buffer.
-	 */
 	this.Compare = function (baseRef) {
 		var h, w, n, item, itemList, reference;
 
@@ -547,7 +509,7 @@ var Container = function (name, width, height, location) {
 			}
 
 			for (h = 0; h < this.height; h += 1) {
-Loop:
+				Loop:
 				for (w = 0; w < this.width; w += 1) {
 					item = this.itemList[this.buffer[h][w] - 1];
 
@@ -576,85 +538,5 @@ Loop:
 
 	this.toSource = function () {
 		return this.buffer.toSource();
-	};
-};
-
-var Storage = new function () {
-	this.Init = function () {
-		this.StashY = me.gametype === 0 ? 4 : 8;
-		this.Inventory = new Container("Inventory", 10, 4, 3);
-		this.TradeScreen = new Container("Inventory", 10, 4, 5);
-		this.Stash = new Container("Stash", 6, this.StashY, 7);
-		this.Belt = new Container("Belt", 4 * this.BeltSize(), 1, 2);
-		this.Cube = new Container("Horadric Cube", 3, 4, 6);
-		this.InvRef = [];
-
-		this.Reload();
-	};
-
-	this.BeltSize = function () {
-		var item = me.getItem(-1, 1); // get equipped item
-
-		if (!item) { // nothing equipped
-			return 1;
-		}
-
-		do {
-			if (item.bodylocation === 8) { // belt slot
-				switch (item.code) {
-				case "lbl": // sash
-				case "vbl": // light belt
-					return 2;
-				case "mbl": // belt
-				case "tbl": // heavy belt
-					return 3;
-				default: // everything else
-					return 4;
-				}
-			}
-		} while (item.getNext());
-
-		return 1; // no belt
-	};
-
-	this.Reload = function () {
-		this.Inventory.Reset();
-		this.Stash.Reset();
-		this.Belt.Reset();
-		this.Cube.Reset();
-		this.TradeScreen.Reset();
-
-		var item = me.getItem();
-
-		if (!item) {
-			return false;
-		}
-
-		do {
-			switch (item.location) {
-			case 3:
-				this.Inventory.Mark(item);
-
-				break;
-			case 5:
-				this.TradeScreen.Mark(item);
-
-				break;
-			case 2:
-				this.Belt.Mark(item);
-
-				break;
-			case 6:
-				this.Cube.Mark(item);
-
-				break;
-			case 7:
-				this.Stash.Mark(item);
-
-				break;
-			}
-		} while (item.getNext());
-
-		return true;
 	};
 };

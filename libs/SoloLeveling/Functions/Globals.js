@@ -37,7 +37,7 @@ var SetUp = {
 	},
 
 	//Storage Settings
- 	sortSettings: {
+	sortSettings: {
 		ItemsSortedFromLeft: [], // default: everything not in Config.ItemsSortedFromRight
 		ItemsSortedFromRight: [
 			// (NOTE: default pickit is fastest if the left side is open)
@@ -51,7 +51,6 @@ var SetUp = {
 			// (NOTE: the earlier in the index, the further to the Right)
 			605, 604, 603, // sort charms from the right, GC > LC > SC
 			519, 518, 543
-			
 		],
 	},
 
@@ -615,88 +614,6 @@ var Check = {
 			mercDiff: build.mercDiff,
 			finalGear: build.autoEquipTiers,
 		};
-	},
-};
-
-var moveTo = {
-	Inventory: function (item, sorting = false) {
-		if (item.mode === 3) {
-			return false;
-		}
-
-		if (item.location === 3 && sorting === false) {
-			return true;
-		}
-
-		let spot = Storage.Inventory.FindSpot(item);
-
-		if (!spot) {
-			return false;
-		}
-
-		if (item.location === 6) {
-			while (!Cubing.openCube()) {
-				delay(1 + me.ping * 2);
-				Packet.flash(me.gid);
-			}
-		}
-
-		if (Packet.itemToCursor(item)) {
-			for (let i = 0; i < 15; i += 1) {
-				sendPacket(1, 0x18, 4, item.gid, 4, spot.y, 4, spot.x, 4, 0x00);
-
-				let tick = getTickCount();
-
-				while (getTickCount() - tick < Math.max(1000, me.ping * 2 + 200)) {
-					if (!me.itemoncursor) {
-						return true;
-					}
-
-					delay(10 + me.ping);
-				}
-			}
-		}
-
-		return false;
-	},
-
-	Stash: function (item, sorting = false) {
-		if (item.mode === 3) {
-			return false;
-		}
-
-		if (item.location === 7 && sorting === false) {
-			return true;
-		}
-
-		let spot = Storage.Stash.FindSpot(item);
-
-		if (!spot) {
-			return false;
-		}
-
-		while (!Town.openStash()) {
-			Packet.flash(me.gid);
-			delay(me.ping * 2);
-		}
-
-		if (Packet.itemToCursor(item)) {
-			for (let i = 0; i < 15; i += 1) {
-				sendPacket(1, 0x18, 4, item.gid, 4, spot.y, 4, spot.x, 4, 0x04);
-
-				let tick = getTickCount();
-
-				while (getTickCount() - tick < Math.max(1000, me.ping * 2 + 200)) {
-					if (!me.itemoncursor) {
-						return true;
-					}
-
-					delay(10 + me.ping);
-				}
-			}
-		}
-
-		return false;
 	},
 };
 

@@ -38,10 +38,9 @@ Town.townTasks = function () {
 	this.heal();
 	this.identify();
 	this.clearInventory();
-	this.buyBooks();
+	this.buyBook();
 	this.buyPotions();
 	this.fillTome(518);
-	this.fillTome(519);
 	this.shopItems();
 	this.buyKeys();
 	this.repair(true);
@@ -101,10 +100,9 @@ Town.doChores = function (repair = false) {
 	this.heal();
 	this.identify();
 	this.clearInventory();
-	this.buyBooks();
+	this.buyBook();
 	this.buyPotions();
 	this.fillTome(518);
-	this.fillTome(519);
 	this.shopItems();
 	this.buyKeys();
 	this.repair(repair);
@@ -284,8 +282,8 @@ Town.identify = function () {
 	return true;
 };
 
-Town.buyBooks = function () {
-	if (me.findItem(518, 0, 3) && me.findItem(519, 0, 3)) {
+Town.buyBook = function () {
+	if (me.findItem(518, 0, 3)) {
 		return true;
 	}
 
@@ -349,24 +347,6 @@ Town.buyBooks = function () {
 					return false;
 				}
 			}
-		}
-	}
-
-	if (!me.findItem(519, 0, 3)) {
-		idBook = npc.getItem(519);
-
-		if (idBook && Storage.Inventory.CanFit(idBook)) {
-			try {
-				if (idBook.buy()) {
-					print('ÿc9SoloLevelingÿc0: bought Tome of Identify');
-				}
-			} catch (e3) {
-				print(e3);
-
-				return false;
-			}
-		} else {
-			return false;
 		}
 	}
 
@@ -683,7 +663,7 @@ Town.unfinishedQuests = function () {
 	}
 
 	//Act 5
-	if (!Check.haveItem("polearm", "runeword", "Insight") && !Item.getEquippedItemMerc(3).prefixnum === 20568 && me.getItem(58)) { // Larzuk reward
+	if (!Item.getEquippedItemMerc(3).prefixnum === 20568 && me.getItem(58)) { // Larzuk reward
 		Quest.holePunch(58); // insight voulge
 	}
 
@@ -858,6 +838,7 @@ Town.canStash = function (item) {
 
 	if (!Storage.Stash.CanFit(item)) {
 		this.sortStash(true);	//Force sort
+
 		if (!Storage.Stash.CanFit(item)) {	//Re-check after sorting
 			return false;
 		}
@@ -904,7 +885,7 @@ Town.stash = function (stashGold) {
 	return true;
 };
 
-Town.sortInventory = function() {
+Town.sortInventory = function () {
 	Storage.Inventory.SortItems(SetUp.sortSettings.ItemsSortedFromLeft, SetUp.sortSettings.ItemsSortedFromRight);
 
 	return true;
