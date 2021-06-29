@@ -433,9 +433,9 @@ var Container = function (name, width, height, location) {
 					delay(10 + me.ping);
 				}
 			}
-
-			return false;
 		}
+
+		return false;
 	};
 
 	this.MoveTo = function (item) {
