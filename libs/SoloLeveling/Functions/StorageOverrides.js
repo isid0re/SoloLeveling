@@ -461,7 +461,7 @@ var Container = function (name, width, height, location) {
 		var x, y, string;
 
 
-		if (this.UsedSpacePercent() > 50) {
+		if (this.UsedSpacePercent() > 60) {
 			for (x = 0; x < this.height; x += 1) {
 				string = "";
 

@@ -133,6 +133,30 @@ Attack.checkIsAuradin = function () {
 				return true;
 			}
 		} while (item.getNext());
+    
+    return false;
+};
+  
+Attack.getSkillElement = function (skillId) {
+	this.elements = ["physical", "fire", "lightning", "magic", "cold", "poison", "none"];
+
+	switch (skillId) {
+	case 74: // Corpse Explosion
+	case 139: // Stun
+	case 144: // Concentrate
+	case 147: // Frenzy
+	case 273: // Minge Blast
+	case 500: // Summoner
+		return "physical";
+	case 101: // Holy Bolt
+		return "holybolt"; // no need to use this.elements array because it returns before going over the array
+	}
+
+	var eType = getBaseStat("skills", skillId, "etype");
+
+	if (typeof (eType) === "number") {
+		return this.elements[eType];
+
 	}
 
 	return false;
