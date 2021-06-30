@@ -239,6 +239,34 @@ function LoadConfig () {
 			}
 
 			break;
+		case 'Immortalwhirl':
+			if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItemMerc(4).prefixnum !== 20566) { //infinity
+				var Inf = [
+					"[Name] == BerRune",
+					"[Name] == MalRune",
+					"[Name] == IstRune",
+					"([Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe || [Name] == giantthresher) && [Flag] == Ethereal && [Quality] == Normal # [Sockets] == 0 # [MaxQuantity] == 1",
+					"([Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe || [Name] == giantthresher) && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(Inf);
+
+				if (!me.getItem(639)) {
+					Config.Recipes.push([Recipe.Rune, "Sur Rune"]); // sur to ber
+				}
+
+				Config.Recipes.push([Recipe.Socket.Weapon, "Giant Thresher"]);
+				Config.Recipes.push([Recipe.Socket.Weapon, "Great Poleaxe"]);
+				Config.Recipes.push([Recipe.Socket.Weapon, "Cryptic Axe"]);
+				Config.Recipes.push([Recipe.Socket.Weapon, "thresher"]);
+
+				Config.Runewords.push([Runeword.Infinity, "Giant Thresher"]);
+				Config.Runewords.push([Runeword.Infinity, "Great Poleaxe"]);
+				Config.Runewords.push([Runeword.Infinity, "Cryptic Axe"]);
+				Config.Runewords.push([Runeword.Infinity, "Thresher"]);
+				Config.KeepRunewords.push("[type] == polearm # [convictionaura] >= 13");
+			}
+
+			break;
 		case 'Singer':
 			if (!Check.haveItem("mace", "runeword", "Heart of the Oak")) {
 				var HotO = [
