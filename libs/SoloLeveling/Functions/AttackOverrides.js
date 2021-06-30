@@ -133,6 +133,7 @@ Attack.checkIsAuradin = function () {
 				return true;
 			}
 		} while (item.getNext());
+    }
     
     return false;
 };
