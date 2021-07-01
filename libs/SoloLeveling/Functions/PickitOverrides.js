@@ -52,7 +52,7 @@ Pickit.checkItem = function (unit) {
 		};
 	}
 
-	if (NTIP.GetTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && !unit.getFlag(0x10)) {
+	if (NTIP.GetCharmTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && !unit.getFlag(0x10)) {
 		return {
 			result: -1,
 			line: null
@@ -62,7 +62,7 @@ Pickit.checkItem = function (unit) {
 	if (NTIP.GetCharmTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && unit.getFlag(0x10)) {
 		return {
 			result: NTIP.CheckItem(unit),
-			line: "Autoequip CharmTier: " + NTIP.GetTier(unit)
+			line: "Autoequip CharmTier: " + NTIP.GetCharmTier(unit)
 		};
 	}
 

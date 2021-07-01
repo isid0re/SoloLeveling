@@ -343,6 +343,65 @@ case 2: // Necromancer
 case 3: // Paladin
 	break;
 case 4: // Barbarian
+	if (!isIncluded("common/Attacks/Barbarian.js")) {
+		include("common/Attacks/Barbarian.js");
+	}
+
+	ClassAttack.doAttack = function (unit, preattack) {
+		var needRepair = Town.needRepair();
+
+		if ((Config.MercWatch && Town.needMerc()) || needRepair.length > 0) {
+			Town.visitTown(!!needRepair.length);
+		}
+
+		if (preattack && Config.AttackSkill[0] > 0 && Attack.checkResist(unit, Attack.getSkillElement(Config.AttackSkill[0])) && (!me.getState(121) || !Skill.isTimed(Config.AttackSkill[0]))) {
+			if (Math.round(getDistance(me, unit)) > Skill.getRange(Config.AttackSkill[0]) || checkCollision(me, unit, 0x4)) {
+				if (!Attack.getIntoPosition(unit, Skill.getRange(Config.AttackSkill[0]), 0x4)) {
+					return 0;
+				}
+			}
+
+			if (Config.AttackSkill[0] !== 146 && me.getSkill(146, 1)) {
+				for (let castBC = 0; castBC < 1; castBC++) {
+					if ((Skill.getManaCost(146) * 3) < me.mp) {
+						Skill.cast(146, Skill.getHand(146, unit));
+					}
+				}
+			}
+
+			Skill.cast(Config.AttackSkill[0], Skill.getHand(Config.AttackSkill[0]), unit);
+
+			return 1;
+		}
+
+		var index,
+			attackSkill = -1;
+
+		index = ((unit.spectype & 0x7) || unit.type === 0) ? 1 : 3;
+
+		if (Attack.getCustomAttack(unit)) {
+			attackSkill = Attack.getCustomAttack(unit)[0];
+		} else {
+			attackSkill = Config.AttackSkill[index];
+		}
+
+		if (!Attack.checkResist(unit, attackSkill)) {
+			attackSkill = -1;
+
+			if (Config.AttackSkill[index + 1] > -1 && Attack.checkResist(unit, Config.AttackSkill[index + 1])) {
+				attackSkill = Config.AttackSkill[index + 1];
+			}
+		}
+
+		// Low mana skill
+		if (Skill.getManaCost(attackSkill) > me.mp && Config.LowManaSkill[0] > -1 && Attack.checkResist(unit, Config.LowManaSkill[0])) {
+			attackSkill = Config.LowManaSkill[0];
+		}
+
+		// Telestomp with barb is pointless
+		return this.doCast(unit, attackSkill);
+	};
+
 	break;
 case 5: // Druid
 	if (!isIncluded("common/Attacks/Druid.js")) {
@@ -524,7 +583,7 @@ case 5: // Druid
 			}
 
 			return 1;
-		}
+		};
 	}
 
 	break;

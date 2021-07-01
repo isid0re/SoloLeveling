@@ -49,22 +49,21 @@ var SetUp = {
 		ItemsSortedFromLeftPriority: [/*605, 604, 603, 519, 518*/], // (NOTE: the earlier in the index, the further to the Left)
 		ItemsSortedFromRightPriority: [
 			// (NOTE: the earlier in the index, the further to the Right)
-			605, 604, 603, // sort charms from the right, GC > LC > SC
-			519, 518, 543
+			519, 518, 605, 604, 603, 543 // sort charms from the right, Books > GC > LC > SC
 		],
 	},
 
 	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
-	respecOne: [ 25, 28, 26, 19, 24, 24, 30][me.classid],
+	respecOne: [ 25, 28, 26, 19, 31, 24, 30][me.classid],
 
 	respecTwo: function () {
 		let respec;
 
 		switch (me.gametype) {
 		case 0:
-			respec = [75, 75, 75, 85, 0, 75, 75][me.classid];
+			respec = [75, 75, 75, 85, 75, 75, 75][me.classid];
 			break;
 
 		case 1:
