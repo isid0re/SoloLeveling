@@ -33,6 +33,10 @@ function hellforge () {
 	Town.npcInteract("cain");
 
 	if (me.getItem(90)) {
+		if ([2, 69, 70].indexOf(Item.getEquippedItem(5).itemType) === -1) { //dual weild fix for assassin/barbarian
+			Item.removeItem(5);
+		}
+
 		Quest.equipItem(90, 4);
 	}
 
@@ -40,6 +44,11 @@ function hellforge () {
 
 	if (!me.getItem(90)) {
 		Pickit.pickItems();
+
+		if ([2, 69, 70].indexOf(Item.getEquippedItem(5).itemType) === -1) { //dual weild fix for assassin/barbarian
+			Item.removeItem(5);
+		}
+
 		Quest.equipItem(90, 4);
 	}
 

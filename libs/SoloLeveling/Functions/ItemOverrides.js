@@ -8,13 +8,37 @@ if (!isIncluded("common/Misc.js")) {
 	include("common/Misc.js");
 }
 
+Item.getEquippedItem = function (bodyLoc) {
+	var item = me.getItem();
+
+	if (item) {
+		do {
+			if (item.bodylocation === bodyLoc) {
+				return {
+					itemType: item.itemType,
+					classid: item.classid,
+					prefixnum: item.prefixnum,
+					tier: NTIP.GetTier(item)
+				};
+			}
+		} while (item.getNext());
+	}
+
+	return {
+		itemType: -1,
+		classid: -1,
+		prefixnum: -1,
+		tier: -1
+	};
+};
+
 Item.getBodyLoc = function (item) {
 	var bodyLoc;
 
 	switch (item.itemType) {
 	case 2: // Shield
-	case 70: // Auric Shields
 	case 69: // Voodoo Heads
+	case 70: // Auric Shields
 		bodyLoc = 5;
 
 		break;
@@ -239,6 +263,35 @@ Item.equip = function (item, bodyLoc) {
 				return true;
 			}
 		}
+	}
+
+	return false;
+};
+
+Item.removeItem = function (bodyLoc) {
+	let cursorItem,
+		removable = me.getItems()
+			.filter(item =>
+				item.location === 1 // Needs to be equipped
+				&& item.bodylocation === bodyLoc
+			)
+			.first();
+
+	if (removable) {
+		removable.toCursor();
+		cursorItem = getUnit(100);
+
+		if (cursorItem) {
+			if (Pickit.checkItem(cursorItem).result === 1) { // only keep wanted items
+				if (Storage.Inventory.CanFit(cursorItem)) {
+					Storage.Inventory.MoveTo(cursorItem);
+				}
+			} else {
+				cursorItem.drop();
+			}
+		}
+
+		return true;
 	}
 
 	return false;

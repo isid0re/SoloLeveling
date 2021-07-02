@@ -9,7 +9,7 @@ if (!isIncluded("common/Pather.js")) {
 }
 
 NodeAction.killMonsters = function (arg) {
-	var monList;
+	var monList, sanityCheck = [62, 63, 64, 74].indexOf(me.area) > -1 ? true : false;
 
 	if (Config.Countess.KillGhosts && [21, 22, 23, 24, 25].indexOf(me.area) > -1) {
 		monList = Attack.getMob(38, 0, 30);
@@ -48,13 +48,13 @@ NodeAction.killMonsters = function (arg) {
 		switch (typeof Config.ClearPath) {
 		case "number":
 			Attack.clear(7, 0);
-			Attack.clear(30, Config.ClearPath);
+			Attack.clear(sanityCheck ? 7 : 30, Config.ClearPath);
 
 			break;
 		case "object":
 			if (!Config.ClearPath.hasOwnProperty("Areas") || Config.ClearPath.Areas.length === 0 || Config.ClearPath.Areas.indexOf(me.area) > -1) {
 				Attack.clear(7, 0);
-				Attack.clear(Config.ClearPath.Range, Config.ClearPath.Spectype);
+				Attack.clear(sanityCheck ? 7 : Config.ClearPath.Range, Config.ClearPath.Spectype);
 			}
 
 			break;
@@ -63,7 +63,7 @@ NodeAction.killMonsters = function (arg) {
 
 	if (arg.clearPath !== false) {
 		Attack.clear(7, 0);
-		Attack.clear(15, typeof arg.clearPath === "number" ? arg.clearPath : 0);
+		Attack.clear(sanityCheck ? 7 : 15, typeof arg.clearPath === "number" ? arg.clearPath : 0);
 	}
 };
 
@@ -460,6 +460,85 @@ Pather.makePortal = function (use) {
 	}
 
 	return false;
+};
+
+Pather.usePortal = function (targetArea, owner, unit) {
+	if (targetArea && me.area === targetArea) {
+		return true;
+	}
+
+	me.cancel();
+
+	var i, tick, portal,
+		preArea = me.area;
+
+	for (i = 0; i < 10; i += 1) {
+		if (me.dead) {
+			break;
+		}
+
+		if (i > 0 && owner && me.inTown) {
+			Town.move("portalspot");
+		}
+
+		portal = unit ? copyUnit(unit) : this.getPortal(targetArea, owner);
+
+		if (portal) {
+			if (portal.area === me.area) {
+				if (getDistance(me, portal) > 5) {
+					this.moveToUnit(portal);
+				}
+
+				if (getTickCount() - this.lastPortalTick > 2500) {
+					if (i < 2) {
+						sendPacket(1, 0x13, 4, 0x2, 4, portal.gid);
+					} else {
+						Misc.click(0, 0, portal);
+					}
+				} else {
+					delay(300 + me.ping);
+					continue;
+				}
+			}
+
+			if (portal.classid === 298 && portal.mode !== 2) { // Portal to/from Arcane
+				Misc.click(0, 0, portal);
+
+				tick = getTickCount();
+
+				while (getTickCount() - tick < 2000) {
+					if (portal.mode === 2 || me.area === 74) {
+						break;
+					}
+
+					delay(10 + me.ping);
+				}
+			}
+
+			tick = getTickCount();
+
+			while (getTickCount() - tick < 500 + me.ping) {
+				if (me.area !== preArea) {
+					this.lastPortalTick = getTickCount();
+					delay(100 + me.ping);
+
+					return true;
+				}
+
+				delay(10 + me.ping);
+			}
+
+			if (i > 1) {
+				Packet.flash(me.gid);
+			}
+		} else {
+			Packet.flash(me.gid);
+		}
+
+		delay(200 + me.ping);
+	}
+
+	return targetArea ? me.area === targetArea : me.area !== preArea;
 };
 
 Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {

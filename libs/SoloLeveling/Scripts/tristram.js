@@ -17,7 +17,7 @@ function tristram () {
 	me.overhead("tristram");
 
 	if (!Misc.checkQuest(4, 4) && !me.getItem(525)) { // missing task or key
-		if (!me.getItem(524)) { // missing scroll 
+		if (!me.getItem(524)) { // missing scroll
 			if (!Pather.checkWP(6)) {
 				Pather.getWP(6);
 				Pather.useWaypoint(5);
@@ -72,17 +72,14 @@ function tristram () {
 
 	if (me.area === 38) {
 		if (!me.tristram) {
-			Pather.moveTo(me.x, me.y + 6);
 			let gibbet = getUnit(2, 26);
 
-			if (!gibbet.mode) {
-				if (!Pather.moveToPreset(38, 2, 26, 0, 0, true, true)) {
-					print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
-				}
+			if (!Pather.moveToPreset(38, 2, 26, 0, 0, true, true)) {
+				print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
+			}
 
-				for (let x = 0; x < 5; x++) {
-					Misc.openChest(gibbet);
-				}
+			for (let x = 0; x < 5; x++) {
+				Misc.openChest(gibbet);
 			}
 
 			Town.npcInteract("akara");
