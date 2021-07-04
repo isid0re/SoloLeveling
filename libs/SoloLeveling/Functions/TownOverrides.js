@@ -1071,7 +1071,7 @@ Town.clearJunk = function () {
 
 	while (junk.length > 0) {
 		if ((junk[0].location === 7 || junk[0].location === 3) && // stash or inventory
-			!Pickit.checkItem(junk[0]).result === 1 && // Don't throw pickit wanted items
+			Pickit.checkItem(junk[0]).result !== 1 && // Don't throw pickit wanted items
 			!Cubing.keepItem(junk[0]) && // Don't throw cubing ingredients
 			!Runewords.keepItem(junk[0]) && // Don't throw runeword ingredients
 			!CraftingSystem.keepItem(junk[0]) && // Don't throw crafting system ingredients
