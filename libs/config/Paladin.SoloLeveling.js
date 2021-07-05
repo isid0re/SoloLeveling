@@ -68,7 +68,7 @@ function LoadConfig () {
 	Config.UseMerc = true;
 	Config.MercWatch = true;
 	Config.StashGold = me.charlvl * 100;
-	Config.ClearInvOnStart = false;
+	Config.ClearInvOnStart = me.findItem("tbk", 0, 3);
 
 	/* Chicken configuration. */
 	Config.LifeChicken = me.playertype ? 60 : 10;
@@ -107,6 +107,11 @@ function LoadConfig () {
 	Config.FastPick = false;
 	Config.CainID.Enable = false;
 	Config.FieldID = false;
+	NTIP.arrayLooping(nipItems.Quest);
+	NTIP.arrayLooping(nipItems.General);
+	NTIP.arrayLooping(nipItems.Selling);
+
+	/* Pickit Files */
 	//	Config.PickitFiles.push("kolton.nip");
 	//	Config.PickitFiles.push("LLD.nip");
 
@@ -379,7 +384,7 @@ function LoadConfig () {
 			var Insight = [
 				"([Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe || [Name] == giantthresher) && [flag] != runeword && [Flag] == Ethereal && [Quality] == Normal # [Sockets] == 0 # [MaxQuantity] == 1",
 				"!me.hell && ([Name] == voulge || [Name] == scythe || [Name] == poleaxe || [Name] == halberd || [Name] == warscythe || [Name] == bill || [Name] == battlescythe || [Name] == partizan || [Name] == grimscythe) && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
-				"([Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe || [Name] == giantthresher)&& [flag] != runeword  && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
+				"([Name] == thresher || [Name] == crypticaxe || [Name] == greatpoleaxe || [Name] == giantthresher) && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Insight);
 

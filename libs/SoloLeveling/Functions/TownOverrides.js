@@ -1070,17 +1070,16 @@ Town.clearJunk = function () {
 	}
 
 	while (junk.length > 0) {
-		if ((junk[0].location === 7 || junk[0].location === 3) && // stash or inventory
-			Pickit.checkItem(junk[0]).result !== 1 && // Don't throw pickit wanted items
-			!Cubing.keepItem(junk[0]) && // Don't throw cubing ingredients
-			!Runewords.keepItem(junk[0]) && // Don't throw runeword ingredients
-			!CraftingSystem.keepItem(junk[0]) && // Don't throw crafting system ingredients
-			(Pickit.checkItem(junk[0]).result === 0 || Pickit.checkItem(junk[0]).result === 4) // only drop unwanted
+		if ((junk[0].location === 7 || junk[0].location === 3) // stash or inventory
+			&& [-1, 1, 2, 3, 5, 6].indexOf(Pickit.checkItem(junk[0]).result) < 0 // only drop unwanted
+			&& !Cubing.keepItem(junk[0]) // Don't throw cubing ingredients
+			&& !Runewords.keepItem(junk[0]) // Don't throw runeword ingredients
+			&& !CraftingSystem.keepItem(junk[0]) // Don't throw crafting system ingredients
 		) {
 			if (junk[0].drop()) {
 				me.overhead('cleared junk');
 				print("ÿc9SoloLevelingÿc0: Cleared junk - " + junk[0].name);
-				delay(50 + me.ping);
+				delay(10 + me.ping);
 			}
 		}
 
@@ -1101,7 +1100,7 @@ Town.clearJunk = function () {
 				if (junk[0].drop()) {
 					me.overhead('cleared runeword junk');
 					print("ÿc9SoloLevelingÿc0: Cleared runeword junk - " + junk[0].name);
-					delay(50 + me.ping);
+					delay(10 + me.ping);
 				}
 			}
 		}

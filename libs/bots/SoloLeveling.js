@@ -12,15 +12,6 @@ if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
 
 function SoloLeveling () {
 	this.setup = function () {
-		print('ÿc9SoloLevelingÿc0: start setup');
-		me.overhead('start setup');
-		print("ÿc9SoloLevelingÿc0: quest items loaded to Pickit");
-		NTIP.arrayLooping(nipItems.Quest);
-		me.overhead('loading pickits');
-		print("ÿc9SoloLevelingÿc0: general items loaded to Pickit");
-		NTIP.arrayLooping(nipItems.General);
-		print("ÿc9SoloLevelingÿc0: valuable items to sell loaded to Pickit");
-		NTIP.arrayLooping(nipItems.Selling);
 		print('ÿc9SoloLevelingÿc0: start run');
 		me.overhead('starting run');
 

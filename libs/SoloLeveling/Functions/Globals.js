@@ -215,6 +215,7 @@ var nipItems = {
 		"[Name] == Khalim'sBrain",
 		"[Name] == Khalim'sFlail",
 		"[Name] == Khalim'sWill",
+		"[Name] == malah'spotion",
 		"[Name] == ScrollofResistance",
 	],
 };

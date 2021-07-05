@@ -1,8 +1,8 @@
 /*
 *	@filename	PickitOverrides.js
-*	@author		theBGuy, isid0re
-*	@desc		Pickit.js fixes to improve functionality
-*	@credits	based on existing pickit.js from PBP autoplays (Sonic, AutoSorc, etc)
+*	@author		isid0re
+*	@desc		modified pickit.js based on from PBP autoplays (Sonic, AutoSorc, etc)
+*	@credits	theBGuy (for customized logging from pbp pickit.js), kolton
 */
 
 if (!isIncluded("common/Pickit.js")) {
@@ -22,7 +22,8 @@ if (!isIncluded("SoloLeveling/Functions/ProtoTypesOverrides.js")) {
 }
 
 Pickit.checkItem = function (unit) {
-	var rval = NTIP.CheckItem(unit, false, true);
+	var rvalTier = NTIP.CheckItem(unit, false, true),
+		rvalNoTier = NTIP.CheckItem(unit, NTIP_CheckListNoTier, true);
 
 	if ((unit.classid === 617 || unit.classid === 618) && Town.repairIngredientCheck(unit)) {
 		return {
@@ -52,28 +53,14 @@ Pickit.checkItem = function (unit) {
 		};
 	}
 
-	if (NTIP.GetCharmTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && !unit.getFlag(0x10)) {
+	if ((NTIP.GetCharmTier(unit) > 0 || NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && !unit.getFlag(0x10)) {
 		return {
 			result: -1,
 			line: null
 		};
 	}
 
-	if (NTIP.GetCharmTier(unit) > 0 && [603, 604, 605].indexOf(unit.classid) !== -1 && unit.getFlag(0x10)) {
-		return {
-			result: NTIP.CheckItem(unit),
-			line: "Autoequip CharmTier: " + NTIP.GetCharmTier(unit)
-		};
-	}
-
-	if ((NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && !unit.getFlag(0x10)) {
-		return {
-			result: -1,
-			line: null
-		};
-	}
-
-	if ((NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && unit.getFlag(0x10)) {
+	if ((NTIP.GetCharmTier(unit) > 0 || NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && unit.getFlag(0x10)) {
 		if (Item.autoEquipCheck(unit)) {
 			return {
 				result: 1,
@@ -88,12 +75,21 @@ Pickit.checkItem = function (unit) {
 			};
 		}
 
-		return NTIP.CheckItem(unit, NTIP_CheckListNoTier, true);
+		/*if (Item.autoEquipCheckCharm(unit)) {
+			return {
+				result: 1,
+				line: "Autoequip CharmTier: " + NTIP.GetCharmTier(unit)
+			};
+		}*/
+
+		return rvalNoTier;
 	}
 
-	// If total gold is less than 10k pick up anything worth 10 gold per
-	// square to sell in town.
-	if (rval.result === 0 && !getBaseStat("items", unit.classid, "quest") && Town.ignoredItemTypes.indexOf(unit.itemType) === -1 && unit.itemType !== 39 && (unit.location === 3 || me.gold < Config.LowGold)) {
+	if (rvalNoTier.result === 1) { // if no_tier wanted
+		return rvalNoTier;
+	}
+
+	if (rvalTier.result === 0 && rvalNoTier.result === 0 && !getBaseStat("items", unit.classid, "quest") && Town.ignoredItemTypes.indexOf(unit.itemType) === -1 && unit.itemType !== 39 && (unit.location === 3 || me.gold < Config.LowGold)) {
 		// Gold doesn't take up room, just pick it up
 		if (unit.classid === 523) {
 			return {
@@ -110,7 +106,7 @@ Pickit.checkItem = function (unit) {
 		}
 	}
 
-	return rval;
+	return rvalTier;
 };
 
 Pickit.pickItems = function () {
