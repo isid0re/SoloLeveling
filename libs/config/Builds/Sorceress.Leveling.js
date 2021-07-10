@@ -396,7 +396,9 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 59, 47, 59, 47, 56, 55];
-
+			Config.BeltColumn = ["hp", "mp", "mp", "rv"];
+			Config.HPBuffer = 0;
+			Config.MPBuffer = 0;
 		}
 	},
 

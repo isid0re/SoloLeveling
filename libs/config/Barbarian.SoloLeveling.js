@@ -171,6 +171,10 @@ function LoadConfig () {
 		"([type] == circlet || [type] == helm) && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"[Type] == armor && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
 		"me.charlvl > 14 && [Type] == Polearm && ([Quality] >= Magic || [flag] == runeword) # [itemchargedskill] >= 0 # [Merctier] == mercscore(item)",
+		//charms
+		"[Name] == smallcharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
+		"[Name] == largecharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
+		"me.charlvl > 39 && [Name] == grandcharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
 	];
 	NTIP.arrayLooping(levelingTiers);
 

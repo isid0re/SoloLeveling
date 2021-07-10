@@ -49,9 +49,9 @@ function ancients () {
 	let ancientsPrep = function () { // ancients prep
 		Town.goToTown(); // prep to revised settings
 		Town.fillTome(518);
-		Town.buyPots(10, "Thawing");
+		Town.buyPots(8, "Thawing");
 		Town.drinkPots();
-		Town.buyPots(10, "Antidote");
+		Town.buyPots(8, "Antidote");
 		Town.drinkPots();
 		Town.buyPotions();
 		Pather.usePortal(120, me.name);
@@ -76,8 +76,8 @@ function ancients () {
 		HealStatus: false,
 		TownHP: 0,
 		TownMP: 0,
-		MPBuffer: 15,
-		HPBuffer: 15,
+		MPBuffer: me.charlvl > 39 ? 8 : 15,
+		HPBuffer: me.charlvl > 39 ? 8 : 15,
 		UseMercRejuv: 25,
 		LifeChicken: 5,
 		ManaChicken: 0,

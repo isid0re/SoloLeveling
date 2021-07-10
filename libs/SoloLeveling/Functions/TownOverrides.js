@@ -48,6 +48,7 @@ Town.townTasks = function () {
 	this.reviveMerc();
 	this.gamble();
 	Item.autoEquip();
+	Item.autoEquipCharm();
 	Merc.hireMerc();
 	Merc.equipMerc();
 	this.stash();
@@ -110,6 +111,7 @@ Town.doChores = function (repair = false) {
 	this.reviveMerc();
 	this.gamble();
 	Item.autoEquip();
+	Item.autoEquipCharm();
 	Merc.hireMerc();
 	Merc.equipMerc();
 	this.stash();
@@ -832,7 +834,7 @@ Town.drinkPots = function () {
 Town.canStash = function (item) {
 	var ignoredClassids = [91, 174]; // Some quest items that have to be in inventory or equipped
 
-	if (this.ignoredItemTypes.indexOf(item.itemType) > -1 || ignoredClassids.indexOf(item.classid) > -1) {
+	if (!Item.canStashCharm(item) || this.ignoredItemTypes.indexOf(item.itemType) > -1 || ignoredClassids.indexOf(item.classid) > -1) {
 		return false;
 	}
 
@@ -891,7 +893,6 @@ Town.sortInventory = function () {
 	return true;
 };
 
-// Thank you Yame for testing
 Town.sortStash = function (force) {
 	if (force === undefined) {
 		force = false;
@@ -1079,7 +1080,7 @@ Town.clearJunk = function () {
 			if (junk[0].drop()) {
 				me.overhead('cleared junk');
 				print("ÿc9SoloLevelingÿc0: Cleared junk - " + junk[0].name);
-				delay(10 + me.ping);
+				delay(50 + me.ping);
 			}
 		}
 
@@ -1100,7 +1101,7 @@ Town.clearJunk = function () {
 				if (junk[0].drop()) {
 					me.overhead('cleared runeword junk');
 					print("ÿc9SoloLevelingÿc0: Cleared runeword junk - " + junk[0].name);
-					delay(10 + me.ping);
+					delay(50 + me.ping);
 				}
 			}
 		}

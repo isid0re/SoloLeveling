@@ -27,7 +27,7 @@ function andariel () {
 
 	if ((me.getStat(45) - resPenalty) < 75 + me.getStat(46)) {
 		Town.doChores();
-		Town.buyPots(10, "Antidote"); // antidote
+		Town.buyPots(8, "Antidote"); // antidote
 		Town.drinkPots();
 		Pather.usePortal(37, me.name);
 	}

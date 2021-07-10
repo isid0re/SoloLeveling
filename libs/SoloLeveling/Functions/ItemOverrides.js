@@ -2,6 +2,7 @@
 *	@filename	ItemOverrides.js
 *	@author		isid0re
 *	@desc		Misc.js Item function fixes to improve functionality and Autoequip
+*	@credits	dzik for the merc autoequip, kolton
 */
 
 if (!isIncluded("common/Misc.js")) {
@@ -200,7 +201,6 @@ Item.autoEquip = function () {
 					}
 
 					gid = items[0].gid;
-
 					print(items[0].name);
 
 					if (this.equip(items[0], bodyLoc[j])) {
@@ -297,7 +297,163 @@ Item.removeItem = function (bodyLoc) {
 	return false;
 };
 
-//AUTO EQUIP MERC - modified from dzik's
+Item.hasCharmTier = function (item) {
+	return Config.AutoEquip && NTIP.GetCharmTier(item) > 0;
+};
+
+Item.canStashCharm = function (item) {
+	let charmID = [603, 604, 605].indexOf(item.classid);
+
+	if (charmID > -1) {
+		if (Check.equippedCharms[charmID].filter(unit => unit.gid === item.gid).first()) {
+			return false;
+		}
+	}
+
+	return true;
+};
+
+Item.canEquipCharm = function (item) {
+	if ([603, 604, 605].indexOf(item.classid) < 0) { // Not a charm
+		return false;
+	}
+
+	if (!item.getFlag(0x10)) { // Unid item
+		return false;
+	}
+
+	if (item.getStat(92) > me.getStat(12)) { // Higher level requirement
+		return false;
+	}
+
+	return true;
+};
+
+Item.equipCharm = function (item) {
+	if (!this.canEquipCharm(item)) {
+		return false;
+	}
+
+	let charmID = [603, 604, 605].indexOf(item.classid),
+		equipped = Check.equippedCharms[charmID],
+		lowestrank = equipped.first();
+
+	if (item.location === 7) {
+		Town.openStash();
+
+		if (Storage.Inventory.CanFit(item)) {
+			Storage.Inventory.MoveTo(item);
+		}
+
+		me.cancel();
+	}
+
+	if (item.location === 3) {
+		if (equipped.length > Item.getCharmLimit(item.classid)) {
+			if (Pickit.checkItem(lowestrank).result !== 1) {
+				lowestrank.drop();
+			}
+		}
+
+		return true;
+	}
+
+	return false;
+};
+
+Item.getCharmLimit = function (itemID) {
+	var charmLimit;
+
+	switch (itemID) {
+	case 603: // small charms
+		charmLimit = 7;
+
+		break;
+	case 604: // large charms
+		charmLimit = 1;
+
+		break;
+	case 605: // grand charms
+		charmLimit = 4;
+
+		break;
+	default:
+		return false;
+	}
+
+	return charmLimit;
+};
+
+Item.autoEquipCheckCharm = function (item) {
+	if (!Config.AutoEquip) {
+		return true;
+	}
+
+	let charmID = [603, 604, 605].indexOf(item.classid);
+
+	if (charmID < 0) { // not a charm
+		return false;
+	}
+
+	let equipped = Check.equippedCharms[charmID].first(),
+		tier = NTIP.GetCharmTier(item),
+		oldTier = Check.equippedCharms[charmID].length < Item.getCharmLimit(item.classid) ? -1 : NTIP.GetCharmTier(equipped);
+
+	if (tier > oldTier || item.gid === equipped.gid) {
+		return true;
+	}
+
+	return false;
+};
+
+Item.autoEquipCharm = function () {
+	if (!Config.AutoEquip) {
+		return true;
+	}
+
+	var charmID, equipped, tier, oldTier,
+		items = me.getItems()
+			.filter(item =>
+				Item.canEquipCharm(item)
+				&& [3, 7].indexOf(item.location) > -1
+			)
+			.sort((a, b) => a.classid - b.classid);
+
+	if (!items) {
+		return false;
+	}
+
+	me.cancel();
+
+	while (items.length > 0) {
+		charmID = [603, 604, 605].indexOf(items[0].classid);
+		tier = NTIP.GetCharmTier(items[0]);
+		equipped = Check.equippedCharms[charmID].first();
+		oldTier = Check.equippedCharms[charmID].length < Item.getCharmLimit(items[0].classid) ? -1 : NTIP.GetCharmTier(equipped);
+
+		if (tier > oldTier) {
+			if (Check.equippedCharms[charmID].filter(unit => unit.gid === items[0].gid).length < 1) {
+				print(items[0].name);
+
+				if (this.equipCharm(items[0])) {
+					Misc.logItem("Equipped", me.getItem(-1, -1, items[0].gid));
+
+					if (Developer.logEquipped) {
+						MuleLogger.logEquippedItems();
+					}
+				}
+			}
+		}
+
+		items.shift();
+	}
+
+	Check.equippedCharms = [[], [], []];
+	Check.setupCharms();
+
+	return true;
+};
+
 Item.hasMercTier = function (item) {
 	return Config.AutoEquip && NTIP.GetMercTier(item) > 0 && !me.classic;
 };
@@ -547,8 +703,18 @@ Item.autoEquipMerc = function () {
 					let cursorItem = getUnit(100);
 
 					if (cursorItem) {
-						cursorItem.drop();
-						Misc.logItem("Merc Dropped", cursorItem);
+						if (Pickit.checkItem(cursorItem).result === 1) { // only keep wanted items
+							if (Storage.Inventory.CanFit(cursorItem)) {
+								Storage.Inventory.MoveTo(cursorItem);
+							}
+						}
+
+						cursorItem = getUnit(100);
+
+						if (cursorItem) {
+							cursorItem.drop();
+							Misc.logItem("Merc Dropped", cursorItem);
+						}
 					}
 
 					break;

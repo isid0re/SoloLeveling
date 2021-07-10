@@ -12,6 +12,7 @@ if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
 
 function SoloLeveling () {
 	this.setup = function () {
+		Check.setupCharms();
 		print('ÿc9SoloLevelingÿc0: start run');
 		me.overhead('starting run');
 

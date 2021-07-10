@@ -341,3 +341,109 @@ var tierscore = function (item) {
 
 	return tier;
 };
+
+var charmscore = function (item) {
+	var resistWeights = {
+		FR: 2, // fire resist
+		LR: 2, // lightning resist
+		CR: 1.5, // cold resist
+		PR: 1, // poison resist
+	};
+
+	var generalWeights = {
+		FRW: 1, // faster run/walk
+		FHR: 3, // faster hit recovery
+		DEF: 0.05, // defense
+		MF: 3, //Magic Find
+		// base stats
+		HP:	1.1,
+		MANA: 1.1,
+		STR: 1,
+		DEX: 1,
+		MINDMG:	Check.Build().caster ? 0 : 3, // min damage
+		MAXDMG: Check.Build().caster ? 0 : 3, // max damage
+		ELEDMG: Check.Build().caster ? 0 : 0.25, // elemental damage
+		AR:	Check.Build().caster ? 0 : 0.5, // attack rating
+	};
+
+	var skillsWeights = {
+		ALL: 2000, // + all skills
+		CLASS: 1750, // + class tab
+		TAB: 1250, // + skill tab
+	};
+
+	this.generalScore = function (item) {
+		// faster run/walk
+		let frwRating = 0,
+			needsFrw = !me.getSkill(54, 0); // value FRW if no teleport
+
+		if (needsFrw) {
+			frwRating = item.getStatEx(96) * generalWeights.FRW;
+		}
+
+		//start generalRating
+		let generalRating = 0;
+		generalRating += frwRating; // add faster run walk
+		generalRating += item.getStatEx(80) * generalWeights.MF; // add magic find
+		generalRating += item.getStatEx(99) * generalWeights.FHR; // add faster hit recovery
+		generalRating += item.getStatEx(31) * generalWeights.DEF; //	add Defense
+		generalRating += (item.getStatEx(3) + item.getStatEx(7) + (item.getStatEx(216) / 2048 * me.charlvl)) * generalWeights.HP; // add HP
+		generalRating += (item.getStatEx(1) + item.getStatEx(9) + (item.getStatEx(217) / 2048 * me.charlvl)) * generalWeights.MANA;// add mana
+		generalRating += item.getStatEx(0) * generalWeights.STR; // add STR
+		generalRating += item.getStatEx(2) * generalWeights.DEX; // add DEX
+		generalRating += item.getStatEx(21) * generalWeights.MINDMG; // add MIN damage
+		generalRating += item.getStatEx(22) * generalWeights.MAXDMG; // add MAX damage
+		generalRating += (item.getStatEx(48) + item.getStatEx(49) + item.getStatEx(50) + item.getStatEx(51) + item.getStatEx(52) + item.getStatEx(53) + item.getStatEx(54) + item.getStatEx(55) + (item.getStatEx(57) * 125 / 256)) * generalWeights.ELEDMG; // add elemental damage PSN damage adjusted for damage per frame (125/256)
+		generalRating += item.getStatEx(19) * generalWeights.AR; // add AR
+
+		return generalRating;
+	};
+
+	this.resistScore = function (item) {
+		let resistRating = 0;
+		// current total resists
+		let currFR = me.getStat(39); // current fire resist
+		let currCR = me.getStat(43); // current cold resist
+		let currLR = me.getStat(41); // current lite resist
+		let currPR = me.getStat(45); // current poison resist
+		// if currRes < max resists give score value upto max resists reached
+		let maxRes = !me.classic ? 175 : 125;
+		let FRlimit = Math.max(maxRes - currFR, 0);
+		let CRlimit = Math.max(maxRes - currCR, 0);
+		let LRlimit = Math.max(maxRes - currLR, 0);
+		let PRlimit = Math.max(maxRes - currPR, 0);
+		// get new item stats
+		let newitemFR = Math.max(item.getStatEx(39), 0); // fire resist
+		let newitemCR = Math.max(item.getStatEx(43), 0); // cold resist
+		let newitemLR = Math.max(item.getStatEx(41), 0); // lite resist
+		let newitemPR = Math.max(item.getStatEx(45), 0); // poison resist
+		// newitemRes upto reslimit
+		let effectiveFR = Math.min(newitemFR, FRlimit);
+		let effectiveCR = Math.min(newitemCR, CRlimit);
+		let effectiveLR = Math.min(newitemLR, LRlimit);
+		let effectivePR = Math.min(newitemPR, PRlimit);
+		// sum resistRatings
+		resistRating += effectiveFR * resistWeights.FR; // add fireresist
+		resistRating += effectiveCR * resistWeights.CR; // add coldresist
+		resistRating += effectiveLR * resistWeights.LR; // add literesist
+		resistRating += effectivePR * resistWeights.PR; // add poisonresist
+
+		return resistRating;
+	};
+
+	this.skillsScore = function (item) {
+		let skillsRating = 0;
+		skillsRating += item.getStatEx(127) * skillsWeights.ALL; // + all skills
+		skillsRating += item.getStatEx(83, me.classid) * skillsWeights.CLASS; // + class skills
+		skillsRating += item.getStatEx(188, Check.Build().tabSkills) * skillsWeights.TAB; // + TAB skills
+
+		return skillsRating;
+	};
+
+	let charmTier = 1; // set to 1 for native autoequip to use items.
+	charmTier += this.generalScore(item);
+	charmTier += this.resistScore(item);
+	charmTier += this.skillsScore(item);
+
+	return charmTier;
+};

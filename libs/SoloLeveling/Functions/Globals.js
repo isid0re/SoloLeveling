@@ -609,6 +609,31 @@ var Check = {
 			finalGear: build.autoEquipTiers,
 		};
 	},
+
+	setupCharms: function () {
+		let i, equipped, limit,
+			type = [603, 604, 605],
+			items = me.getItems()
+				.filter(item => item.location === 3 && type.indexOf(item.classid) > -1)
+				.sort((a, b) => a.classid - b.classid);
+
+		for (i = 0; i < type.length; i++) {
+			equipped = items.filter(item => item.classid === type[i])
+				.sort((a, b) => NTIP.GetCharmTier(a) - NTIP.GetCharmTier(b));
+
+			limit = Item.getCharmLimit(type[i]) * -1; // trim off lowest tier
+			equipped = equipped.slice(limit);
+
+			while (equipped.length > 0) {
+				Check.equippedCharms[i].push(copyUnit(equipped[0]));
+				equipped.shift();
+			}
+		}
+
+		return true;
+	},
+
+	equippedCharms: [[],[],[]],
 };
 
 var indexOfMax = function (arr) {

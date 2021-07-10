@@ -75,12 +75,12 @@ Pickit.checkItem = function (unit) {
 			};
 		}
 
-		/*if (Item.autoEquipCheckCharm(unit)) {
+		if (Item.autoEquipCheckCharm(unit)) {
 			return {
 				result: 1,
 				line: "Autoequip CharmTier: " + NTIP.GetCharmTier(unit)
 			};
-		}*/
+		}
 
 		return rvalNoTier;
 	}
