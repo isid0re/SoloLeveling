@@ -11,7 +11,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 - Includes character build options for final respec
 - Plays and finishes the game through Act 5 Hell
 - Hires class/build specific mercenary
-- Fully configured Autoequip for bot and mercenary
+- Fully configured Autoequip for bot and mercenary (includes inventory charms)
 - Makes and equips CTA and spirit shield on swap
 
 ## Available Characters and Builds
