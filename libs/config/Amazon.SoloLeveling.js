@@ -154,6 +154,7 @@ function LoadConfig () {
 
 	var levelingTiers = [ // autoequip setup
 		//weapon
+		"[Name] == CrystalSword && [flag] == runeword # [plusskillbattleorders] >= 1", // CTA for swap
 		"me.charlvl < 25 && ([Type] == bow || [Type] == amazonbow) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		"me.charlvl < 25 && [Type] == bowquiver # # [MaxQuantity] == 2",
 		"me.charlvl > 24 && ([Type] == javelin || [Type] == amazonjavelin) && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
