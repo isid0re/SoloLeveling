@@ -251,7 +251,7 @@ var Check = {
 
 			break;
 		case "countess": //countess
-			if (me.classic && !me.countess || !me.classic && needRunes) { // classic quest completed normal || have runes for difficulty
+			if (me.classic && !me.countess || !me.classic && (needRunes || !me.hell && !Check.Gold())) { // classic quest completed normal || have runes for difficulty
 				return true;
 			}
 
@@ -305,7 +305,7 @@ var Check = {
 
 			break;
 		case "tombs": //tombs
-			if (Pather.accessToAct(2) && me.normal && me.charlvl < 25) {
+			if (Pather.accessToAct(2) && (me.normal && me.charlvl < 25 || !Check.Gold())) {
 				return true;
 			}
 
@@ -323,7 +323,7 @@ var Check = {
 
 			break;
 		case "templeruns": //temple runs
-			if (Pather.accessToAct(3) && (!me.lamessen || me.nightmare && me.charlvl < 50 || me.hell)) {
+			if (Pather.accessToAct(3) && (!me.lamessen || me.nightmare && me.charlvl < 50 || me.hell || !Check.Gold())) {
 				return true;
 			}
 
