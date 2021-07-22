@@ -57,12 +57,12 @@ var Overlay = {
 				format = "";
 				mygold = me.getStat(14) + me.getStat(15);
 
-				if (mygold > 99999) {
+				if (mygold > 999999) {
 					mygold = (mygold / 1000000).toFixed(1);
 					format = "M";
 				}
 
-				if (mygold > 9999 && mygold <= 99999) {
+				if (mygold > 9999 && mygold <= 999999) {
 					mygold = (mygold / 1000).toFixed(1);
 					format = "K";
 				}

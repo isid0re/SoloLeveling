@@ -336,24 +336,26 @@ Item.equipCharm = function (item) {
 		equipped = Check.equippedCharms[charmID],
 		lowestrank = equipped.first();
 
-	if (item.location === 7) {
-		Town.openStash();
+	if (equipped.map(x => x.gid).indexOf(item.gid) === -1) {
+		if (item.location === 7) {
+			Town.openStash();
 
-		if (Storage.Inventory.CanFit(item)) {
-			Storage.Inventory.MoveTo(item);
-		}
-
-		me.cancel();
-	}
-
-	if (item.location === 3) {
-		if (equipped.length > Item.getCharmLimit(item.classid)) {
-			if (Pickit.checkItem(lowestrank).result !== 1) {
-				lowestrank.drop();
+			if (Storage.Inventory.CanFit(item)) {
+				Storage.Inventory.MoveTo(item);
 			}
+
+			me.cancel();
 		}
 
-		return true;
+		if (item.location === 3) {
+			if (equipped.length > Item.getCharmLimit(item.classid)) {
+				if (Pickit.checkItem(lowestrank).result !== 1) {
+					lowestrank.drop();
+				}
+			}
+
+			return true;
+		}
 	}
 
 	return false;
@@ -409,7 +411,7 @@ Item.autoEquipCharm = function () {
 		return true;
 	}
 
-	var charmID, equipped, tier, oldTier,
+	var charmID, equipped, logItem, tier, oldTier,
 		items = me.getItems()
 			.filter(item =>
 				Item.canEquipCharm(item)
@@ -428,13 +430,14 @@ Item.autoEquipCharm = function () {
 		tier = NTIP.GetCharmTier(items[0]);
 		equipped = Check.equippedCharms[charmID].first();
 		oldTier = Check.equippedCharms[charmID].length < Item.getCharmLimit(items[0].classid) ? -1 : NTIP.GetCharmTier(equipped);
+		logItem = items[0];
 
-		if (Check.equippedCharms[charmID].map(x => x.gid).indexOf(items[0].gid) === -1) {
-			if (tier > oldTier) {
+		if (Check.equippedCharms[charmID].length > 0) {
+			if (tier > oldTier && Check.equippedCharms[charmID].map(x => x.gid).indexOf(items[0].gid) === -1) {
 				print(items[0].name);
 
 				if (this.equipCharm(items[0])) {
-					Misc.logItem("Equipped", me.getItem(-1, -1, items[0].gid));
+					Misc.logItem("Equipped", me.getItem(-1, -1, logItem.gid));
 
 					if (Developer.logEquipped) {
 						MuleLogger.logEquippedItems();
