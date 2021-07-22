@@ -376,6 +376,12 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.AttackSkill = [154, 144, 154, 144, 154];
 
+			if (SetUp.finalBuild === "bumper") {
+				print("ÿc9SoloLevelingÿc0: Bumper completed");
+				D2Bot.printToConsole('SoloLeveling: Bumper completed');
+
+				D2Bot.stop();
+			}
 		}
 	},
 

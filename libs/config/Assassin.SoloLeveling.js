@@ -22,8 +22,6 @@
 *		2. Select the Bots profile
 *		3. In the info tag box enter one of the following choices:
 *			Trapsin
-*			Whirlwind
-*           Kicksin
 *			Bumper
 *
 *	Selecting the entry script and run the bot
