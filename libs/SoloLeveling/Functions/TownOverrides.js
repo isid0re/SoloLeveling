@@ -164,7 +164,7 @@ Town.identify = function () {
 	// Avoid unnecessary NPC visits
 	for (i = 0; i < list.length; i += 1) {
 		// Only unid items or sellable junk (low level) should trigger a NPC visit
-		if ((!list[i].getFlag(0x10) || Config.LowGold > 0) && ([-1, 4].indexOf(Pickit.checkItem(list[i]).result) > -1 || (!list[i].getFlag(0x10) && (Item.hasTier(list[i]) || Item.hasMercTier(list[i]))))) {
+		if ((!list[i].getFlag(0x10) || Config.LowGold > 0) && ([-1, 4].indexOf(Pickit.checkItem(list[i]).result) > -1 || (!list[i].getFlag(0x10) && (Item.hasTier(list[i]) || Item.hasCharmTier(list[i]) || Item.hasMercTier(list[i]))))) {
 			break;
 		}
 	}
@@ -193,7 +193,7 @@ Town.identify = function () {
 			result = Pickit.checkItem(item);
 
 			// Force ID for unid items matching autoEquip criteria
-			if (result.result === 1 && !item.getFlag(0x10) && (Item.hasTier(item) || Item.hasMercTier(item))) {
+			if (result.result === 1 && !item.getFlag(0x10) && (Item.hasTier(item) || Item.hasCharmTier(item) || Item.hasMercTier(item))) {
 				result.result = -1;
 			}
 
@@ -834,7 +834,7 @@ Town.drinkPots = function () {
 Town.canStash = function (item) {
 	var ignoredClassids = [91, 174]; // Some quest items that have to be in inventory or equipped
 
-	if (!Item.canStashCharm(item) || this.ignoredItemTypes.indexOf(item.itemType) > -1 || ignoredClassids.indexOf(item.classid) > -1) {
+	if (!item.getFlag(0x10) || !Item.canStashCharm(item) || this.ignoredItemTypes.indexOf(item.itemType) > -1 || ignoredClassids.indexOf(item.classid) > -1) {
 		return false;
 	}
 

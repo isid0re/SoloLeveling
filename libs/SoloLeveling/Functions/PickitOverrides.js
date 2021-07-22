@@ -53,14 +53,14 @@ Pickit.checkItem = function (unit) {
 		};
 	}
 
-	if ((NTIP.GetCharmTier(unit) > 0 || NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && !unit.getFlag(0x10)) {
+	if ((NTIP.GetCharmTier(unit) > -1 || NTIP.GetMercTier(unit) > -1 || NTIP.GetTier(unit) > -1) && !unit.getFlag(0x10)) {
 		return {
 			result: -1,
 			line: null
 		};
 	}
 
-	if ((NTIP.GetCharmTier(unit) > 0 || NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && unit.getFlag(0x10)) {
+	if ((NTIP.GetCharmTier(unit) > -1 || NTIP.GetMercTier(unit) > -1 || NTIP.GetTier(unit) > -1) && unit.getFlag(0x10)) {
 		if (Item.autoEquipCheck(unit)) {
 			return {
 				result: 1,
