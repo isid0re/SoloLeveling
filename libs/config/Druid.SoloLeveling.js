@@ -3,6 +3,19 @@
 *	@author		isid0re
 *	@desc		Config Settings for SoloLeveling Druid
 *
+*	Profile settings
+*		To setup the profile.
+*		1. Add a profile in D2Bot.exe console
+*		2. Name the profile one of the following:
+*			SCL-DRU  // for softcore ladder
+*			SCNL-DRU  // for softcore nonladder
+*			SCCL-DRU  // for softcore classic ladder
+*			SCCNL-DRU  // for softcore classic nonladder
+*			HCL-DRU  // for hardcore ladder
+*			HCNL-DRU  // for hardcore nonladder
+*			HCCL-DRU  // for hardcore classic ladder
+*			HCCNL-DRU  // for hardcore classic nonladder
+*
 *	FinalBuild choices
 *		To select your finalbuild.
 *		1. Go into the D2BS console manager.
@@ -12,9 +25,11 @@
 *			Elemental
 *			Wolf
 *			Plaguewolf
-*			Nbumper // normal bumper
-*			Nmbumper // nightmare bumper
-*		4. Save the profile and start
+*			Bumper
+*
+*	Selecting the entry script and run the bot
+*		1. Select D2Bot.SoloLevelingEntry.dbj
+*		2. Save the profile and start
 */
 
 function LoadConfig () {
@@ -233,7 +248,7 @@ function LoadConfig () {
 
 	Config.SummonRaven = false;
 	Config.SummonAnimal = 0; // 0 = disabled, 1 or "Spirit Wolf" = summon spirit wolf, 2 or "Dire Wolf" = summon dire wolf, 3 or "Grizzly" = summon grizzly
-	Config.SummonSpirit = 0; // 0 = disabled, 1 / "Oak Sage", 2 / "Heart of Wolverine", 3 / "Spirit of Barbs"
+	Config.SummonSpirit = 0; // 0 = disabled, 1 / "Oak Sage", 2 / "Heart of Wolverine", 3 / "Spirit of DRUs"
 	Config.SummonVine = 0; // 0 = disabled, 1 / "Poison Creeper", 2 / "Carrion Vine", 3 / "Solar Creeper"
 
 	/* LOD gear */

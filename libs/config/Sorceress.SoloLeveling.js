@@ -3,6 +3,19 @@
 *	@author		isid0re
 *	@desc		Config Settings for SoloLeveling Sorceress
 *
+*	Profile settings
+*		To setup the profile.
+*		1. Add a profile in D2Bot.exe console
+*		2. Name the profile one of the following:
+*			SCL-SORC  // for softcore ladder
+*			SCNL-SORC  // for softcore nonladder
+*			SCCL-SORC  // for softcore classic ladder
+*			SCCNL-SORC  // for softcore classic nonladder
+*			HCL-SORC  // for hardcore ladder
+*			HCNL-SORC  // for hardcore nonladder
+*			HCCL-SORC  // for hardcore classic ladder
+*			HCCNL-SORC  // for hardcore classic nonladder
+*
 *	FinalBuild choices
 *		To select your finalbuild.
 *		1. Go into the D2BS console manager.
@@ -13,9 +26,11 @@
 *			BlizzBaller
 *			Blova
 *			Lightning
-*			Nbumper // normal bumper
-*			Nmbumper // nightmare bumper
-*		4. Save the profile and start
+*			Bumper
+*
+*	Selecting the entry script and run the bot
+*		1. Select D2Bot.SoloLevelingEntry.dbj
+*		2. Save the profile and start
 */
 
 function LoadConfig () {

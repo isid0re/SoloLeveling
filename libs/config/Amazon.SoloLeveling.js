@@ -3,6 +3,19 @@
 *	@author		isid0re
 *	@desc		Config Settings for SoloLeveling Amazon
 *
+*	Profile settings
+*		To setup the profile.
+*		1. Add a profile in D2Bot.exe console
+*		2. Name the profile one of the following:
+*			SCL-ZON  // for softcore ladder
+*			SCNL-ZON  // for softcore nonladder
+*			SCCL-ZON  // for softcore classic ladder
+*			SCCNL-ZON  // for softcore classic nonladder
+*			HCL-ZON  // for hardcore ladder
+*			HCNL-ZON  // for hardcore nonladder
+*			HCCL-ZON  // for hardcore classic ladder
+*			HCCNL-ZON  // for hardcore classic nonladder
+*
 *	FinalBuild choices
 *		To select your finalbuild.
 *		1. Go into the D2BS console manager.
@@ -10,9 +23,11 @@
 *		3. In the info tag box enter one of the following choices:
 *			Witchyzon
 *			Javazon
-*			Nbumper // normal bumper
-*			Nmbumper // nightmare bumper
-*		4. Save the profile and start
+*			Bumper
+*
+*	Selecting the entry script and run the bot
+*		1. Select D2Bot.SoloLevelingEntry.dbj
+*		2. Save the profile and start
 */
 
 function LoadConfig () {

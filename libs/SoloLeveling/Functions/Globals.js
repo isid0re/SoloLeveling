@@ -96,7 +96,7 @@ var SetUp = {
 				respec = Check.haveItem("sword", "runeword", "Grief") ? me.charlvl : 100;
 				break;
 			case "Frenzy":
-				respec = Check.haveItem("weapon", "runeword", "Grief") && Check.haveItem("weapon", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+				respec = Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("sword", "runeword", "Breath of the Dying") ? me.charlvl : 100;
 				break;
 			case "Wolf":
 				respec = Check.haveItem("stalagmite", "unique", "Ribcracker") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
@@ -595,7 +595,7 @@ var Check = {
 		var template = getBuildTemplate();
 
 		if (!include(template)) {
-			if (["Nbumper", "Nmbumper"].indexOf(SetUp.finalBuild) > -1) {
+			if (SetUp.finalBuild === "Bumper") {
 				return {
 					caster: true,
 					tabSkills: -1,

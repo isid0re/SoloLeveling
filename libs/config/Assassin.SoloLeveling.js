@@ -3,6 +3,19 @@
 *	@author		isid0re
 *	@desc		Config Settings for SoloLeveling Assassin
 *
+*	Profile settings
+*		To setup the profile.
+*		1. Add a profile in D2Bot.exe console
+*		2. Name the profile one of the following:
+*			SCL-SIN  // for softcore ladder
+*			SCNL-SIN  // for softcore nonladder
+*			SCCL-SIN  // for softcore classic ladder
+*			SCCNL-SIN  // for softcore classic nonladder
+*			HCL-SIN  // for hardcore ladder
+*			HCNL-SIN  // for hardcore nonladder
+*			HCCL-SIN  // for hardcore classic ladder
+*			HCCNL-SIN  // for hardcore classic nonladder
+*
 *	FinalBuild choices
 *		To select your finalbuild.
 *		1. Go into the D2BS console manager.
@@ -11,9 +24,11 @@
 *			Trapsin
 *			Whirlwind
 *           Kicksin
-*			Nbumper // normal bumper
-*			Nmbumper // nightmare bumper
-*		4. Save the profile and start
+*			Bumper
+*
+*	Selecting the entry script and run the bot
+*		1. Select D2Bot.SoloLevelingEntry.dbj
+*		2. Save the profile and start
 */
 
 function LoadConfig () {

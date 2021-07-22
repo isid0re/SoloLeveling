@@ -3,6 +3,19 @@
 *	@author		isid0re
 *	@desc		Config Settings for SoloLeveling Barbarian
 *
+*	Profile settings
+*		To setup the profile.
+*		1. Add a profile in D2Bot.exe console
+*		2. Name the profile one of the following:
+*			SCL-BARB  // for softcore ladder
+*			SCNL-BARB  // for softcore nonladder
+*			SCCL-BARB  // for softcore classic ladder
+*			SCCNL-BARB  // for softcore classic nonladder
+*			HCL-BARB  // for hardcore ladder
+*			HCNL-BARB  // for hardcore nonladder
+*			HCCL-BARB  // for hardcore classic ladder
+*			HCCNL-BARB  // for hardcore classic nonladder
+*
 *	FinalBuild choices
 *		To select your finalbuild.
 *		1. Go into the D2BS console manager.
@@ -11,9 +24,11 @@
 *			Whirlwind
 *           Singer
 *			Frenzy
-*			Nbumper // normal bumper
-*			Nmbumper // nightmare bumper
-*		4. Save the profile and start
+*			Bumper
+*
+*	Selecting the entry script and run the bot
+*		1. Select D2Bot.SoloLevelingEntry.dbj
+*		2. Save the profile and start
 */
 
 function LoadConfig () {
@@ -278,6 +293,39 @@ function LoadConfig () {
 			}
 
 			break;
+		case 'Frenzy':
+			if (!Check.haveItem("sword", "runeword", "Grief")) {
+				var Grief = [
+					"[Name] == EthRune # # [MaxQuantity] == 1",
+					"[Name] == TirRune # # [MaxQuantity] == 1",
+					"[Name] == LoRune",
+					"[Name] == MalRune",
+					"[Name] == RalRune # # [MaxQuantity] == 1",
+					"[Name] == PhaseBlade && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(Grief);
+
+				Config.Runewords.push([Runeword.Grief, "Phase Blade"]);
+				Config.KeepRunewords.push("[Type] == sword # [ias] >= 30");
+			}
+
+			if (!Check.haveItem("sword", "runeword", "Breath of the Dying")) {
+				var botd = [
+					"[Name] == VexRune",
+					"[Name] == HelRune # # [MaxQuantity] == 1",
+					"[Name] == ElRune # # [MaxQuantity] == 1",
+					"[Name] == EldRune # # [MaxQuantity] == 1",
+					"[Name] == ZodRune",
+					"[Name] == EthRune # # [MaxQuantity] == 1",
+					"[Name] == colossusblade && [flag] == ethereal && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 6 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(botd);
+
+				Config.Runewords.push([Runeword.botd, "Colossus Blade"]);
+				Config.KeepRunewords.push("[Type] == sword # [ias] >= 60");
+			}
+
+			break;
 		default:
 			break;
 		}
@@ -297,7 +345,7 @@ function LoadConfig () {
 			Config.Recipes.push([Recipe.Socket.Shield, "Monarch", Roll.NonEth]);
 			Config.Runewords.push([Runeword.Spirit, "Monarch"]);
 			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fcr] >= 35 && [maxmana] >= 89");
-		
+		}
 
 		if (!Check.haveItem("armor", "runeword", "Enigma")) { // Enigma
 			var Enigma = [

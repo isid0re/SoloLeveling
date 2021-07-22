@@ -231,12 +231,6 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
 			Config.ExplodeCorpses = 74;
 
-			if (SetUp.finalBuild === "Nbumper") {
-				print("ÿc9SoloLevelingÿc0: Bumper completed");
-				D2Bot.printToConsole('SoloLeveling: Bumper completed');
-
-				D2Bot.stop();
-			}
 		}
 	},
 

@@ -3,6 +3,19 @@
 *	@author		isid0re
 *	@desc		Config Settings for SoloLeveling Necromancer
 *
+*	Profile settings
+*		To setup the profile.
+*		1. Add a profile in D2Bot.exe console
+*		2. Name the profile one of the following:
+*			SCL-NECRO  // for softcore ladder
+*			SCNL-NECRO  // for softcore nonladder
+*			SCCL-NECRO  // for softcore classic ladder
+*			SCCNL-NECRO  // for softcore classic nonladder
+*			HCL-NECRO  // for hardcore ladder
+*			HCNL-NECRO  // for hardcore nonladder
+*			HCCL-NECRO  // for hardcore classic ladder
+*			HCCNL-NECRO  // for hardcore classic nonladder
+*
 *	FinalBuild choices
 *		To select your finalbuild.
 *		1. Go into the D2BS console manager.
@@ -11,9 +24,11 @@
 *			Bone
 *			Poison
 *			Summon
-*			Nbumper // normal bumper
-*			Nmbumper // nightmare bumper
-*		4. Save the profile and start
+*			Bumper
+*
+*	Selecting the entry script and run the bot
+*		1. Select D2Bot.SoloLevelingEntry.dbj
+*		2. Save the profile and start
 */
 
 function LoadConfig () {
