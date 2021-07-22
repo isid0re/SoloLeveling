@@ -9,7 +9,7 @@ if (!isIncluded("common/Pather.js")) {
 }
 
 NodeAction.killMonsters = function (arg) {
-	var monList, sanityCheck = [62, 63, 64, 74].indexOf(me.area) > -1 ? true : false;
+	var monList, sanityCheck = [8, 10, 12, 18, 19, 62, 63, 64, 74, 94, 95, 96, 97, 98, 99].indexOf(me.area) > -1 ? true : false;
 
 	if (Config.Countess.KillGhosts && [21, 22, 23, 24, 25].indexOf(me.area) > -1) {
 		monList = Attack.getMob(38, 0, 30);
@@ -45,7 +45,7 @@ NodeAction.killMonsters = function (arg) {
 	}
 
 	if ([8].indexOf(me.area) > -1) {
-		let corpsefire = getUnit(1, "Corpsefire");
+		let corpsefire = getUnit(1, getLocaleString(3319));
 
 		if (corpsefire) {
 			do {
