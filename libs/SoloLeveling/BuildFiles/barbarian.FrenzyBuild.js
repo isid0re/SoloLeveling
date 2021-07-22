@@ -45,6 +45,7 @@ var build = {
 		[138, 1], // Shout
 		[149, 1], // Battle Orders
 		[155, 1], // Battle Command
+		[154, 1], // War Cry
 		[147, 20], // Frenzy
 		[133, 20], // Double Swing
 		[149, 20], // Battle Orders
