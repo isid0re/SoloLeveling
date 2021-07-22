@@ -30,7 +30,7 @@ var mercscore = function (item) {
 		PR: 1, // poison resist
 	};
 
-	let mercRating = 1;
+	let mercRating = 0;
 
 	if (item.prefixnum === 20653) { //treachery
 		mercRating += item.getStatEx(201, 2) * 1000; // fade
@@ -311,7 +311,7 @@ var tierscore = function (item) {
 		return skillsRating;
 	};
 
-	let tier = 1; // set to 1 for native autoequip to use items.
+	let tier = 0;
 	tier += this.generalScore(item);
 	tier += this.resistScore(item);
 	tier += this.buildScore(item);
@@ -440,7 +440,7 @@ var charmscore = function (item) {
 		return skillsRating;
 	};
 
-	let charmTier = 1; // set to 1 for native autoequip to use items.
+	let charmTier = 0;
 	charmTier += this.generalScore(item);
 	charmTier += this.resistScore(item);
 	charmTier += this.skillsScore(item);

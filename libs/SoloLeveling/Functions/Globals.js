@@ -646,7 +646,7 @@ var Check = {
 		return true;
 	},
 
-	equippedCharms: [[],[],[]],
+	equippedCharms: [[], [], []],
 };
 
 var indexOfMax = function (arr) {
