@@ -87,6 +87,27 @@ function baal () {
 		delay(500 + me.ping);
 	}
 
+	switch (SetUp.finalBuild) {
+	case "Nbumper":
+		if (me.normal) {
+			print("ÿc9SoloLevelingÿc0: Bumper check triggered");
+
+			return true;
+		}
+
+		break;
+	case "Nmbumper":
+		if (me.nightmare) {
+			print("ÿc9SoloLevelingÿc0: Bumper check triggered");
+
+			return true;
+		}
+
+		break;
+	default:
+		break;
+	}
+
 	let portal = getUnit(2, 563);
 
 	if (portal) {

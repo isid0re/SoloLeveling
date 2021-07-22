@@ -431,8 +431,8 @@ Item.autoEquipCharm = function () {
 		equipped = Check.equippedCharms[charmID].first();
 		oldTier = Check.equippedCharms[charmID].length < Item.getCharmLimit(items[0].classid) ? -1 : NTIP.GetCharmTier(equipped);
 
-		if (tier > oldTier) {
-			if (Check.equippedCharms[charmID].filter(unit => unit.gid === items[0].gid).length < 1) {
+		if (Check.equippedCharms[charmID].filter(unit => unit.gid === items[0].gid).length < 1) {
+			if (tier > oldTier) {
 				print(items[0].name);
 
 				if (this.equipCharm(items[0])) {

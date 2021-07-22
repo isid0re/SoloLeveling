@@ -13,6 +13,8 @@
 *			BlizzBaller
 *			Blova
 *			Lightning
+*			Nbumper // normal bumper
+*			Nmbumper // nightmare bumper
 *		4. Save the profile and start
 */
 
@@ -267,7 +269,7 @@ function LoadConfig () {
 				Config.Runewords.push([Runeword.Infinity, "Great Poleaxe"]);
 				Config.Runewords.push([Runeword.Infinity, "Cryptic Axe"]);
 				Config.Runewords.push([Runeword.Infinity, "Thresher"]);
-				Config.KeepRunewords.push("[type] == polearm # [convictionaura] >= 13");
+				Config.KeepRunewords.push("[type] == polearm # [convictionaura] >= 12");
 			}
 
 			if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItem(5).tier < 1000) { // Spirit shield

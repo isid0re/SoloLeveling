@@ -232,7 +232,7 @@ var Check = {
 			}
 
 			break;
-		case "bloodraven": //bloodaraven
+		case "bloodraven": //bloodraven
 			if (me.normal && !me.bloodraven) {
 				return true;
 			}
@@ -428,13 +428,13 @@ var Check = {
 
 	Resistance: function () {
 		let resStatus,
-			resPenalty = me.classic ? [0, 20, 50, 50][me.diff + 1] : [ 0, 40, 100, 100][me.diff + 1],
-			frRes = me.getStat(39) - resPenalty,
-			lrRes = me.getStat(41) - resPenalty,
-			crRes = me.getStat(43) - resPenalty,
-			prRes = me.getStat(45) - resPenalty;
+			resPenalty = me.classic ? [0, 20, 50, 50] : [ 0, 40, 100, 100],
+			frRes = me.getStat(39),
+			lrRes = me.getStat(41),
+			crRes = me.getStat(43),
+			prRes = me.getStat(45);
 
-		if ((frRes >= 0) && (lrRes >= 0) && (crRes >= 0)) {
+		if ((frRes - resPenalty[me.diff + 1] >= 0) && (lrRes - resPenalty[me.diff + 1] >= 0) && (crRes - resPenalty[me.diff + 1] >= 0)) {
 			resStatus = true;
 		} else {
 			resStatus = false;
@@ -442,10 +442,10 @@ var Check = {
 
 		return {
 			Status: resStatus,
-			FR: frRes,
-			CR: crRes,
-			LR: lrRes,
-			PR: prRes,
+			FR: frRes - resPenalty[me.diff],
+			CR: crRes - resPenalty[me.diff],
+			LR: lrRes - resPenalty[me.diff],
+			PR: prRes - resPenalty[me.diff],
 		};
 	},
 
@@ -595,6 +595,19 @@ var Check = {
 		var template = getBuildTemplate();
 
 		if (!include(template)) {
+			if (["Nbumper", "Nmbumper"].indexOf(SetUp.finalBuild) > -1) {
+				return {
+					caster: true,
+					tabSkills: -1,
+					wantedSkills: -1,
+					usefulSkills: -1,
+					mercAuraName: "holy freeze",
+					mercAuraWanted: 104,
+					mercDiff: 2,
+					finalGear: -1,
+				};
+			}
+
 			throw new Error("buildCheck(): Failed to include template: " + template);
 		}
 

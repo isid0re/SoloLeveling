@@ -42,7 +42,7 @@ var Overlay = {
 		},
 
 		getRes: function (resistance) {
-			var penalty = [[0, 20, 50], [0, 40, 100]][me.gametype][me.diff];
+			var format, mygold, penalty = [[0, 20, 50], [0, 40, 100]][me.gametype][me.diff];
 
 			switch (resistance) {
 			case "fire":
@@ -53,6 +53,21 @@ var Overlay = {
 				return me.getStat(41) - penalty;
 			case "poison":
 				return me.getStat(45) - penalty;
+			case "gold":
+				format = "";
+				mygold = me.getStat(14) + me.getStat(15);
+
+				if (mygold > 9999) {
+					mygold = (mygold / 1000).toPrecision(3);
+					format = "K";
+				}
+
+				if (mygold > 99999) {
+					mygold = (mygold / 1000000).toPrecision(3);
+					format = "M";
+				}
+
+				return mygold + format;
 			default:
 				break;
 			}
@@ -96,7 +111,7 @@ var Overlay = {
 			if (!this.getHook("resistances")) {
 				this.add("resistances");
 			} else {
-				this.getHook("resistances").hook.text = "FR: ÿc1" + this.getRes("fire") + "ÿc4   CR: ÿc3" + this.getRes("cold") + "ÿc4   LR: ÿc9" + this.getRes("light") + "ÿc4   PR: ÿc2" + this.getRes("poison");
+				this.getHook("resistances").hook.text = "FR: ÿc1" + this.getRes("fire") + "ÿc4   CR: ÿc3" + this.getRes("cold") + "ÿc4   LR: ÿc9" + this.getRes("light") + "ÿc4   PR: ÿc2" + this.getRes("poison") + "ÿc4   Gold: ÿc0" + this.getRes("gold");
 			}
 
 			switch (me.act) {
@@ -398,7 +413,7 @@ var Overlay = {
 				this.hooks.push({
 					name: "resistances",
 					hook: new Text(
-						"FR: ÿc1" + this.getRes("fire") + "ÿc4   CR: ÿc3" + this.getRes("cold") + "ÿc4   LR: ÿc9" + this.getRes("light") + "ÿc4   PR: ÿc2" + this.getRes("poison"), Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY + 45, 4, 13, 2)
+						"FR: ÿc1" + this.getRes("fire") + "ÿc4   CR: ÿc3" + this.getRes("cold") + "ÿc4   LR: ÿc9" + this.getRes("light") + "ÿc4   PR: ÿc2" + this.getRes("poison") + "ÿc4   Gold: ÿc0" + this.getRes("poison"), Overlay.dashboardX + Overlay.resfixX, Overlay.dashboardY + Overlay.resfixY + 45, 4, 13, 2)
 				});
 
 				break;

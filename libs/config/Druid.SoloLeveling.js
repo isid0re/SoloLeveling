@@ -12,6 +12,8 @@
 *			Elemental
 *			Wolf
 *			Plaguewolf
+*			Nbumper // normal bumper
+*			Nmbumper // nightmare bumper
 *		4. Save the profile and start
 */
 

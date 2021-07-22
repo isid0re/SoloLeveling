@@ -11,6 +11,8 @@
 *			Bone
 *			Poison
 *			Summon
+*			Nbumper // normal bumper
+*			Nmbumper // nightmare bumper
 *		4. Save the profile and start
 */
 
@@ -233,7 +235,7 @@ function LoadConfig () {
 	Config.DodgeRange = 5;
 
 	Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
-	Config.Curse[1] = me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
+	Config.Curse[1] = me.normal && me.getSkill(71, 0) ? 71 : me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
 
 	Config.ExplodeCorpses = me.getSkill(74, 0) ? 74 : me.getSkill(83, 0) ? 83 : 0;
 	Config.Golem = me.getSkill(75, 0) ? "Clay" : "None";

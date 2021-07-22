@@ -116,6 +116,7 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
 			Config.TownCheck = me.findItem("tbk", 0, 3);
 			Config.TownHP = me.playertype ? 0 : Config.TownCheck ? 35 : 0;
+			Config.Curse[1] = me.normal && me.getSkill(71, 0) ? 71 : me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
 		}
 	},
 
@@ -211,8 +212,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
-			Config.Curse[1] = 66;
-			Config.ExplodeCorpses = 74;
+
 		}
 	},
 
@@ -229,6 +229,15 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
+			Config.Curse[1] = 66;
+			Config.ExplodeCorpses = 74;
+
+			if (SetUp.finalBuild === "Nbumper") {
+				print("ÿc9SoloLevelingÿc0: Bumper completed");
+				D2Bot.printToConsole('SoloLeveling: Bumper completed');
+
+				D2Bot.stop();
+			}
 		}
 	},
 

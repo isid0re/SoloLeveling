@@ -460,15 +460,15 @@ var Container = function (name, width, height, location) {
 	this.Dump = function () {
 		var x, y, string;
 
+		for (x = 0; x < this.height; x += 1) {
+			string = "";
 
-		if (this.UsedSpacePercent() > 60) {
-			for (x = 0; x < this.height; x += 1) {
-				string = "";
+			for (y = 0; y < this.width; y += 1) {
+				string += (this.buffer[x][y] > 0) ? "ÿc1x" : "ÿc0o";
+			}
 
-				for (y = 0; y < this.width; y += 1) {
-					string += (this.buffer[x][y] > 0) ? "ÿc1x" : "ÿc0o";
-				}
-
+			if (this.UsedSpacePercent() > 85) {
+				print("ÿc9SoloLevelingÿc0: Warning" + this.name + " is almost full.");
 				print(string);
 			}
 		}

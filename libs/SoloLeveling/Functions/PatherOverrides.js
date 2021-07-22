@@ -44,6 +44,21 @@ NodeAction.killMonsters = function (arg) {
 		}
 	}
 
+	if ([8].indexOf(me.area) > -1) {
+		let corpsefire = getUnit(1, "Corpsefire");
+
+		if (corpsefire) {
+			do {
+				if (!Attack.canAttack(corpsefire)) {
+					Town.goToTown();
+					print('ÿc9SoloLevelingÿc0: exit Den. Corpsefire immune.');
+					me.overhead('Exit Den. Corpsefire immune.');
+				}
+			} while (corpsefire.getNext());
+		}
+	}
+
+
 	if ((typeof Config.ClearPath === "number" || typeof Config.ClearPath === "object") && arg.clearPath === false) {
 		switch (typeof Config.ClearPath) {
 		case "number":

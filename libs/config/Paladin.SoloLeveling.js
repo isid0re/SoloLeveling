@@ -10,6 +10,8 @@
 *		3. In the info tag box enter one of the following choices:
 *			Hammerdin
 *			Smiter
+*			Nbumper // normal bumper
+*			Nmbumper // nightmare bumper
 *		4. Save the profile and start
 */
 

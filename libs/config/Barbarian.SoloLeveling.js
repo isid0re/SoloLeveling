@@ -10,6 +10,9 @@
 *		3. In the info tag box enter one of the following choices:
 *			Whirlwind
 *           Singer
+*			Frenzy
+*			Nbumper // normal bumper
+*			Nmbumper // nightmare bumper
 *		4. Save the profile and start
 */
 

@@ -6,7 +6,7 @@
  */
 
 var build = {
-	caster: true,
+	caster: me.charlvl === SetUp.respecTwo() ? true : false,
 	skillstab: 32, // Combat
 	wantedskills: [154, 138], //warcry, shout
 	usefulskills: [148, 153], //increased speed, natural resistance

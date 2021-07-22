@@ -339,6 +339,138 @@ case 2: // Necromancer
 		return false;
 	};
 
+	ClassAttack.doAttack = function (unit, preattack) {
+		Misc.townCheck();
+
+		if (!this.cursesSet) {
+			this.initCurses();
+		}
+
+		if (Config.MercWatch && Town.needMerc()) {
+			Town.visitTown();
+		}
+
+		if (preattack && Config.AttackSkill[0] > 0 && Attack.checkResist(unit, Config.AttackSkill[0]) && (!me.getState(121) || !Skill.isTimed(Config.AttackSkill[0]))) {
+			if (Math.round(getDistance(me, unit)) > Skill.getRange(Config.AttackSkill[0]) || checkCollision(me, unit, 0x4)) {
+				if (!Attack.getIntoPosition(unit, Skill.getRange(Config.AttackSkill[0]), 0x4)) {
+					return 0;
+				}
+			}
+
+			Skill.cast(Config.AttackSkill[0], Skill.getHand(Config.AttackSkill[0]), unit);
+
+			return 1;
+		}
+
+		var index, checkSkill, result,
+			mercRevive = 0,
+			timedSkill = -1,
+			untimedSkill = -1;
+
+		index = ((unit.spectype & 0x7) || unit.type === 0) ? 1 : 3;
+
+		if (Config.Curse[0] > 0 && this.isCursable(unit) && (unit.spectype & 0x7) && !unit.getState(this.curseState[0])) {
+			if (getDistance(me, unit) > 25 || checkCollision(me, unit, 0x4)) {
+				if (!Attack.getIntoPosition(unit, 25, 0x4)) {
+					return 0;
+				}
+			}
+
+			if (me.normal && me.area === 73 && me.getSkill(76, 0)) { // iron maiden curse on normal duriel only
+				Skill.cast(76, 0, unit);
+			} else {
+				Skill.cast(Config.Curse[0], 0, unit);
+			}
+
+			return 1;
+		}
+
+		if (Config.Curse[1] > 0 && this.isCursable(unit) && !(unit.spectype & 0x7) && !unit.getState(this.curseState[1])) {
+			if (getDistance(me, unit) > 25 || checkCollision(me, unit, 0x4)) {
+				if (!Attack.getIntoPosition(unit, 25, 0x4)) {
+					return 0;
+				}
+			}
+
+			Skill.cast(Config.Curse[1], 0, unit);
+
+			return 1;
+		}
+
+		// Get timed skill
+		if (Attack.getCustomAttack(unit)) {
+			checkSkill = Attack.getCustomAttack(unit)[0];
+		} else {
+			checkSkill = Config.AttackSkill[index];
+		}
+
+		if (Attack.checkResist(unit, checkSkill)) {
+			timedSkill = checkSkill;
+		} else if (Config.AttackSkill[5] > -1 && Attack.checkResist(unit, Config.AttackSkill[5]) && ([56, 59].indexOf(Config.AttackSkill[5]) === -1 || Attack.validSpot(unit.x, unit.y))) {
+			timedSkill = Config.AttackSkill[5];
+		}
+
+		// Get untimed skill
+		if (Attack.getCustomAttack(unit)) {
+			checkSkill = Attack.getCustomAttack(unit)[1];
+		} else {
+			checkSkill = Config.AttackSkill[index + 1];
+		}
+
+		if (Attack.checkResist(unit, checkSkill)) {
+			untimedSkill = checkSkill;
+		} else if (Config.AttackSkill[6] > -1 && Attack.checkResist(unit, Config.AttackSkill[6]) && ([56, 59].indexOf(Config.AttackSkill[6]) === -1 || Attack.validSpot(unit.x, unit.y))) {
+			untimedSkill = Config.AttackSkill[6];
+		}
+
+		// Low mana timed skill
+		if (Config.LowManaSkill[0] > -1 && Skill.getManaCost(timedSkill) > me.mp && Attack.checkResist(unit, Config.LowManaSkill[0])) {
+			timedSkill = Config.LowManaSkill[0];
+		}
+
+		// Low mana untimed skill
+		if (Config.LowManaSkill[1] > -1 && Skill.getManaCost(untimedSkill) > me.mp && Attack.checkResist(unit, Config.LowManaSkill[1])) {
+			untimedSkill = Config.LowManaSkill[1];
+		}
+
+		Precast.doPrecast(false);
+		result = this.doCast(unit, timedSkill, untimedSkill);
+
+		if (result === 1) {
+			if (Config.ActiveSummon) {
+				this.raiseArmy();
+			}
+
+			this.explodeCorpses(unit);
+		} else if (result === 2 && Config.TeleStomp && Attack.checkResist(unit, "physical") && !!me.getMerc()) {
+			while (Attack.checkMonster(unit)) {
+				if (Town.needMerc()) {
+					if (Config.MercWatch && mercRevive++ < 1) {
+						Town.visitTown();
+					} else {
+						return 2;
+					}
+				}
+
+				if (getDistance(me, unit) > 3) {
+					Pather.moveToUnit(unit);
+				}
+
+				this.doCast(unit, Config.AttackSkill[1], Config.AttackSkill[2]);
+
+				if (Config.ActiveSummon) {
+					this.raiseArmy();
+				}
+
+				this.explodeCorpses(unit);
+			}
+
+			return 1;
+		}
+
+		return result;
+	};
+
 	break;
 case 3: // Paladin
 	break;
@@ -587,6 +719,6 @@ case 5: // Druid
 	}
 
 	break;
-case 6: // Assasin
+case 6: // Assassin
 	break;
 }

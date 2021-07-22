@@ -25,7 +25,7 @@ function andariel () {
 	Pather.moveToExit([36, 37], true);
 	let resPenalty = [[0, 20, 50], [0, 40, 100]][me.gametype][me.diff];
 
-	if ((me.getStat(45) - resPenalty) < 75 + me.getStat(46)) {
+	if (Check.Resistance().PR < 75 + me.getStat(46)) {
 		Town.doChores();
 		Town.buyPots(8, "Antidote"); // antidote
 		Town.drinkPots();

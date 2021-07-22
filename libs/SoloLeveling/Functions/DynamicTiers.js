@@ -14,7 +14,7 @@ var mercscore = function (item) {
 		ELEDMG: 2, // elemental damage
 		AR:	0.5, // attack rating
 		CB: 3, // crushing blow
-		OW: 3, // open wounds
+		OW: 2, // open wounds
 		LL: 1.5, //lifeleach
 		// regen
 		HPREGEN: 2,
@@ -135,7 +135,7 @@ var tierscore = function (item) {
 		ELEDMG: 1, // elemental damage
 		AR:	0.5, // attack rating
 		CB: 3, // crushing blow
-		OW: 3, // open wounds
+		OW: 2, // open wounds
 		// leaching
 		LL: 1.5, //lifeleach
 		ML:	1.5, //manaleach
@@ -164,7 +164,7 @@ var tierscore = function (item) {
 		if (needsCBF && item.getStatEx(cbfItem)) {
 			let haveCBF = false;
 
-			for (let part = 0; part < body.length; part++) { // total 10 body slots
+			for (let part = 0; part < body.length; part++) { // total 12 body slots
 				if (body[part].getStatEx(cbfItem)) {
 					if (item.gid === body[part].gid) {
 						break;
@@ -386,7 +386,7 @@ var charmscore = function (item) {
 		generalRating += frwRating; // add faster run walk
 		generalRating += item.getStatEx(80) * generalWeights.MF; // add magic find
 		generalRating += item.getStatEx(99) * generalWeights.FHR; // add faster hit recovery
-		generalRating += item.getStatEx(31) * generalWeights.DEF; //	add Defense
+		generalRating += item.getStatEx(31) * generalWeights.DEF; // add Defense
 		generalRating += (item.getStatEx(3) + item.getStatEx(7) + (item.getStatEx(216) / 2048 * me.charlvl)) * generalWeights.HP; // add HP
 		generalRating += (item.getStatEx(1) + item.getStatEx(9) + (item.getStatEx(217) / 2048 * me.charlvl)) * generalWeights.MANA;// add mana
 		generalRating += item.getStatEx(0) * generalWeights.STR; // add STR

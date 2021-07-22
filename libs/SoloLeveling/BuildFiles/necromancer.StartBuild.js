@@ -21,7 +21,8 @@ var build = {
 	skills: [
 		[67, 5], // teeth
 		[68, 1], // bone armor
-		[67, 13], // teeth
+		[71, 1], // dim vision
+		[67, 12], // teeth
 		[75, 1], // clay golem
 		[79, 1], // Golem Mastery
 		[66, 1], // amplified damage
