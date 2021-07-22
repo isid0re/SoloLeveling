@@ -229,7 +229,6 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [-1, 84, -1, 84, -1, -1, -1];
-			Config.Curse[1] = 66;
 			Config.ExplodeCorpses = 74;
 
 			if (SetUp.finalBuild === "Nbumper") {
