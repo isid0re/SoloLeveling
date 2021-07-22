@@ -304,10 +304,8 @@ Item.hasCharmTier = function (item) {
 Item.canStashCharm = function (item) {
 	let charmID = [603, 604, 605].indexOf(item.classid);
 
-	if (charmID > -1) {
-		if (Check.equippedCharms[charmID].filter(unit => unit.gid === item.gid).first()) {
-			return false;
-		}
+	if (charmID > -1 && Check.equippedCharms[charmID].map(x => x.gid).indexOf(item.gid) > -1) {
+		return false;
 	}
 
 	return true;
