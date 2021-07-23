@@ -17,11 +17,12 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 ## Available Characters and Builds
 | Amazon | Sorceress | Necromancer | Paladin | Barbarian | Druid | Assassin |
 |:------:|:-------:|:-------:|:------:|:------:|:------:|:-----:|
-| Javazon | Cold | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
-| Witchyzon | BlizzBaller |   Bone | Smiter| | Elemental |
-| | Meteorb | Summon | |
-| | Blova | |
+| Javazon | Cold | Poison | Hammerdin| Singer | Wind |Trapsin|
+| Witchyzon | BlizzBaller |   Bone | Smiter| Frenzy | Elemental | Bumper |
+| Bumper | Meteorb | Summon | Bumper | Whirlwind| Bumper |
+| | Blova | Bumper | | Bumper |
 | | Lightning | |
+|| Bumper |
 
 ## Frequently Asked Questions
 **Q: Why isn't the bot making the build I selected?**
