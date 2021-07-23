@@ -76,7 +76,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 |SORC| Sorceress Class|
 |NECRO| Necromancer Class|
 |PAL| Paladin Class|
-|BARB| Barbarian Class **NOT CURRENTLY AVAILABLE**|
+|BARB| Barbarian Class |
 |DRU| Druid Class|
 |SIN| Assassin Class|
 
