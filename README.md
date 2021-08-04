@@ -17,11 +17,12 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 ## Available Characters and Builds
 | Amazon | Sorceress | Necromancer | Paladin | Barbarian | Druid | Assassin |
 |:------:|:-------:|:-------:|:------:|:------:|:------:|:-----:|
-| Javazon | Cold | Poison | Hammerdin| Currently N/A | Wind |Trapsin|
-| Witchyzon | BlizzBaller |   Bone | Smiter| | Elemental |
-| | Meteorb | Summon | |
-| | Blova | |
+| Javazon | Cold | Poison | Hammerdin| Singer | Wind |Trapsin|
+| Witchyzon | BlizzBaller |   Bone | Smiter| Frenzy | Elemental | Bumper |
+| Bumper | Meteorb | Summon | Bumper | Whirlwind| Bumper |
+| | Blova | Bumper | | Bumper |
 | | Lightning | |
+|| Bumper |
 
 ## Frequently Asked Questions
 **Q: Why isn't the bot making the build I selected?**
@@ -75,7 +76,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 |SORC| Sorceress Class|
 |NECRO| Necromancer Class|
 |PAL| Paladin Class|
-|BARB| Barbarian Class **NOT CURRENTLY AVAILABLE**|
+|BARB| Barbarian Class |
 |DRU| Druid Class|
 |SIN| Assassin Class|
 
@@ -102,4 +103,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 [GPL-3.0](https://choosealicense.com/licenses/gpl-3.0/)
 
 ## Banner Image 
-The banner for SoloLeveling was graciously provided by [Patricia Dias](https://www.behance.net/patricia_dias).
+The banner for SoloLeveling was graciously provided by Patricia Dias.
