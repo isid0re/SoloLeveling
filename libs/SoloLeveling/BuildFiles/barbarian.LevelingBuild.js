@@ -5,9 +5,9 @@
  */
 
 var build = {
-	caster: false,
+	caster: true,
 	skillstab: 32, // Combat
-	wantedskills: [129, 144, 154], // Mace Mastery, Concentrate, WarCry
+	wantedskills: [127, 144, 154], // Mace Mastery, Concentrate, WarCry
 	usefulskills: [149, 153], // Battle Orders, Natural Resist
 	mercAuraName: "Might",
 	mercAuraWanted: 98,
@@ -15,8 +15,8 @@ var build = {
 	stats: [
 		["vitality", 40], ["dexterity", 35], ["strength", 60],
 		["vitality", 60], ["dexterity", 44], ["strength", 89],
-		["vitality", 96], ["dexterity", 77],
-		["vitality", "all"]
+		["vitality", 96], ["dexterity", 77], ["strength", 118],
+		["dexterity", 136], ["vitality", "all"]
 	],
 	skills: [
 		[129, 5], // Mace Mastery

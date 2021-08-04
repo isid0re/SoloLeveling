@@ -250,8 +250,8 @@ function LoadConfig () {
 
 		switch (SetUp.finalBuild) { // finalbuilld autoequip setup
 		case 'Whirlwind':
-			if (!Check.haveItem("sword", "runeword", "Grief")) {
-				var Grief = [
+			if ((me.ladder || Developer.addLadderRW) && !Check.haveItem("sword", "runeword", "Grief")) {
+				let Grief = [
 					"[Name] == EthRune # # [MaxQuantity] == 1",
 					"[Name] == TirRune # # [MaxQuantity] == 1",
 					"[Name] == LoRune",
@@ -263,6 +263,22 @@ function LoadConfig () {
 
 				Config.Runewords.push([Runeword.Grief, "Phase Blade"]);
 				Config.KeepRunewords.push("[Type] == sword # [ias] >= 30");
+			}
+
+			if (!Check.haveItem("sword", "runeword", "Silence")) {
+				let Silence = [
+					"[Name] == DolRune # # [MaxQuantity] == 1",
+					"[Name] == EldRune # # [MaxQuantity] == 1",
+					"[Name] == HelRune # # [MaxQuantity] == 1",
+					"[Name] == IstRune",
+					"[Name] == TirRune # # [MaxQuantity] == 1",
+					"[Name] == VexRune",
+					"[Name] == PhaseBlade && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 6 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(Silence);
+
+				Config.Runewords.push([Runeword.Silence, "Phase Blade"]);
+				Config.KeepRunewords.push("[Type] == sword # [ias] >= 20");
 			}
 
 			break;
@@ -294,8 +310,8 @@ function LoadConfig () {
 
 			break;
 		case 'Frenzy':
-			if (!Check.haveItem("sword", "runeword", "Grief")) {
-				var Grief = [
+			if ((me.ladder || Developer.addLadderRW) && !Check.haveItem("sword", "runeword", "Grief")) {
+				let Grief = [
 					"[Name] == EthRune # # [MaxQuantity] == 1",
 					"[Name] == TirRune # # [MaxQuantity] == 1",
 					"[Name] == LoRune",
@@ -310,7 +326,7 @@ function LoadConfig () {
 			}
 
 			if (!Check.haveItem("sword", "runeword", "Breath of the Dying")) {
-				var botd = [
+				let botd = [
 					"[Name] == VexRune",
 					"[Name] == HelRune # # [MaxQuantity] == 1",
 					"[Name] == ElRune # # [MaxQuantity] == 1",
@@ -372,47 +388,6 @@ function LoadConfig () {
 			}
 
 			Config.KeepRunewords.push("[type] == armor # [frw] >= 45");
-		}
-
-		// leveling weapons-testing
-		if (!Check.haveItem("mace", "runeword", "Black") && !me.hell) {
-			var black = [
-				"[Name] == ThulRune # # [MaxQuantity] == 1",
-				"[Name] == IoRune # # [MaxQuantity] == 1",
-				"[Name] == NefRune # # [MaxQuantity] == 1",
-				"[Name] == Flail && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-			];
-			NTIP.arrayLooping(black);
-
-			NTIP.addLine("[Name] == Knout && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1");
-			Config.Runewords.push([Runeword.Malice, "Knout"]);
-			Config.Runewords.push([Runeword.Malice, "Flail"]);
-			Config.KeepRunewords.push("[Type] == mace # [IAS] == 15");
-		}
-
-		if (!Check.haveItem("mace", "runeword", "Malice") && me.normal) {
-			var malice = [
-				"[Name] == IthRune # # [MaxQuantity] == 1",
-				"[Name] == ElRune # # [MaxQuantity] == 1",
-				"[Name] == EthRune # # [MaxQuantity] == 1",
-				"[Name] == Flail && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-			];
-			NTIP.arrayLooping(malice);
-
-			Config.Runewords.push([Runeword.Malice, "Flail"]);
-			Config.KeepRunewords.push("[Type] == mace # [tohit] == 50");
-		}
-
-		if (!Check.haveItem("mace", "runeword", "Steel") && me.normal) {
-			var steel = [
-				"[Name] == TirRune # # [MaxQuantity] == 1",
-				"[Name] == ElRune # # [MaxQuantity] == 1",
-				"[Name] == Mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
-			];
-			NTIP.arrayLooping(steel);
-
-			Config.Runewords.push([Runeword.Steel, "Mace"]);
-			Config.KeepRunewords.push("[Type] == mace # [tohit] == 50 && [IAS] == 25");
 		}
 
 		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItemMerc(4).tier < 3600) { // Merc Insight
