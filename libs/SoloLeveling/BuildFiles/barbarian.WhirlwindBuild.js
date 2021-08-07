@@ -6,7 +6,7 @@
  */
 
 var build = {
-	caster: me.charlvl === SetUp.respecTwo() ? false : true,
+	caster: false,
 	skillstab: 32, // Barbarian Combat
 	wantedskills: [126, 151], // Bash, Whirlwind
 	usefulskills: [130, 138], // Howl, Shout

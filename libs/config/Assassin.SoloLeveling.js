@@ -196,7 +196,7 @@ function LoadConfig () {
 		//charms
 		"[Name] == smallcharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
 		"[Name] == largecharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
-		"me.charlvl > 39 && [Name] == grandcharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
+		"[Name] == grandcharm && [Quality] >= Magic && [Level] >= 50 # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
 	];
 	NTIP.arrayLooping(levelingTiers);
 

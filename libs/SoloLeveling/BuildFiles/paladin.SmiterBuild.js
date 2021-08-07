@@ -5,7 +5,7 @@
  */
 
 var build = {
-	caster: me.charlvl !== SetUp.respecTwo() ? true : false,
+	caster: false,
 	skillstab: 24, //combat
 	wantedskills: [97, 122], //smite, fanaticism
 	usefulskills: [117, 125], //holy shield, salvation

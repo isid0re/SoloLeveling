@@ -379,7 +379,7 @@ var Quest = {
 	},
 
 	characterRespec: function () {// Akara reset for build change
-		if (me.respec) {
+		if (me.respec || Config.AutoBuild.Template === SetUp.finalBuild) {
 			return true;
 		}
 

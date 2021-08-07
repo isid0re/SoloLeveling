@@ -135,7 +135,7 @@ Item.autoEquipCheck = function (item) {
 
 	if (tier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
-			if (tier > this.getEquippedItem(bodyLoc[i]).tier && (this.canEquip(item) || !item.getFlag(0x10))) {
+			if (tier > this.getEquippedItem(bodyLoc[i]).tier) {
 				return true;
 			}
 		}

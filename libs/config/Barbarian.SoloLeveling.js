@@ -177,8 +177,6 @@ function LoadConfig () {
 		"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//armor
 		"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
-		//shield
-		"me.charlvl > 30 && [type] == shield && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//gloves
 		"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//ammy
@@ -192,7 +190,7 @@ function LoadConfig () {
 		//charms
 		"[Name] == smallcharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
 		"[Name] == largecharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
-		"me.charlvl > 39 && [Name] == grandcharm && [Quality] >= Magic # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
+		"[Name] == grandcharm && [Quality] >= Magic && [Level] >= 50 # [itemchargedskill] >= 0 # [charmtier] == charmscore(item)",
 	];
 	NTIP.arrayLooping(levelingTiers);
 
@@ -450,32 +448,6 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Lore, "Death Mask"]);
 			Config.Runewords.push([Runeword.Lore, "Full Helm"]);
 			Config.KeepRunewords.push("([type] == circlet || [type] == helm) # [LightResist] >= 25");
-		}
-
-		if (Item.getEquippedItem(5).tier < 500) { // Ancients' Pledge
-			if (!Check.haveItem("shield", "runeword", "Ancients' Pledge") && !me.hell) {
-				if (me.normal && !me.getItem(618)) {
-					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
-				}
-
-				var apRunes = [
-					"[Name] == RalRune # # [MaxQuantity] == 1",
-					"[Name] == OrtRune # # [MaxQuantity] == 1",
-					"[Name] == TalRune # # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(apRunes);
-			}
-
-			var apShields = [
-				"me.normal && [Name] == LargeShield && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-				"[Name] == Scutum && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-			];
-			NTIP.arrayLooping(apShields);
-
-			Config.Runewords.push([Runeword.AncientsPledge, "Scutum"]);
-			Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
-
-			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
 		}
 
 		if (Item.getEquippedItemMerc(3).prefixnum !== 20547) { // Merc Fortitude
