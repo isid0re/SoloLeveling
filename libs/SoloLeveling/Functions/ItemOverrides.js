@@ -714,7 +714,6 @@ Item.autoEquipMerc = function () {
 
 						if (cursorItem) {
 							cursorItem.drop();
-							Misc.logItem("Merc Dropped", cursorItem);
 						}
 					}
 
