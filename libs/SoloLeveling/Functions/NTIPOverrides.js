@@ -163,6 +163,10 @@ NTIP.ParseLineInt = function (input, info) {
 				p_result[0] += "item.ilvl";
 
 				break;
+			case 'strengthreq':
+				p_result[0] += "item.strreq";
+
+				break;
 			case 'prefix':
 				if (p_section[i][p_end] === '!') {
 					p_result[0] += "!item.getPrefix(";

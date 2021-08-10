@@ -113,7 +113,7 @@ function LoadConfig () {
 	/* Inventory buffers and lock configuration. */
 	Config.HPBuffer = 0;
 	Config.MPBuffer = 0;
-	Config.RejuvBuffer = 4;
+	Config.RejuvBuffer = me.findItems(605, -1, 3).length >= Item.getCharmLimit(605) ? 0 : 4;
 	Config.Inventory[0] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[1] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[2] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
@@ -173,7 +173,7 @@ function LoadConfig () {
 	var levelingTiers = [ // autoequip setup
 		//weapon
 		"[Name] == CrystalSword && [flag] == runeword # [plusskillbattleorders] >= 1", // CTA for swap
-		"([Type] == Scepter || [Type] == Mace && [Quality] >= Magic || [Type] == Sword && ([Quality] >= Magic || [flag] == runeword) || [Type] == knife && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"([Type] == Scepter || [Type] == Mace && [Quality] >= Magic || [Type] == Sword && ([Quality] >= Magic || [flag] == runeword) || [Type] == knife && [Quality] >= Magic) && [flag] != ethereal && [strengthreq] <= 89 # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
 		"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//belt
@@ -181,9 +181,9 @@ function LoadConfig () {
 		//boots
 		"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//armor
-		"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal && [strengthreq] <= 89 # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//shield
-		"([type] == shield || [type] == auricshields) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"([type] == shield || [type] == auricshields) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal && [strengthreq] <= 89 # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//gloves
 		"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//ammy

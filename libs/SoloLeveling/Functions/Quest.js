@@ -411,18 +411,18 @@ var Quest = {
 			return true;
 		}
 
-		let selected = me.getItems(itemID)
+		let selected = me.getItems()
 			.filter(item =>
 				item.classid === itemID //
 				&& item.getStat(194) === 0 //no sockets
 				&& (item.quality === 2 || item.quality === 3) // Normal, Superior only
 				&& [3, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
 			)
-			.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
 			.first();
 
 		if (selected) {
 			if (!Storage.Inventory.CanFit(selected)) { // not able to keep
+				print('ÿc9SoloLevelingÿc0: unable to use hole punch on ' + selected.name + ". No Space in Inventory.");
 
 				return false;
 			}

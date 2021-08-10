@@ -111,7 +111,7 @@ function LoadConfig () {
 	/* Inventory buffers and lock configuration. */
 	Config.HPBuffer = 0;
 	Config.MPBuffer = 0;
-	Config.RejuvBuffer = 4;
+	Config.RejuvBuffer = me.findItems(605, -1, 3).length >= Item.getCharmLimit(605) ? 0 : 4;
 	Config.Inventory[0] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[1] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[2] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
@@ -168,7 +168,7 @@ function LoadConfig () {
 
 	var levelingTiers = [ // autoequip setup
 		//weapon
-		"([Type] == Scepter || [Type] == Mace || [Type] == Sword || [Type] == Axe) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"([Type] == Scepter || [Type] == Mace || [Type] == Sword || [Type] == Axe) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal && [strengthreq] <= 118 # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
 		"([type] == helm || [type] == primalhelm) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal #  [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//belt
@@ -176,7 +176,7 @@ function LoadConfig () {
 		//boots
 		"[Type] == Boots && [Quality] >= Magic && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//armor
-		"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"[type] == armor && ([Quality] >= Magic || [flag] == runeword) && [Flag] != Ethereal && [strengthreq] <= 118 # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//gloves
 		"[Type] == Gloves && [Quality] >= Magic && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//ammy
@@ -555,6 +555,24 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Smoke, "WyrmHide"]);
 
 			Config.KeepRunewords.push("[type] == armor # [fireresist] == 50");
+		}
+
+		if (Item.getEquippedItem(3).tier < 433) { // Myth
+			if (!Check.haveItem("armor", "runeword", "Myth") && !me.hell) {
+				var mythRunes = [
+					"[Name] == HelRune # # [MaxQuantity] == 1",
+					"[Name] == AmnRune # # [MaxQuantity] == 1",
+					"[Name] == NefRune # # [MaxQuantity] == 1",
+					"([Name] == MagePlate || [Name] == BreastPlate || [Name] == LightPlate) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(mythRunes);
+			}
+
+			Config.Runewords.push([Runeword.Myth, "Mage Plate"]);
+			Config.Runewords.push([Runeword.Myth, "Light Plate"]);
+			Config.Runewords.push([Runeword.Myth, "Breast Plate"]);
+
+			Config.KeepRunewords.push("[type] == armor # [hpregen] == 10");
 		}
 
 		if (Item.getEquippedItem(3).tier < 233) { // Stealth

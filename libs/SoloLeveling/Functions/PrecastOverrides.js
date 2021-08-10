@@ -94,12 +94,12 @@ Precast.doPrecast = function (force) {
 
 			if (me.getSkill(149, 0) && (!me.getState(32) || force)) {
 				Skill.cast(149, 0); // Battle Orders
-
+				delay(me.ping + 10); // add delay to establish state
 			}
 
 			if (me.getSkill(138, 0) && (!me.getState(26) || force)) {
 				Skill.cast(138, 0); // Shout
-
+				delay(me.ping + 10); // add delay to establish state
 			}
 
 			Attack.weaponSwitch(swap);

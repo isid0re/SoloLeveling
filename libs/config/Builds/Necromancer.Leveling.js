@@ -367,7 +367,7 @@ var AutoBuildTemplate = {
 			Config.HPBuffer = 0;
 			Config.MPBuffer = 0;
 
-			if (SetUp.finalBuild === "bumper") {
+			if (SetUp.finalBuild === "Bumper") {
 				print("ÿc9SoloLevelingÿc0: Bumper completed");
 				D2Bot.printToConsole('SoloLeveling: Bumper completed');
 

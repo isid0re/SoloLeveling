@@ -13,7 +13,7 @@ var build = {
 	mercAuraWanted: 98,
 	mercDiff: 1,
 	stats: [
-		["dexterity", 35], ["vitality", 40], ["strength", 50], ["vitality", "all"]
+		["dexterity", 35], ["vitality", 40], ["strength", 61], ["vitality", "all"]
 	],
 	skills: [
 		[129, 4], // Mace Mastery
@@ -37,10 +37,9 @@ var build = {
 		[148, 2], // Increased Speed
 		[147, 3], // Frenzy
 		[148, 3], // Increased Speed
-		[147, 4], // Frenzy
 		[154, 1], // War Cry
 		[155, 1], // Battle Command
-		[153, 1], // Natural Resistance
+		[153, 5], // Natural Resistance
 		[147, 20], // Frenzy
 	]
 };

@@ -113,7 +113,7 @@ function LoadConfig () {
 	/* Inventory buffers and lock configuration. */
 	Config.HPBuffer = 0;
 	Config.MPBuffer = 0;
-	Config.RejuvBuffer = 4;
+	Config.RejuvBuffer = me.findItems(605, -1, 3).length >= Item.getCharmLimit(605) ? 0 : 4;
 	Config.Inventory[0] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[1] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
 	Config.Inventory[2] = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1];

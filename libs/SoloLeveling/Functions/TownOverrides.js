@@ -139,7 +139,7 @@ Town.doChores = function (repair = false) {
 		this.goToTown(preAct);
 	}
 
-	if (me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
+	if (!me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
 		Precast.doPrecast(false);
 	}
 
