@@ -6,6 +6,25 @@ SoloLeveling is an automated leveling script for any Diablo 2 characters using K
 
 If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid0re](https://www.buymeacoffee.com/isid0re).
 
+## How SoloLeveling came to exist
+***Standing on the shoulders of giants - Sir Isaac Newton*** 
+
+Autoplay bots have been around for a while, so the concept of SoloLeveling isn't new. What previously existed were sorceress based leveling bots focused on MF farming: Sonic, AutoPlay, and AutoSorc, respectively. Each on of those built on eachother to create a method that worked for what most botters want, a fast script that can get to hell and MF the key areas for profit. 
+
+That wasn't what I wanted or needed. I play solo with limited time for gaming, therefore I needed a way to level up my characters and gear them up by themselves so I had a ready to use character when I wanted to play the character, regardless of the class. Initially, I wanted a paladin to try and do Ubers, but I didn't want to level up a paladin. At the same time, I had become aware of the speedrunner community. With the lack of a non-sorceress leveling script and new found knowledge of speedrunner methods to level quickly, I started the process of making my own leveling script for all classes. 
+
+I'm not a coder or programmer, but I do have a background in structured thought. So I started by looking at the sorceress based scripts to see if they could be modified. The results of what I found made it not an ideal solution. Instead I started building off the quest.js script of regular kolbot and attempted to keep it with as minimal modifications as possible. Initially, it was mostly adding in functions to fix problems with walking scripts, such as the act 5 monster doors, summoner telepad portals, and objects blocking the pathing movements.
+
+Prior to the SoloLeveling, leveling scripts either used static or algebraic lines to evaluate tiers. I didn't like that approach as it lead to over emphasising certain resists or attributes, so I created the rating system dynamictiers.js. It was the creation of my own dynamictier functions when SoloLeveling truly became its own script. It was that point, when I decided I could really make it fully automated and something that went beyond what currently existed. 
+
+Since inception I've added in completely new functions that have become standard operating for walking bots, a methodology that allowed the bot to be driven completely from the profile without any file edits, a truly dynamic autoequip scoring, autoequipping for charms, implemented baalwave skipping, and real time diablo lightning avoidance. 
+
+While I've brought innovation and a novel approach to using kolbot, I have been fortunate to have been advised by some of the major thought leaders of blizzhackers: Jaenster, DZIK, Nishimura_Katsuo, macohan, Laz, Fa-b, and Noah in one way or another. Their guidance has really helped improve my programming skills and understanding of botting. 
+
+Also, for those who are curious, it was named sololeveling because its focus is to only level alone not as an homage to the korean webnovel. It until later that a few korean users told me that there was a manhua with the same name.  
+
+Using trial and error over the course of 2 years the bot has grown to its current status (8/12/2021) and it will continue to get better. Thank you all for your support.
+
 ## Features
 - Operates in Hell difficulty within 24 hours
 - Includes character build options for final respec
@@ -22,7 +41,7 @@ If you enjoy using SoloLeveling consider supporting me at [buymeacoffee.com/isid
 | Bumper | Meteorb | Summon | Bumper | Whirlwind| Bumper |
 | | Blova | Bumper | | Bumper |
 | | Lightning | |
-|| Bumper |
+| | Bumper |
 
 ## Frequently Asked Questions
 **Q: Why isn't the bot making the build I selected?**
