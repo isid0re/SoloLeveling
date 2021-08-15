@@ -438,7 +438,7 @@ function main () {
 			break;
 		case 35: // End key
 			MuleLogger.logChar();
-			delay(rand(Config.QuitListDelay[0] * 1e3, Config.QuitListDelay[1] * 1e3));
+			delay(rand(Config.QuitListDelay[0] * 1e3, Config.QuitListDelay[1] * 1e3) + 1);
 			D2Bot.printToConsole(me.profile + " - end run " + me.gamename);
 			D2Bot.stop(me.profile, true);
 
@@ -490,10 +490,7 @@ function main () {
 			break;
 		case 189: // Dash - (for laptops without numberpad)
 		case 109: // Numpad -
-			D2Bot.printToConsole(getUnit(101).name + ' getTier: ' + NTIP.GetTier(getUnit(101)) + ' tierscore: ' + tierscore(getUnit(101)));
-			D2Bot.printToConsole(getUnit(101).name + ' getCharmTier: ' + NTIP.GetCharmTier(getUnit(101)) + ' charmscore: ' + charmscore(getUnit(101)));
-			D2Bot.printToConsole(getUnit(101).name + ' getMercTier: ' + NTIP.GetMercTier(getUnit(101)) + ' mercscore: ' + mercscore(getUnit(101)));
-			D2Bot.printToConsole(getUnit(101).name + ' Pickit.checkItem: ' + Pickit.checkItem(getUnit(101)).result);
+			Misc.spy(me.name);
 
 			break;
 		case 110: // decimal point
@@ -506,6 +503,17 @@ function main () {
 			break;
 		case 106: // numpad * - precast
 			Precast.doPrecast(true);
+
+			break;
+		case 122: // F11 key
+			D2Bot.printToConsole(getUnit(101).name + ' getTier: ' + NTIP.GetTier(getUnit(101)) + ' tierscore: ' + tierscore(getUnit(101)));
+			D2Bot.printToConsole(getUnit(101).name + ' getCharmTier: ' + NTIP.GetCharmTier(getUnit(101)) + ' charmscore: ' + charmscore(getUnit(101)));
+			D2Bot.printToConsole(getUnit(101).name + ' getMercTier: ' + NTIP.GetMercTier(getUnit(101)) + ' mercscore: ' + mercscore(getUnit(101)));
+			D2Bot.printToConsole(getUnit(101).name + ' Pickit.checkItem: ' + Pickit.checkItem(getUnit(101)).result);
+
+			break;
+		case 123: // F12 key 
+			load("default.dbj");
 
 			break;
 		}
