@@ -665,7 +665,7 @@ Town.unfinishedQuests = function () {
 	}
 
 	//Act 5
-	if (!Item.getEquippedItemMerc(3).prefixnum === 20568 && me.getItem(58)) { // Larzuk reward
+	if (Item.getEquippedItemMerc(3).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
 		Quest.holePunch(58); // insight voulge
 	}
 

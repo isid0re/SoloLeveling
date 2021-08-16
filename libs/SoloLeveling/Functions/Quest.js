@@ -421,7 +421,7 @@ var Quest = {
 			.first();
 
 		if (selected) {
-			if (!Storage.Inventory.CanFit(selected)) { // not able to keep
+			if (selected.location === 7 && !Storage.Inventory.CanFit(selected)) { // not able to keep
 				print('ÿc9SoloLevelingÿc0: unable to use hole punch on ' + selected.name + ". No Space in Inventory.");
 
 				return false;
@@ -429,8 +429,8 @@ var Quest = {
 
 			if (selected.location === 7 && Storage.Inventory.CanFit(selected)) { //move selected to inventory
 				Town.move('stash');
+				Town.openStash();
 				Storage.Inventory.MoveTo(selected);
-				me.cancel;
 			}
 
 			me.overhead("hole punch");

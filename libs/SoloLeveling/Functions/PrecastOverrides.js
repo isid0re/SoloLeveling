@@ -81,28 +81,22 @@ Precast.doPrecast = function (force) {
 		break;
 	case 4: // Barbarian - TODO: BO duration
 		if (!me.getState(32) || !me.getState(51) || !me.getState(26) || force) {
-			var swap = me.weaponswitch;
-
-			Attack.weaponSwitch(this.getBetterSlot(149));
-
 			if (me.getSkill(155, 0) && (!me.getState(51) || force)) {
-				Skill.cast(155, 0); // Battle Command
+				this.precastSkill(155); // Battle Command
 				delay(me.ping + 100);
-				Skill.cast(155, 0); // Cast twice. It works on itself
+				this.precastSkill(155); // Cast twice. It works on itself
 
 			}
 
 			if (me.getSkill(149, 0) && (!me.getState(32) || force)) {
-				Skill.cast(149, 0); // Battle Orders
-				delay(me.ping + 10); // add delay to establish state
+				this.precastSkill(149); // Battle Orders
+				delay(me.ping + 100); // add delay to establish state
 			}
 
 			if (me.getSkill(138, 0) && (!me.getState(26) || force)) {
-				Skill.cast(138, 0); // Shout
-				delay(me.ping + 10); // add delay to establish state
+				this.precastSkill(138); // Shout
+				delay(me.ping + 100); // add delay to establish state
 			}
-
-			Attack.weaponSwitch(swap);
 		}
 
 		break;
