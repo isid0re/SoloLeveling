@@ -548,7 +548,46 @@ Misc.gamePause = function () {
 };
 
 Misc.gamePacket = function (bytes) {// various game events
-	let diablo, tick, wave, waveMonster;
+	let diablo, tick, wave;
+
+	function skipWave (run = false) {
+		let script = getScript('default.dbj');
+
+		if (run) {
+			print('ÿc9SoloLevelingÿc0: skipping baal wave #' + wave);
+
+			if (script && script.running) {
+				Misc.gamePause();
+			}
+
+			while (getTickCount() - tick < 6500) { //prep
+				Pather.moveTo(15091, 5073);
+			}
+
+			Config.NoTele = true;
+			tick = getTickCount();
+
+			while (getTickCount() - tick < 5000) { // 5 second delay (5000ms)
+				Pather.moveTo(15098, 5082);	// leave throne
+			}
+
+			tick = getTickCount();
+			Pather.moveTo(15099, 5078); // reenter throne
+
+			while (getTickCount() - tick < 2000) {// 2 second delay (2000ms)
+				Pather.moveTo(15098, 5082);
+			}
+
+			Pather.moveTo(15099, 5078);
+			Config.NoTele = false;
+
+			if (script && !script.running) {
+				Misc.gamePause();
+			}
+		}
+
+		return true;
+	}
 
 	switch (bytes[0]) {
 	case 0x89: // den completion lights
@@ -569,8 +608,8 @@ Misc.gamePacket = function (bytes) {// various game events
 		}
 
 		break;
-		/*	case 0x4c: // diablo lightning dodge
-		if (bytes[6] === 193 && !me.getSkill(54, 0)) {
+	case 0x4c: // diablo lightning dodge
+		/*if (bytes[6] === 193 && !me.getSkill(54, 0)) {
 			diablo = getUnit(1, 243);
 			tick = getTickCount();
 			Misc.gamePause();
@@ -599,41 +638,36 @@ Misc.gamePacket = function (bytes) {// various game events
 
 			Misc.gamePause();
 		}
-
-		break;	*/
+*/
+		break;
 	case 0xa4: //baalwave
-		if (me.hell) {
-			waveMonster = ((bytes[1]) | (bytes[2] << 8));
-			wave = [23, 381, 557, 558, 571].indexOf(waveMonster);
+		wave = [0, 62, 105, 557, 558, 571].indexOf((bytes[1]) | (bytes[2] << 8));
+		tick = getTickCount();
 
-			if (wave > -1) {
-				Misc.gamePause();
-				tick = getTickCount();
-				print('ÿc9SoloLevelingÿc0: baal wave #' + (wave + 1));
-				me.overhead("wave " + (wave + 1));
+		switch (wave) {
+		case 1: // fire immune in hell
 
-				while (getTickCount() - tick < 6500) { //prep
-					Pather.moveTo(15092, 5073);
-				}
-
-				Config.NoTele = true;
-				tick = getTickCount();
-
-				while (getTickCount() - tick < 5000) { // 5 second delay (5000ms)
-					Pather.moveTo(15098, 5082);	// leave throne
-				}
-
-				tick = getTickCount();
-				Pather.moveTo(15099, 5078); // reenter throne
-
-				while (getTickCount() - tick < 2000) {// 2 second delay (2000ms)
-					Pather.moveTo(15098, 5082);
-				}
-
-				Pather.moveTo(15098, 5073);
-				Config.NoTele = false;
-				Misc.gamePause();
+			break;
+		case 2: // magic immune in hell
+			if (me.hell && me.paladin) {
+				skipWave(true);
 			}
+
+			break;
+		case 3: // lightning immune in hell
+			if (me.hell && me.amazon) {
+				skipWave(true);
+			}
+
+			break;
+		case 4: // poison immune in hell
+
+			break;
+		case 5: // always skip lister pack
+			skipWave(true);
+			break;
+		default:
+			break;
 		}
 
 		break;

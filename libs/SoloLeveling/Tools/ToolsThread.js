@@ -505,6 +505,16 @@ function main () {
 			Precast.doPrecast(true);
 
 			break;
+		case 121:
+			var script = getScript();
+
+			if (script) {
+				do {
+					print(script.name + " running with thread id: " + script.threadid);
+				} while (script.getNext());
+			}
+
+			break;
 		case 122: // F11 key
 			D2Bot.printToConsole(getUnit(101).name + ' getTier: ' + NTIP.GetTier(getUnit(101)) + ' tierscore: ' + tierscore(getUnit(101)));
 			D2Bot.printToConsole(getUnit(101).name + ' getCharmTier: ' + NTIP.GetCharmTier(getUnit(101)) + ' charmscore: ' + charmscore(getUnit(101)));
@@ -512,7 +522,7 @@ function main () {
 			D2Bot.printToConsole(getUnit(101).name + ' Pickit.checkItem: ' + Pickit.checkItem(getUnit(101)).result);
 
 			break;
-		case 123: // F12 key 
+		case 123: // F12 key
 			load("default.dbj");
 
 			break;
