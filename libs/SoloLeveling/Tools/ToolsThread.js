@@ -517,9 +517,13 @@ function main () {
 			break;
 		case 122: // F11 key
 			D2Bot.printToConsole(getUnit(101).name + ' getTier: ' + NTIP.GetTier(getUnit(101)) + ' tierscore: ' + tierscore(getUnit(101)));
+			print(getUnit(101).name + ' getTier: ' + NTIP.GetTier(getUnit(101)) + ' tierscore: ' + tierscore(getUnit(101)));
 			D2Bot.printToConsole(getUnit(101).name + ' getCharmTier: ' + NTIP.GetCharmTier(getUnit(101)) + ' charmscore: ' + charmscore(getUnit(101)));
+			print(getUnit(101).name + ' getCharmTier: ' + NTIP.GetCharmTier(getUnit(101)) + ' charmscore: ' + charmscore(getUnit(101)));
 			D2Bot.printToConsole(getUnit(101).name + ' getMercTier: ' + NTIP.GetMercTier(getUnit(101)) + ' mercscore: ' + mercscore(getUnit(101)));
+			print(getUnit(101).name + ' getMercTier: ' + NTIP.GetMercTier(getUnit(101)) + ' mercscore: ' + mercscore(getUnit(101)));
 			D2Bot.printToConsole(getUnit(101).name + ' Pickit.checkItem: ' + Pickit.checkItem(getUnit(101)).result);
+			print(getUnit(101).name + ' Pickit.checkItem: ' + Pickit.checkItem(getUnit(101)).result);
 
 			break;
 		case 123: // F12 key

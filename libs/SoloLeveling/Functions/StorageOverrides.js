@@ -458,19 +458,8 @@ var Container = function (name, width, height, location) {
 	};
 
 	this.Dump = function () {
-		var x, y, string;
-
-		for (x = 0; x < this.height; x += 1) {
-			string = "";
-
-			for (y = 0; y < this.width; y += 1) {
-				string += (this.buffer[x][y] > 0) ? "ÿc1x" : "ÿc0o";
-			}
-
-			if (this.UsedSpacePercent() > 85) {
-				print("ÿc9SoloLevelingÿc0: Warning" + this.name + " is almost full.");
-				print(string);
-			}
+		if (this.UsedSpacePercent() > 85) {
+			print("ÿc9SoloLevelingÿc0: Warning " + this.name + " is almost full.");
 		}
 
 		print("ÿc9SoloLevelingÿc0: " + this.name + " has used " + this.UsedSpacePercent().toFixed(2) + "% of its total space");

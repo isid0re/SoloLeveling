@@ -48,7 +48,7 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [154, 147, -1, 147, -1];
 			Config.LowManaSkill = [133, 133];
 			Config.HPBuffer = 2;
-			Config.MPBuffer = 10;
+			Config.MPBuffer = 6;
 		}
 	},
 
@@ -704,7 +704,8 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.AttackSkill = [138, 154, 147, 154, 147];
-
+			Config.HPBuffer = 0;
+			Config.MPBuffer = 0;
 
 		}
 	},

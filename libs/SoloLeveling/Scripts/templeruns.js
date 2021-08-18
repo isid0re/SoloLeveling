@@ -22,15 +22,46 @@ function templeruns () {
 		Precast.doPrecast(true);
 
 		if (Pather.moveToExit(temples[run], true, true)) {
-			if (me.area === 79) {
+			switch (me.area) {
+			case 79: // Lower kurast
 				Misc.openChestsInArea(79);
-			} else if (me.area === 94 && !me.lamessen) {
-				me.overhead("lamessen");
-				Pather.moveToPreset(94, 2, 193);
-				Quest.collectItem(548, 193);
-				Town.unfinishedQuests();
-			} else {
+				break;
+			case 94: // Ruined Temple
+				if (!me.lamessen) {
+					me.overhead("lamessen");
+					Pather.moveToPreset(94, 2, 193);
+					Quest.collectItem(548, 193);
+					Town.unfinishedQuests();
+				} else if (me.hell && me.paladin && me.lamessen) {
+					print('ÿc9SoloLevelingÿc0: cannot run temple. (Magic Immunes)');
+					break;
+				} else {
+					Attack.clearLevel(0xF);
+				}
+
+				break;
+			case 95: // Disused Fane
+			case 96: // Forgotten Reliquary
+				if (me.hell && me.paladin) { // magic immunes
+					print('ÿc9SoloLevelingÿc0: cannot run temple. (Magic Immunes)');
+					break;
+				}
+
 				Attack.clearLevel(0xF);
+				break;
+			case 97: // Forgotten Temple
+			case 98: // Ruined Fane
+			case 99: // Disused Reliquary
+				if (me.hell && me.amazon) { // lightning immunes
+					print('ÿc9SoloLevelingÿc0: cannot run temple. (Lightning Immunes)');
+					break;
+				}
+
+				Attack.clearLevel(0xF);
+				break;
+			default:
+				Attack.clearLevel(0xF);
+				break;
 			}
 		}
 

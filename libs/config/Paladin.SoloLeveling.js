@@ -173,7 +173,7 @@ function LoadConfig () {
 	var levelingTiers = [ // autoequip setup
 		//weapon
 		"[Name] == CrystalSword && [flag] == runeword # [plusskillbattleorders] >= 1", // CTA for swap
-		"([Type] == Scepter || [Type] == Mace && [Quality] >= Magic || [Type] == Sword && ([Quality] >= Magic || [flag] == runeword) || [Type] == knife && [Quality] >= Magic) && [flag] != ethereal && [strengthreq] <= 89 # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"([Type] == Scepter || [Type] == Mace && [Quality] >= Magic || [Type] == Sword && ([Quality] >= Magic || [flag] == runeword) || [Type] == knife && [Quality] >= Magic) && [flag] != ethereal && [strengthreq] <= 89 # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
 		"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//belt
