@@ -558,7 +558,7 @@ Town.shopItems = function () {
 };
 
 Town.unfinishedQuests = function () {
-	let malus = me.getItem(89), leg = me.getItem(88), book = me.getItem(552), tome = me.getItem(548), kw = me.getItem(174), hammer = me.getItem(90), soulstone = me.getItem(551);
+	let equipped, malus = me.getItem(89), leg = me.getItem(88), book = me.getItem(552), tome = me.getItem(548), kw = me.getItem(174), hammer = me.getItem(90), soulstone = me.getItem(551);
 
 	//Act 1
 	if (malus) { //tools of the trade
@@ -665,18 +665,40 @@ Town.unfinishedQuests = function () {
 	}
 
 	//Act 5
-	if (Item.getEquippedItemMerc(3).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
-		Quest.holePunch(58); // insight voulge
-	}
-
-	if (!Check.haveItem("sword", "runeword", "Spirit") && (me.getItem(29) || me.getItem(30))) {
-		if (me.getItem(29)) { // spirit crystal sword
-			Quest.holePunch(29);
+	switch (me.diff) {
+	case 0:
+	case 1:
+		if (Item.getEquippedItemMerc(3).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
+			Quest.holePunch(58); // insight voulge
 		}
 
-		if (me.getItem(30)) { // spirit broad sword
-			Quest.holePunch(30);
+		if (!Check.haveItem("sword", "runeword", "Spirit") && (me.getItem(29) || me.getItem(30))) {
+			if (me.getItem(29)) { // spirit crystal sword
+				Quest.holePunch(29);
+			}
+
+			if (me.getItem(30)) { // spirit broad sword
+				Quest.holePunch(30);
+			}
 		}
+
+		break;
+	case 2:
+		if (Misc.checkQuest(35, 1) && Item.getEquippedItemMerc(1).classid === 428 && Item.getEquippedItemMerc(1).sockets === 0) { // socket andy's visage
+			Item.removeItemsMerc(1);
+			Quest.holePunch(428);
+			equipped = me.getItem(428);
+			Item.equipMerc(equipped, 1);
+		}
+
+		if (me.getItem(617) && Item.getEquippedItemMerc(1).classid === 428 && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral to andy's visage
+			Item.removeItemsMerc(1);
+			equipped = me.getItem(428);
+			Quest.fillSockets(equipped, 617);
+			Item.equipMerc(equipped, 1);
+		}
+
+		break;
 	}
 
 	if (me.getItem(646)) {
@@ -1087,6 +1109,7 @@ Town.clearJunk = function () {
 		let rwBase = me.getItems()
 			.filter(item =>
 				item.itemType === junk[0].itemType// same item type as current
+				&& (item.quality === 2 || item.quality === 3) // only normal or superior items
 				&& !item.getFlag(NTIPAliasFlag["ethereal"]) // only noneth runeword bases
 				&& item.getStat(194) === junk[0].getStat(194) // sockets match junk in review
 				&& [3, 7].indexOf(item.location) > -1 // locations
@@ -1094,10 +1117,11 @@ Town.clearJunk = function () {
 			.sort((a, b) => a.getStatEx(31) - b.getStatEx(31)) // Sort on defense, low to high.
 			.last(); // select last
 
-		if (junk[0].getStat(194) > 0) {
+		if (junk[0].getStatEx(31) > 0 && junk[0].getStat(194) > 0) { // only drop noneth rw base armors helms shields
 			if ((junk[0].location === 7 || junk[0].location === 3) &&
 				!junk[0].getFlag(NTIPAliasFlag["ethereal"]) &&
-				junk[0].itemType !== 30 && junk[0].getStatEx(31) < rwBase.getStatEx(31)) { // only drop noneth armors helms shields
+				(junk[0].quality === 2 || junk[0].quality === 3) &&
+				junk[0].getStatEx(31) < rwBase.getStatEx(31)) {
 				if (junk[0].drop()) {
 					me.overhead('cleared runeword junk');
 					print("ÿc9SoloLevelingÿc0: Cleared runeword junk - " + junk[0].name);

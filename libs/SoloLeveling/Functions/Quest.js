@@ -415,27 +415,38 @@ var Quest = {
 			.filter(item =>
 				item.classid === itemID //
 				&& item.getStat(194) === 0 //no sockets
-				&& (item.quality === 2 || item.quality === 3) // Normal, Superior only
-				&& [3, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
+				&& (item.quality === 2 || item.quality === 3 || item.quality === 5 || item.quality === 7) // Normal, Superior, set, unique only
+				&& [1, 3, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
 			)
 			.first();
 
 		if (selected) {
-			if (selected.location === 7 && !Storage.Inventory.CanFit(selected)) { // not able to keep
+			let originalBodyLoc, originalLocation = selected.location;
+
+			if ((selected.location === 1 || selected.location === 7) && !Storage.Inventory.CanFit(selected)) { // not able to keep
 				print('ÿc9SoloLevelingÿc0: unable to use hole punch on ' + selected.name + ". No Space in Inventory.");
 
 				return false;
 			}
 
-			if (selected.location === 7 && Storage.Inventory.CanFit(selected)) { //move selected to inventory
-				Town.move('stash');
-				Town.openStash();
-				Storage.Inventory.MoveTo(selected);
+			if (selected.location !== 3 && Storage.Inventory.CanFit(selected)) { //move selected to inventory
+				switch (originalLocation) {
+				case 1:
+					originalBodyLoc = selected.bodylocation;
+					break;
+				case 3:
+					break;
+				case 7:
+					Town.move('stash');
+					Town.openStash();
+					Storage.Inventory.MoveTo(selected);
+					me.cancel();
+					break;
+				}
 			}
 
-			me.overhead("hole punch");
-
 			//socket item
+			me.overhead("hole punch");
 			Town.goToTown(5);
 			Town.npcInteract("larzuk");
 			delay(10 + me.ping * 2);
@@ -449,19 +460,69 @@ var Quest = {
 			delay(500 + me.ping);
 			selected = false; //reset item gid
 			selected = me.findItem(itemID, 0, 3);
+			print('ÿc9SoloLevelingÿc0: used hole punch on ' + selected.name);
 
 			if (selected) {
-				if (Storage.Stash.CanFit(selected)) { //move selected back to stash
-					Town.move('stash');
-					Storage.Stash.MoveTo(selected);
-					me.cancel;
-					print('ÿc9SoloLevelingÿc0: used hole punch on ' + selected.name);
+				switch (originalLocation) {
+				case 1:
+					Item.equip(selected, originalBodyLoc);
+					break;
+				case 3:
+					break;
+				case 7:
+					if (Storage.Stash.CanFit(selected)) { //move selected back to stash
+						Town.move('stash');
+						Storage.Stash.MoveTo(selected);
+						me.cancel();
 
-					return true;
+						return true;
+					}
+
+					break;
 				}
 			}
 		}
 
 		return false;
+	},
+
+	fillSockets: function (baseitem, ...insertables) {
+		if (!baseitem || baseitem.getStat(194) === 0) { //no sockets or item
+			return true;
+		}
+
+		if (!me.inTown) {
+			Town.goToTown();
+		}
+
+		let socketItem, insert = true, plugged = baseitem.getItems();
+
+		for (let insertable of insertables) {
+			socketItem = me.getItem(insertable);
+
+			for (let hole = 0; hole < baseitem.getStat(194); hole++) {// check each hole for insertable
+				if (plugged.length > 0 && plugged[hole].classid === insertable) {
+					insert = false; // set flag to not insert item
+					break;
+				}
+			}
+
+			if (socketItem && insert) {
+				Town.move('stash');
+				Town.openStash();
+
+				if (!Runewords.socketItem(baseitem, socketItem)) {
+					print('ÿc9SoloLevelingÿc0: failed to socket ' + socketItem.name + ' into ' + baseitem.name);
+
+					return false;
+				}
+
+				print('ÿc9SoloLevelingÿc0: socketed ' + socketItem.name + ' into ' + baseitem.name);
+			}
+		}
+
+		me.cancel();
+
+		return true;
 	},
 };

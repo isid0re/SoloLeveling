@@ -410,6 +410,10 @@ function LoadConfig () {
 			break;
 		}
 
+		if (me.hell && Item.getEquippedItemMerc(1).classid === 428 && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral for andy's visage if none
+			NTIP.addLine("[Name] == RalRune # # [MaxQuantity] == 1");
+		}
+
 		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItem(4).tier < 777) { // Spirit Sword
 			if (!Check.haveItem("sword", "runeword", "Spirit") && !me.hell) {
 				var SpiritSword = [

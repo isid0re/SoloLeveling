@@ -557,7 +557,9 @@ Item.getEquippedItemMerc = function (bodyLoc) {
 						tier: NTIP.GetMercTier(item),
 						name: item.fname,
 						str: item.getStatEx(0),
-						dex: item.getStatEx(2)
+						dex: item.getStatEx(2),
+						sockets: item.getStat(194),
+						description: item.description
 					};
 				}
 			} while (item.getNext());
@@ -570,7 +572,9 @@ Item.getEquippedItemMerc = function (bodyLoc) {
 		tier: -1,
 		name: "none",
 		str: 0,
-		dex: 0
+		dex: 0,
+		sockets: 0,
+		description: "none"
 	};
 };
 
@@ -728,7 +732,7 @@ Item.autoEquipMerc = function () {
 	return true;
 };
 
-Item.removeItemsMerc = function () {
+Item.removeItemsMerc = function (bodylocation = null) {
 	let cursorItem, mercenary = Merc.getMercFix();
 
 	if (!mercenary) {
@@ -738,6 +742,13 @@ Item.removeItemsMerc = function () {
 	let items = mercenary.getItems();
 
 	if (items) {
+		if (bodylocation) {
+			items = items.filter(item =>
+				item.location === 1
+				&& item.bodylocation === bodylocation
+			);
+		}
+
 		for (var i = 0; i < items.length; i++) {
 			clickItem(4, items[i].bodylocation);
 			delay(500 + me.ping * 2);

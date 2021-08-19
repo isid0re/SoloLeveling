@@ -280,6 +280,10 @@ function LoadConfig () {
 			Config.KeepRunewords.push("[type] == wand # [fcr] >= 20");
 		}
 
+		if (me.hell && Item.getEquippedItemMerc(1).classid === 428 && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral for andy's visage if none
+			NTIP.addLine("[Name] == RalRune # # [MaxQuantity] == 1");
+		}
+
 		if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
 			var CTA = [
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
