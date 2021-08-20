@@ -360,7 +360,7 @@ function LoadConfig () {
 			break;
 		}
 
-		if (me.hell && Item.getEquippedItemMerc(1).classid === 428 && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral for andy's visage if none
+		if (me.hell && Item.getEquippedItemMerc(1).name.includes("Andariel's") && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral for andy's visage if none
 			NTIP.addLine("[Name] == RalRune # # [MaxQuantity] == 1");
 		}
 

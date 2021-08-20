@@ -18,6 +18,8 @@ Item.getEquippedItem = function (bodyLoc) {
 				return {
 					itemType: item.itemType,
 					classid: item.classid,
+					name: item.fname,
+					sockets: item.getStat(194),
 					prefixnum: item.prefixnum,
 					tier: NTIP.GetTier(item)
 				};
@@ -28,6 +30,8 @@ Item.getEquippedItem = function (bodyLoc) {
 	return {
 		itemType: -1,
 		classid: -1,
+		name: "none",
+		sockets: 0,
 		prefixnum: -1,
 		tier: -1
 	};

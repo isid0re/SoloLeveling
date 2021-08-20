@@ -189,12 +189,12 @@ var nipItems = {
 		"[name] == ScrollofTownPortal # # [MaxQuantity] == 20",
 		"[name] == scrollofidentify # # [MaxQuantity] == 20",
 		"[name] == key # # [maxquantity] == 12",
-		"[name] == perfectamethyst # # [MaxQuantity] == 2",
-		"[name] == perfectemerald # # [MaxQuantity] == 2",
-		"[name] == perfecttopaz # # [MaxQuantity] == 2",
-		"[name] == perfectdiamond # # [MaxQuantity] == 2",
-		"[name] == perfectruby # # [MaxQuantity] == 2",
-		"[name] == perfectsapphire # # [MaxQuantity] == 2",
+		"[name] == perfectamethyst # # [MaxQuantity] == 1",
+		"[name] == perfectemerald # # [MaxQuantity] == 1",
+		"[name] == perfecttopaz # # [MaxQuantity] == 1",
+		"[name] == perfectdiamond # # [MaxQuantity] == 1",
+		"[name] == perfectruby # # [MaxQuantity] == 1",
+		"[name] == perfectsapphire # # [MaxQuantity] == 1",
 		"[name] >= pulrune && [name] <= zodrune"
 	],
 

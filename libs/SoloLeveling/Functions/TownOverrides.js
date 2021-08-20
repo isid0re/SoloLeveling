@@ -665,40 +665,63 @@ Town.unfinishedQuests = function () {
 	}
 
 	//Act 5
-	switch (me.diff) {
-	case 0:
-	case 1:
-		if (Item.getEquippedItemMerc(3).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
-			Quest.holePunch(58); // insight voulge
-		}
-
-		if (!Check.haveItem("sword", "runeword", "Spirit") && (me.getItem(29) || me.getItem(30))) {
-			if (me.getItem(29)) { // spirit crystal sword
-				Quest.holePunch(29);
+	if (Misc.checkQuest(35, 1)) { // socket items
+		switch (me.diff) {
+		case 0:
+		case 1:
+			if (Item.getEquippedItemMerc(3).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
+				Quest.holePunch(58); // insight voulge
 			}
 
-			if (me.getItem(30)) { // spirit broad sword
-				Quest.holePunch(30);
+			if (!Check.haveItem("sword", "runeword", "Spirit") && (me.getItem(29) || me.getItem(30))) {
+				if (me.getItem(29)) { // spirit crystal sword
+					Quest.holePunch(29);
+				}
+
+				if (me.getItem(30)) { // spirit broad sword
+					Quest.holePunch(30);
+				}
 			}
-		}
 
-		break;
-	case 2:
-		if (Misc.checkQuest(35, 1) && Item.getEquippedItemMerc(1).classid === 428 && Item.getEquippedItemMerc(1).sockets === 0) { // socket andy's visage
-			Item.removeItemsMerc(1);
-			Quest.holePunch(428);
-			equipped = me.getItem(428);
-			Item.equipMerc(equipped, 1);
-		}
+			break;
+		case 2:
+			if (Item.getEquippedItemMerc(1).name.includes("Andariel's") && Item.getEquippedItemMerc(1).sockets === 0) { // socket andy's visage
+				Item.removeItemsMerc(1);
+				Quest.holePunch(428);
+				equipped = me.findItem(428, 0, 3);
+				Item.equipMerc(equipped, 1);
+			}
 
-		if (me.getItem(617) && Item.getEquippedItemMerc(1).classid === 428 && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral to andy's visage
-			Item.removeItemsMerc(1);
-			equipped = me.getItem(428);
-			Quest.fillSockets(equipped, 617);
-			Item.equipMerc(equipped, 1);
-		}
+			if (Item.getEquippedItem(1).name.includes("Harlequin") && Item.getEquippedItem(1).sockets === 0) { // socket harlequin crest
+				Item.removeItem(1);
+				Quest.holePunch(422);
+				equipped = me.findItem(422, 0, 3);
+				Item.equip(equipped, 1);
+			}
 
-		break;
+			break;
+		}
+	}
+
+	if (me.getItem(617) && Item.getEquippedItemMerc(1).name.includes("Andariel's") && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral to andy's visage
+		Item.removeItems(1);
+		equipped = me.findItem(428, 0, 3);
+		Quest.fillSockets(equipped, 617);
+		Item.equipMerc(equipped, 1);
+	}
+
+	if (me.getItem(586) && Item.getEquippedItem(5).name.includes("Moser's")) { // add pdiamonds to Moser's Blessed Circle
+		Item.removeItem(5);
+		equipped = me.findItem(375, 0, 3); //mosers's
+		Quest.fillSockets(equipped, 586, 586);
+		Item.equip(equipped, 5);
+	}
+
+	if (me.getItem(631) && Item.getEquippedItem(1).sockets > 0 && Item.getEquippedItem(1).name.includes("Harlequin")) { // add Um to Shako
+		Item.removeItem(1);
+		equipped = me.findItem(422, 0, 3); // shako Harlequin's Crest
+		Quest.fillSockets(equipped, 631);
+		Item.equip(equipped, 1);
 	}
 
 	if (me.getItem(646)) {
