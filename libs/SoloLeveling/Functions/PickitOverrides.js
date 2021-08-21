@@ -2,7 +2,7 @@
 *	@filename	PickitOverrides.js
 *	@author		isid0re
 *	@desc		modified pickit.js based on from PBP autoplays (Sonic, AutoSorc, etc)
-*	@credits	theBGuy (for customized logging from pbp pickit.js), kolton
+*	@credits	theBGuy, Adpist, Laz, kolton
 */
 
 if (!isIncluded("common/Pickit.js")) {

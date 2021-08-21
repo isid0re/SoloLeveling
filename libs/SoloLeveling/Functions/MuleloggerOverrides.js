@@ -1,6 +1,7 @@
 /*
 *	@filename	MuleloggerOverrides.js
-*	@author		theBguy
+*	@author		theBguy, isid0re
+*	@credits	Kolton (original author), Adpist (adding tiers to mulelogger methodology)
 *	@desc		Added tiers to mulelogging
 */
 
@@ -96,12 +97,15 @@ MuleLogger.logItem = function (unit, logIlvl, type) {
 	desc = this.getItemDesc(unit, logIlvl);/* + "$" + unit.gid + ":" + unit.classid + ":" + unit.location + ":" + unit.x + ":" + unit.y + (unit.getFlag(0x400000) ? ":eth" : "");*/
 	color = unit.getColor();
 
-	if (NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) {
+	if (NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0 || NTIP.GetCharmTier(unit) > 0) {
 		if (unit.mode === 1 && type === "Player") {
 			desc += ("\n\\xffc0Autoequip tier: " + NTIP.GetTier(unit));
 
 		} else if (unit.mode === 1 && type === "Merc") {
 			desc += ("\n\\xffc0Autoequip merctier: " + NTIP.GetMercTier(unit));
+
+		} else if (unit.mode === 0 && unit.node === 1 && unit.location === 3 && [603, 604, 605].indexOf(unit.classid) > -1) {
+			desc += ("\n\\xffc0Autoequip charmtier: " + NTIP.GetCharmTier(unit));
 
 		}
 	}
@@ -352,7 +356,7 @@ MuleLogger.logEquippedItems = function () {
 
 			for (i = 0; i < items.length; i += 1) {
 				parsedItem = this.logItem(items[i], true, "Merc");
-				parsedItem.title += " (merc)";
+				parsedItem.title += " (merc equipped)";
 
 				string = JSON.stringify(parsedItem);
 				finalString += (string + "\n");

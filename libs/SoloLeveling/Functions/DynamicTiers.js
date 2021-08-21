@@ -156,7 +156,7 @@ var tierscore = function (item) {
 		// cannot be frozen
 		let cbfItem = NTIPAliasStat["itemcannotbefrozen"],
 			cbfRating = 0,
-			needsCBF = !me.getSkill(54, 0),
+			needsCBF = (me.sorceress && !me.getSkill(54, 0) || !me.sorceress && !me.getStat(97, 54)) ? true : false,
 			body = me.getItems()
 				.filter(item => [1].indexOf(item.location) > -1 ) // limit search to equipped body parts
 				.sort((a, b) => a.bodylocation - b.bodylocation); // Sort on body, low to high.
@@ -181,27 +181,11 @@ var tierscore = function (item) {
 			}
 		}
 
-		// faster run/walk
-		let frwRating = 0,
-			needsFrw = !me.getSkill(54, 0); // value FRW if no teleport
-
-		if (needsFrw) {
-			frwRating = item.getStatEx(96) * generalWeights.FRW;
-		}
-
-		// belt slots
-		let beltRating = 0,
-			isBelt = item.itemType === 19; // check if belt
-
-		if (isBelt) {
-			beltRating = Storage.BeltSize() * 4 * generalWeights.BELTSLOTS; // rows * columns * weight
-		}
-
 		//start generalRating
 		let generalRating = 0;
 		generalRating += cbfRating; // add cannot be frozen
-		generalRating += frwRating; // add faster run walk
-		generalRating += beltRating; // add belt slots
+		generalRating = item.itemType === 19 ? Storage.BeltSize() * 4 * generalWeights.BELTSLOTS : 0;
+		generalRating += (me.sorceress && !me.getSkill(54, 0) || !me.sorceress && !me.getStat(97, 54)) ? item.getStatEx(96) * generalWeights.FRW : 0; // add faster run walk
 		generalRating += item.getStatEx(80) * generalWeights.MF; // add magic find
 		generalRating += item.getStatEx(99) * generalWeights.FHR; // add faster hit recovery
 		generalRating += item.getStatEx(31) * generalWeights.DEF; //	add Defense
@@ -373,17 +357,9 @@ var charmscore = function (item) {
 	};
 
 	this.generalScore = function (item) {
-		// faster run/walk
-		let frwRating = 0,
-			needsFrw = !me.getSkill(54, 0); // value FRW if no teleport
-
-		if (needsFrw) {
-			frwRating = item.getStatEx(96) * generalWeights.FRW;
-		}
-
 		//start generalRating
 		let generalRating = 0;
-		generalRating += frwRating; // add faster run walk
+		generalRating += (me.sorceress && !me.getSkill(54, 0) || !me.sorceress && !me.getStat(97, 54)) ? item.getStatEx(96) * generalWeights.FRW : 0; // add faster run walk
 		generalRating += item.getStatEx(80) * generalWeights.MF; // add magic find
 		generalRating += item.getStatEx(99) * generalWeights.FHR; // add faster hit recovery
 		generalRating += item.getStatEx(31) * generalWeights.DEF; // add Defense
