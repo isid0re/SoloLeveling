@@ -21,9 +21,9 @@ Since inception I've added in completely new functions that have become standard
 
 While I've brought innovation and a novel approach to using kolbot, I have been fortunate to have been advised by some of the major thought leaders of blizzhackers: Jaenster, DZIK, Nishimura_Katsuo, macohan, Laz, Fa-b, and Noah in one way or another. Their guidance has really helped improve my programming skills and understanding of botting. 
 
-Also, for those who are curious, it was named sololeveling because its focus is to only level alone not as an homage to the korean webnovel. It until later that a few korean users told me that there was a manhua with the same name.  
+Also, for those who are curious, it was named SoloLeveling because its focus is to only level alone not as an homage to the korean webnovel. It until later that a few korean users told me that there was a manhua with the same name.  
 
-Using trial and error over the course of 2 years the bot has grown to its current status (8/12/2021) and it will continue to get better. Thank you all for your support.
+Using trial and error over the course of 2 years the bot has grown to its current status (8/12/2021) and it will continue to get better. Thank you all for your continued support.
 
 ## Features
 - Operates in Hell difficulty within 24 hours
@@ -32,6 +32,7 @@ Using trial and error over the course of 2 years the bot has grown to its curren
 - Hires class/build specific mercenary
 - Fully configured Autoequip for bot and mercenary (includes inventory charms)
 - Makes and equips CTA and spirit shield on swap
+- Will add and use sockets (for ex. PDiamonds to Moser's, Ral to Andariel's Visage)
 
 ## Available Characters and Builds
 | Amazon | Sorceress | Necromancer | Paladin | Barbarian | Druid | Assassin |
