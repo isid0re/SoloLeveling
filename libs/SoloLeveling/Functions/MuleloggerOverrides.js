@@ -1,7 +1,7 @@
 /*
 *	@filename	MuleloggerOverrides.js
 *	@author		theBguy, isid0re
-*	@credits	Kolton (original author), Adpist (adding tiers to mulelogger methodology)
+*	@credits	Kolton (original author), Adpist (adding tiers to mulelogger concept)
 *	@desc		Added tiers to mulelogging
 */
 
