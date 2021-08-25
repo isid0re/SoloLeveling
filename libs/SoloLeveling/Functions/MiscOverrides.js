@@ -301,6 +301,10 @@ Misc.townCheck = function () {
 
 	if (Config.TownCheck && !me.inTown) {
 		try {
+			if (!me.respec && (me.charlvl === SetUp.respecOne || me.charlvl === SetUp.respecTwo())) {
+				check = true;
+			}
+
 			if (me.charlvl > 2 && me.gold > 500) {
 				for (i = 0; i < 4; i += 1) {
 					if (Config.BeltColumn[i] === "hp" && Config.MinColumn[i] > 0) {
