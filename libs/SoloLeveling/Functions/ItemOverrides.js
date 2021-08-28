@@ -37,6 +37,8 @@ Item.getEquippedItem = function (bodyLoc) {
 	};
 };
 
+Item.equippedBodyLoc = null;
+
 Item.getBodyLoc = function (item) {
 	var bodyLoc;
 
@@ -139,7 +141,11 @@ Item.autoEquipCheck = function (item) {
 
 	if (tier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
+			Item.equippedBodyLoc = bodyLoc[i];
+
 			if (tier > this.getEquippedItem(bodyLoc[i]).tier) {
+				Item.equippedBodyLoc = null;
+
 				return true;
 			}
 		}

@@ -23,7 +23,6 @@ function andariel () {
 
 	Precast.doPrecast(true);
 	Pather.moveToExit([36, 37], true);
-	let resPenalty = [[0, 20, 50], [0, 40, 100]][me.gametype][me.diff];
 
 	if (Check.Resistance().PR < 75 + me.getStat(46)) {
 		Town.doChores();

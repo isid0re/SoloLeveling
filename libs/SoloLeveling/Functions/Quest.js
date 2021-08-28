@@ -242,15 +242,16 @@ var Quest = {
 	},
 
 	stashItem: function (classid) {
-		if (!me.getItem(classid)) {
-			return false;
+		let questItem = me.getItem(classid);
+
+		if (!questItem || questItem && questItem.location === 7) {
+			return true;
 		}
 
 		if (!me.inTown) {
 			Town.goToTown();
 		}
 
-		let questItem = me.getItem(classid);
 		Town.move("stash");
 		Town.openStash();
 
@@ -397,10 +398,10 @@ var Quest = {
 			delay(750 + me.ping * 2);
 			Town.clearBelt();
 			delay(250 + me.ping);
+			print("ÿc9SoloLevelingÿc0: changed build from " + Config.AutoBuild.Template + " to " + SetUp.getBuild());
 			let script = getScript("default.dbj");
 			script.stop();
 			load("default.dbj");
-			Item.autoEquip();
 		}
 
 		return true;

@@ -404,6 +404,116 @@ Pather.moveTo = function (x, y, retry, clearPath, pop) {
 	return getDistance(me, node.x, node.y) < 5;
 };
 
+Pather.moveToPreset = function (area, unitType, unitId, offX, offY, clearPath, pop) {
+	if (area === undefined || unitType === undefined || unitId === undefined) {
+		throw new Error("moveToPreset: Invalid parameters.");
+	}
+
+	if (offX === undefined) {
+		offX = 0;
+	}
+
+	if (offY === undefined) {
+		offY = 0;
+	}
+
+	if (clearPath === undefined) {
+		clearPath = false;
+	}
+
+	if (pop === undefined) {
+		pop = false;
+	}
+
+	var presetUnit = getPresetUnit(area, unitType, unitId);
+
+	if (!presetUnit) {
+		throw new Error("moveToPreset: Couldn't find preset unit - id " + unitId);
+	}
+
+	return this.moveTo(presetUnit.roomx * 5 + presetUnit.x + offX, presetUnit.roomy * 5 + presetUnit.y + offY, null, clearPath, pop);
+};
+
+Pather.moveToExit = function (targetArea, use, clearPath) {
+	var i, j, area, exits, targetRoom, dest, currExit,
+		areas = [];
+
+	if (targetArea instanceof Array) {
+		areas = targetArea;
+	} else {
+		areas.push(targetArea);
+	}
+
+	for (i = 0; i < areas.length; i += 1) {
+		area = getArea();
+
+		if (!area) {
+			throw new Error("moveToExit: error in getArea()");
+		}
+
+		exits = area.exits;
+
+		if (!exits || !exits.length) {
+			return false;
+		}
+
+		for (j = 0; j < exits.length; j += 1) {
+			currExit = {
+				x: exits[j].x,
+				y: exits[j].y,
+				type: exits[j].type,
+				target: exits[j].target,
+				tileid: exits[j].tileid
+			};
+
+			if (currExit.target === areas[i]) {
+				dest = this.getNearestWalkable(currExit.x, currExit.y, 5, 1);
+
+				if (!dest) {
+					return false;
+				}
+
+				if (!this.moveTo(dest[0], dest[1], null, clearPath)) {
+					return false;
+				}
+
+				/* i < areas.length - 1 is for crossing multiple areas.
+					In that case we must use the exit before the last area.
+				*/
+				if (use || i < areas.length - 1) {
+					switch (currExit.type) {
+					case 1: // walk through
+						targetRoom = this.getNearestRoom(areas[i]);
+
+						if (targetRoom) {
+							this.moveTo(targetRoom[0], targetRoom[1]);
+						} else {
+							// might need adjustments
+							return false;
+						}
+
+						break;
+					case 2: // stairs
+						if (!this.openExit(areas[i]) && !this.useUnit(5, currExit.tileid, areas[i])) {
+							return false;
+						}
+
+						break;
+					}
+				}
+
+				break;
+			}
+		}
+	}
+
+	if (use) {
+		return typeof targetArea === "object" ? me.area === targetArea[targetArea.length - 1] : me.area === targetArea;
+	}
+
+	return true;
+};
+
 Pather.makePortal = function (use) {
 	if (me.inTown) {
 		return true;

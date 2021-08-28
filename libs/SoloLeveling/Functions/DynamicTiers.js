@@ -158,7 +158,7 @@ var tierscore = function (item) {
 			cbfRating = 0,
 			needsCBF = (me.sorceress && !me.getSkill(54, 0) || !me.sorceress && !me.getStat(97, 54)) ? true : false,
 			body = me.getItems()
-				.filter(item => [1].indexOf(item.location) > -1 ) // limit search to equipped body parts
+				.filter(unit => [1].indexOf(unit.location) > -1 ) // limit search to equipped body parts
 				.sort((a, b) => a.bodylocation - b.bodylocation); // Sort on body, low to high.
 
 		if (needsCBF && item.getStatEx(cbfItem)) {
@@ -206,18 +206,17 @@ var tierscore = function (item) {
 		let currLR = me.getStat(41); // current lite resist
 		let currPR = me.getStat(45); // current poison resist
 		// get item body location
-		let itembodyloc = Item.getBodyLoc(item);
+		let itembodyloc = Item.equippedBodyLoc;
 
 		if (!itembodyloc) {
 			return resistRating;
 		}
 
-		let bodyloc = itembodyloc[0]; // extract bodyloc from array
 		// get item resists stats from olditem equipped on body location
 		let equippedItems = me.getItems()
-			.filter(item =>
-				item.bodylocation === bodyloc // filter equipped items to body location
-				&& [1].indexOf(item.location) > -1); // limit search to equipped body parts
+			.filter(unit =>
+				unit.bodylocation === itembodyloc // filter equipped items to body location
+				&& [1].indexOf(unit.location) > -1); // limit search to equipped body parts
 		let oldItem = equippedItems[0]; // extract oldItem from array
 		let olditemFR = oldItem !== undefined ? oldItem.getStatEx(39) : 0; // equipped fire resist
 		let olditemCR = oldItem !== undefined ? oldItem.getStatEx(43) : 0; // equipped cold resist
