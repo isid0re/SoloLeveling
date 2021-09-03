@@ -31,26 +31,26 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000", // HotO
+		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 100000 + tierscore(item)", // HotO
 		//Helmet
-		"[name] == diadem && [quality] == unique # [fcr] == 25 # [tier] == 100000", //griffons
+		"[name] == diadem && [quality] == unique # [fcr] == 25 # [tier] == 100000 + tierscore(item)", //griffons
 		//belt
-		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
+		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000 + tierscore(item)", //arach's
 		//boots
-		"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 30 # [tier] == 100000", //war traveler
+		"[name] == battleboots && [quality] == unique && [flag] != ethereal # [itemmagicbonus] >= 30 # [tier] == 100000 + tierscore(item)", //war traveler
 		//armor
-		"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 100000", //CoH
+		"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 100000 + tierscore(item)", //CoH
 		//shield
-		"[type] == shield # [fcr] >= 35 && [maxmana] >= 89 # [tier] == 100000", //spirit
+		"[type] == shield # [fcr] >= 35 && [maxmana] >= 89 # [tier] == 100000 + tierscore(item)", //spirit
 		//gloves
-		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000", //magefist
+		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000 + tierscore(item)", //magefist
 		//ammy
-		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
+		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000 + tierscore(item)", //maras
 		//rings
-		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
-		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 3 # [tier] == 100000", //bk ring
+		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000 + tierscore(item)", //soj
+		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 3 # [tier] == 100000 + tierscore(item)", //bk ring
 		//merc
 		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
-		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Eth Andy's
+		"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Andy's
 	]
 };

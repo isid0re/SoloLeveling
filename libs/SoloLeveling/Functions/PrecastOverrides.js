@@ -283,7 +283,7 @@ Precast.summon = function (skillId) {
 		rv = true;
 		let coord = CollMap.getRandCoordinate(me.x, -3, 3, me.y, -3, 3);	//Keeps bots from getting stuck trying to summon
 
-		if (coord) {
+		if (coord && Attack.validSpot(coord.x, coord.y)) {
 			Skill.cast(skillId, 0, coord.x, coord.y);
 		} else {
 			Skill.cast(skillId, 0, me.x, me.y);
@@ -299,10 +299,16 @@ Precast.summon = function (skillId) {
 				Town.heal();
 				delay(1000 + me.ping);
 				coord = CollMap.getRandCoordinate(me.x, -5, 5, me.y, -5, 5);	//Keeps bots from getting stuck trying to summon
-				Pather.moveTo(coord.x, coord.y);
+
+				if (coord && Attack.validSpot(coord.x, coord.y)) {
+					Pather.moveTo(coord.x, coord.y);
+				}
 			} else {
 				coord = CollMap.getRandCoordinate(me.x, -5, 5, me.y, -5, 5);	//Keeps bots from getting stuck trying to summon
-				Pather.moveTo(coord.x, coord.y);
+
+				if (coord && Attack.validSpot(coord.x, coord.y)) {
+					Pather.moveTo(coord.x, coord.y);
+				}
 			}
 
 			retry = 0;

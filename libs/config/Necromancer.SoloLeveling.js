@@ -211,7 +211,7 @@ function LoadConfig () {
 	/* Attack configuration. */
 	Skill.usePvpRange = true;
 	Config.AttackSkill = [0, 0, 0, 0, 0, 0, 0];
-	Config.LowManaSkill = [0, 0];
+	Config.LowManaSkill = [-1, -1];
 	Config.MaxAttackCount = 1000;
 	Config.BossPriority = me.normal ? true : false;
 	Config.ClearType = 0;
@@ -249,7 +249,7 @@ function LoadConfig () {
 	/* Class specific configuration. */
 	Config.Dodge = false;
 	Config.DodgeRange = 5;
-
+	Config.CustomCurse = me.normal ? {"Duriel": [76]} : {}; // e.x. {"Monster Name": [-1], "Monster Name": [-1]}
 	Config.Curse[0] = me.getSkill(87, 0) ? 87 : me.getSkill(66, 0) ? 66 : 0; // Boss curse.
 	Config.Curse[1] = me.normal && me.getSkill(71, 0) ? 71 : me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
 

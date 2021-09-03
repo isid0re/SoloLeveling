@@ -2,6 +2,7 @@
 *	@filename	AttackOverrides.js
 *	@author		isid0re
 *	@desc		Attack.js fixes to improve functionality
+*	@credits	Mexxtexter monster count in range function
 */
 
 if (!isIncluded("common/Attack.js")) {
@@ -436,4 +437,46 @@ Attack.clear = function (range, spectype, bossId, sortfunc, pickit) { // probabl
 	}
 
 	return true;
+};
+
+Attack.getNearestMonster = function (unit, range = 25) {
+	var gid, distance, monster = getUnit(1);
+
+	if (monster) {
+		do {
+			if (Attack.checkMonster(monster) && Attack.canAttack(monster)) {
+				distance = getDistance(unit, monster);
+
+				if (distance < range) {
+					range = distance;
+					gid = monster.gid;
+				}
+			}
+		} while (monster.getNext());
+	}
+
+	if (gid) {
+		monster = getUnit(1, -1, -1, gid);
+	} else {
+		monster = false;
+	}
+
+	return monster;
+};
+
+Attack.getMonstersInRange = function (unit, range = 25) {
+	var count, monster = getUnit(1);
+	count = 0;
+
+	if (monster) {
+		do {
+			if (Attack.checkMonster(monster)) {
+				if (getDistance(unit, monster) <= range) {
+					count += 1;
+				}
+			}
+		} while (monster.getNext());
+	}
+
+	return count;
 };

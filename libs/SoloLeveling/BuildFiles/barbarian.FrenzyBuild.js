@@ -6,7 +6,7 @@
  */
 
 var build = {
-	caster: me.charlvl !== SetUp.respecTwo() ? true : false,
+	caster: false,
 	skillstab: 32, // Barbarian Combat
 	wantedskills: [126, 133, 137], // fremzu, double swing, taunt
 	usefulskills: [129, 153], // swordmastery, natural res
@@ -54,25 +54,25 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[name] == phaseblade && [flag] == runeword # [ias] >= 30 # [tier] == 100000", //Grief
-		"[name] == colossusblade && [flag] == ethereal && [flag] == runeword # [ias] >= 60 # [tier] == 100000", //BoTD
+		"[name] == phaseblade && [flag] == runeword # [ias] >= 30 # [tier] == 100000 + tierscore(item)", //Grief
+		"[name] == colossusblade && [flag] == ethereal && [flag] == runeword # [ias] >= 60 # [tier] == 100000 + tierscore(item)", //BoTD
 		//Helmet
-		"[name] == wingedhelm && [quality] == set && [flag] != ethereal # [fhr] >= 30 # [tier] == 100000", // gface
+		"[name] == wingedhelm && [quality] == set && [flag] != ethereal # [fhr] >= 30 # [tier] == 100000 + tierscore(item)", // gface
 		//belt
-		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
+		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000 + tierscore(item)", //arach's
 		//boots
-		"[name] == warboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 100000", //gorerider's
+		"[name] == warboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 100000 + tierscore(item)", //gorerider's
 		//armor
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000 + tierscore(item)", //Enigma
 		//gloves
-		"[name] == bramblemitts && [quality] == set && [flag] != ethereal # [ias] == 20 # [tier] == 100000", //laying of hands
+		"[name] == bramblemitts && [quality] == set && [flag] != ethereal # [ias] == 20 # [tier] == 100000 + tierscore(item)", //laying of hands
 		//ammy
-		"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 100000", //highlords
+		"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 100000 + tierscore(item)", //highlords
 		//rings
-		"[type] == ring && [quality] == unique # [tohit] >= 180 && [dexterity] >= 15 # [tier] == 100000", // ravenfrost
-		"[type] == ring && [quality] == unique # [lifeleech] >= 5 && [maxstamina] == 50 # [tier] == 100000", // bul-kathos' wedding band
+		"[type] == ring && [quality] == unique # [tohit] >= 180 && [dexterity] >= 15 # [tier] == 100000 + tierscore(item)", // ravenfrost
+		"[type] == ring && [quality] == unique # [lifeleech] >= 5 && [maxstamina] == 50 # [tier] == 100000 + tierscore(item)", // bul-kathos' wedding band
 		//merc
 		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
-		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Eth Andy's
+		"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Andy's
 	]
 };

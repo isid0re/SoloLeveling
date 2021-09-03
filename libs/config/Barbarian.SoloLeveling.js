@@ -168,7 +168,7 @@ function LoadConfig () {
 
 	var levelingTiers = [ // autoequip setup
 		//weapon
-		"([Type] == Scepter || [Type] == Mace || [Type] == Sword || [Type] == Axe) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal && [strengthreq] <= 118 # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"([Type] == Scepter || [Type] == Mace) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal && [strengthreq] <= 118 # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
 		"([type] == helm || [type] == primalhelm) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal #  [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//belt
@@ -602,6 +602,45 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.Stealth, "Studded Leather"]);
 
 			Config.KeepRunewords.push("[type] == armor # [frw] == 25");
+		}
+
+		if (Item.getEquippedItem(4).tier < 100 && me.normal) { // Steel
+			var steel = [
+				"[Name] == TirRune # # [MaxQuantity] == 1",
+				"[Name] == ElRune # # [MaxQuantity] == 1",
+				"[name] == mace && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1"
+			];
+			NTIP.arrayLooping(steel);
+
+			Config.Runewords.push([Runeword.Steel, "Mace"]);
+			Config.KeepRunewords.push("[type] == mace # [plusmindamage] >= 3 && [plusmaxdamage] >= 3");
+		}
+
+		if (Item.getEquippedItem(4).tier < 200 && !me.hell) { // Malice
+			var malice = [
+				"[Name] == IthRune # # [MaxQuantity] == 1",
+				"[Name] == ElRune # # [MaxQuantity] == 1",
+				"[Name] == EthRune # # [MaxQuantity] == 1",
+				"[name] == flail && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1"
+			];
+			NTIP.arrayLooping(malice);
+
+			Config.Runewords.push([Runeword.Malice, "Flail"]);
+			Config.KeepRunewords.push("[type] == mace # [itemopenwounds] >= 100 && [plusmaxdamage] >= 9");
+		}
+
+		if (Item.getEquippedItem(4).tier < 300) { // Black
+			var black = [
+				"[Name] == ThulRune # # [MaxQuantity] == 1",
+				"[Name] == IoRune # # [MaxQuantity] == 1",
+				"[Name] == NefRune # # [MaxQuantity] == 1",
+				"([name] == flail || [name] == knout)&& [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1"
+			];
+			NTIP.arrayLooping(black);
+
+			Config.Runewords.push([Runeword.Black, "Flail"]);
+			Config.Runewords.push([Runeword.Black, "Knout"]);
+			Config.KeepRunewords.push("[type] == mace # [ias] >= 15 && [itemcrushingblow] >= 40");
 		}
 	}
 }

@@ -40,6 +40,9 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.AttackSkill = [-1, 0, 0, 0, 0, -1, -1];
 			Config.LowManaSkill = [0, 0];
+			Config.Curse[0] = [66, 87, 91]; // Boss curse.
+			Config.Curse[1] = [71, 66]; // Other monsters curse.
+			Config.ExplodeCorpses = 74; // Explode corpses.
 			Config.TownCheck = me.findItem("tbk", 0, 3);
 			Config.TownHP = me.playertype ? 0 : Config.TownCheck ? 35 : 0;
 			Config.BeltColumn = ["hp", "hp", "hp", "hp"];
@@ -116,7 +119,6 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [-1, 67, -1, 67, -1, -1, -1];
 			Config.TownCheck = me.findItem("tbk", 0, 3);
 			Config.TownHP = me.playertype ? 0 : Config.TownCheck ? 35 : 0;
-			Config.Curse[1] = me.normal && me.getSkill(71, 0) ? 71 : me.getSkill(66, 0) ? 66 : 0; // Other monsters curse.
 		}
 	},
 

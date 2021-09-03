@@ -40,25 +40,25 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[Type] == sword && [flag] == runeword # [ias] >= 30 # [tier] == 100000", //Grief dual weild
-		"[Type] == sword && [flag] == runeword # [ias] >= 20 && [coldresist] >= 75 # [tier] == 100000", //Silence x2 dual weild
+		"[Type] == sword && [flag] == runeword # [ias] >= 30 # [tier] == 100000 + tierscore(item)", //Grief dual weild
+		"[Type] == sword && [flag] == runeword # [ias] >= 20 && [coldresist] >= 75 # [tier] == 100000 + tierscore(item)", //Silence x2 dual weild
 		//Helmet
-		"[name] == slayerguard && [quality] == unique && [flag] != ethereal # [fhr] >= 30 # [tier] == 100000", //arreat's
+		"[name] == slayerguard && [quality] == unique && [flag] != ethereal # [fhr] >= 30 # [tier] == 100000 + tierscore(item)", //arreat's
 		//belt
-		"[name] == mithrilcoil && [quality] == unique && [flag] != ethereal # [fhr] >= 10 # [tier] == 100000", //verdungo's
+		"[name] == mithrilcoil && [quality] == unique && [flag] != ethereal # [fhr] >= 10 # [tier] == 100000 + tierscore(item)", //verdungo's
 		//boots
-		"[name] == warboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 100000", //gorerider's
+		"[name] == warboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 100000 + tierscore(item)", //gorerider's
 		//armor
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000 + tierscore(item)", //Enigma
 		//gloves
-		"[name] == vambraces && [quality] == unique && [flag] != ethereal # [LifeLeech] >= 4 && [ManaLeech] >= 4 # [tier] == 100000", //soul drainer
+		"[name] == vambraces && [quality] == unique && [flag] != ethereal # [LifeLeech] >= 4 && [ManaLeech] >= 4 # [tier] == 100000 + tierscore(item)", //soul drainer
 		//ammy
-		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 25 # [tier] == 100000", //maras
+		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 25 # [tier] == 100000 + tierscore(item)", //maras
 		//rings
-		"[type] == ring && [quality] == unique # [tohit] >= 180 && [dexterity] >= 15 # [tier] == 100000", // ravenfrost
-		"[type] == ring && [quality] == unique # [lifeleech] >= 5 && [maxstamina] == 50 # [tier] == 100000", // bul-kathos' wedding band
+		"[type] == ring && [quality] == unique # [tohit] >= 180 && [dexterity] >= 15 # [tier] == 100000 + tierscore(item)", // ravenfrost
+		"[type] == ring && [quality] == unique # [lifeleech] >= 5 && [maxstamina] == 50 # [tier] == 100000 + tierscore(item)", // bul-kathos' wedding band
 		//merc
 		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
-		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Eth Andy's
+		"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Andy's
 	]
 };

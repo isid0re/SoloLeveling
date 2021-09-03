@@ -3,6 +3,7 @@
  *	@author		isid0re
  *	@credits	kolton, YGM
  *	@desc		clear Throne of Destruction and kill Baal with wave skips
+ *	@credits	DarkHorseDre for dopplezon preattack solution https://github.com/kolton/d2bot-with-kolbot/issues/2777
  */
 
 function baal () {
@@ -12,6 +13,12 @@ function baal () {
 		var check;
 
 		switch (me.classid) {
+		case 0: // Amazon
+			if (me.getSkill(28, 1) && me.getMinionCount(8) < 1) { // cast dopplezon
+				Skill.cast(28, 0, 15094 + rand(-1, 1), 5028);
+			}
+
+			break;
 		case 1: // Sorceress
 			switch (Config.AttackSkill[3]) {
 			case 49:
@@ -176,7 +183,7 @@ function baal () {
 			me.overhead("Dolls found! NG.");
 		}
 
-		if (getUnit(1, 641)) {
+		if (Check.Resistance().LR < 75 + me.getStat(42) && getUnit(1, 641)) { // leave game if not max res
 			print("ÿc9SoloLevelingÿc0: Souls found! NG.");
 			me.overhead("Souls found! NG.");
 		}

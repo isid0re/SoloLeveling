@@ -172,7 +172,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [139, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 		}
 	},
 
@@ -180,7 +180,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [139, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -189,7 +189,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [139, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -198,7 +198,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [139, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -207,7 +207,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [139, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -216,7 +216,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [139, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -225,7 +225,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -234,7 +234,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -243,7 +243,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -252,7 +252,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -261,7 +261,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -270,7 +270,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 133, -1, 133, -1];
+			Config.AttackSkill = [[137, 130, 146], 133, -1, 133, -1];
 
 		}
 	},
@@ -279,7 +279,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 147, -1, 147, -1];
+			Config.AttackSkill = [[137, 130, 146], 147, -1, 147, -1];
 			Config.LowManaSkill = [133, 133];
 			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
 			Config.MinColumn[0] = Config.BeltColumn[0] !== "rv" ? Math.max(1, Storage.BeltSize() - 1) : 0;
@@ -294,7 +294,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 147, -1, 147, -1];
+			Config.AttackSkill = [[137, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -302,7 +302,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 147, -1, 147, -1];
+			Config.AttackSkill = [[137, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -310,7 +310,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 147, -1, 147, -1];
+			Config.AttackSkill = [[137, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -318,7 +318,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 147, -1, 147, -1];
+			Config.AttackSkill = [[137, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -326,7 +326,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [146, 147, -1, 147, -1];
+			Config.AttackSkill = [[137, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -334,7 +334,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [154, 147, -1, 147, -1];
+			[[154, 137, 154, 154, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -342,7 +342,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [154, 147, -1, 147, -1];
+			[[154, 137, 154, 154, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -350,7 +350,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [154, 147, -1, 147, -1];
+			[[154, 137, 154, 154, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -359,7 +359,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [154, 147, -1, 147, -1];
+			[[154, 137, 154, 154, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -368,7 +368,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [154, 147, -1, 147, -1];
+			[[154, 137, 154, 154, 130, 146], 147, -1, 147, -1];
 
 		}
 	},
@@ -377,7 +377,7 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.AttackSkill = [154, 147, -1, 147, -1];
+			[[154, 137, 154, 154, 130, 146], 147, -1, 147, -1];
 
 		}
 	}

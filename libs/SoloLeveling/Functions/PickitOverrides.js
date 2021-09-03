@@ -9,6 +9,10 @@ if (!isIncluded("common/Pickit.js")) {
 	include("common/Pickit.js");
 }
 
+if (!isIncluded("AutoMule.js")) {
+	include("AutoMule.js");
+}
+
 if (!isIncluded("SoloLeveling/Functions/NTIPOverrides.js")) {
 	include("SoloLeveling/Functions/NTIPOverrides.js");
 }

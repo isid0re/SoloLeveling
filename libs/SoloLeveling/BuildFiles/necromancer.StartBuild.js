@@ -22,11 +22,11 @@ var build = {
 		[67, 5], // teeth
 		[68, 1], // bone armor
 		[71, 1], // dim vision
-		[67, 12], // teeth
 		[75, 1], // clay golem
+		[67, 12], // teeth
+		[76, 1], // iron maiden
 		[79, 1], // Golem Mastery
 		[66, 1], // amplified damage
-		[76, 1], // iron maiden
 		[74, 1], // corpse explosion
 		[84, 7], // bone spear
 		[78, 4], // bone wall

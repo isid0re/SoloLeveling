@@ -431,7 +431,7 @@ Pather.moveToPreset = function (area, unitType, unitId, offX, offY, clearPath, p
 		throw new Error("moveToPreset: Couldn't find preset unit - id " + unitId);
 	}
 
-	return this.moveTo(presetUnit.roomx * 5 + presetUnit.x + offX, presetUnit.roomy * 5 + presetUnit.y + offY, null, clearPath, pop);
+	return this.moveTo(presetUnit.roomx * 5 + presetUnit.x + offX, presetUnit.roomy * 5 + presetUnit.y + offY, 15, clearPath, pop);
 };
 
 Pather.moveToExit = function (targetArea, use, clearPath) {
@@ -473,7 +473,7 @@ Pather.moveToExit = function (targetArea, use, clearPath) {
 					return false;
 				}
 
-				if (!this.moveTo(dest[0], dest[1], null, clearPath)) {
+				if (!this.moveTo(dest[0], dest[1], 15, clearPath)) {
 					return false;
 				}
 
