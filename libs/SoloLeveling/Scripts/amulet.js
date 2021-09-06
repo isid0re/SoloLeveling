@@ -19,7 +19,7 @@ function amulet () {
 	Pather.moveToExit([45, 58, 61], true);
 	Precast.doPrecast(true);
 
-	if (me.classid !== 1 || me.classid === 1 && me.charlvl <= SetUp.respecOne) {
+	if (!me.sorceress || me.sorceress && me.charlvl <= Config.respecOne) {
 		Pather.moveTo(15065, 14047);
 		Pather.moveTo(15063, 14066);
 		Pather.moveTo(15051, 14066);

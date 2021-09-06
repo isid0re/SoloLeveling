@@ -15,7 +15,7 @@ NTIP.GetCharmTier = NTIP.generateTierFunc('Charmtier');
 NTIP.addLine = function (itemString) {
 	let info = {
 		line: 1,
-		file: "SoloLeveling",
+		file: "SoloLeveling", 
 		string: line
 	};
 
@@ -36,8 +36,10 @@ NTIP.addLine = function (itemString) {
 };
 
 NTIP.arrayLooping = function (arraytoloop) {
-	for (let q = 0; q < arraytoloop.length; q += 1) {
-		NTIP.addLine(arraytoloop[q]);
+	if (arraytoloop) {
+		for (let q = 0; q < arraytoloop.length; q += 1) {
+			NTIP.addLine(arraytoloop[q]);
+		}
 	}
 
 	return true;

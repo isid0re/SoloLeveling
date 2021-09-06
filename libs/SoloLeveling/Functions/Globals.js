@@ -53,58 +53,48 @@ var SetUp = {
 		],
 	},
 
-	levelCap: [33, 65, 100][me.diff],
 	className: ["Amazon", "Sorceress", "Necromancer", "Paladin", "Barbarian", "Druid", "Assassin"][me.classid],
 	finalBuild: DataFile.getStats().finalBuild,
-	respecOne: [25, 28, 26, 19, 34, 24, 30][me.classid],
-
 	respecTwo: function () {
 		let respec;
 
-		switch (me.gametype) {
-		case 0:
-			respec = [75, 75, 75, 85, 75, 75, 75][me.classid];
+		switch (this.finalBuild) {
+		case "Witchyzon":
+			respec = Check.haveItem("diamondbow", "unique", "Witchwild String") ? me.charlvl : 100;
 			break;
-
-		case 1:
-			switch (this.finalBuild) {
-			case "Witchyzon":
-				respec = Check.haveItem("diamondbow", "unique", "Witchwild String") ? me.charlvl : 100;
-				break;
-			case "Javazon":
-			case "Lightning":
-			case "Blova":
-				respec = Attack.checkInfinity() ? me.charlvl : 100;
-				break;
-			case "Cold":
-			case "Meteorb":
-			case "Blizzballer":
-				respec = Check.haveItem("amulet", "set", "Tal Rasha's Adjudication") && Check.haveItem("belt", "set", "Tal Rasha's Fine-Spun Cloth") && Check.haveItem("armor", "set", "Tal Rasha's Guardianship") && Check.haveItem("swirlingcrystal", "set", "Tal Rasha's Lidless Eye") ? me.charlvl : 100; //Tal ammy, belt, armor, and wep
-				break;
-			case "Bone":
-			case "Poison":
-			case "Summon":
-			case "Hammerdin":
-			case "Elemental":
-			case "Wind":
-			case "Trapsin":
-			case "Singer":
-				respec = Check.haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
-				break;
-			case "Whirlwind":
-			case "Smiter":
-				respec = Check.haveItem("sword", "runeword", "Grief") ? me.charlvl : 100;
-				break;
-			case "Frenzy":
-				respec = Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("sword", "runeword", "Breath of the Dying") ? me.charlvl : 100;
-				break;
-			case "Wolf":
-				respec = Check.haveItem("stalagmite", "unique", "Ribcracker") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
-				break;
-			case "Plaguewolf":
-				respec = Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
-				break;
-			}
+		case "Javazon":
+		case "Lightning":
+		case "Blova":
+			respec = Attack.checkInfinity() ? me.charlvl : 100;
+			break;
+		case "Cold":
+		case "Meteorb":
+		case "Blizzballer":
+			respec = Check.haveItem("amulet", "set", "Tal Rasha's Adjudication") && Check.haveItem("belt", "set", "Tal Rasha's Fine-Spun Cloth") && Check.haveItem("armor", "set", "Tal Rasha's Guardianship") && Check.haveItem("swirlingcrystal", "set", "Tal Rasha's Lidless Eye") ? me.charlvl : 100; //Tal ammy, belt, armor, and wep
+			break;
+		case "Bone":
+		case "Poison":
+		case "Summon":
+		case "Hammerdin":
+		case "Elemental":
+		case "Wind":
+		case "Trapsin":
+		case "Singer":
+			respec = Check.haveItem("armor", "runeword", "Enigma") ? me.charlvl : 100;
+			break;
+		case "Whirlwind":
+		case "Smiter":
+			respec = Check.haveItem("sword", "runeword", "Grief") ? me.charlvl : 100;
+			break;
+		case "Frenzy":
+			respec = Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("sword", "runeword", "Breath of the Dying") ? me.charlvl : 100;
+			break;
+		case "Wolf":
+			respec = Check.haveItem("stalagmite", "unique", "Ribcracker") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
+			break;
+		case "Plaguewolf":
+			respec = Check.haveItem("sword", "runeword", "Grief") && Check.haveItem("armor", "runeword", "Chains of Honor") ? me.charlvl : 100;
+			break;
 		}
 
 		return respec;
@@ -113,9 +103,9 @@ var SetUp = {
 	getBuild: function () {
 		let buildType;
 
-		if (me.charlvl < SetUp.respecOne) {
+		if (me.charlvl < Config.respecOne) {
 			buildType = "Start";
-		} else if (me.charlvl >= SetUp.respecTwo()) {
+		} else if (me.charlvl >= Config.respecTwo) {
 			buildType = SetUp.finalBuild;
 		} else {
 			buildType = "Leveling";
@@ -452,7 +442,7 @@ var Check = {
 	nextDifficulty: function () {
 		let diffShift = me.diff;
 		let lowRes = !this.Resistance().Status;
-		let lvlReq = me.charlvl >= SetUp.levelCap ? true : false;
+		let lvlReq = me.charlvl >= Config.levelCap ? true : false;
 		let diffCompleted = !me.classic && me.baal ? true : me.classic && me.diablo ? true : false;
 
 		if (diffCompleted) {
@@ -461,7 +451,7 @@ var Check = {
 					diffShift = me.diff + 1;
 					D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + Difficulty[diffShift]);
 				} else {
-					if (me.charlvl >= SetUp.levelCap + 5) {
+					if (me.charlvl >= Config.levelCap + 5) {
 						diffShift = me.diff + 1;
 						D2Bot.printToConsole('SoloLeveling: Over leveled. Starting: ' + Difficulty[diffShift]);
 					} else {

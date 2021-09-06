@@ -302,7 +302,7 @@ Misc.townCheck = function () {
 
 	if (Config.TownCheck && !me.inTown) {
 		try {
-			if (!me.respec && (me.charlvl === SetUp.respecOne || me.charlvl === SetUp.respecTwo())) {
+			if (!me.respec && (me.charlvl === Config.respecOne || me.charlvl === Config.respecTwo)) {
 				check = true;
 			}
 

@@ -384,7 +384,7 @@ var Quest = {
 			return true;
 		}
 
-		if (me.charlvl === SetUp.respecOne || me.charlvl === SetUp.respecTwo()) {
+		if (me.charlvl === Config.respecOne || me.charlvl === Config.respecTwo) {
 			Precast.doPrecast(true);
 			Town.goToTown(1);
 			me.overhead('time to respec');
