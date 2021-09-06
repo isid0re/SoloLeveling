@@ -222,12 +222,12 @@ Pickit.pickItem = function (unit, status, keptLine) {
 		cancelFlags = [0x01, 0x08, 0x14, 0x0c, 0x19, 0x1a],
 		itemCount = me.itemcount;
 
-	if (unit.gid) {
+	if (unit && unit.gid) {
 		gid = unit.gid;
 		item = getUnit(4, -1, -1, gid);
 	}
 
-	if (!item) {
+	if (!unit || !item) {
 		return false;
 	}
 
