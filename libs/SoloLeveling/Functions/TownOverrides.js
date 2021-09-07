@@ -1143,6 +1143,7 @@ Town.clearJunk = function () {
 		if (junk[0].getStatEx(31) > 0 && junk[0].getStat(194) > 0) { // only drop noneth rw base armors helms shields
 			if ((junk[0].location === 7 || junk[0].location === 3) &&
 				!junk[0].getFlag(NTIPAliasFlag["ethereal"]) &&
+				!junk[0].getFlag(NTIPAliasFlag["runeword"]) && // don't drop made runewords
 				(junk[0].quality === 2 || junk[0].quality === 3) &&
 				junk[0].getStatEx(31) < rwBase.getStatEx(31)) {
 				if (junk[0].drop()) {
