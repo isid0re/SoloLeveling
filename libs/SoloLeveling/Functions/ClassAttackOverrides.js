@@ -624,7 +624,7 @@ case 2: // Necromancer
 	};
 
 	ClassAttack.explodeCorpses = function (unit) {
-		if (Config.ExplodeCorpses === 0 || unit.mode === 0 || unit.mode === 12) {
+		if (!me.getSkill(Config.ExplodeCorpses, 1) || Config.ExplodeCorpses === 0 || unit.mode === 0 || unit.mode === 12) {
 			return false;
 		}
 
@@ -649,13 +649,14 @@ case 2: // Necromancer
 
 					if (corpse) {
 						if (!unit.dead && this.checkCorpse(corpse) && getDistance(corpse, unit) <= range) {
-							me.overhead("Exploding: " + corpse.classid + " " + corpse.name + " id:" + corpse.gid); // Added corpse ID so I can see when it blows another monster with the same ClassID and Name
 							mobList = Attack.getMonstersInRange(corpse, range);
 							mark = Attack.getNearestMonster(corpse, range);
 
 							if (mark && mobList > 0 && me.getSkill(66, 1) && !mark.getState(9)) {
 								Skill.cast(66, 0, mark);
 							}
+
+							me.overhead("Exploding: " + corpse.classid + " " + corpse.name + " id:" + corpse.gid); // Added corpse ID so I can see when it blows another monster with the same ClassID and Name
 
 							if (mobList > 0 && Skill.cast(Config.ExplodeCorpses, 0, corpse)) {
 								delay(me.ping + 1);
@@ -669,13 +670,14 @@ case 2: // Necromancer
 						corpse = corpseList.shift();
 
 						if (corpse) {
-							me.overhead("Exploding: " + corpse.classid + " " + corpse.name);
 							mobList = Attack.getMonstersInRange(corpse, range);
 							mark = Attack.getNearestMonster(corpse, range);
 
 							if (mark && mobList > 0 && me.getSkill(66, 1) && !mark.getState(9)) {
 								Skill.cast(66, 0, mark);
 							}
+
+							me.overhead("Exploding: " + corpse.classid + " " + corpse.name);
 
 							if (mobList > 0 && Skill.cast(Config.ExplodeCorpses, 0, corpse)) {
 								delay(200);

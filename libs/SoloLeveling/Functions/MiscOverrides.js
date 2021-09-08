@@ -302,7 +302,7 @@ Misc.townCheck = function () {
 
 	if (Config.TownCheck && !me.inTown) {
 		try {
-			if (!me.respec && (me.charlvl === Config.respecOne || me.charlvl === Config.respecTwo)) {
+			if (me.den && !me.respec && (me.charlvl === Config.respecOne || me.charlvl === Config.respecTwo)) {
 				check = true;
 			}
 
@@ -415,7 +415,7 @@ Misc.openChest = function (unit) {
 Misc.openChests = function (range) {
 	var unit,
 		unitList = [],
-		containers = [ "loose rock", "hidden stash", "loose boulder", "chest", "chest3", "armorstand", "holeanim", "weaponrack"],
+		containers = ["loose rock", "hidden stash", "loose boulder", "chest", "chest3", "armorstand", "holeanim", "corpseonstick", "roguecorpse", "corpse", "skeleton", "guardcorpse", "weaponrack"],
 		pita = ["barrel", "largeurn", "jar3", "jar2", "jar1", "urn", "jug"]; // pain in the ass
 
 	if (!range) {

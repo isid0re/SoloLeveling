@@ -1,7 +1,7 @@
 /**
- *    @filename   necromancer.ExplosionBuild.js
+ *    @filename   necromancer.levelingBuild.js
  *	  @author	  isid0re
- *    @desc       explosionmancer necro build for after respecOne
+ *    @desc       explosionmancer necro build for leveling after respecOne
  */
 
 var build = {

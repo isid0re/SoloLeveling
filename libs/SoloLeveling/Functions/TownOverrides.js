@@ -8,7 +8,6 @@ if (!isIncluded("common/Town.js")) {
 	include("common/Town.js");
 }
 
-//Removed Missle Potions for easy gold
 Town.ignoredItemTypes = [ // Items that won't be stashed
 	5, // Arrows
 	6, // Bolts
@@ -106,8 +105,11 @@ Town.doChores = function (repair = false) {
 	this.fillTome(518);
 	this.shopItems();
 	this.buyKeys();
-	this.repair(repair);
-	this.shopItems();
+
+	if (this.repair(repair)) {
+		this.shopItems();
+	}
+
 	this.reviveMerc();
 	this.gamble();
 	Item.autoEquip();
@@ -1134,6 +1136,7 @@ Town.clearJunk = function () {
 				item.itemType === junk[0].itemType// same item type as current
 				&& (item.quality === 2 || item.quality === 3) // only normal or superior items
 				&& !item.getFlag(NTIPAliasFlag["ethereal"]) // only noneth runeword bases
+				&& !item.getFlag(NTIPAliasFlag["runeword"]) // only unmade runeword bases
 				&& item.getStat(194) === junk[0].getStat(194) // sockets match junk in review
 				&& [3, 7].indexOf(item.location) > -1 // locations
 			)
@@ -1415,4 +1418,67 @@ Town.needRepair = function () {
 	}
 
 	return repairAction;
+};
+
+Town.repair = function (force = false) {
+	var i, quiver, myQuiver, npc, repairAction, bowCheck;
+
+	this.cubeRepair();
+
+	repairAction = this.needRepair();
+
+	if (force && repairAction.indexOf("repair") === -1) {
+		repairAction.push("repair");
+	}
+
+	if (!repairAction || !repairAction.length) {
+		return false;
+	}
+
+	for (i = 0; i < repairAction.length; i += 1) {
+		switch (repairAction[i]) {
+		case "repair":
+			npc = this.initNPC("Repair", "repair");
+
+			if (!npc) {
+				return false;
+			}
+
+			me.repair();
+
+			break;
+		case "buyQuiver":
+			bowCheck = Attack.usingBow();
+
+			if (bowCheck) {
+				if (bowCheck === "bow") {
+					quiver = "aqv"; // Arrows
+				} else {
+					quiver = "cqv"; // Bolts
+				}
+
+				myQuiver = me.getItem(quiver, 1);
+
+				if (myQuiver) {
+					myQuiver.drop();
+				}
+
+				npc = this.initNPC("Repair", "repair");
+
+				if (!npc) {
+					return false;
+				}
+
+				quiver = npc.getItem(quiver);
+
+				if (quiver) {
+					quiver.buy();
+				}
+			}
+
+			break;
+		}
+	}
+
+	return true;
 };
