@@ -622,7 +622,7 @@ function main () {
 	this.scriptEvent = function (msg) {
 		var obj, msgCheck;
 
-		msgCheck = msg.substring(0, 9).includes("settings-") ? "settings-" : msg;
+		msgCheck = msg.includes("settings-") ? "settings-" : msg;
 
 		switch (msgCheck) {
 		case "toggleQuitlist":
