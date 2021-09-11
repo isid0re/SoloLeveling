@@ -198,12 +198,13 @@ function main () {
 		}
 
 		load("libs/SoloLeveling/Tools/ToolsThread.js");
+		load("libs/SoloLeveling/Tools/TownChicken.js");
 	} else {
 		load("tools/ToolsThread.js");
-	}
 
-	if (Config.TownCheck || Config.TownHP || Config.TownMP) {
-		load("tools/TownChicken.js");
+		if (Config.TownCheck || Config.TownHP || Config.TownMP) {
+			load("tools/TownChicken.js");
+		}
 	}
 
 	if (Config.PublicMode) {

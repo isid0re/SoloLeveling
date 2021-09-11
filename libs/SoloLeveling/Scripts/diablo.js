@@ -303,7 +303,6 @@ function diablo () {
 	this.vizier();
 	this.seis();
 	this.infector();
-	Config.MercWatch = false;
 	Pather.moveTo(7788, 5292, 3, 30);
 	this.diabloPrep();
 	let theD = getUnit(1, 243);
@@ -332,8 +331,6 @@ function diablo () {
 		delay(500 + me.ping);
 		Pather.useUnit(2, 566, 109);
 	}
-
-	Config.MercWatch = true;
 
 	return true;
 }

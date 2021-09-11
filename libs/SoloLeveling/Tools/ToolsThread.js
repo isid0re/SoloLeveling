@@ -620,15 +620,21 @@ function main () {
 	};
 
 	this.scriptEvent = function (msg) {
-		var obj;
+		var obj, msgCheck;
 
-		switch (msg) {
+		msgCheck = msg.substring(0, 9).includes("settings-") ? "settings-" : msg;
+
+		switch (msgCheck) {
 		case "toggleQuitlist":
 			canQuit = !canQuit;
 
 			break;
 		case "quit":
 			quitFlag = true;
+
+			break;
+		case "settings-":
+			Config = JSON.parse(msg.split("settings-")[1]);
 
 			break;
 		default:

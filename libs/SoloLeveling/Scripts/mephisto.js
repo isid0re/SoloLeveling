@@ -26,9 +26,7 @@ function mephisto () {
 	Precast.doPrecast(true);
 	Pather.moveTo(17692, 8048);
 	Pather.moveTo(17563, 8072);
-	Config.MercWatch = false;
 	Attack.killTarget("Mephisto");
-	Config.MercWatch = true;
 	Pickit.pickItems();
 	Pather.moveTo(17581, 8070);
 	delay(250 + me.ping * 2);

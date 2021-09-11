@@ -283,6 +283,10 @@ Skill.getRange = function (skillId) {
 	return 20;
 };
 
+Misc.updateConfig = function () {
+	scriptBroadcast("settings-" + JSON.stringify(Misc.copy(Config)));
+};
+
 Misc.checkQuest = function (id, state) {
 	sendPacket(1, 0x40);
 	delay(500 + me.ping);

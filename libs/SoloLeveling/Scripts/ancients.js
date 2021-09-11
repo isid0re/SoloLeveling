@@ -69,27 +69,22 @@ function ancients () {
 
 	Precast.doPrecast(true);
 	Pather.moveToExit(120, true); // enter at ancients plateau
-	let tempConfig = Misc.copy(Config); // save and update config settings
-	let updateConfig = {
-		TownCheck: false,
-		MercWatch: false,
-		HealStatus: false,
-		TownHP: 0,
-		TownMP: 0,
-		MPBuffer: me.charlvl > 39 ? 8 : 15,
-		HPBuffer: me.charlvl > 39 ? 8 : 15,
-		UseMercRejuv: 25,
-		LifeChicken: 5,
-		ManaChicken: 0,
-		MercChicken: 0
-	};
-
 	Town.townTasks();
+	let origConfig = Misc.copy(Config); // save and update config settings
+	Config.TownCheck = false;
+	Config.MercWatch = false;
+	Config.HealStatus = false;
+	Config.TownHP = 0;
+	Config.TownMP = 0;
+	Config.MPBuffer = me.charlvl > 39 ? 8 : 15;
+	Config.HPBuffer = me.charlvl > 39 ? 8 : 15;
+	Config.UseMercRejuv = 25;
+	Config.LifeChicken = me.playertype ? 30 : 5;
+	Misc.updateConfig();
 	me.overhead('updated settings');
-	Object.assign(Config, updateConfig);
-	Town.buyPots(10, "Thawing"); // prep to revised settings
+	Town.buyPots(8, "Thawing"); // prep to revised settings
 	Town.drinkPots();
-	Town.buyPots(10, "Antidote");
+	Town.buyPots(8, "Antidote");
 	Town.drinkPots();
 	Town.buyPotions();
 	Pather.usePortal(120, me.name);
@@ -119,8 +114,9 @@ function ancients () {
 	Attack.clear(50);
 	Pather.moveTo(10048, 12628);
 	me.cancel();
+	Config = origConfig;
+	Misc.updateConfig();
 	me.overhead('restored settings');
-	Object.assign(Config, tempConfig);
 	Precast.doPrecast(true);
 
 	try {

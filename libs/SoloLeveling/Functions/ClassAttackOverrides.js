@@ -1150,6 +1150,14 @@ case 4: // Barbarian
 			Town.visitTown(!!needRepair.length);
 		}
 
+		if (!me.getState(51) && me.getSkill(155, 1)) { // add battle command state
+			Skill.cast(155, 0);
+		}
+
+		if (!me.getState(32) && me.getSkill(149, 1)) { // add battle orders state
+			Skill.cast(149, 0);
+		}
+
 		if (!me.getState(26) && me.getSkill(138, 1)) { // add shout state
 			Skill.cast(138, 0);
 		}

@@ -25,7 +25,6 @@ function duriel () {
 	Town.doChores();
 	Town.buyPots(8, "Thawing"); // thawing
 	Town.drinkPots();
-	Config.MercWatch = false;
 	Pather.usePortal(null, me.name);
 	delay(1000 + me.ping);
 	Pather.useUnit(2, 100, 73);
@@ -43,7 +42,6 @@ function duriel () {
 	}
 
 	Pather.changeAct();
-	Config.MercWatch = true;
 
 	return true;
 }
