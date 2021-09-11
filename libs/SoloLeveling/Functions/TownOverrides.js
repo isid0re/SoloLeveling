@@ -706,7 +706,7 @@ Town.unfinishedQuests = function () {
 	}
 
 	if (me.getItem(617) && Item.getEquippedItemMerc(1).name.includes("Andariel's") && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral to andy's visage
-		Item.removeItems(1);
+		Item.removeItemsMerc(1);
 		equipped = me.findItem(428, 0, 3);
 		Quest.fillSockets(equipped, 617);
 		Item.equipMerc(equipped, 1);
