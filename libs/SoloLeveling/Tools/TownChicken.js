@@ -63,7 +63,7 @@ function main () {
 
 	addEventListener("scriptmsg",
 		function (msg) {
-			let msgCheck = msg.includes("settings-") ? "settings-" : msg;
+			let msgCheck = msg.toString().substring(0, 9).includes("settings-") ? "settings-" : msg;
 
 			switch (msgCheck) {
 			case "townCheck":
