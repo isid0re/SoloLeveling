@@ -81,6 +81,11 @@ function hellforge () {
 	delay(4500 + me.ping);
 	Pickit.pickItems();
 	Item.autoEquip();
+
+	if ([2, 69, 70].indexOf(Item.getEquippedItem(5).itemType) === -1) { //dual weild fix for assassin/barbarian
+		Item.autoEquip();
+	}
+
 	Town.npcInteract("cain");
 
 	return true;
