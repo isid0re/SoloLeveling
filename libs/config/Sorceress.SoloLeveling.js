@@ -394,7 +394,7 @@ function LoadConfig () {
 				];
 				NTIP.arrayLooping(SpiritSword);
 
-				if (!me.getItem(620)) { //Amn Rune
+				if (me.normal && !me.getItem(620)) { //Amn Rune
 					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
 					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
@@ -422,6 +422,13 @@ function LoadConfig () {
 			NTIP.arrayLooping(Insight);
 
 			if (!me.hell && Item.getEquippedItemMerc(4).prefixnum !== 20568) {
+				var InsightRunes = [
+					"[Name] == RalRune # # [MaxQuantity] == 1",
+					"[Name] == TirRune # # [MaxQuantity] == 1",
+					"[Name] == TalRune # # [MaxQuantity] == 1",
+					"[Name] == SolRune # # [MaxQuantity] == 1",
+				];
+				NTIP.arrayLooping(InsightRunes);
 				NTIP.addLine("[Name] == voulge && [flag] != runeword && [flag] != ethereal && [Quality] == Normal && [Level] >= 26 && [Level] <= 40 # [Sockets] == 0 # [MaxQuantity] == 1");
 			}
 
@@ -454,10 +461,6 @@ function LoadConfig () {
 					"[Name] == SolRune # # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(loreRunes);
-
-				Config.Recipes.push([Recipe.Rune, "Ort Rune"]);
-				Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
-				Config.Recipes.push([Recipe.Rune, "Amn Rune"]);
 			}
 
 			var loreHelm = [

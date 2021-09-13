@@ -7,7 +7,7 @@
 var build = {
 	caster: true,
 	skillstab: 32, // Combat
-	wantedskills: [129, 144, 154], // Mace Mastery, Concentrate, WarCry
+	wantedskills: [129, 147, 154], // Mace Mastery, Concentrate, WarCry
 	usefulskills: [149, 153], // Battle Orders, Natural Resist
 	mercAuraName: "Might",
 	mercAuraWanted: 98,
@@ -20,31 +20,24 @@ var build = {
 	],
 	skills: [
 		[130, 1], // Howl
-		[137, 1], // Taunt
 		[138, 1], // Shout
+		[137, 10], // Taunt
 		[146, 1], // Battle Cry
 		[149, 1], // Battle Orders
 		[155, 1], // Battle Command
-		[154, 1], // War Cry
+		[154, 3], // War Cry
 		[129, 1], // Mace Mastery
-		[141, 1], // Increased Stamina
-		[148, 1], // Increased Speed
+		[127, 1], // Sword Mastery
 		[145, 1], // Iron Skin
 		[153, 1], // Natural Resistance
 		[126, 1], // Bash
-		[139, 1], // Stun
-		[144, 1], // Concentrate
-		[152, 1], // Berserk
-		[133, 1], // Double Swing
+		[133, 9], // Double Swing
 		[140, 1], // Double Throw
 		[147, 1], // Frenzy
-		[153, 4], // Natural Resistance
-		[133, 6], // Double Swing
-		[137, 9], // Taunt
-		[149, 5], // Battle Orders
-		[154, 20], // War Cry
-		[146, 20], // Battle Cry
-		[137, 20], // Taunt
-		[130, 20], // Howl
+		[154, 20, false], // War Cry
+		[149, 20, false], // Battle Orders
+		[147, 20, false], // Frenzy
+		[137, 20, false], // Taunt
+		[146, 20, false], // Battle Cry
 	],
 };
