@@ -1228,6 +1228,10 @@ case 4: // Barbarian
 			break;
 		}
 
+		if (!unit.getState(89) && me.getSkill(146, 1)) { // keep battle cry up on unit
+			Skill.cast(146, Skill.getHand(146), unit);
+		}
+
 		index = ((unit.spectype & 0x7) || unit.type === 0) ? 1 : 3;
 
 		if (Attack.getCustomAttack(unit)) {

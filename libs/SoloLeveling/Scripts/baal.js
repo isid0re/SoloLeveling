@@ -177,7 +177,7 @@ function baal () {
 	Attack.clear(20);
 	Pather.moveTo(15098, 5029);
 
-	if (me.diff === 2) {
+	if (me.hell) {
 		if (getUnit(1, 691)) {
 			print("ÿc9SoloLevelingÿc0: Dolls found! NG.");
 			me.overhead("Dolls found! NG.");
