@@ -1,6 +1,6 @@
 ![SoloLeveling](https://i.imgur.com/6UMDGFk.png)
 
-SoloLeveling is the *original* multi-class single character leveling script for Kolbot. The overall goal of the project is to be the easiest to use and fastest leveling script for any character class.
+SoloLeveling is the ***original*** multi-class single character leveling script for Kolbot. The overall goal of the project is to be the easiest to use and fastest leveling script for any character class.
 
 **NOTE:** This script is designed to be only run from [https://github.com/blizzhackers/kolbot](https://github.com/blizzhackers/kolbot). Most errors occur from using the wrong Kolbot repo installation. 
 
