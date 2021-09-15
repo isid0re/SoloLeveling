@@ -4,7 +4,7 @@
  *      @desc       Barbarian start build
  */
 
- var build = {
+var build = {
 	caster: false,
 	skillstab: 32, // Combat
 	wantedskills: [129, 147], // Mace Mastery, Frenzy

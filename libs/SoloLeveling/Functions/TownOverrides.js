@@ -291,7 +291,7 @@ Town.buyBook = function () {
 		return true;
 	}
 
-	var tpBook, tpScroll, idBook, npc;
+	var tpBook, tpScroll, npc;
 
 	switch (me.area) {
 	case 1:
@@ -667,11 +667,11 @@ Town.unfinishedQuests = function () {
 	}
 
 	//Act 5
-	if (Misc.checkQuest(35, 1)) { // socket items
+	if (Misc.checkQuest(35, 1) && SetUp.finalBuild !== "Bumper") { // socket items
 		switch (me.diff) {
 		case 0:
 		case 1:
-			if (Item.getEquippedItemMerc(3).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
+			if (Item.getEquippedItemMerc(4).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
 				Quest.holePunch(58); // insight voulge
 			}
 
@@ -1111,7 +1111,7 @@ Town.clearInventory = function () {
 };
 
 Town.clearJunk = function () {
-	let junk = me.findItems(-1, 0);
+	let focus, result, rwBase, junk = me.findItems(-1, 0);
 
 	if (!junk) {
 		return false;
@@ -1131,29 +1131,45 @@ Town.clearJunk = function () {
 			}
 		}
 
-		let rwBase = me.getItems()
+		focus = junk[0].getStat(194) === 0 ? "SOCKETS" : junk[0].getStat(31) > 0 ? "DEF" : "DMG";
+
+		rwBase = me.getItems()
 			.filter(item =>
 				item.itemType === junk[0].itemType// same item type as current
 				&& (item.quality === 2 || item.quality === 3) // only normal or superior items
 				&& !item.getFlag(NTIPAliasFlag["ethereal"]) // only noneth runeword bases
 				&& !item.getFlag(NTIPAliasFlag["runeword"]) // only unmade runeword bases
-				&& item.getStat(194) === junk[0].getStat(194) // sockets match junk in review
-				&& [3, 7].indexOf(item.location) > -1 // locations
-			)
-			.sort((a, b) => a.getStatEx(31) - b.getStatEx(31)) // Sort on defense, low to high.
-			.last(); // select last
+				&& [3, 6, 7].indexOf(item.location) > -1 // locations
+			);
 
-		if (junk[0].getStatEx(31) > 0 && junk[0].getStat(194) > 0) { // only drop noneth rw base armors helms shields
-			if ((junk[0].location === 7 || junk[0].location === 3) &&
-				!junk[0].getFlag(NTIPAliasFlag["ethereal"]) &&
-				!junk[0].getFlag(NTIPAliasFlag["runeword"]) && // don't drop made runewords
-				(junk[0].quality === 2 || junk[0].quality === 3) &&
-				junk[0].getStatEx(31) < rwBase.getStatEx(31)) {
-				if (junk[0].drop()) {
-					me.overhead('cleared runeword junk');
-					print("ÿc9SoloLevelingÿc0: Cleared runeword junk - " + junk[0].name);
-					delay(50 + me.ping);
-				}
+		switch (focus) {
+		case "SOCKETS":
+			rwBase = rwBase.filter(item => item.getStat(194) > 0); // total matching itemTypes with sockets
+			result = rwBase.length > 0;
+
+			break;
+		case "DMG":
+			rwBase = rwBase.filter(item => item.getStat(194) === junk[0].getStat(194)); // sockets match junk in review
+			rwBase = rwBase.sort((a, b) => ((a.getStatEx(21) + a.getStatEx(22)) / 2) - ((b.getStatEx(21) + b.getStatEx(22)) / 2)); // Sort on avg damage, low to high.
+			rwBase = rwBase.last(); // select last
+			result = ((junk[0].getStatEx(21) + junk[0].getStatEx(22)) / 2) < ((rwBase.getStatEx(21) + rwBase.getStatEx(22)) / 2);
+			break;
+		case "DEF":
+			rwBase = rwBase.filter(item => item.getStat(194) === junk[0].getStat(194)); // sockets match junk in review
+			rwBase = rwBase.sort((a, b) => a.getStatEx(31) - b.getStatEx(31)); // Sort on defense, low to high.
+			rwBase = rwBase.last(); // select last
+			result = junk[0].getStatEx(31) < rwBase.getStatEx(31);
+			break;
+		}
+
+		if ((junk[0].location === 7 || junk[0].location === 3) &&
+			!junk[0].getFlag(NTIPAliasFlag["ethereal"]) &&
+			!junk[0].getFlag(NTIPAliasFlag["runeword"]) && // don't drop made runewords
+			(junk[0].quality === 2 || junk[0].quality === 3) && !!result) {
+			if (junk[0].drop()) {
+				me.overhead('cleared runeword junk');
+				print("ÿc9SoloLevelingÿc0: Cleared runeword junk - " + junk[0].name);
+				delay(50 + me.ping);
 			}
 		}
 
@@ -1312,7 +1328,7 @@ Town.reviveMerc = function () {
 
 	Attack.checkInfinity();
 
-	if (!!Merc.getMercFix()) {
+	if (Merc.getMercFix()) {
 		if (Config.MercWatch && (me.barbarian && me.getSkill(149, 0) || Precast.checkCTA())) { // Cast BO on merc so he doesn't just die again. Only Do this is you are a barb or actually have a cta. Otherwise its just a waste of time.
 			print("MercWatch precast");
 			Pather.useWaypoint("random");
