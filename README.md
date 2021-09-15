@@ -1,6 +1,6 @@
 ![SoloLeveling](https://i.imgur.com/6UMDGFk.png)
 
-SoloLeveling is the *original* multi-class single character leveling script for Kolbot. The overall goal of the project is to be the easiest to use and fastest leveling script for any character class.
+SoloLeveling is the ***original*** multi-class single character leveling script for Kolbot. The overall goal of the project is to be the easiest to use and fastest leveling script for any character class.
 
 **NOTE:** This script is designed to be only run from [https://github.com/blizzhackers/kolbot](https://github.com/blizzhackers/kolbot). Most errors occur from using the wrong Kolbot repo installation. 
 
@@ -25,7 +25,7 @@ Since inception I've added in completely new functions that have become standard
 
 Using trial and error over the course of its development the bot has grown to its current status and it will continue to get better. It is a far cry from my original single file script. While I've brought innovation and a novel approach to using kolbot, I have been fortunate to have been advised by some of the major thought leaders of blizzhackers: Jaenster, DZIK, Nishimura_Katsuo, macohan, Laz, Fa-b, and Noah in one way or another. Their guidance has really helped improve my programming skills and understanding of botting. 
 
-I never had planned to release this bot to the public as it was for my own personal hobby project. It became public because I didn't know how to setup a github repo and inadvertantly made it available to others. Since it became public domain I rolled with it and others started to take notice. SoloLeveling has always been a personal hobby project and not something planned or developed for recognition of the community. There has never been a team of developers for SoloLeveling either, but there have been users of the script who submitted PRs to help it along. Since its popularity has grown after the Kolbot-Forever youtube video, others have decited to make their own versions based off my script. 
+I never had planned to release this bot to the public as it was for my own personal hobby project. It became public because I didn't know how to setup a github repo and inadvertantly made it available to others. Since it became public domain I rolled with it and others started to take notice. SoloLeveling has always been a personal hobby project and not something planned or developed for recognition of the community. There has never been a team of developers for SoloLeveling either, but there have been both users of the script and code developers who saw SoloLeveling's potential and submitted PRs for bug fixes, builds, and quality of life improvements. Since its popularity has grown after the Kolbot-Forever youtube video, others have decided to make their own versions based off my script. 
 
 I am content to just work on my little project and complete the original goal: the easiest to use and fastest leveling script for any character class. I believe i have succeeded in the first part with the fully profile driven mechanics. As for the fastest leveling script, I continue to try out different methods, build designs, and script sequences that can work with kolbot. 
 
