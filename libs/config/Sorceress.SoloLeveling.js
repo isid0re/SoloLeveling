@@ -366,6 +366,11 @@ function LoadConfig () {
 			NTIP.addLine("[Name] == RalRune # # [MaxQuantity] == 1");
 		}
 
+		if (!me.getItem(586)) {
+			NTIP.addLine("[Name] == FlawlessDiamond # # [MaxQuantity] == 3");
+			Config.Recipes.push([Recipe.Gem, "Flawless Diamond"]); // Make Perfect Diamond
+		}
+
 		if (!Check.haveItem("sword", "runeword", "Call To Arms")) {
 			var CTA = [
 				"[Name] == AmnRune # # [MaxQuantity] == 1",
