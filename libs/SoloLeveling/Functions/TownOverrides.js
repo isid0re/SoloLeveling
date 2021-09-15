@@ -1124,19 +1124,6 @@ Town.clearJunk = function () {
 	}
 
 	while (junk.length > 0) {
-		if ((junk[0].location === 7 || junk[0].location === 3) // stash or inventory
-			&& [-1, 1, 2, 3, 5, 6].indexOf(Pickit.checkItem(junk[0]).result) < 0 // only drop unwanted
-			&& !Cubing.keepItem(junk[0]) // Don't throw cubing ingredients
-			&& !Runewords.keepItem(junk[0]) // Don't throw runeword ingredients
-			&& !CraftingSystem.keepItem(junk[0]) // Don't throw crafting system ingredients
-		) {
-			if (junk[0].drop()) {
-				me.overhead('cleared junk');
-				print("ÿc9SoloLevelingÿc0: Cleared junk - " + junk[0].name);
-				delay(50 + me.ping);
-			}
-		}
-
 		focus = junk[0].getStat(194) === 0 ? "SOCKETS" : junk[0].getStat(31) > 0 ? "DEF" : "DMG";
 
 		rwBase = me.getItems()
@@ -1175,6 +1162,19 @@ Town.clearJunk = function () {
 			if (junk[0].drop()) {
 				me.overhead('cleared runeword junk');
 				print("ÿc9SoloLevelingÿc0: Cleared runeword junk - " + junk[0].name);
+				delay(50 + me.ping);
+			}
+		}
+
+		if ((junk[0].location === 7 || junk[0].location === 3) // stash or inventory
+			&& [-1, 1, 2, 3, 5, 6].indexOf(Pickit.checkItem(junk[0]).result) < 0 // only drop unwanted
+			&& !Cubing.keepItem(junk[0]) // Don't throw cubing ingredients
+			&& !Runewords.keepItem(junk[0]) // Don't throw runeword ingredients
+			&& !CraftingSystem.keepItem(junk[0]) // Don't throw crafting system ingredients
+		) {
+			if (junk[0].drop()) {
+				me.overhead('cleared junk');
+				print("ÿc9SoloLevelingÿc0: Cleared junk - " + junk[0].name);
 				delay(50 + me.ping);
 			}
 		}
