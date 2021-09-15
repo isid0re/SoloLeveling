@@ -640,7 +640,7 @@ function locationAction (location) {
 			D2Bot.updateRuns();
 		}
 
-		ControlAction.createGame((gameInfo.gameName === "Name" ? randomString(null, true) : gameInfo.gameName + gameCount), (gameInfo.gamePass === "Password" ? randomString(null, true) : gameInfo.gamePass), gameInfo.difficulty, StarterConfig.CreateGameDelay * 1000);
+		ControlAction.createGame(((gameInfo.gameName === "Name" || gameInfo.gameName === "" || gameInfo.gameName === null) ? randomString(null, true) : gameInfo.gameName + gameCount), ((gameInfo.gamePass === "Password" || gameInfo.gamePass === "" || gameInfo.gamePass === null) ? randomString(null, true) : gameInfo.gamePass), gameInfo.difficulty, StarterConfig.CreateGameDelay * 1000);
 		lastGameStatus = "pending";
 		setNextGame();
 		locationTimeout(10000, location);

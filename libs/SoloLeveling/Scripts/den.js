@@ -26,10 +26,7 @@ function den () {
 	Precast.doPrecast(true);
 	Attack.clear(50);
 	Pather.moveToExit(8, true);
-
-	while (me.area === 8) {
-		Attack.clearLevel();
-	}
+	Attack.clearLevel();
 
 	return true;
 }
