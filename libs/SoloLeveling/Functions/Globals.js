@@ -585,7 +585,7 @@ var Check = {
 		var template = getBuildTemplate();
 
 		if (!include(template)) {
-			if (SetUp.finalBuild === "Bumper") {
+			if (SetUp.finalBuild === "Bumper" || SetUp.finalBuild === "Socket") {
 				return {
 					caster: true,
 					tabSkills: -1,

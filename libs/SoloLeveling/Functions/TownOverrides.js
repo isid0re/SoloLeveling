@@ -667,41 +667,47 @@ Town.unfinishedQuests = function () {
 	}
 
 	//Act 5
-	if (Misc.checkQuest(35, 1) && SetUp.finalBuild !== "Bumper") { // socket items
-		switch (me.diff) {
-		case 0:
-		case 1:
-			if (Item.getEquippedItemMerc(4).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
-				Quest.holePunch(58); // insight voulge
-			}
-
-			if (!Check.haveItem("sword", "runeword", "Spirit") && (me.getItem(29) || me.getItem(30))) {
-				if (me.getItem(29)) { // spirit crystal sword
-					Quest.holePunch(29);
+	if (Misc.checkQuest(35, 1)) {
+		if (["Bumper", "Socket"].indexOf(SetUp.finalBuild) === -1) { // socket items
+			switch (me.diff) {
+			case 0:
+			case 1:
+				if (Item.getEquippedItemMerc(4).prefixnum !== 20568 && me.getItem(58)) { // Larzuk reward
+					Quest.holePunch(58); // insight voulge
 				}
 
-				if (me.getItem(30)) { // spirit broad sword
-					Quest.holePunch(30);
+				if (!Check.haveItem("sword", "runeword", "Spirit") && (me.getItem(29) || me.getItem(30))) {
+					if (me.getItem(29)) { // spirit crystal sword
+						Quest.holePunch(29);
+					}
+
+					if (me.getItem(30)) { // spirit broad sword
+						Quest.holePunch(30);
+					}
 				}
-			}
 
-			break;
-		case 2:
-			if (Item.getEquippedItemMerc(1).name.includes("Andariel's") && Item.getEquippedItemMerc(1).sockets === 0) { // socket andy's visage
-				Item.removeItemsMerc(1);
-				Quest.holePunch(428);
-				equipped = me.findItem(428, 0, 3);
-				Item.equipMerc(equipped, 1);
-			}
+				break;
+			case 2:
+				if (Item.getEquippedItemMerc(1).name.includes("Andariel's") && Item.getEquippedItemMerc(1).sockets === 0) { // socket andy's visage
+					Item.removeItemsMerc(1);
+					Quest.holePunch(428);
+					equipped = me.findItem(428, 0, 3);
+					Item.equipMerc(equipped, 1);
+				}
 
-			if (Item.getEquippedItem(1).name.includes("Harlequin") && Item.getEquippedItem(1).sockets === 0) { // socket harlequin crest
-				Item.removeItem(1);
-				Quest.holePunch(422);
-				equipped = me.findItem(422, 0, 3);
-				Item.equip(equipped, 1);
-			}
+				if (Item.getEquippedItem(1).name.includes("Harlequin") && Item.getEquippedItem(1).sockets === 0) { // socket harlequin crest
+					Item.removeItem(1);
+					Quest.holePunch(422);
+					equipped = me.findItem(422, 0, 3);
+					Item.equip(equipped, 1);
+				}
 
-			break;
+				break;
+			}
+		} else if (SetUp.finalBuild === "Socket") {
+			print("Socket run completed");
+			D2Bot.printToConsole("Socket run completed");
+			D2Bot.stop();
 		}
 	}
 
