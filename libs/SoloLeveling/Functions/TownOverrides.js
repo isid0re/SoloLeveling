@@ -1117,15 +1117,14 @@ Town.clearInventory = function () {
 };
 
 Town.clearJunk = function () {
-	let focus, result, rwBase, junk = me.findItems(-1, 0);
+	var check, result, rwBase, junk = me.findItems(-1, 0);
 
 	if (!junk) {
 		return false;
 	}
 
 	while (junk.length > 0) {
-		focus = junk[0].getStat(194) === 0 ? "SOCKETS" : junk[0].getStat(31) > 0 ? "DEF" : "DMG";
-
+		check = junk[0].getStat(194) === 0 ? "SOCKETS" : junk[0].getStat(31) > 0 ? "DEF" : "DMG";
 		rwBase = me.getItems()
 			.filter(item =>
 				item.itemType === junk[0].itemType// same item type as current
@@ -1135,23 +1134,23 @@ Town.clearJunk = function () {
 				&& [3, 6, 7].indexOf(item.location) > -1 // locations
 			);
 
-		switch (focus) {
+		switch (check) {
 		case "SOCKETS":
 			rwBase = rwBase.filter(item => item.getStat(194) > 0); // total matching itemTypes with sockets
-			result = rwBase.length > 0;
+			result = rwBase.length > 0 ? true : false;
 
 			break;
 		case "DMG":
 			rwBase = rwBase.filter(item => item.getStat(194) === junk[0].getStat(194)); // sockets match junk in review
 			rwBase = rwBase.sort((a, b) => ((a.getStatEx(21) + a.getStatEx(22)) / 2) - ((b.getStatEx(21) + b.getStatEx(22)) / 2)); // Sort on avg damage, low to high.
 			rwBase = rwBase.last(); // select last
-			result = ((junk[0].getStatEx(21) + junk[0].getStatEx(22)) / 2) < ((rwBase.getStatEx(21) + rwBase.getStatEx(22)) / 2);
+			result = rwBase && ((junk[0].getStatEx(21) + junk[0].getStatEx(22)) / 2) < ((rwBase.getStatEx(21) + rwBase.getStatEx(22)) / 2) ? true : false;
 			break;
 		case "DEF":
 			rwBase = rwBase.filter(item => item.getStat(194) === junk[0].getStat(194)); // sockets match junk in review
 			rwBase = rwBase.sort((a, b) => a.getStatEx(31) - b.getStatEx(31)); // Sort on defense, low to high.
 			rwBase = rwBase.last(); // select last
-			result = junk[0].getStatEx(31) < rwBase.getStatEx(31);
+			result = rwBase && junk[0].getStatEx(31) < rwBase.getStatEx(31) ? true : false;
 			break;
 		}
 
