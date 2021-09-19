@@ -50,7 +50,7 @@ var build = {
 		//shield
 		"([type] == shield && ([Quality] >= Magic || [flag] == runeword) || [type] == voodooheads) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//gloves
-		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000 + tierscore(item)",
+		"[name] == heavybracers && [quality] == set # [fcr] == 20 && [coldresist] == 30 # [tier] == 100000 + tierscore(item)", //Trang Oul's
 		//ammy
 		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000 + tierscore(item)", //maras
 		//rings

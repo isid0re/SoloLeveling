@@ -1295,6 +1295,10 @@ case 5: // Druid
 			Skill.cast(235, 0);
 		}
 
+		if (me.getSkill(232, 1) && me.getState(139) && !me.getState(120)) { // Start Feral Rage if WereWolf
+			Skill.cast(232, 0);
+		}
+
 		switch (typeof Config.AttackSkill[0]) {
 		case "object":
 			for (let i = 0; i < Config.AttackSkill[0].length; i++) {
@@ -1558,6 +1562,14 @@ case 5: // Druid
 		}
 
 		return 1;
+	};
+
+	ClassAttack.afterAttack = function () {
+		if (Pather.useTeleport() && (me.getState(139) || me.getState(140))) {
+			Misc.unShift();
+		}
+
+		Precast.doPrecast(false);
 	};
 
 	break;

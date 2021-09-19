@@ -183,7 +183,7 @@ Precast.doPrecast = function (force) {
 			this.precastCTA(force);
 		}
 
-		if (!!Config.Wereform) {
+		if (Config.Wereform) {
 			Misc.shapeShift(Config.Wereform);
 		}
 
