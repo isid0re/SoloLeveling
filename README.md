@@ -45,10 +45,10 @@ Thank you all for your appreciation of SoloLeveling and continued support. I am 
 |:------:|:-------:|:-------:|:------:|:------:|:------:|:-----:|
 | Javazon | Cold | Poison | Hammerdin| Singer | Wind |Trapsin|
 | Witchyzon | BlizzBaller |   Bone | Smiter| Frenzy | Elemental | Bumper |
-| Bumper | Meteorb | Summon | Bumper | Whirlwind| Bumper | Socket |
-| Socket | Blova | Bumper | Socket | Bumper | Socket |
-| | Lightning | Socket | | Socket |
-| | Bumper |
+| Bumper | Meteorb | Summon | Bumper | Whirlwind| Fury | Socket |
+| Socket | Blova | Bumper | Socket | Bumper | Rabies |
+| | Lightning | Socket | | Socket | Bumper |
+| | Bumper | | | | Socket |
 | | Socket |
 
 ## Frequently Asked Questions
