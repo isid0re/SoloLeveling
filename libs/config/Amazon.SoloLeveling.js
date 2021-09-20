@@ -24,6 +24,7 @@
 *			Witchyzon
 *			Javazon
 *			Bumper
+*			Socket
 *
 *	Selecting the entry script and run the bot
 *		1. Select D2Bot.SoloLevelingEntry.dbj
@@ -430,8 +431,8 @@ function LoadConfig () {
 			}
 
 			var loreHelm = [
-				"!me.hell && ([Name] == Crown || [Name] == BoneHelm || [Name] == FullHelm) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
-				"([Name] == Casque || [Name] == Sallet || [Name] == DeathMask || [Name] == GrimHelm) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
+				"!me.hell && ([Name] == Crown || [Name] == BoneHelm || [Name] == FullHelm) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2",
+				"([Name] == Casque || [Name] == Sallet || [Name] == DeathMask || [Name] == GrimHelm) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2",
 			];
 			NTIP.arrayLooping(loreHelm);
 
@@ -468,30 +469,6 @@ function LoadConfig () {
 			Config.Runewords.push([Runeword.AncientsPledge, "Large Shield"]);
 
 			Config.KeepRunewords.push("([type] == shield || [type] == auricshields) # [fireresist]+[lightresist]+[coldresist]+[poisonresist] >= 187");
-		}
-
-		if (Item.getEquippedItem(3).tier < 700) { // Peace
-			if (!Check.haveItem("armor", "runeword", "Peace") && !me.hell) {
-				var peaceRunes = [
-					"[Name] == ShaelRune # # [MaxQuantity] == 1",
-					"[Name] == ThulRune # # [MaxQuantity] == 1",
-					"[Name] == AmnRune # # [MaxQuantity] == 1",
-				];
-				NTIP.arrayLooping(peaceRunes);
-			}
-
-			NTIP.addLine("([Name] == demonhidearmor || [Name] == DuskShroud || [Name] == GhostArmor || [Name] == LightPlate || [Name] == MagePlate || [Name] == SerpentskinArmor || [Name] == trellisedarmor || [Name] == WyrmHide) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1");
-
-			Config.Runewords.push([Runeword.Peace, "demonhide armor"]);
-			Config.Runewords.push([Runeword.Peace, "Dusk Shroud"]);
-			Config.Runewords.push([Runeword.Peace, "Ghost Armor"]);
-			Config.Runewords.push([Runeword.Peace, "Light Plate"]);
-			Config.Runewords.push([Runeword.Peace, "Mage Plate"]);
-			Config.Runewords.push([Runeword.Peace, "Serpentskin Armor"]);
-			Config.Runewords.push([Runeword.Peace, "trellised armor"]);
-			Config.Runewords.push([Runeword.Peace, "WyrmHide"]);
-
-			Config.KeepRunewords.push("[type] == armor # [coldresist] == 30");
 		}
 
 		if (Item.getEquippedItemMerc(3).prefixnum !== 20547) { // Merc Fortitude
@@ -538,23 +515,12 @@ function LoadConfig () {
 
 		if (Item.getEquippedItemMerc(3).tier < 15000) { // Merc Treachery
 			var Treachery = [
-				"([Name] == BreastPlate || [Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3 # [MaxQuantity] == 1",
-				"!me.normal && ([Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [Quality] == Normal && [flag] != runeword && [Flag] == Ethereal # [Sockets] == 0 # [MaxQuantity] == 1",
+				"([Name] == BreastPlate || [Name] == MagePlate || [Name] == HellforgePlate || [Name] == KrakenShell || [Name] == ArchonPlate || [Name] == BalrogSkin || [Name] == BoneWeave || [Name] == GreatHauberk || [Name] == LoricatedMail || [Name] == DiamondMail || [Name] == WireFleece || [Name] == ScarabHusk || [Name] == WyrmHide || [Name] == DuskShroud) && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 3",
+				"[Name] == ShaelRune # # [MaxQuantity] == 1",
+				"[Name] == ThulRune # # [MaxQuantity] == 1",
+				"[Name] == LemRune # # [MaxQuantity] == 1",
 			];
 			NTIP.arrayLooping(Treachery);
-
-			Config.Recipes.push([Recipe.Socket.Armor, "Hellforge Plate"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Kraken Shell"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Archon Plate"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Balrog Skin"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "BoneWeave"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Great Hauberk"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Loricated Mail"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Diamond Mail"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Wire Fleece"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Scarab Husk"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "WyrmHide"]);
-			Config.Recipes.push([Recipe.Socket.Armor, "Dusk Shroud"]);
 
 			Config.Runewords.push([Runeword.Treachery, "Breast Plate"]);
 			Config.Runewords.push([Runeword.Treachery, "Mage Plate"]);
@@ -576,10 +542,6 @@ function LoadConfig () {
 
 		if (Item.getEquippedItem(3).tier < 634) { // Smoke
 			if (!Check.haveItem("armor", "runeword", "Smoke") && !me.hell) {
-				if (!me.getItem(626)) { // Cube to Lum Rune
-					Config.Recipes.push([Recipe.Rune, "Io Rune"]); // cube Io to Lum
-				}
-
 				var smokeRunes = [
 					"[Name] == NefRune # # [MaxQuantity] == 1",
 					"[Name] == LumRune # # [MaxQuantity] == 1",
@@ -587,7 +549,7 @@ function LoadConfig () {
 				NTIP.arrayLooping(smokeRunes);
 			}
 
-			NTIP.addLine("([Name] == demonhidearmor || [Name] == DuskShroud || [Name] == GhostArmor || [Name] == LightPlate || [Name] == MagePlate || [Name] == SerpentskinArmor || [Name] == trellisedarmor || [Name] == WyrmHide) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1");
+			NTIP.addLine("([Name] == demonhidearmor || [Name] == DuskShroud || [Name] == GhostArmor || [Name] == LightPlate || [Name] == MagePlate || [Name] == SerpentskinArmor || [Name] == trellisedarmor || [Name] == WyrmHide) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2");
 
 			Config.Runewords.push([Runeword.Smoke, "demonhide armor"]);
 			Config.Runewords.push([Runeword.Smoke, "Dusk Shroud"]);
@@ -611,8 +573,8 @@ function LoadConfig () {
 			}
 
 			var stealthArmor = [
-				"!me.hell && ([Name] == StuddedLeather || [Name] == BreastPlate || [Name] == LightPlate) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
-				"([Name] == GhostArmor || [Name] == SerpentskinArmor || [Name] == MagePlate) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2 # [MaxQuantity] == 1",
+				"(me.normal && [Name] == StuddedLeather || me.normal && [Name] == BreastPlate || !me.hell && [Name] == LightPlate) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2",
+				"([Name] == GhostArmor || [Name] == SerpentskinArmor || [Name] == MagePlate) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2",
 			];
 			NTIP.arrayLooping(stealthArmor);
 

@@ -1,20 +1,20 @@
 /**
- *  @filename   druid.RabiesBuild.js
+ *  @filename   druid.FuryBuild.js
  *  @author     isid0re
- *  @desc       Druid rabies build for final build
- *	@credits	https://d2.maxroll.gg/guides/rabies-druid-guide
+ *  @desc       Druid fury build for final build
+ *	@credits	https://d2.maxroll.gg/guides/werewolf-fury-druid
  */
 
 var build = {
 	caster: false,
 	skillstab: 41, // Shape-Shifting
-	wantedskills: [223, 224, 238], // Werewolf, Lycanthropy, Rabies
+	wantedskills: [223, 224, 248], // Werewolf, Lycanthropy, Fury
 	usefulskills: [247, 236, 232], // Summon Grizzly, Heart of Wolverine, Feral Rage
 	mercAuraName: "Might",
 	mercAuraWanted: 98,
 	mercDiff: 1,
 	stats: [
-		["dexterity", 136], ["strength", 106], ["vitality", "all"]
+		["dexterity", 55], ["strength", 156], ["vitality", "all"]
 	],
 	skills: [
 		[226, 1], //Oak Sage
@@ -28,28 +28,25 @@ var build = {
 		[232, 1], // Feral Rage
 		[238, 1], // Rabies
 		[248, 1], //Fury
-		[222, 1], // Poison Creeper
-		[238, 20], // Rabies
-		[222, 20], // Poison Creeper
 		[223, 20], // Werewolf
 		[224, 20], // Lycanthropy
 		[232, 20], // Feral Rage
+		[248, 20], //Fury
+		[236, 20], //Heart of Wolverine
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[Type] == sword && [flag] == runeword # [ias] >= 30 # [tier] == 100000 + tierscore(item)", //Grief
+		"[Type] == axe && [flag] == runeword # [ias] == 50 # [tier] == 100000 + tierscore(item)", //Oath
 		//Helmet
 		"[name] == totemicmask && [quality] == unique # [druidskills] == 2 # [tier] == 100000 + tierscore(item)", //Jalal's mane
 		//belt
-		"[name] == mithrilcoil && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000 + tierscore(item)", //Verdungo's
+		"[name] == demonhidesash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 150 # [tier] == 100000 + tierscore(item)", //String of Ears
 		//boots
 		"[name] == warboots && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 100000 + tierscore(item)", //Gore Rider's
 		//armor
-		"[Type] == armor && [flag] == runeword # [fireresist] == 30 && [poisonresist] == 100 # [tier] == 100000 + tierscore(item)", //Bramble
-		//shield
-		"[Name] == TrollNest && [Flag] != Ethereal && [flag] == runeword # [fireresist] >= 50 # [tier] == 100000 + tierscore(item)", //Sanctuary
+		"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 100000 + tierscore(item)", //CoH
 		//gloves
-		"[name] == heavybracers && [quality] == set # [fcr] == 20 && [coldresist] == 30 # [tier] == 100000 + tierscore(item)", //Trang Oul's
+		"[name] == vampirebonegloves && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000 + tierscore(item)", //Dracul's Grasp
 		//ammy
 		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000 + tierscore(item)", //Maras
 		//rings
