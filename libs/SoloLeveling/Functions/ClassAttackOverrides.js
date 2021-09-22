@@ -14,7 +14,7 @@ case 0: // Amazon
 	}
 
 	ClassAttack.doAttack = function (unit, preattack) {
-		var index, checkSkill, casterList, mobAura, mobList, mobLoc, result, merc = Merc.getMercFix(), needRepair = Town.needRepair(), timedSkill = -1, untimedSkill = -1;
+		var index, checkSkill, casterList, mobAura, mobLoc, result, merc = Merc.getMercFix(), needRepair = Town.needRepair(), timedSkill = -1, untimedSkill = -1;
 
 		if ((Config.MercWatch && Town.needMerc()) || needRepair.length > 0) {
 			print("mercwatch");
@@ -23,9 +23,8 @@ case 0: // Amazon
 
 		index = ((unit.spectype & 0x7) || unit.type === 0) ? 1 : 3;
 		casterList = [91, 92, 93, 94, 95, 118, 119, 120, 121, 131, 132, 133, 134, 135, 160, 161, 162, 163, 164, 170, 171, 172, 173, 174, 274, 275, 276, 277, 311, 312, 360, 361, 362, 373, 374, 375, 376, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 394, 395, 474, 475, 476, 477, 478, 558, 575, 576, 577, 578, 579, 610, 611, 612, 613, 614, 620, 621, 622, 623, 624, 625, 626, 635, 636, 627, 638, 639, 640, 641, 654, 655, 686, 687, 692, 693, 694, 696, 697, 701, 702];
-		mobList = Attack.getMob(unit.classid, null, 8, unit);
 		mobLoc = CollMap.getRandCoordinate(unit.x, -4, 4, unit.y, -4, 4);
-		mobAura = mobList && mobList.filter(mob => mob.type === 1 && (mob.getState(28) || mob.getState(49) || mob.getState(43))) > 0 ? "true" : "false";
+		mobAura = Attack.getMonstersInRange(unit, 8) > 3 && (unit.getState(28) || unit.getState(49) || unit.getState(43)) > 0 ? "true" : "false";
 
 		switch (typeof Config.AttackSkill[0]) {
 		case "object":
@@ -43,7 +42,7 @@ case 0: // Amazon
 						if (Math.round(me.mp * 100 / me.mpmax) > 30) {
 							switch (Config.AttackSkill[0][i]) {
 							case 28: // use dopplezon
-								if (mobList && mobList.length > 3 && (mobAura || Attack.getScarinessLevel(unit) > 3)) {
+								if (mobAura || Attack.getScarinessLevel(unit) > 3) {
 									Skill.cast(Config.AttackSkill[0][i], Skill.getHand(Config.AttackSkill[0][i]), mobLoc);
 								} else if (Attack.getScarinessLevel(unit) === 4 && !Attack.checkResist(unit, Config.AttackSkill[index])) {
 									Skill.cast(Config.AttackSkill[0][i], Skill.getHand(Config.AttackSkill[0][i]), mobLoc);
@@ -57,7 +56,7 @@ case 0: // Amazon
 
 								break;
 							case 15:// use poison javalin
-								if (!me.getSkill(25, 1) && mobList && (mobList.length > 3 || mobAura || Attack.getScarinessLevel(unit) > 3)) {
+								if (!me.getSkill(25, 1) && (Attack.getMonstersInRange(unit, 8) > 3 || mobAura || Attack.getScarinessLevel(unit) > 3)) {
 									Skill.cast(Config.AttackSkill[0][i], Skill.getHand(Config.AttackSkill[0][i]), unit);
 								}
 
@@ -69,7 +68,7 @@ case 0: // Amazon
 
 								break;
 							case 25: // use plague javalin
-								if (mobList && (mobList.length > 3 || mobAura || Attack.getScarinessLevel(unit) > 3)) {
+								if (Attack.getMonstersInRange(unit, 8) > 3 || mobAura || Attack.getScarinessLevel(unit) > 3) {
 									Skill.cast(Config.AttackSkill[0][i], Skill.getHand(Config.AttackSkill[0][i]), unit);
 								}
 
@@ -117,8 +116,8 @@ case 0: // Amazon
 
 		if (Attack.checkResist(unit, checkSkill)) {
 			switch (checkSkill) {
-			case 35: // throttle lightning fury
-				if (mobList.length > 3 && (Math.round(getDistance(me, unit)) > Skill.getRange(checkSkill) || checkCollision(me, unit, 0x4))) {
+			case 35: // only cast LF if more than 3 monsters.
+				if (Attack.getMonstersInRange(unit, 8) > 3) {
 					timedSkill = checkSkill;
 				}
 
@@ -694,7 +693,7 @@ case 2: // Necromancer
 	};
 
 	ClassAttack.doAttack = function (unit, preattack) {
-		var index, curseIndex, checkCurses = [], checkSkill, mark, markList, mobList, result, merc = Merc.getMercFix(), timedSkill = -1, untimedSkill = -1;
+		var index, curseIndex, checkCurses = [], checkSkill, mark, markList = [91, 92, 77], result, merc = Merc.getMercFix(), timedSkill = -1, untimedSkill = -1;
 
 		if (Config.MercWatch && Town.needMerc()) {
 			print("mercwatch");
@@ -702,9 +701,8 @@ case 2: // Necromancer
 		}
 
 		if (me.getSkill(91, 0) && me.getSkill(77, 0) && me.getSkill(92, 0)) {
-			if (Attack.getMonstersInRange(me, 10) > 4) {
-				markList = [91, 92, 77]; // Lower Resists, Poison Nova, Terror
-				mark = Attack.getNearestMonster(me, 10);
+			if (Attack.getMonstersInRange(me, 8) > 3) {
+				mark = Attack.getNearestMonster(me, 8);
 
 				for (let p = 0; p < markList.length; p++) {
 					if (Math.round(me.mp * 100 / me.mpmax) > 30 && mark && !mark.getState(ClassAttack.returnCurseState(markList[p]))) {

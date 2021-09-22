@@ -235,7 +235,7 @@ var Check = {
 
 			break;
 		case "tristram": //tristram
-			if (me.normal && me.charlvl < 15 || !me.normal && !me.tristram && (me.classic && me.diablo || me.baal)) {
+			if (me.normal && me.charlvl < 15 || me.hell && !me.tristram && (me.classic && me.diablo || me.baal)) {
 				return true;
 			}
 
