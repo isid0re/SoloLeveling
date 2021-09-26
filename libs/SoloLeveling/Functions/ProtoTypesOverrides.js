@@ -310,6 +310,7 @@ Unit.prototype.getStatEx = function (id, subid) {
 	return this.getStat(id, subid);
 };
 
+/* Game Type and Difficulty */
 Object.defineProperty(Unit.prototype, 'classic', {
 	get: function () {
 		if (this.type > 0) {
@@ -350,6 +351,7 @@ Object.defineProperty(Unit.prototype, 'hell', {
 	}
 });
 
+/* Classes */
 Object.defineProperty(Unit.prototype, 'amazon', {
 	get: function () {
 		if (this.type > 0) {
@@ -420,6 +422,7 @@ Object.defineProperty(Unit.prototype, 'assassin', {
 	}
 });
 
+/* Quests */
 Object.defineProperty(Unit.prototype, 'den', {
 	get: function () {
 		if (this.type > 0) {
@@ -539,7 +542,6 @@ Object.defineProperty(Unit.prototype, 'horadricstaff', {
 		return this.getQuest(10, 0);
 	}
 });
-
 
 Object.defineProperty(Unit.prototype, 'summoner', {
 	get: function () {
@@ -758,5 +760,63 @@ Object.defineProperty(Unit.prototype, 'respec', {
 		}
 
 		return this.getQuest(41, 0);
+	}
+});
+
+/* Build Status */
+Unit.prototype.__defineGetter__("currentBuild",	function () {
+	if (this.type > 0) {
+		throw new Error("Unit.currentBuild: Must be used with player units.");
+	}
+
+	var build = Config.AutoBuild.Template;
+
+	if (!build) {
+		throw new Error("Unit.currentBuild: Config.AutoBuild.Template is either 'false', or invalid (" + build + ")");
+	}
+
+	return build;
+});
+
+Object.defineProperty(Unit.prototype, 'start', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.start: Must be used with player units.");
+		}
+
+		return this.currentBuild === "Start";
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'leveling', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.leveling: Must be used with player units.");
+		}
+
+		return this.currentBuild === "Leveling";
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'final', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.final: Must be used with player units.");
+		}
+
+		return this.currentBuild === DataFile.getStats().finalBuild;
+	}
+});
+
+Object.defineProperty(Unit.prototype, 'lowgold', {
+	get: function () {
+		if (this.type > 0) {
+			throw new Error("Unit.final: Must be used with player units.");
+		}
+
+		let gold = this.getStat(14) + this.getStat(15);
+		let goldLimit = [10000, 50000, 100000][this.diff];
+
+		return gold < goldLimit;
 	}
 });

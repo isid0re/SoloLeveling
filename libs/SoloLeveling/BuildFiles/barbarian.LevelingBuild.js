@@ -13,10 +13,9 @@ var build = {
 	mercAuraWanted: 98,
 	mercDiff: 1,
 	stats: [
-		["vitality", 40], ["dexterity", 35], ["strength", 61],
-		["vitality", 60], ["dexterity", 44], ["strength", 96],
-		["vitality", 96], ["dexterity", 77], ["strength", 118],
-		["dexterity", 136], ["vitality", "all"]
+		["dexterity", 35], ["strength", 61], ["vitality", 127],
+		["dexterity", 60], ["strength", 96], ["vitality", 177],
+		["dexterity", 136], ["strength", 118], ["vitality", "all"]
 	],
 	skills: [
 		[130, 1], // Howl

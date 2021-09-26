@@ -92,7 +92,7 @@ var Merc = {
 
 		let mercSelected = getmercAura();
 
-		if (mercSelected === mercAuraWanted || me.diff !== mercDiff && mercSelected === tempMercAura) {
+		if (me.baal || mercSelected === mercAuraWanted || me.diff !== mercDiff && mercSelected === tempMercAura) {
 			return true;
 		}
 

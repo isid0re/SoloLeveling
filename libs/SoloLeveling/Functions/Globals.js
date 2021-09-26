@@ -404,10 +404,7 @@ var Check = {
 	},
 
 	Gold: function () {
-		let gold = me.getStat(14) + me.getStat(15);
-		let goldLimit = [10000, 50000, 100000][me.diff];
-
-		if (me.normal && !Pather.accessToAct(2) || gold >= goldLimit) {
+		if (me.normal && !Pather.accessToAct(2) || !me.lowgold) {
 			return true;
 		}
 
@@ -449,16 +446,21 @@ var Check = {
 			if (lvlReq) {
 				if (!lowRes) {
 					diffShift = me.diff + 1;
-					D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Starting: ' + Difficulty[diffShift]);
+					D2Bot.printToConsole('SoloLeveling: next difficulty requirements met. Next game starting: ' + Difficulty[diffShift]);
 				} else {
 					if (me.charlvl >= Config.levelCap + 5) {
 						diffShift = me.diff + 1;
-						D2Bot.printToConsole('SoloLeveling: Over leveled. Starting: ' + Difficulty[diffShift]);
+						D2Bot.printToConsole('SoloLeveling: Over leveled. Next game starting: ' + Difficulty[diffShift]);
 					} else {
 						D2Bot.printToConsole('SoloLeveling: ' + Difficulty[diffShift + 1] + ' requirements not met. Negative resistance. FR: ' + Check.Resistance().FR + ' | CR: ' + Check.Resistance().CR + ' | LR: ' + Check.Resistance().LR);
 					}
 				}
 			}
+		}
+
+		if (!me.normal && me.lowgold) {
+			diffShift = me.diff - 1;
+			D2Bot.printToConsole('SoloLeveling: LowGold. Gold recovery next game starting: ' + Difficulty[diffShift]);
 		}
 
 		let nextDiff = Difficulty[diffShift];
