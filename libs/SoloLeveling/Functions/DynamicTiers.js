@@ -11,7 +11,7 @@ var mercscore = function (item) {
 		MAXDMG: 3, // max damage
 		SECMINDMG: 3, // secondary min damage
 		SECMAXDMG: 3, // secondary max damage
-		ELEDMG: 2, // elemental damage
+		ELEDMG: 0.5, // elemental damage
 		AR:	0.5, // attack rating
 		CB: 3, // crushing blow
 		OW: 2, // open wounds
@@ -28,6 +28,7 @@ var mercscore = function (item) {
 		LR: 2, // lightning resist
 		CR: 1.5, // cold resist
 		PR: 1, // poison resist
+		DR: 2 // normal and magic damage reduction
 	};
 
 	let mercRating = 0;
@@ -59,6 +60,7 @@ var mercscore = function (item) {
 	mercRating += item.getStatEx(43) * mercWeights.CR; // add CR
 	mercRating += item.getStatEx(41) * mercWeights.LR; // add LR
 	mercRating += item.getStatEx(45) * mercWeights.PR; // add PR
+	mercRating += (item.getStatEx(34) + item.getStatEx(35)) * mercWeights.DR; // add damage reduction
 
 	let rwBase;
 
@@ -85,6 +87,7 @@ var tierscore = function (item) {
 		CR: 1.5, // cold resist
 		PR: 1, // poison resist
 		ABS: 2.7 // absorb damage (fire light magic cold)
+		DR: 2 // normal and magic damage reduction
 	};
 
 	var generalWeights = {
@@ -249,6 +252,7 @@ var tierscore = function (item) {
 		resistRating += effectiveLR * resistWeights.LR; // add literesist
 		resistRating += effectivePR * resistWeights.PR; // add poisonresist
 		resistRating += (item.getStatEx(142) + item.getStatEx(144) + item.getStatEx(146) + item.getStatEx(148)) * resistWeights.ABS; // add absorb damage
+		resistRating += (item.getStatEx(34) + item.getStatEx(35)) * resistWeights.DR; // add damage reduction
 
 		return resistRating;
 	};

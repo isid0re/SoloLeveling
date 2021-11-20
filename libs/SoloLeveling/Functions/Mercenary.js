@@ -10,6 +10,8 @@ var Merc = {
 	equipMerc: function () {
 		if (!me.classic) {
 			Item.autoEquipMerc();
+			Pickit.pickItems();
+			Item.autoEquipMerc();
 		}
 
 		return true;
