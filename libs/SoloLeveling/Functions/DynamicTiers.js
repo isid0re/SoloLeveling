@@ -86,7 +86,7 @@ var tierscore = function (item) {
 		LR: 2, // lightning resist
 		CR: 1.5, // cold resist
 		PR: 1, // poison resist
-		ABS: 2.7 // absorb damage (fire light magic cold)
+		ABS: 2.7, // absorb damage (fire light magic cold)
 		DR: 2 // normal and magic damage reduction
 	};
 
