@@ -496,21 +496,16 @@ var Quest = {
 			Town.goToTown();
 		}
 
-		let socketItem, insert = true, plugged = baseitem.getItems();
+		let	totalSockets = baseitem.getStat(194), usedSocketItems = Misc.getItemSockets(baseitem);
 
-		for (let insertable of insertables) {
-			socketItem = me.getItem(insertable);
+		for (let socket = 0; socket < totalSockets; socket++) {// check each socket for each insertable
+			let insertable = insertables[socket], usedInsertableType = usedSocketItems.filter(classid => classid === insertable), neededInsertableType = insertables.filter(classid => classid === insertable), socketItem = me.getItem(insertable);
 
-			for (let hole = 0; hole < baseitem.getStat(194); hole++) {// check each hole for insertable
-				if (plugged.length > 0 && plugged[hole].classid === insertable) {
-					insert = false; // set flag to not insert item
-					break;
+			if (usedSocketItems.length < totalSockets && neededInsertableType.length < usedInsertableType.length && socketItem) {
+				if (!getUIFlag(0x19)) {
+					Town.move('stash');
+					Town.openStash();
 				}
-			}
-
-			if (socketItem && insert) {
-				Town.move('stash');
-				Town.openStash();
 
 				if (!Runewords.socketItem(baseitem, socketItem)) {
 					print('ÿc9SoloLevelingÿc0: failed to socket ' + socketItem.name + ' into ' + baseitem.name);

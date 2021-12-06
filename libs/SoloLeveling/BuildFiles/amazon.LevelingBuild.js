@@ -13,7 +13,7 @@ var build = {
 	mercAuraWanted: 114,
 	mercDiff: 1,
 	stats: [
-		["vitality", 60], ["dexterity", 30], ["strength", 27], ["vitality", 91], ["dexterity", 47], ["strength", 30], ["vitality", 96], ["dexterity", 59], ["strength", 60], ["vitality", 109], ["dexterity", 77], ["strength", 89], ["vitality", 137], ["dexterity", 89], ["vitality", 173], ["dexterity", 103], ["vitality", 208], ["dexterity", 118], ["vitality", 243], ["dexterity", 133], ["vitality", 279], ["dexterity", 147], ["vitality", "all"]
+		["dexterity", 45], ["strength", 45], ["vitality", 100], ["dexterity", 55], ["strength", 55], ["vitality", 115], ["dexterity", 80], ["strength", 90], ["vitality", 145], ["dexterity", 90], ["vitality", 175], ["dexterity", 110], ["vitality", 210], ["dexterity", 120], ["vitality", 250], ["dexterity", 147], ["vitality", "all"]
 	],
 	skills: [
 		[9, 1], // Critical Strike

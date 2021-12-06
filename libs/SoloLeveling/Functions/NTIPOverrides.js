@@ -15,7 +15,7 @@ NTIP.GetCharmTier = NTIP.generateTierFunc('Charmtier');
 NTIP.addLine = function (itemString) {
 	let info = {
 		line: 1,
-		file: "SoloLeveling", 
+		file: "SoloLeveling",
 		string: line
 	};
 
@@ -365,6 +365,7 @@ NTIP.ParseLineInt = function (input, info) {
 				break;
 			case "charmtier":
 			case "merctier":
+			case "swaptier":
 			case "tier":
 				try {
 					// p_result[2].Tier = function(item) { return value };

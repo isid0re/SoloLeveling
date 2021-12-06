@@ -13,7 +13,7 @@ var build = {
 	mercAuraWanted: 114,
 	mercDiff: 1,
 	stats: [
-		["vitality", 35], ["strength", 22], ["dexterity", 28], ["vitality", 75], ["strength", 27], ["vitality", "all"],
+		["vitality", 35], ["strength", 40], ["dexterity", 45], ["vitality", 75], ["strength", 45], ["vitality", "all"],
 	],
 	skills: [
 		[9, 1], // critical strike
