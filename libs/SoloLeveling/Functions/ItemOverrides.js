@@ -307,6 +307,31 @@ Item.removeItem = function (bodyLoc) {
 	return false;
 };
 
+Item.autoEquipSockets = function () {
+	var equipped;
+
+	if (me.getItem(617) && Item.getEquippedItemMerc(1).name.includes("Andariel's") && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral to andy's visage
+		Item.removeItemsMerc(1);
+		equipped = me.findItem(428, 0, 3);
+		Quest.fillSockets(equipped, 617);
+		Item.equipMerc(equipped, 1);
+	}
+
+	if (me.getItem(586) && Item.getEquippedItem(5).name.includes("Moser's")) { // add pdiamonds to Moser's Blessed Circle
+		Item.removeItem(5);
+		equipped = me.findItem(375, 0, 3); //mosers's
+		Quest.fillSockets(equipped, 586, 586);
+		Item.equip(equipped, 5);
+	}
+
+	if (me.getItem(631) && Item.getEquippedItem(1).sockets > 0 && Item.getEquippedItem(1).name.includes("Harlequin")) { // add Um to Shako
+		Item.removeItem(1);
+		equipped = me.findItem(422, 0, 3); // shako Harlequin's Crest
+		Quest.fillSockets(equipped, 631);
+		Item.equip(equipped, 1);
+	}
+};
+
 Item.hasCharmTier = function (item) {
 	return Config.AutoEquip && NTIP.GetCharmTier(item) > 0;
 };

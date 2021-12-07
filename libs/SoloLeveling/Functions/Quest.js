@@ -496,12 +496,12 @@ var Quest = {
 			Town.goToTown();
 		}
 
-		let	totalSockets = baseitem.getStat(194), usedSocketItems = Misc.getItemSockets(baseitem);
+		let	totalSockets = baseitem.getStat(194), usedSocketItems = Misc.getItemSockets(baseitem).filter(classid => classid !== "gemsocket");
 
-		for (let socket = 0; socket < totalSockets; socket++) {// check each socket for each insertable
+		for (let socket = 0; socket < totalSockets; socket++) {// check each socket for insertable
 			let insertable = insertables[socket], usedInsertableType = usedSocketItems.filter(classid => classid === insertable), neededInsertableType = insertables.filter(classid => classid === insertable), socketItem = me.getItem(insertable);
 
-			if (usedSocketItems.length < totalSockets && neededInsertableType.length < usedInsertableType.length && socketItem) {
+			if (usedSocketItems.length < totalSockets && usedInsertableType.length < neededInsertableType.length && socketItem) {
 				if (!getUIFlag(0x19)) {
 					Town.move('stash');
 					Town.openStash();
