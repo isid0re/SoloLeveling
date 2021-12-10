@@ -21,7 +21,8 @@ Item.getEquippedItem = function (bodyLoc) {
 					name: item.fname,
 					sockets: item.getStat(194),
 					prefixnum: item.prefixnum,
-					tier: NTIP.GetTier(item)
+					tier: NTIP.GetTier(item),
+					swaptier: NTIP.GetSwapTier(item)
 				};
 			}
 		} while (item.getNext());
@@ -33,7 +34,8 @@ Item.getEquippedItem = function (bodyLoc) {
 		name: "none",
 		sockets: 0,
 		prefixnum: -1,
-		tier: -1
+		tier: -1,
+		swaptier: -1
 	};
 };
 
@@ -44,18 +46,15 @@ Item.getBodyLoc = function (item) {
 
 	switch (item.itemType) {
 	case 2: // Shield
+	case 5: // Arrows
+	case 6: // Bolts
 	case 69: // Voodoo Heads
 	case 70: // Auric Shields
-		bodyLoc = 5;
+		bodyLoc = [5, 12];
 
 		break;
 	case 3: // Armor
 		bodyLoc = 3;
-
-		break;
-	case 5: // Arrows
-	case 6: // Bolts
-		bodyLoc = 5;
 
 		break;
 	case 10: // Ring
@@ -111,7 +110,7 @@ Item.getBodyLoc = function (item) {
 			break;
 		}
 
-		bodyLoc = 4;
+		bodyLoc = [4, 11];
 
 		break;
 	case 67: // Handtohand (Assasin Claw)
@@ -154,12 +153,40 @@ Item.autoEquipCheck = function (item) {
 	return false;
 };
 
+Item.hasSwapTier = function (item) {
+	return Config.AutoEquip && NTIP.GetSwapTier(item) > 0;
+};
+
+Item.autoEquipCheckSwap = function (item) {
+	if (!Config.AutoEquip) {
+		return true;
+	}
+
+	var i,
+		tier = NTIP.GetSwapTier(item),
+		bodyLoc = this.getBodyLoc(item);
+
+	if (tier > 0 && bodyLoc) {
+		for (i = 0; i < bodyLoc.length; i += 1) {
+			Item.equippedBodyLoc = bodyLoc[i];
+
+			if (tier > this.getEquippedItem(bodyLoc[i]).swaptier) {
+				Item.equippedBodyLoc = null;
+
+				return true;
+			}
+		}
+	}
+
+	return false;
+};
+
 Item.autoEquip = function () {
 	if (!Config.AutoEquip) {
 		return true;
 	}
 
-	var i, j, tier, bodyLoc, tome, gid,
+	var i, j, tier, bodyLoc, tome, gid, swaptier,
 		items = me.findItems(-1, 0);
 
 	if (!items) {
@@ -182,7 +209,7 @@ Item.autoEquip = function () {
 
 	// Remove items without tier
 	for (i = 0; i < items.length; i += 1) {
-		if (NTIP.GetTier(items[i]) === 0) {
+		if (NTIP.GetTier(items[i]) === 0 && NTIP.GetSwapTier(items[i]) === 0) {
 			items.splice(i, 1);
 
 			i -= 1;
@@ -192,8 +219,9 @@ Item.autoEquip = function () {
 	while (items.length > 0) {
 		items.sort(sortEq);
 
-		tier = NTIP.GetTier(items[0]);
 		bodyLoc = this.getBodyLoc(items[0]);
+		tier = NTIP.GetTier(items[0]);
+		swaptier = NTIP.GetSwapTier(items[0]);
 
 		if (tier > 0 && bodyLoc) {
 			for (j = 0; j < bodyLoc.length; j += 1) {
@@ -220,6 +248,40 @@ Item.autoEquip = function () {
 							MuleLogger.logEquippedItems();
 						}
 					}
+
+					break;
+				}
+			}
+		}
+
+		if (swaptier > 0 && bodyLoc) {
+			for (j = 0; j < bodyLoc.length; j += 1) {
+				if ([3, 7].indexOf(items[0].location) > -1 && swaptier > this.getEquippedItem(bodyLoc[j]).swaptier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
+					if (!items[0].getFlag(0x10)) { // unid
+						tome = me.findItem(519, 0, 3);
+
+						if (tome && tome.getStat(70) > 0) {
+							if (items[0].location === 7) {
+								Town.openStash();
+							}
+
+							Town.identifyItem(items[0], tome);
+						}
+					}
+
+					gid = items[0].gid;
+					print(items[0].name);
+					Attack.weaponSwitch();
+
+					if (this.equip(items[0], bodyLoc[j])) {
+						Misc.logItem("Equipped", me.getItem(-1, -1, gid));
+
+						if (Developer.logEquipped) {
+							MuleLogger.logEquippedItems();
+						}
+					}
+
+					Attack.weaponSwitch();
 
 					break;
 				}
@@ -253,7 +315,6 @@ Item.equip = function (item, bodyLoc) {
 	for (i = 0; i < 3; i += 1) {
 		if (item.toCursor()) {
 			clickItemAndWait(0, bodyLoc);
-
 
 			if (item.bodylocation === bodyLoc) {
 				if (getCursorType() === 3) {
@@ -313,23 +374,58 @@ Item.autoEquipSockets = function () {
 	if (me.getItem(617) && Item.getEquippedItemMerc(1).name.includes("Andariel's") && Item.getEquippedItemMerc(1).sockets > 0 && Item.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral to andy's visage
 		Item.removeItemsMerc(1);
 		equipped = me.findItem(428, 0, 3);
-		Quest.fillSockets(equipped, 617);
+		Item.fillSockets(equipped, 617);
 		Item.equipMerc(equipped, 1);
 	}
 
 	if (me.getItem(586) && Item.getEquippedItem(5).name.includes("Moser's")) { // add pdiamonds to Moser's Blessed Circle
 		Item.removeItem(5);
 		equipped = me.findItem(375, 0, 3); //mosers's
-		Quest.fillSockets(equipped, 586, 586);
+		Item.fillSockets(equipped, 586, 586);
 		Item.equip(equipped, 5);
 	}
 
 	if (me.getItem(631) && Item.getEquippedItem(1).sockets > 0 && Item.getEquippedItem(1).name.includes("Harlequin")) { // add Um to Shako
 		Item.removeItem(1);
 		equipped = me.findItem(422, 0, 3); // shako Harlequin's Crest
-		Quest.fillSockets(equipped, 631);
+		Item.fillSockets(equipped, 631);
 		Item.equip(equipped, 1);
 	}
+};
+
+Item.fillSockets = function (baseitem, ...insertables) {
+	if (!baseitem || baseitem.getStat(194) === 0) { //no sockets or item
+		return true;
+	}
+
+	if (!me.inTown) {
+		Town.goToTown();
+	}
+
+	let	totalSockets = baseitem.getStat(194), usedSocketItems = Misc.getItemSockets(baseitem).filter(classid => classid !== "gemsocket");
+
+	for (let socket = 0; socket < totalSockets; socket++) {// check each socket for insertable
+		let insertable = insertables[socket], usedInsertableType = usedSocketItems.filter(classid => classid === insertable), neededInsertableType = insertables.filter(classid => classid === insertable), socketItem = me.getItem(insertable);
+
+		if (usedSocketItems.length < totalSockets && usedInsertableType.length < neededInsertableType.length && socketItem) {
+			if (!getUIFlag(0x19)) {
+				Town.move('stash');
+				Town.openStash();
+			}
+
+			if (!Runewords.socketItem(baseitem, socketItem)) {
+				print('ÿc9SoloLevelingÿc0: failed to socket ' + socketItem.name + ' into ' + baseitem.name);
+
+				return false;
+			}
+
+			print('ÿc9SoloLevelingÿc0: socketed ' + socketItem.name + ' into ' + baseitem.name);
+		}
+	}
+
+	me.cancel();
+
+	return true;
 };
 
 Item.hasCharmTier = function (item) {

@@ -27,24 +27,27 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[name] == ceremonialjavelin && [quality] == unique && [flag] == ethereal # [javelinandspearskilltab] == 2 # [tier] == 110000", //deaths fathom
+		"[name] == ceremonialjavelin && [quality] == unique && [flag] == ethereal # [javelinandspearskilltab] == 2 # [tier] == 110000 + tierscore(item)", //eth titans
 		//Helmet
-		"[name] == diadem && [quality] == unique && [flag] != ethereal # [fcr] == 25 # [tier] == 110000", //griffons
+		"[name] == diadem && [quality] == unique && [flag] != ethereal # [fcr] == 25 # [tier] == 110000 + tierscore(item)", //griffons
 		//boots
-		"[name] == scarabshellboots && [quality] == unique && [flag] != ethereal # [strength]+[vitality] >= 20 # [tier] == 100000", //sandstorm treks
+		"[name] == scarabshellboots && [quality] == unique && [flag] != ethereal # [strength]+[vitality] >= 20 # [tier] == 100000 + tierscore(item)", //sandstorm treks
 		//belt
-		"[name] == warbelt && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 110000", //thundergod's vigor
+		"[name] == warbelt && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 160 # [tier] == 110000 + tierscore(item)", //thundergod's vigor
 		//armor
-		"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 110000", //CoH
+		"[type] == armor && [flag] == runeword  && [flag] != ethereal # [fireresist] == 65 && [hpregen] == 7 # [tier] == 110000 + tierscore(item)", //CoH
 		//shield
-		"[type] == shield # [fcr] >= 35 && [maxmana] >= 89 # [tier] == 110000", //spirit
+		"[type] == shield # [fcr] >= 35 && [maxmana] >= 89 # [tier] == 110000 + tierscore(item)", //spirit
 		//ammy
-		"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 110000", // highlords
+		"[type] == amulet && [quality] == unique # [lightresist] == 35 # [tier] == 110000 + tierscore(item)", // highlords
 		//rings
-		"[type] == ring && [quality] == unique # [dexterity] == 20 && [tohit] == 250 # [tier] == # [tier] == 110000", // raven frost
-		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 5 # [tier] == 110000", //bk ring
+		"[type] == ring && [quality] == unique # [dexterity] == 20 && [tohit] == 250 # [tier] == # [tier] == 110000 + tierscore(item)", // raven frost
+		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 5 # [tier] == 110000 + tierscore(item)", //bk ring
+		//swap
+		"([type] == sword || [type] == mace) # [plusskillbattleorders] >= 1 # [swaptier] == 100000", //CTA
+		"[type] == shield # [fcr] >= 25 # [swaptier] == 100000", //spirit
 		//merc
-		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
-		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Eth Andy's
+		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000", //Fortitude
+		"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Andy's
 	]
 };

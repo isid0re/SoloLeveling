@@ -11,6 +11,7 @@ if (!isIncluded("NTItemParser.dbl")) {
 var NTIP_CheckListNoTier = [];
 
 NTIP.GetCharmTier = NTIP.generateTierFunc('Charmtier');
+NTIP.GetSwapTier = NTIP.generateTierFunc('Swaptier');
 
 NTIP.addLine = function (itemString) {
 	let info = {

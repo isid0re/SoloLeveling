@@ -33,7 +33,6 @@ Town.townTasks = function () {
 	Runewords.makeRunewords();
 	Cubing.doCubing();
 	Runewords.makeRunewords();
-	this.equipSWAP();
 	this.heal();
 	this.identify();
 	this.clearInventory();
@@ -97,7 +96,6 @@ Town.doChores = function (repair = false) {
 	Runewords.makeRunewords();
 	Cubing.doCubing();
 	Runewords.makeRunewords();
-	this.equipSWAP();
 	this.heal();
 	this.identify();
 	this.clearInventory();
@@ -723,51 +721,6 @@ Town.unfinishedQuests = function () {
 
 		sor.interact();
 		print('ÿc9SoloLevelingÿc0: used scroll of resistance');
-	}
-
-	return true;
-};
-
-Town.equipSWAP = function () {
-	let spirit = me.getItems()
-		.filter(item =>
-			item.getPrefix(20635) // The spirit shield prefix
-			&& item.classid !== 29 // no broad sword
-			&& item.classid !== 30 // no crystal sword
-			&& item.classid !== 31 // no long sword
-			&& [3, 6, 7].indexOf(item.location) > -1 // Needs to be on either of these locations
-		)
-		.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
-		.first();
-
-	if (spirit) {
-		if (Item.getEquippedItem(12).tier < 0) {
-			Town.move('stash');
-			Storage.Inventory.MoveTo(spirit);
-			Attack.weaponSwitch(); // switch to slot 2
-			spirit.equip();
-			Attack.weaponSwitch();
-		}
-	}
-
-	let cta = me.getItems()
-		.filter(item =>
-			item.getPrefix(20519) // The call to arms prefix
-			&& [1, 3, 6, 7].indexOf(item.location) > -1 // Needs to be on one these locations
-		)
-		.sort((a, b) => a.location - b.location) // Sort on location, low to high. So if you have one already equiped, it comes first
-		.first();
-
-	if (cta) {
-		if (cta.location === 1) {
-			return true;
-		} else {
-			Town.move('stash');
-			Storage.Inventory.MoveTo(cta);
-			Attack.weaponSwitch(); // switch to slot 2
-			cta.equip();
-			Attack.weaponSwitch();
-		}
 	}
 
 	return true;

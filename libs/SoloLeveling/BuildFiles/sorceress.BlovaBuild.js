@@ -55,6 +55,8 @@ var build = {
 		//rings
 		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000 + tierscore(item)", //soj
 		"[name] == ring && [quality] == unique # [maxstamina] == 50 && [lifeleech] >= 3 # [tier] == 100000 + tierscore(item)", //bk ring
+		//swap
+		"([type] == sword || [type] == mace) # [plusskillbattleorders] >= 1 # [swaptier] == 100000", //CTA
 		//merc
 		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
 		"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Andy's

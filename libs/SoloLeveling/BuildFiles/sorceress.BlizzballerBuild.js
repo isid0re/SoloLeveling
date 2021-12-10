@@ -62,6 +62,8 @@ var build = {
 		//rings
 		"[type] == ring && [quality] == unique # [dexterity] >= 20 # [tier] == 100000 + tierscore(item)", //ravenfrost
 		"[type] == ring && [quality] == unique # [itemmagicbonus] >= 30 # [tier] == 100000 + tierscore(item)", //nagelring
+		//swap
+		"([type] == sword || [type] == mace) # [plusskillbattleorders] >= 1 # [swaptier] == 100000", //CTA
 		//merc
 		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
 		"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Andy's

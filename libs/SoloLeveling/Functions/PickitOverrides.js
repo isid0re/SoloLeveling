@@ -79,6 +79,13 @@ Pickit.checkItem = function (unit) {
 			};
 		}
 
+		if (Item.autoEquipCheckSwap(unit)) {
+			return {
+				result: 1,
+				line: "Autoequip SwapTier: " + NTIP.GetSwapTier(unit)
+			};
+		}
+
 		if (Item.autoEquipCheckCharm(unit)) {
 			return {
 				result: 1,

@@ -486,39 +486,4 @@ var Quest = {
 
 		return false;
 	},
-
-	fillSockets: function (baseitem, ...insertables) {
-		if (!baseitem || baseitem.getStat(194) === 0) { //no sockets or item
-			return true;
-		}
-
-		if (!me.inTown) {
-			Town.goToTown();
-		}
-
-		let	totalSockets = baseitem.getStat(194), usedSocketItems = Misc.getItemSockets(baseitem).filter(classid => classid !== "gemsocket");
-
-		for (let socket = 0; socket < totalSockets; socket++) {// check each socket for insertable
-			let insertable = insertables[socket], usedInsertableType = usedSocketItems.filter(classid => classid === insertable), neededInsertableType = insertables.filter(classid => classid === insertable), socketItem = me.getItem(insertable);
-
-			if (usedSocketItems.length < totalSockets && usedInsertableType.length < neededInsertableType.length && socketItem) {
-				if (!getUIFlag(0x19)) {
-					Town.move('stash');
-					Town.openStash();
-				}
-
-				if (!Runewords.socketItem(baseitem, socketItem)) {
-					print('ÿc9SoloLevelingÿc0: failed to socket ' + socketItem.name + ' into ' + baseitem.name);
-
-					return false;
-				}
-
-				print('ÿc9SoloLevelingÿc0: socketed ' + socketItem.name + ' into ' + baseitem.name);
-			}
-		}
-
-		me.cancel();
-
-		return true;
-	},
 };

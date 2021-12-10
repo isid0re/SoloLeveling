@@ -62,27 +62,30 @@ var build = {
 	],
 	autoEquipTiers: [ // autoequip final gear
 		//weapon
-		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 200000", // HotO
-		"[name] == greatertalons && [quality] == unique && [flag] != ethereal # [enhanceddamage] >= 150 && [lifeleech] >= 5 # [tier] == 100000", //bartuc's
+		"[Type] == mace && [flag] == runeword # [FCR] == 40 # [tier] == 200000 + tierscore(item)", // HotO
+		"[name] == greatertalons && [quality] == unique && [flag] != ethereal # [enhanceddamage] >= 150 && [lifeleech] >= 5 # [tier] == 100000 + tierscore(item)", //bartuc's
 		//Helmet
-		"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000", // harlequin's crest
+		"[name] == shako && [quality] == unique && [flag] != ethereal # [DamageResist] == 10 # [tier] == 100000 + tierscore(item)", // harlequin's crest
 		//belt
-		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000", //arach's
+		"[name] == spiderwebsash && [quality] == unique && [flag] != ethereal # [enhanceddefense] >= 90 # [tier] == 100000 + tierscore(item)", //arach's
 		//boots
-		"[Name] == SharkskinBoots && [Quality] == Unique && [Flag] != Ethereal # [MaxHP] >= 65 # [tier] == 100000", //waterwalks
+		"[Name] == SharkskinBoots && [Quality] == Unique && [Flag] != Ethereal # [MaxHP] >= 65 # [tier] == 100000 + tierscore(item)", //waterwalks
 		//armor
-		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000", //Enigma
+		"[type] == armor && [flag] != ethereal && [flag] == runeword # [frw] >= 45 # [tier] == 100000 + tierscore(item)", //Enigma
 		//shield
 		"[type] == shield && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//gloves
-		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000", //magefist
+		"[name] == lightgauntlets && [quality] == unique && [flag] != ethereal # [fcr] >= 20 # [tier] == 100000 + tierscore(item)", //magefist
 		//ammy
-		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000", //maras
+		"[type] == amulet && [quality] == unique # [strength] == 5 && [coldresist] >= 30 # [tier] == 100000 + tierscore(item)", //maras
 		//rings
-		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000", //soj
-		"[Type] == Ring	&& [Quality] == Unique # [Dexterity] >= 20 # [tier] == 100000", //ravenfrost
+		"[type] == ring && [quality] == unique # [itemmaxmanapercent] == 25 # [tier] == 100000 + tierscore(item)", //soj
+		"[Type] == Ring	&& [Quality] == Unique # [Dexterity] >= 20 # [tier] == 100000 + tierscore(item)", //ravenfrost
+		//swap
+		"([type] == sword || [type] == mace) # [plusskillbattleorders] >= 1 # [swaptier] == 100000", //CTA
+		"[type] == shield # [fcr] >= 25 # [swaptier] == 100000", //spirit
 		//merc
 		"[type] == armor && [flag] == runeword # [enhanceddefense] >= 200 && [enhanceddamage] >= 300 # [merctier] == 100000",	//Fortitude
-		"[name] == demonhead && [quality] == unique && [flag] == ethereal # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Eth Andy's
+		"[name] == demonhead && [quality] == unique # [strength] >= 25 && [enhanceddefense] >= 100 # [merctier] == 50000",	//Andy's
 	]
 };

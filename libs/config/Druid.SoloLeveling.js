@@ -226,7 +226,6 @@ function LoadConfig () {
 	var finalGear = !me.classic ? Check.Build().finalGear : false;
 	var levelingTiers = [ // autoequip setup
 		//weapon
-		"[Name] == CrystalSword && [flag] == runeword # [plusskillbattleorders] >= 1", // CTA for swap
 		"([type] == wand || [type] == sword && ([Quality] >= Magic || [flag] == runeword) || [type] == knife && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
 		"([type] == helm || [type] == circlet || [type] == pelt)  && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
@@ -273,10 +272,11 @@ function LoadConfig () {
 				NTIP.arrayLooping(CTA);
 
 				if (me.getItem(636)) { // have Ohm before collecting base
-					NTIP.addLine("[Name] == CrystalSword && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");
+					NTIP.addLine("([Name] == CrystalSword || [Name] == Flail) && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1");
 				}
 
 				Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
+				Config.Runewords.push([Runeword.CallToArms, "Flail"]);
 				Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
 			}
 
