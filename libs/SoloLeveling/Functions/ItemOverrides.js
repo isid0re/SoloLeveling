@@ -138,11 +138,11 @@ Item.autoEquipCheck = function (item) {
 		tier = NTIP.GetTier(item),
 		bodyLoc = this.getBodyLoc(item);
 
-	if (tier > 0 && bodyLoc) {
+	if (Item.hasTier(item) && tier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
 			Item.equippedBodyLoc = bodyLoc[i];
 
-			if (tier > this.getEquippedItem(bodyLoc[i]).tier) {
+			if (bodyLoc[i] < 11 && tier > this.getEquippedItem(bodyLoc[i]).tier) {
 				Item.equippedBodyLoc = null;
 
 				return true;
@@ -163,14 +163,14 @@ Item.autoEquipCheckSwap = function (item) {
 	}
 
 	var i,
-		tier = NTIP.GetSwapTier(item),
+		swaptier = NTIP.GetSwapTier(item),
 		bodyLoc = this.getBodyLoc(item);
 
-	if (tier > 0 && bodyLoc) {
+	if (Item.hasSwapTier(item) && swaptier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
 			Item.equippedBodyLoc = bodyLoc[i];
 
-			if (tier > this.getEquippedItem(bodyLoc[i]).swaptier) {
+			if (bodyLoc[i] > 10 && swaptier > this.getEquippedItem(bodyLoc[i]).swaptier) {
 				Item.equippedBodyLoc = null;
 
 				return true;
@@ -225,7 +225,7 @@ Item.autoEquip = function () {
 
 		if (tier > 0 && bodyLoc) {
 			for (j = 0; j < bodyLoc.length; j += 1) {
-				if ([3, 7].indexOf(items[0].location) > -1 && tier > this.getEquippedItem(bodyLoc[j]).tier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
+				if (bodyLoc[j] < 11 && [3, 7].indexOf(items[0].location) > -1 && tier > this.getEquippedItem(bodyLoc[j]).tier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
 					if (!items[0].getFlag(0x10)) { // unid
 						tome = me.findItem(519, 0, 3);
 
@@ -256,7 +256,7 @@ Item.autoEquip = function () {
 
 		if (swaptier > 0 && bodyLoc) {
 			for (j = 0; j < bodyLoc.length; j += 1) {
-				if ([3, 7].indexOf(items[0].location) > -1 && swaptier > this.getEquippedItem(bodyLoc[j]).swaptier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
+				if (bodyLoc[j] > 10 && [3, 7].indexOf(items[0].location) > -1 && swaptier > this.getEquippedItem(bodyLoc[j]).swaptier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
 					if (!items[0].getFlag(0x10)) { // unid
 						tome = me.findItem(519, 0, 3);
 
