@@ -210,11 +210,6 @@ var tierscore = function (item) {
 		let currPR = me.getStat(45); // current poison resist
 		// get item body location
 		let itembodyloc = Item.equippedBodyLoc;
-
-		if (!itembodyloc) {
-			return resistRating;
-		}
-
 		// get item resists stats from olditem equipped on body location
 		let equippedItems = me.getItems()
 			.filter(unit =>

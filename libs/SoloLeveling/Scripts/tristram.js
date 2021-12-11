@@ -78,7 +78,7 @@ function tristram () {
 				print("ÿc9SoloLevelingÿc0: Failed to move to Cain's Gibbet");
 			}
 
-			for (let x = 0; x < 5; x++) {
+			for (let x = 0; x < 15; x++) {
 				Misc.openChest(gibbet);
 			}
 
