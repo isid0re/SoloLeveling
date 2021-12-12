@@ -685,7 +685,7 @@ Misc.gamePacket = function (bytes) {// various game events
 	}
 };
 
-Misc.getItemSockets = function (unit) {
+Misc.getUsedSockets = function (unit) {
 	var i, code,
 		sockets = unit.getStat(194),
 		subItems = unit.getItems(),
@@ -738,10 +738,6 @@ Misc.getItemSockets = function (unit) {
 	for (i = 0; i < sockets; i += 1) {
 		if (tempArray[i]) {
 			code = tempArray[i].classid;
-
-			if ([10, 12, 58, 82, 83, 84].indexOf(tempArray[i].itemType) > -1) {
-				code += (tempArray[i].gfx + 1);
-			}
 		} else {
 			code = "gemsocket";
 		}

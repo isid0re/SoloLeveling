@@ -402,7 +402,7 @@ Item.fillSockets = function (baseitem, ...insertables) {
 		Town.goToTown();
 	}
 
-	let	totalSockets = baseitem.getStat(194), usedSocketItems = Misc.getItemSockets(baseitem).filter(classid => classid !== "gemsocket");
+	let	totalSockets = baseitem.getStat(194), usedSocketItems = Misc.getUsedSockets(baseitem).filter(classid => classid !== "gemsocket");
 
 	for (let socket = 0; socket < totalSockets; socket++) {// check each socket for insertable
 		let insertable = insertables[socket], usedInsertableType = usedSocketItems.filter(classid => classid === insertable), neededInsertableType = insertables.filter(classid => classid === insertable), socketItem = me.getItem(insertable);

@@ -836,6 +836,24 @@ Town.canStash = function (item) {
 	return true;
 };
 
+Town.checkKeys = function () {
+	if (!Config.OpenChests || me.classid === 6 || me.gold < 540 || (!me.getItem("key") && !Storage.Inventory.CanFit({sizex: 1, sizey: 1, gid: 13378008}))) {
+		return 12;
+	}
+
+	var i,
+		count = 0,
+		key = me.findItems(543, 0, 3);
+
+	if (key) {
+		for (i = 0; i < key.length; i += 1) {
+			count += key[i].getStat(70);
+		}
+	}
+
+	return count;
+};
+
 Town.stash = function (stashGold) {
 	if (stashGold === undefined) {
 		stashGold = true;
