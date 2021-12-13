@@ -269,7 +269,7 @@ function LoadConfig () {
 				.first();
 
 			if (!WWS) {
-				NTIP.addLine("[name] == shortsiegebow && [quality] == unique # [fireresist] == 40 # [MaxQuantity] == 1", "SoloLeveling: WitchyZon");
+				NTIP.addLine("[name] == shortsiegebow && [quality] == unique # [fireresist] == 40 # [MaxQuantity] == 1", "WitchyZon");
 				Config.Recipes.push([Recipe.Unique.Weapon.ToElite, "Short Siege Bow", Roll.NonEth]);
 			}
 

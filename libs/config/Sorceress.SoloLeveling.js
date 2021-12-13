@@ -367,7 +367,7 @@ function LoadConfig () {
 		}
 
 		if (!me.getItem(586)) {
-			NTIP.addLine("[Name] == FlawlessDiamond # # [MaxQuantity] == 3", "SoloLeveling: Socketing Mosers");
+			NTIP.addLine("[Name] == FlawlessDiamond # # [MaxQuantity] == 3", "Socketing Mosers");
 			Config.Recipes.push([Recipe.Gem, "Flawless Diamond"]); // Make Perfect Diamond
 		}
 
