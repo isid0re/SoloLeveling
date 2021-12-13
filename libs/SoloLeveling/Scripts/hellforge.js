@@ -5,8 +5,8 @@
 */
 
 function hellforge () {
-	NTIP.addLine("[name] == hellforgehammer");
-	NTIP.addLine("[name] == mephisto'ssoulstone");
+	NTIP.addLine("[name] == hellforgehammer", "SoloLeveling: Quest Hellforge");
+	NTIP.addLine("[name] == mephisto'ssoulstone", "SoloLeveling: Quest Hellforge");
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting hellforge');
 	me.overhead("hellforge");

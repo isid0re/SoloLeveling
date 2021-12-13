@@ -137,7 +137,7 @@ function cows () {
 		return true;
 	};
 
-	NTIP.addLine("[Name] == wirt'sleg");
+	NTIP.addLine("[Name] == wirt'sleg", "SoloLeveling: Quest Cows");
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting cows');
 	me.overhead("cows");

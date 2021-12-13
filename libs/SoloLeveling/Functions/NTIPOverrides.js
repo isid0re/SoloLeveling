@@ -13,10 +13,10 @@ var NTIP_CheckListNoTier = [];
 NTIP.GetCharmTier = NTIP.generateTierFunc('Charmtier');
 NTIP.GetSwapTier = NTIP.generateTierFunc('Swaptier');
 
-NTIP.addLine = function (itemString) {
+NTIP.addLine = function (itemString, linenumber = 1, filename = "SoloLeveling") {
 	let info = {
-		line: 1,
-		file: "SoloLeveling",
+		line: linenumber,
+		file: filename,
 		string: line
 	};
 
@@ -36,10 +36,13 @@ NTIP.addLine = function (itemString) {
 	return true;
 };
 
-NTIP.arrayLooping = function (arraytoloop) {
+NTIP.arrayLooping = function (arraytoloop, arrayName = false) {
 	if (arraytoloop) {
+		let filename = arrayName !== false ? "SoloLeveling: " + arrayName : "SoloLeveling";
+
 		for (let q = 0; q < arraytoloop.length; q += 1) {
-			NTIP.addLine(arraytoloop[q]);
+			let linenumber = 1 + q;
+			NTIP.addLine(arraytoloop[q], linenumber, filename);
 		}
 	}
 

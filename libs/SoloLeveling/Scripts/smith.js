@@ -5,7 +5,7 @@
 */
 
 function smith () {
-	NTIP.addLine("[name] == horadricmalus");
+	NTIP.addLine("[name] == horadricmalus", "SoloLeveling: Quest Smith");
 	Town.townTasks();
 	print('ÿc9SoloLevelingÿc0: starting smith');
 	me.overhead("smith");

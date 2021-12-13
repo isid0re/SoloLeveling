@@ -146,7 +146,7 @@ var SetUp = {
 };
 
 // SoloLeveling Pickit Items
-var nipItems = {
+var PickitItems = {
 	Selling: [
 		'([type] == ring || [type] == amulet) && [quality] >= magic # [fcr] >= 600',
 		'([type] == armor || [type] == boots || [type] == gloves || [type] == belt) && [quality] >= magic # [fcr] >= 600',
