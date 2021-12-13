@@ -342,7 +342,7 @@ function LoadConfig () {
 				NTIP.arrayLooping(HotO, "Runeword HotO");
 
 				if (me.getItem(635)) {
-					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1", "SoloLeveling: Runeword HotO");
+					NTIP.addLine("([Name] == Flail || [Name] == Knout) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1", "Runeword HotO");
 				}
 
 				if (!me.getItem(635)) {
@@ -382,7 +382,7 @@ function LoadConfig () {
 			NTIP.arrayLooping(CTA, "Runeword CTA");
 
 			if (me.getItem(636)) { // have Ohm before collecting base
-				NTIP.addLine("([Name] == CrystalSword || [Name] == Flail) && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1", "SoloLeveling: Runeword CTA");
+				NTIP.addLine("([Name] == CrystalSword || [Name] == Flail) && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 5 # [MaxQuantity] == 1", "Runeword CTA");
 			}
 
 			Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
@@ -406,13 +406,13 @@ function LoadConfig () {
 					Config.Recipes.push([Recipe.Rune, "Thul Rune"]);
 				}
 
-				NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword) && [flag] != runeword && [flag] != ethereal && [Quality] == Normal && [Level] >= 26 && [Level] <= 40 # [Sockets] == 0 # [MaxQuantity] == 1", "SoloLeveling: Runeword Spirit");
+				NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword) && [flag] != runeword && [flag] != ethereal && [Quality] == Normal && [Level] >= 26 && [Level] <= 40 # [Sockets] == 0 # [MaxQuantity] == 1", "Runeword Spirit");
 
 				Config.Recipes.push([Recipe.Socket.Weapon, "Crystal Sword", Roll.NonEth]);
 				Config.Recipes.push([Recipe.Socket.Weapon, "Broad Sword", Roll.NonEth]);
 			}
 
-			NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword) && [flag] != runeword && [flag] != ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1", "SoloLeveling: Runeword Spirit");
+			NTIP.addLine("([Name] == BroadSword || [Name] == CrystalSword) && [flag] != runeword && [flag] != ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 4 # [MaxQuantity] == 1", "Runeword Spirit");
 			Config.Runewords.push([Runeword.Spirit, "Crystal Sword"]);
 			Config.Runewords.push([Runeword.Spirit, "Broad Sword"]);
 
@@ -435,7 +435,7 @@ function LoadConfig () {
 					"[Name] == SolRune # # [MaxQuantity] == 1",
 				];
 				NTIP.arrayLooping(InsightRunes, "Runeword Insight");
-				NTIP.addLine("[Name] == voulge && [flag] != runeword && [flag] != ethereal && [Quality] == Normal && [Level] >= 26 && [Level] <= 40 # [Sockets] == 0 # [MaxQuantity] == 1", "SoloLeveling: Runeword Insight");
+				NTIP.addLine("[Name] == voulge && [flag] != runeword && [flag] != ethereal && [Quality] == Normal && [Level] >= 26 && [Level] <= 40 # [Sockets] == 0 # [MaxQuantity] == 1", "Runeword Insight");
 			}
 
 			Config.Recipes.push([Recipe.Socket.Weapon, "Giant Thresher"]);
@@ -588,7 +588,7 @@ function LoadConfig () {
 				NTIP.arrayLooping(smokeRunes, "Runeword Smoke");
 			}
 
-			NTIP.addLine("([Name] == demonhidearmor || [Name] == DuskShroud || [Name] == GhostArmor || [Name] == LightPlate || [Name] == MagePlate || [Name] == SerpentskinArmor || [Name] == trellisedarmor || [Name] == WyrmHide) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2", "SoloLeveling: Runeword Smoke");
+			NTIP.addLine("([Name] == demonhidearmor || [Name] == DuskShroud || [Name] == GhostArmor || [Name] == LightPlate || [Name] == MagePlate || [Name] == SerpentskinArmor || [Name] == trellisedarmor || [Name] == WyrmHide) && [flag] != runeword && [Flag] != Ethereal && [Quality] >= Normal && [Quality] <= Superior # [Sockets] == 2", "Runeword Smoke");
 
 			Config.Runewords.push([Runeword.Smoke, "demonhide armor"]);
 			Config.Runewords.push([Runeword.Smoke, "Dusk Shroud"]);
