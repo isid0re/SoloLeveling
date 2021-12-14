@@ -277,7 +277,7 @@ function LoadConfig () {
 
 				Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
 				Config.Runewords.push([Runeword.CallToArms, "Flail"]);
-				Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
+				Config.KeepRunewords.push("([type] == sword || [type] == mace) # [plusskillbattleorders] >= 1");
 			}
 
 			if (!Check.haveItem("mace", "runeword", "Heart of the Oak")) {

@@ -387,7 +387,7 @@ function LoadConfig () {
 
 			Config.Runewords.push([Runeword.CallToArms, "Crystal Sword"]);
 			Config.Runewords.push([Runeword.CallToArms, "Flail"]);
-			Config.KeepRunewords.push("[type] == sword # [plusskillbattleorders] >= 1");
+			Config.KeepRunewords.push("([type] == sword || [type] == mace) # [plusskillbattleorders] >= 1");
 		}
 
 		if ((me.ladder || Developer.addLadderRW) && Item.getEquippedItem(4).tier < 777) { // Spirit Sword
