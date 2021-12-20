@@ -48,7 +48,7 @@ Town.townTasks = function () {
 	Item.autoEquip();
 	Item.autoEquipCharm();
 	Merc.hireMerc();
-	Merc.equipMerc();
+	Item.autoEquipMerc();
 	this.stash();
 	this.clearJunk();
 	Item.autoEquipSockets();
@@ -114,7 +114,7 @@ Town.doChores = function (repair = false) {
 	Item.autoEquip();
 	Item.autoEquipCharm();
 	Merc.hireMerc();
-	Merc.equipMerc();
+	Item.autoEquipMerc();
 	this.stash();
 	this.clearJunk();
 	Item.autoEquipSockets();
@@ -821,7 +821,7 @@ Town.drinkPots = function () {
 Town.canStash = function (item) {
 	var ignoredClassids = [91, 174]; // Some quest items that have to be in inventory or equipped
 
-	if (!item.getFlag(0x10) || !Item.canStashCharm(item) || this.ignoredItemTypes.indexOf(item.itemType) > -1 || ignoredClassids.indexOf(item.classid) > -1) {
+	if (!item.getFlag(0x10) || Item.canEquipCharm(item) || this.ignoredItemTypes.indexOf(item.itemType) > -1 || ignoredClassids.indexOf(item.classid) > -1) {
 		return false;
 	}
 

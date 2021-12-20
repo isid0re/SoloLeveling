@@ -295,7 +295,7 @@ var Check = {
 
 			break;
 		case "tombs": //tombs
-			if (Pather.accessToAct(2) && (me.normal && me.charlvl < 25 || !Check.Gold())) {
+			if (Pather.accessToAct(2) && me.normal && me.charlvl < 24) {
 				return true;
 			}
 
@@ -313,7 +313,7 @@ var Check = {
 
 			break;
 		case "templeruns": //temple runs
-			if (Pather.accessToAct(3) && (!me.lamessen || me.nightmare && me.charlvl < 50 || me.hell || !Check.Gold())) {
+			if (Pather.accessToAct(3) && (!me.lamessen || me.nightmare && me.charlvl < 50 || me.hell)) {
 				return true;
 			}
 
@@ -331,7 +331,7 @@ var Check = {
 
 			break;
 		case "travincal": //travincal
-			if (Pather.accessToAct(3) && (me.charlvl < 25 || !me.travincal)) {
+			if (Pather.accessToAct(3) && (me.charlvl < 24 || !me.travincal)) {
 				return true;
 			}
 
@@ -355,7 +355,7 @@ var Check = {
 
 			break;
 		case "hellforge": // hellforge
-			if (Pather.accessToAct(4) && !me.normal && !me.hellforge) {
+			if (!me.classic && Pather.accessToAct(4) && !me.normal && !me.hellforge) {
 				return true;
 			}
 
@@ -614,31 +614,6 @@ var Check = {
 			finalGear: build.autoEquipTiers,
 		};
 	},
-
-	setupCharms: function () {
-		let i, equipped, limit,
-			type = [603, 604, 605],
-			items = me.getItems()
-				.filter(item => item.location === 3 && type.indexOf(item.classid) > -1)
-				.sort((a, b) => a.classid - b.classid);
-
-		for (i = 0; i < type.length; i++) {
-			equipped = items.filter(item => item.classid === type[i])
-				.sort((a, b) => NTIP.GetCharmTier(a) - NTIP.GetCharmTier(b));
-
-			limit = Item.getCharmLimit(type[i]) * -1; // trim off lowest tier
-			equipped = equipped.slice(limit);
-
-			while (equipped.length > 0) {
-				Check.equippedCharms[i].push(copyUnit(equipped[0]));
-				equipped.shift();
-			}
-		}
-
-		return true;
-	},
-
-	equippedCharms: [[], [], []],
 };
 
 var indexOfMax = function (arr) {

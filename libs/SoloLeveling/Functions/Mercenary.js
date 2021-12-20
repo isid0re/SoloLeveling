@@ -7,16 +7,6 @@
 var Merc = {
 	Id: [],
 
-	equipMerc: function () {
-		if (!me.classic) {
-			Item.autoEquipMerc();
-			Pickit.pickItems();
-			Item.autoEquipMerc();
-		}
-
-		return true;
-	},
-
 	getMercFix: function () { // merc is null fix
 		if (!Config.UseMerc) {
 			return null;
