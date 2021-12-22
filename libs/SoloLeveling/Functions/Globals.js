@@ -247,7 +247,7 @@ var Check = {
 
 			break;
 		case "pits": //pits
-			if (me.hell) {
+			if (me.hell && !me.sorceress) {
 				return true;
 			}
 
