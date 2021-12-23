@@ -21,8 +21,14 @@ function bloodraven () {
 		me.overhead("blood raven");
 		Pather.moveToExit([3, 17], true);
 		Pather.moveToPreset(17, 1, 805);
-		Attack.killTarget("Blood Raven");
-		Pickit.pickItems();
+
+		try {
+			Attack.kill("Blood Raven");
+			Pickit.pickItems();
+		} catch (err) {
+			print('ÿc9SoloLevelingÿc0: Failed to kill Blood Raven');
+		}
+
 		Town.npcInteract("kashya");
 
 		return true;

@@ -28,8 +28,13 @@ function duriel () {
 	Pather.usePortal(null, me.name);
 	delay(1000 + me.ping);
 	Pather.useUnit(2, 100, 73);
-	Attack.killTarget("Duriel");
-	Pickit.pickItems();
+
+	try {
+		Attack.kill("Duriel");
+		Pickit.pickItems();
+	} catch (err) {
+		print('ÿc9SoloLevelingÿc0: Failed to kill Duriel');
+	}
 
 	if (!me.duriel && !Misc.checkQuest(14, 3)) {
 		Quest.tyraelTomb();

@@ -23,8 +23,13 @@ function travincal () {
 	};
 
 	Pather.moveToUnit(council);
-	Attack.killTarget("Ismail Vilehand");
-	Pickit.pickItems();
+
+	try {
+		Attack.kill("Ismail Vilehand");
+		Pickit.pickItems();
+	} catch (err) {
+		print('ÿc9SoloLevelingÿc0: Failed to kill Ismail Vilehand');
+	}
 
 	if (!Pather.moveToPreset(83, 2, 404)) { // go to orb
 		print('ÿc9SoloLevelingÿc0: Failed to move to compelling orb');

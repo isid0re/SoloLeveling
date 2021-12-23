@@ -20,14 +20,25 @@ function shenk () {
 
 	if (Eldritch && Attack.canAttack(Eldritch)) {// Eldritch the Rectifier
 		Pather.moveTo(3745, 5084);
-		Attack.killTarget(getLocaleString(22500));
-		Pickit.pickItems();
+
+		try {
+			Attack.kill(Eldritch);
+			Pickit.pickItems();
+		} catch (err) {
+			print('ÿc9SoloLevelingÿc0: Failed to kill Eldritch');
+		}
 	}
 
 	Pather.moveTo(110, true);
 	Pather.moveTo(3883, 5113);
-	Attack.killTarget(getLocaleString(22435)); // Shenk the Overseer
-	Pickit.pickItems();
+	let Shenk = getUnit(1, getLocaleString(22435));
+
+	try {
+		Attack.kill(Shenk);
+		Pickit.pickItems();
+	} catch (err) {
+		print('ÿc9SoloLevelingÿc0: Failed to kill Shenk');
+	}
 
 	return true;
 }

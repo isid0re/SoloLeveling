@@ -36,7 +36,7 @@ function diablo () {
 
 				try {
 					if (boss && boss.hp > 0) {
-						Attack.killTarget(name);
+						Attack.kill(name);
 					}
 				} catch (e) {
 					Attack.clear(10, 0, name);
@@ -316,7 +316,7 @@ function diablo () {
 		this.diabloPrep();
 	}
 
-	Attack.killTarget(243); //diablo
+	Attack.kill(243); //diablo
 	Pickit.pickItems();
 
 	if (me.classic) {

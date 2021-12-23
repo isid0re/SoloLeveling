@@ -80,9 +80,6 @@ Town.townTasks = function () {
 		Precast.doPrecast(false);
 	}
 
-	Config.NoTele = me.normal && me.gold < 10000 ? true : !me.normal && me.gold < 50000 ? true : false;
-	Config.Dodge = (me.getSkill(54, 0) || me.getStat(97, 54)) ? !Config.NoTele : Config.Dodge;
-
 	return true;
 };
 
@@ -144,9 +141,6 @@ Town.doChores = function (repair = false) {
 	if (!me.barbarian && !Precast.checkCTA()) {	//If not a barb and no CTA, do precast. This is good since townchicken calls doChores. If the char has a cta this is ignored since revive merc does precast
 		Precast.doPrecast(false);
 	}
-
-	Config.NoTele = me.normal && me.gold < 10000 ? true : !me.normal && me.gold < 50000 ? true : false;
-	Config.Dodge = me.getSkill(54, 0) && me.sorceress ? !Config.NoTele : false;
 
 	return true;
 };
@@ -1297,46 +1291,6 @@ Town.reviveMerc = function () {
 	}
 
 	return false;
-};
-
-Town.visitTown = function (repair = false) {
-	if (me.inTown) {
-		this.doChores();
-		this.move("stash");
-
-		return true;
-	}
-
-	var preArea = me.area,
-		preAct = me.act;
-
-	try { // not an essential function -> handle thrown errors
-		this.goToTown();
-	} catch (e) {
-		return false;
-	}
-
-	this.doChores(repair);
-
-	if (me.act !== preAct) {
-		this.goToTown(preAct);
-	}
-
-	this.move("portalspot");
-
-	if (!Pather.usePortal(null, me.name)) { // this part is essential
-		try {
-			Pather.usePortal(preArea, me.name);
-		} catch (e) {
-			throw new Error("Town.visitTown: Failed to go back from town");
-		}
-	}
-
-	if (Config.PublicMode) {
-		Pather.makePortal();
-	}
-
-	return true;
 };
 
 Town.needRepair = function () {

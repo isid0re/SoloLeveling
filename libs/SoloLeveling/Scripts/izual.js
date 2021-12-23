@@ -19,7 +19,13 @@ function izual () {
 
 	if (!Misc.checkQuest(25, 1)) {
 		Pather.moveToPreset(105, 1, 256);
-		Attack.killTarget("Izual");
+
+		try {
+			Attack.kill("Izual");
+			Pickit.pickItems();
+		} catch (err) {
+			print('ÿc9SoloLevelingÿc0: Failed to kill Izual');
+		}
 	}
 
 	Town.npcInteract("tyrael");

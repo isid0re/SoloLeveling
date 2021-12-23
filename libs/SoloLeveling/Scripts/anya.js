@@ -59,8 +59,13 @@ function anya () {
 
 		Precast.doPrecast(true);
 		Pather.moveTo(10058, 13234);
-		Attack.killTarget(getLocaleString(22497)); // pindleskin
-		Pickit.pickItems();
+
+		try {
+			Attack.kill(getLocaleString(22497));
+			Pickit.pickItems();
+		} catch (err) {
+			print('ÿc9SoloLevelingÿc0: Failed to kill Pindleskin');
+		}
 	}
 
 	return true;

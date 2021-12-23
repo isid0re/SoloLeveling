@@ -2,6 +2,7 @@
 *	@filename	PatherOverrides.js
 *	@author		isid0re
 *	@desc		Pather.js fixes to improve functionality
+*	@credits	Xcon for turn off teleport if below 20% mana
 */
 
 if (!isIncluded("common/Pather.js")) {
@@ -132,11 +133,11 @@ Pather.checkWP = function (area) {
 	return getWaypoint(Pather.wpAreas.indexOf(area));
 };
 
-Pather.useTeleport = function () { //XCon provided. to turn off teleport if below 20% mana
-	return this.teleport && !Config.NoTele && !me.getState(139) && !me.getState(140) && !me.inTown && ((me.classid === 1 && me.getSkill(54, 1) && ((me.getStat(8) / me.getStat(9)) * 100) >= 20) || me.getStat(97, 54));
+Pather.useTeleport = function () {
+	return this.teleport && !Config.NoTele && !me.getState(139) && !me.getState(140) && !me.inTown && !me.lowgold && ((me.classid === 1 && me.getSkill(54, 1) && ((me.getStat(8) / me.getStat(9)) * 100) >= 20) || me.getStat(97, 54));
 };
 
-Pather.openDoors = function (x, y) { //fixed monsterdoors/walls in act 5
+Pather.openDoors = function (x, y) {
 	if (me.inTown) {
 		return false;
 	}

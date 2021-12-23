@@ -26,8 +26,14 @@ function mephisto () {
 	Precast.doPrecast(true);
 	Pather.moveTo(17692, 8048);
 	Pather.moveTo(17563, 8072);
-	Attack.killTarget("Mephisto");
-	Pickit.pickItems();
+
+	try {
+		Attack.kill("Mephisto");
+		Pickit.pickItems();
+	} catch (err) {
+		print('ÿc9SoloLevelingÿc0: Failed to kill Mephisto');
+	}
+
 	Pather.moveTo(17581, 8070);
 	delay(250 + me.ping * 2);
 	Pather.usePortal(null);

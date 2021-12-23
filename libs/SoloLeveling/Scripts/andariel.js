@@ -38,9 +38,14 @@ function andariel () {
 	Pather.moveTo(22572, 9582);
 	Pather.moveTo(22554, 9566);
 	Pather.moveTo(22546, 9554);
-	Attack.killTarget("Andariel");
-	delay(2000 + me.ping); // Wait for minions to die.
-	Pickit.pickItems();
+
+	try {
+		Attack.kill("Andariel");
+		delay(2000 + me.ping); // Wait for minions to die.
+		Pickit.pickItems();
+	} catch (err) {
+		print('ÿc9SoloLevelingÿc0: Failed to kill Andariel');
+	}
 
 	if (!me.andariel) {
 		Pather.changeAct();

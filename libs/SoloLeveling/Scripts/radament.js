@@ -20,8 +20,14 @@ function radament () {
 	Precast.doPrecast(true);
 	Pather.moveToExit(49, true);
 	Pather.moveToPreset(me.area, 2, 355);
-	Attack.killTarget("Radament");
-	Pickit.pickItems();
+
+	try {
+		Attack.kill("Radament");
+		Pickit.pickItems();
+	} catch (err) {
+		print('ÿc9SoloLevelingÿc0: Failed to kill Radament');
+	}
+
 	Town.npcInteract("atma");
 	Town.unfinishedQuests();
 

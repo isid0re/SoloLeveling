@@ -342,10 +342,7 @@ Item.equip = function (item, bodyLoc) {
 Item.removeItem = function (bodyLoc) {
 	let cursorItem,
 		removable = me.getItems()
-			.filter(item =>
-				item.location === 1 // Needs to be equipped
-				&& item.bodylocation === bodyLoc
-			)
+			.filter(item => item.location === 1 && item.bodylocation === bodyLoc)
 			.first();
 
 	if (removable) {
@@ -452,7 +449,7 @@ Item.equipCharm = function (item) {
 	let cursorItem, index = [603, 604, 605].indexOf(item.classid),
 		equipped = this.equippedCharms[index], lowestrank = equipped.first();
 
-	if (!this.canEquipCharm(item) || equipped.filter(x => x.gid === item.gid).length > 0) {
+	if (!this.canEquipCharm(item)) {
 		return false;
 	}
 
@@ -574,7 +571,7 @@ Item.autoEquipCharm = function () {
 		return true;
 	}
 
-	let limit, oldTier, tier, index,
+	let equipped, limit, oldTier, tier, index,
 		items = me.getItems()
 			.filter(item => this.canEquipCharm(item) && [3, 7].indexOf(item.location) > -1)
 			.sort((a, b) => a.classid - b.classid);
@@ -597,15 +594,18 @@ Item.autoEquipCharm = function () {
 		index = [603, 604, 605].indexOf(items[0].classid),
 		limit = this.getCharmLimit(items[0].classid);
 		tier = NTIP.GetCharmTier(items[0]);
+		equipped = this.equippedCharms[index].filter(x => x.gid === items[0].gid).length > 0;
 
 		if (tier > 0 && limit) {
 			for (let j = 0; j < limit; j += 1) {
 				oldTier = this.getEquippedCharm(items[0], j).tier;
 
+				if (equipped) {
+					break;
+				}
+
 				if (tier > oldTier) {
-					if (this.equippedCharms[index].filter(x => x.gid === items[0].gid).length === 0) {
-						print(items[0].name);
-					}
+					print(items[0].name);
 
 					if (this.equipCharm(items[0])) {
 						Misc.logItem("Equipped Charm", me.getItem(-1, -1, items[0].gid));

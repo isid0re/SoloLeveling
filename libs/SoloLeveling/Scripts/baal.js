@@ -268,7 +268,7 @@ function baal () {
 		}
 
 		Pather.moveTo(15134, 5923);
-		Attack.killTarget(544); // Baal
+		Attack.kill(544); // Baal
 		Pickit.pickItems();
 	} else {
 		print("ÿc9SoloLevelingÿc0: Bumper check triggered");
