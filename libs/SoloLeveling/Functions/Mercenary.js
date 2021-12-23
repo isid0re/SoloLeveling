@@ -145,9 +145,9 @@ var Merc = {
 			print('ÿc9SoloLevelingÿc0: ' + mercAuraName + ' merc not available. try later.');
 		}
 
-		this.equipMerc();
+		Item.autoEquipMerc();
 		Pickit.pickItems(); // safetycheck for merc items on ground
-		this.equipMerc();
+		Item.autoEquipMerc();
 		removeEventListener("gamepacket", Merc.listPacket);
 
 		return true;
