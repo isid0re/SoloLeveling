@@ -446,9 +446,6 @@ Item.canEquipCharm = function (item) {
 };
 
 Item.equipCharm = function (item) {
-	let cursorItem, index = [603, 604, 605].indexOf(item.classid),
-		equipped = this.equippedCharms[index], lowestrank = equipped.first();
-
 	if (!this.canEquipCharm(item)) {
 		return false;
 	}
@@ -463,24 +460,6 @@ Item.equipCharm = function (item) {
 		me.cancel();
 	}
 
-	if (equipped.length >= this.getCharmLimit(item.classid)) {
-		if (item.toCursor()) {
-			clickItemAndWait(0, lowestrank.y, lowestrank.x, 3);
-
-			if (item.location === 3 && item.x === lowestrank.x && item.y === lowestrank.y) {
-				if (getCursorType() === 3) {
-					cursorItem = getUnit(100);
-
-					if (cursorItem) {
-						if (Pickit.checkItem(lowestrank).result !== 1) {
-							lowestrank.drop();
-						}
-					}
-				}
-			}
-		}
-	}
-
 	this.updateEquippedCharms(item);
 
 	return true;
@@ -491,15 +470,15 @@ Item.getEquippedCharm = function (item, arrayPosition) {
 		invCharms = this.equippedCharms[index];
 
 	if (invCharms) {
-		for (let unit in invCharms) {
-			if (invCharms.indexOf(unit) === arrayPosition) {
+		for (let x = 0; x < invCharms.length; x++) {
+			if (invCharms.indexOf(invCharms[x]) === arrayPosition) {
 				return {
-					classid: unit.classid,
-					gid: unit.gid,
-					quality: unit.quality,
-					tier: NTIP.GetCharmTier(unit),
-					name: unit.fname,
-					description: unit.description
+					classid: invCharms[x].classid,
+					gid: invCharms[x].gid,
+					quality: invCharms[x].quality,
+					tier: NTIP.GetCharmTier(invCharms[x]),
+					name: invCharms[x].fname,
+					description: invCharms[x].description
 				};
 			}
 		}
@@ -557,7 +536,7 @@ Item.autoEquipCheckCharm = function (item) {
 		for (let i = 0; i < charmLimit; i += 1) {
 			let oldTier = this.getEquippedCharm(item, i).tier;
 
-			if (charmTier > oldTier) {
+			if (charmTier > oldTier || item.gid === this.getEquippedCharm(item, i).gid) {
 				return true;
 			}
 		}
@@ -571,7 +550,7 @@ Item.autoEquipCharm = function () {
 		return true;
 	}
 
-	let equipped, limit, oldTier, tier, index,
+	let equipped, limit, oldTier, tier,
 		items = me.getItems()
 			.filter(item => this.canEquipCharm(item) && [3, 7].indexOf(item.location) > -1)
 			.sort((a, b) => a.classid - b.classid);
@@ -591,12 +570,18 @@ Item.autoEquipCharm = function () {
 	}
 
 	while (items.length > 0) {
-		index = [603, 604, 605].indexOf(items[0].classid),
 		limit = this.getCharmLimit(items[0].classid);
+		equipped = false;
 		tier = NTIP.GetCharmTier(items[0]);
-		equipped = this.equippedCharms[index].filter(x => x.gid === items[0].gid).length > 0;
 
-		if (tier > 0 && limit) {
+		for (let x = 0; x < limit; x++) {
+			if (items[0].gid === this.getEquippedCharm(items[0], x).gid) {
+				equipped = true;
+				break;
+			}
+		}
+
+		if (tier > 0 && !equipped) {
 			for (let j = 0; j < limit; j += 1) {
 				oldTier = this.getEquippedCharm(items[0], j).tier;
 
@@ -608,7 +593,7 @@ Item.autoEquipCharm = function () {
 					print(items[0].name);
 
 					if (this.equipCharm(items[0])) {
-						Misc.logItem("Equipped Charm", me.getItem(-1, -1, items[0].gid));
+						Misc.logItem("Equipped", me.getItem(-1, -1, items[0].gid));
 
 						if (Developer.logEquipped) {
 							MuleLogger.logEquippedItems();
@@ -638,8 +623,6 @@ Item.setupCharms = function () {
 	for (i = 0; i < type.length; i++) {
 		equipped = items.filter(item => item.classid === type[i] && this.canEquipCharm(item))
 			.sort((a, b) => NTIP.GetCharmTier(a) - NTIP.GetCharmTier(b));
-
-
 		limit = Item.getCharmLimit(type[i]) * -1; // trim off lowest tier
 		equipped = equipped.slice(limit);
 
