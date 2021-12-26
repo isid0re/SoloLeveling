@@ -317,7 +317,7 @@ function diablo () {
 	}
 
 	try {
-		Attack.kill(theD); // Diablo
+		Attack.kill(243); // Diablo
 		Pickit.pickItems();
 	} catch (err) {
 		print('ÿc9SoloLevelingÿc0: Failed to kill Diablo');

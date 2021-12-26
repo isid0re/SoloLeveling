@@ -696,9 +696,9 @@ Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
 };
 
 Pather.useUnit = function (type, id, targetArea) {
-	var i, coord, tick, unit, preArea = me.area;
+	var tick, unit, coord, preArea = me.area;
 
-	for (i = 0; i < 5; i += 1) {
+	for (let i = 0; i < 15; i += 1) {
 		unit = getUnit(type, id);
 
 		if (unit) {
@@ -709,12 +709,12 @@ Pather.useUnit = function (type, id, targetArea) {
 	}
 
 	if (!unit) {
-		throw new Error("useUnit: Unit not found. TYPE: " + type + " OBJECTID: " + id + " AREA: " + me.area);
+		throw new Error("useUnit: Unit not found. TYPE: " + type + " ID: " + id + " AREA: " + me.area);
 	}
 
-	for (i = 0; i < 3; i += 1) {
+	for (let i = 0; i < 5; i += 1) {
 		if (getDistance(me, unit) > 5) {
-			Pather.moveToUnit(unit);
+			this.moveToUnit(unit);
 		}
 
 		if (type === 2 && unit.mode === 0) {
@@ -751,7 +751,7 @@ Pather.useUnit = function (type, id, targetArea) {
 
 		Packet.flash(me.gid);
 		coord = CollMap.getRandCoordinate(me.x, -1, 1, me.y, -1, 1, 3);
-		Pather.moveTo(coord.x, coord.y);
+		this.moveTo(coord.x, coord.y);
 	}
 
 	return targetArea ? me.area === targetArea : me.area !== preArea;
