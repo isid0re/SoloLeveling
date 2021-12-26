@@ -206,13 +206,13 @@ Pather.openDoors = function (x, y) {
 };
 
 Pather.changeAct = function () {
-	let tick, code, prevAct = me.act, targetAct;
+	let code, targetAct;
 
 	if (!me.inTown) {
 		Town.goToTown();
 	}
 
-	switch (prevAct) {
+	switch (me.act) {
 	case 1:
 		Town.npcInteract("warriv");
 		code = 0x0D36;
@@ -236,17 +236,11 @@ Pather.changeAct = function () {
 	}
 
 	if (Misc.useMenu(code)) {
-		for (let i = 0; i < 4; i += 1) {
-			tick = getTickCount();
+		for (let i = 0; i < 7; i += 1) {
+			delay(1000 + me.ping);
 
-			while (getTickCount() - tick < 3000) {
-				if (me.inTown && (me.act !== prevAct || me.act === targetAct)) {
-					delay(100);
-
-					return true;
-				}
-
-				delay(10);
+			if (me.inTown && me.act === targetAct) {
+				return true;
 			}
 		}
 	}
@@ -715,7 +709,7 @@ Pather.useUnit = function (type, id, targetArea) {
 	}
 
 	if (!unit) {
-		throw new Error("useUnit: Unit not found. TYPE: " + type + " ID: " + id + " AREA: " + me.area);
+		throw new Error("useUnit: Unit not found. TYPE: " + type + " OBJECTID: " + id + " AREA: " + me.area);
 	}
 
 	for (i = 0; i < 3; i += 1) {

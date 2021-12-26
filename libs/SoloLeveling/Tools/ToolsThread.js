@@ -162,7 +162,7 @@ function main () {
 
 	this.togglePause = function () {
 		var l,	script,
-			scripts = ["default.dbj", "tools/townchicken.js", "tools/antihostile.js", "tools/party.js", "tools/rushthread.js"];
+			scripts = ["default.dbj", "SoloLeveling/Tools/TownChicken.js", "tools/antihostile.js", "tools/party.js", "tools/rushthread.js"];
 
 		for (l = 0; l < scripts.length; l += 1) {
 			script = getScript(scripts[l]);
@@ -174,7 +174,7 @@ function main () {
 					}
 
 					// don't pause townchicken during clone walk
-					if (scripts[l] !== "tools/townchicken.js" || !cloneWalked) {
+					if (scripts[l] !== "SoloLeveling/Tools/TownChicken.js" || !cloneWalked) {
 						script.pause();
 					}
 				} else {
@@ -201,6 +201,10 @@ function main () {
 	};
 
 	this.exit = function () {
+		if (Developer.logPerformance) {
+			Tracker.Update();
+		}
+
 		this.stopDefault();
 		quit();
 	};
@@ -466,11 +470,6 @@ function main () {
 				if (AutoMule.getMuleItems().length > 0) {
 					print("ÿc2Mule triggered");
 					scriptBroadcast("mule");
-
-					if (Developer.logPerformance) {
-						Tracker.Update();
-					}
-
 					this.exit();
 				} else {
 					me.overhead("No items to mule.");
@@ -700,10 +699,6 @@ function main () {
 						D2Bot.printToConsole("Life Chicken (" + me.hp + "/" + me.hpmax + ")" + this.getNearestMonster() + " in " + Pather.getAreaName(me.area) + ". Ping: " + me.ping, 9);
 					}
 
-					if (Developer.logPerformance) {
-						Tracker.Update();
-					}
-
 					D2Bot.updateChickens();
 					this.exit();
 
@@ -723,10 +718,6 @@ function main () {
 						D2Bot.printToConsole("Mana Chicken: (" + me.mp + "/" + me.mpmax + ") in " + Pather.getAreaName(me.area), 9);
 					}
 
-					if (Developer.logPerformance) {
-						Tracker.Update();
-					}
-
 					D2Bot.updateChickens();
 					this.exit();
 
@@ -742,10 +733,6 @@ function main () {
 						if (ironGolem.hp <= Math.floor(128 * Config.IronGolemChicken / 100)) { // ironGolem.hpmax is bugged with BO
 							if (!Developer.hideChickens) {
 								D2Bot.printToConsole("Irom Golem Chicken in " + Pather.getAreaName(me.area), 9);
-							}
-
-							if (Developer.logPerformance) {
-								Tracker.Update();
 							}
 
 							D2Bot.updateChickens();
@@ -764,10 +751,6 @@ function main () {
 						if (mercHP < Config.MercChicken) {
 							if (!Developer.hideChickens) {
 								D2Bot.printToConsole("Merc Chicken in " + Pather.getAreaName(me.area), 9);
-							}
-
-							if (Developer.logPerformance) {
-								Tracker.Update();
 							}
 
 							D2Bot.updateChickens();
@@ -824,10 +807,6 @@ function main () {
 
 			if (Config.LogExperience) {
 				Experience.log();
-			}
-
-			if (Developer.logPerformance) {
-				Tracker.Update();
 			}
 
 			this.checkPing(false); // In case of quitlist triggering first

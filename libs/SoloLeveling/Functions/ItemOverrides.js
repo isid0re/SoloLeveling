@@ -20,6 +20,7 @@ Item.getEquippedItem = function (bodyLoc) {
 					classid: item.classid,
 					name: item.fname,
 					sockets: item.getStat(194),
+					usedSockets: Misc.getUsedSockets(item).filter(classid => classid !== "gemsocket").length,
 					prefixnum: item.prefixnum,
 					tier: NTIP.GetTier(item),
 					swaptier: NTIP.GetSwapTier(item)
@@ -33,6 +34,7 @@ Item.getEquippedItem = function (bodyLoc) {
 		classid: -1,
 		name: "none",
 		sockets: 0,
+		usedSockets: 0,
 		prefixnum: -1,
 		tier: -1,
 		swaptier: -1
@@ -353,9 +355,11 @@ Item.removeItem = function (bodyLoc) {
 			if (Pickit.checkItem(cursorItem).result === 1) { // only keep wanted items
 				if (Storage.Inventory.CanFit(cursorItem)) {
 					Storage.Inventory.MoveTo(cursorItem);
+				} else {
+					clickItemAndWait(0, bodyLoc);
 				}
 			} else {
-				cursorItem.drop();
+				clickItemAndWait(0, bodyLoc);
 			}
 		}
 
@@ -368,21 +372,21 @@ Item.removeItem = function (bodyLoc) {
 Item.autoEquipSockets = function () {
 	var equipped;
 
-	if (me.getItem(617) && this.getEquippedItemMerc(1).name.includes("Andariel's") && this.getEquippedItemMerc(1).sockets > 0 && this.getEquippedItemMerc(1).description.includes("Fire Resist")) { // add ral to andy's visage
+	if (me.getItem(617) && this.getEquippedItemMerc(1).name.includes("Andariel's") && this.getEquippedItemMerc(1).sockets > 0 && this.getEquippedItemMerc(1).usedSockets < 1) { // add ral to andy's visage
 		this.removeItemsMerc(1);
 		equipped = me.findItem(428, 0, 3);
 		this.fillSockets(equipped, 617);
 		this.equipMerc(equipped, 1);
 	}
 
-	if (me.getItem(586) && this.getEquippedItem(5).name.includes("Moser's")) { // add pdiamonds to Moser's Blessed Circle
+	if (me.getItem(586) && this.getEquippedItem(5).name.includes("Moser's") && this.getEquippedItem(5).usedSockets < 2) { // add pdiamonds to Moser's Blessed Circle
 		this.removeItem(5);
 		equipped = me.findItem(375, 0, 3); //mosers's
 		this.fillSockets(equipped, 586, 586);
 		this.equip(equipped, 5);
 	}
 
-	if (me.getItem(631) && this.getEquippedItem(1).sockets > 0 && this.getEquippedItem(1).name.includes("Harlequin")) { // add Um to Shako
+	if (me.getItem(631) && this.getEquippedItem(1).name.includes("Harlequin") && this.getEquippedItem(1).sockets > 0 && this.getEquippedItem(1).usedSockets < 1) { // add Um to Shako
 		this.removeItem(1);
 		equipped = me.findItem(422, 0, 3); // shako Harlequin's Crest
 		this.fillSockets(equipped, 631);
@@ -592,7 +596,7 @@ Item.autoEquipCharm = function () {
 				if (tier > oldTier) {
 					print(items[0].name);
 
-					if (this.equipCharm(items[0])) {
+					if (!equipped || this.equipCharm(items[0])) {
 						Misc.logItem("Equipped", me.getItem(-1, -1, items[0].gid));
 
 						if (Developer.logEquipped) {
@@ -642,7 +646,6 @@ Item.updateEquippedCharms = function (item) {
 			.filter(unit => this.canEquipCharm(unit) && unit.location === 3 && unit.classid === item.classid)
 			.sort((a, b) => NTIP.GetCharmTier(a) - NTIP.GetCharmTier(b));
 	equipped = equipped.slice(limit);
-
 	this.equippedCharms[index] = []; // reset array
 
 	while (equipped.length > 0) {
@@ -757,6 +760,7 @@ Item.getEquippedItemMerc = function (bodyLoc) {
 						str: item.getStatEx(0),
 						dex: item.getStatEx(2),
 						sockets: item.getStat(194),
+						usedSockets: Misc.getUsedSockets(item).filter(classid => classid !== "gemsocket").length,
 						description: item.description
 					};
 				}
@@ -772,6 +776,7 @@ Item.getEquippedItemMerc = function (bodyLoc) {
 		str: 0,
 		dex: 0,
 		sockets: 0,
+		usedSockets: 0,
 		description: "none"
 	};
 };

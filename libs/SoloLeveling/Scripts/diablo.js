@@ -316,8 +316,12 @@ function diablo () {
 		this.diabloPrep();
 	}
 
-	Attack.kill(243); //diablo
-	Pickit.pickItems();
+	try {
+		Attack.kill(theD); // Diablo
+		Pickit.pickItems();
+	} catch (err) {
+		print('ÿc9SoloLevelingÿc0: Failed to kill Diablo');
+	}
 
 	if (me.classic) {
 		return true;

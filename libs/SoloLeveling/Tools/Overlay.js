@@ -153,7 +153,6 @@ var Overlay = {
 					this.getHook("Andariel").hook.text = "Andariel: " + (me.getQuest(6, 0) ? "ÿc2Complete" : "ÿc1Incomplete");
 				}
 
-
 				break;
 			case 2:
 				if (!this.getHook("questbox")) {
@@ -602,7 +601,7 @@ var Overlay = {
 		function status () {
 			let hide = [0x01, 0x02, 0x03, 0x04, 0x05, 0x09, 0x0C, 0x0D, 0x0F, 0x14, 0x18, 0x19, 0x1A, 0x21, 0x24];
 
-			if (!me.area || !me.gameReady) {
+			if (!me.area || !me.gameReady || !me.ingame || me.dead) {
 				Overlay.text.enabled = false;
 			} else {
 				for (let flag = 0; flag < hide.length; flag++) {

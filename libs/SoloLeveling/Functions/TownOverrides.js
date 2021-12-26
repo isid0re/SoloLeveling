@@ -1409,3 +1409,43 @@ Town.repair = function (force = false) {
 
 	return true;
 };
+
+Town.visitTown = function (repair = false) {
+	if (me.inTown) {
+		this.doChores();
+		this.move("stash");
+
+		return true;
+	}
+
+	var preArea = me.area,
+		preAct = me.act;
+
+	try { // not an essential function -> handle thrown errors
+		this.goToTown();
+	} catch (e) {
+		return false;
+	}
+
+	this.doChores(repair);
+
+	if (me.act !== preAct) {
+		this.goToTown(preAct);
+	}
+
+	this.move("portalspot");
+
+	if (!Pather.usePortal(null, me.name)) { // this part is essential
+		try {
+			Pather.usePortal(preArea, me.name);
+		} catch (e) {
+			throw new Error("Town.visitTown: Failed to go back from town");
+		}
+	}
+
+	if (Config.PublicMode) {
+		Pather.makePortal();
+	}
+
+	return true;
+};
