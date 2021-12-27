@@ -560,7 +560,7 @@ Pather.makePortal = function (use) {
 				do {
 					if (portal.getParent() === me.name && portal.gid !== oldGid) {
 						if (use) {
-							if (Pather.usePortal(null, null, copyUnit(portal))) {
+							if (this.usePortal(null, null, copyUnit(portal))) {
 								return true;
 							}
 
@@ -576,89 +576,9 @@ Pather.makePortal = function (use) {
 		}
 
 		Packet.flash(me.gid);
-		delay(200 + me.ping);
 	}
 
 	return false;
-};
-
-Pather.usePortal = function (targetArea, owner, unit) {
-	if (targetArea && me.area === targetArea) {
-		return true;
-	}
-
-	me.cancel();
-
-	var i, tick, portal,
-		preArea = me.area;
-
-	for (i = 0; i < 10; i += 1) {
-		if (me.dead) {
-			break;
-		}
-
-		if (i > 0 && owner && me.inTown) {
-			Town.move("portalspot");
-		}
-
-		portal = unit ? copyUnit(unit) : this.getPortal(targetArea, owner);
-
-		if (portal) {
-			if (portal.area === me.area) {
-				if (getDistance(me, portal) > 5) {
-					this.moveToUnit(portal);
-				}
-
-				if (getTickCount() - this.lastPortalTick > 2500) {
-					if (i < 2) {
-						sendPacket(1, 0x13, 4, 0x2, 4, portal.gid);
-					} else {
-						Misc.click(0, 0, portal);
-					}
-				} else {
-					delay(300 + me.ping);
-					continue;
-				}
-			}
-
-			if (portal.classid === 298 && portal.mode !== 2) { // Portal to/from Arcane
-				Misc.click(0, 0, portal);
-
-				tick = getTickCount();
-
-				while (getTickCount() - tick < 2000) {
-					if (portal.mode === 2 || me.area === 74) {
-						break;
-					}
-
-					delay(10 + me.ping);
-				}
-			}
-
-			tick = getTickCount();
-
-			while (getTickCount() - tick < 500 + me.ping) {
-				if (me.area !== preArea) {
-					this.lastPortalTick = getTickCount();
-					delay(100 + me.ping);
-
-					return true;
-				}
-
-				delay(10 + me.ping);
-			}
-
-			if (i > 1) {
-				Packet.flash(me.gid);
-			}
-		} else {
-			Packet.flash(me.gid);
-		}
-
-		delay(200 + me.ping);
-	}
-
-	return targetArea ? me.area === targetArea : me.area !== preArea;
 };
 
 Pather.moveToUnit = function (unit, offX, offY, clearPath, pop) {
@@ -755,4 +675,164 @@ Pather.useUnit = function (type, id, targetArea) {
 	}
 
 	return targetArea ? me.area === targetArea : me.area !== preArea;
+};
+
+Pather.useWaypoint = function useWaypoint (targetArea, check) {
+	switch (targetArea) {
+	case undefined:
+		throw new Error("useWaypoint: Invalid targetArea parameter: " + targetArea);
+	case null:
+	case "random":
+		check = true;
+
+		break;
+	default:
+		if (typeof targetArea !== "number") {
+			throw new Error("useWaypoint: Invalid targetArea parameter");
+		}
+
+		if (this.wpAreas.indexOf(targetArea) < 0) {
+			throw new Error("useWaypoint: Invalid area");
+		}
+
+		break;
+	}
+
+	this.broadcastIntent(targetArea);
+
+	var i, tick, wp, coord, retry, npc;
+
+	for (i = 0; i < 12; i += 1) {
+		if (me.area === targetArea || me.dead) {
+			break;
+		}
+
+		if (me.inTown) {
+			npc = getUnit(1, NPC.Warriv);
+
+			if (me.area === 40 && npc && getDistance(me, npc) < 50) {
+				if (npc && npc.openMenu()) {
+					Misc.useMenu(0x0D37);
+
+					if (!Misc.poll(function () {
+						return me.area === 1;
+					}, 2000, 100)) {
+						throw new Error("Failed to go to act 1 using Warriv");
+					}
+				}
+			}
+
+			Town.move("waypoint");
+		}
+
+		wp = getUnit(2, "waypoint");
+
+		if (wp && wp.area === me.area) {
+			if (!me.inTown && getDistance(me, wp) > 7) {
+				this.moveToUnit(wp);
+			}
+
+			if (check || Config.WaypointMenu) {
+				if (getDistance(me, wp) > 5) {
+					this.moveToUnit(wp);
+				}
+
+				Misc.click(0, 0, wp);
+
+				tick = getTickCount();
+
+				while (getTickCount() - tick < Math.max(Math.round((i + 1) * 1000 / (i / 5 + 1)), me.ping * 2)) {
+					if (getUIFlag(0x14)) { // Waypoint screen is open
+						delay(500);
+
+						switch (targetArea) {
+						case "random":
+							while (true) {
+								targetArea = this.wpAreas[rand(0, this.wpAreas.length - 1)];
+
+								// get a valid wp, avoid towns
+								if ([1, 40, 75, 103, 109].indexOf(targetArea) === -1 && getWaypoint(this.wpAreas.indexOf(targetArea))) {
+									break;
+								}
+
+								delay(5);
+							}
+
+							break;
+						case null:
+							me.cancel();
+
+							return true;
+						}
+
+						if (!getWaypoint(this.wpAreas.indexOf(targetArea))) {
+							me.cancel();
+							me.overhead("Trying to get the waypoint");
+
+							if (this.getWP(targetArea)) {
+								return true;
+							}
+
+							throw new Error("Pather.useWaypoint: Failed to go to waypoint");
+						}
+
+						break;
+					}
+
+					delay(10);
+				}
+
+				if (!getUIFlag(0x14)) {
+					print("waypoint retry " + (i + 1));
+					retry = Math.min(i + 1, 5)
+					coord = CollMap.getRandCoordinate(me.x, -5 * retry, 5 * retry, me.y, -5 * retry, 5 * retry);
+					this.moveTo(coord.x, coord.y);
+					delay(200 + me.ping);
+
+					Packet.flash(me.gid);
+
+					continue;
+				}
+			}
+
+			if (!check || getUIFlag(0x14)) {
+				delay(200 + me.ping);
+				wp.interact(targetArea);
+
+				tick = getTickCount();
+
+				while (getTickCount() - tick < Math.max(Math.round((i + 1) * 1000 / (i / 5 + 1)), me.ping * 2)) {
+					if (me.area === targetArea) {
+						delay(100 + me.ping);
+
+						return true;
+					}
+
+					delay(10 + me.ping);
+				}
+
+				while (!me.gameReady) {
+					delay(200 + me.ping);
+				}
+
+				me.cancel(); // In case lag causes the wp menu to stay open
+			}
+
+			Packet.flash(me.gid);
+
+			if (i > 1) { // Activate check if we fail direct interact twice
+				check = true;
+			}
+		} else {
+			Packet.flash(me.gid);
+		}
+
+		delay(200 + me.ping);
+	}
+
+	if (me.area === targetArea) {
+		return true;
+	}
+
+	throw new Error("useWaypoint: Failed to use waypoint");
 };

@@ -22,7 +22,7 @@ Town.ignoredItemTypes = [ // Items that won't be stashed
 	81 // Thawing Potion
 ];
 
-Town.townTasks = function () {
+Town.townTasks = function (repair = false) {
 	if (!me.inTown) {
 		Town.goToTown();
 	}
@@ -41,8 +41,11 @@ Town.townTasks = function () {
 	this.fillTome(518);
 	this.shopItems();
 	this.buyKeys();
-	this.repair(true);
-	this.shopItems();
+
+	if (this.repair((repair || me.normal))) {
+		this.shopItems();
+	}
+
 	this.reviveMerc();
 	this.gamble();
 	Item.autoEquip();
