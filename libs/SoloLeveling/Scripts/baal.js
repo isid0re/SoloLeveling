@@ -181,14 +181,16 @@ function baal () {
 		if (getUnit(1, 691)) {
 			print("ÿc9SoloLevelingÿc0: Dolls found! NG.");
 			me.overhead("Dolls found! NG.");
+
+			return true;
 		}
 
 		if (Check.Resistance().LR < 75 + me.getStat(42) && getUnit(1, 641)) { // leave game if not max res
 			print("ÿc9SoloLevelingÿc0: Souls found! NG.");
 			me.overhead("Souls found! NG.");
-		}
 
-		return true;
+			return true;
+		}
 	}
 
 	this.clearThrone();
