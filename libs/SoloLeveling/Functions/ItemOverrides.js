@@ -52,7 +52,7 @@ Item.getBodyLoc = function (item) {
 	case 6: // Bolts
 	case 69: // Voodoo Heads
 	case 70: // Auric Shields
-		bodyLoc = [5, 12];
+		bodyLoc = 5;
 
 		break;
 	case 3: // Armor
@@ -112,7 +112,7 @@ Item.getBodyLoc = function (item) {
 			break;
 		}
 
-		bodyLoc = [4, 11];
+		bodyLoc = 4;
 
 		break;
 	case 67: // Handtohand (Assasin Claw)
@@ -144,7 +144,7 @@ Item.autoEquipCheck = function (item) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
 			this.equippedBodyLoc = bodyLoc[i];
 
-			if (bodyLoc[i] < 11 && tier > this.getEquippedItem(bodyLoc[i]).tier) {
+			if (tier > this.getEquippedItem(bodyLoc[i]).tier) {
 				this.equippedBodyLoc = null;
 
 				return true;
@@ -159,6 +159,58 @@ Item.hasSwapTier = function (item) {
 	return Config.AutoEquip && NTIP.GetSwapTier(item) > 0;
 };
 
+Item.getBodyLocSwap = function (item) {
+	var bodyLoc;
+
+	switch (item.itemType) {
+	case 2: // Shield
+	case 5: // Arrows
+	case 6: // Bolts
+	case 69: // Voodoo Heads
+	case 70: // Auric Shields
+		bodyLoc = 12;
+
+		break;
+	case 24: //
+	case 25: //
+	case 26: //
+	case 27: //
+	case 28: //
+	case 29: //
+	case 30: //
+	case 31: //
+	case 32: //
+	case 33: //
+	case 34: //
+	case 35: //
+	case 36: //
+	case 42: //
+	case 43: //
+	case 44: //
+	case 68: //
+	case 85: //
+	case 86: //
+	case 87: //
+		if (me.barbarian) {
+			bodyLoc = [11, 12];
+
+			break;
+		}
+
+		bodyLoc = 11;
+
+		break;
+	default:
+		return false;
+	}
+
+	if (typeof bodyLoc === "number") {
+		bodyLoc = [bodyLoc];
+	}
+
+	return bodyLoc;
+};
+
 Item.autoEquipCheckSwap = function (item) {
 	if (!Config.AutoEquip) {
 		return true;
@@ -166,13 +218,13 @@ Item.autoEquipCheckSwap = function (item) {
 
 	var i,
 		swaptier = NTIP.GetSwapTier(item),
-		bodyLoc = this.getBodyLoc(item);
+		bodyLoc = this.getBodyLocSwap(item);
 
 	if (this.hasSwapTier(item) && swaptier > 0 && bodyLoc) {
 		for (i = 0; i < bodyLoc.length; i += 1) {
 			this.equippedBodyLoc = bodyLoc[i];
 
-			if (bodyLoc[i] > 10 && swaptier > this.getEquippedItem(bodyLoc[i]).swaptier) {
+			if (swaptier > this.getEquippedItem(bodyLoc[i]).swaptier) {
 				this.equippedBodyLoc = null;
 
 				return true;
@@ -188,7 +240,7 @@ Item.autoEquip = function () {
 		return true;
 	}
 
-	var i, j, tier, bodyLoc, tome, gid, swaptier,
+	var i, j, tier, bodyLoc, tome, gid, swapbodyLoc, swaptier,
 		items = me.findItems(-1, 0);
 
 	if (!items) {
@@ -222,12 +274,17 @@ Item.autoEquip = function () {
 		items.sort(sortEq);
 
 		bodyLoc = this.getBodyLoc(items[0]);
+		swapbodyLoc = this.getBodyLocSwap(items[0]);
 		tier = NTIP.GetTier(items[0]);
 		swaptier = NTIP.GetSwapTier(items[0]);
 
 		if (tier > 0 && bodyLoc) {
 			for (j = 0; j < bodyLoc.length; j += 1) {
-				if (bodyLoc[j] < 11 && [3, 7].indexOf(items[0].location) > -1 && tier > this.getEquippedItem(bodyLoc[j]).tier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
+				if ([3, 6, 7].indexOf(items[0].location) > -1 && tier > this.getEquippedItem(bodyLoc[j]).tier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
+					if (items[0].location === 6) {
+						Cubing.emptyCube();
+					}
+
 					if (!items[0].getFlag(0x10)) { // unid
 						tome = me.findItem(519, 0, 3);
 
@@ -258,7 +315,11 @@ Item.autoEquip = function () {
 
 		if (swaptier > 0 && bodyLoc) {
 			for (j = 0; j < bodyLoc.length; j += 1) {
-				if (bodyLoc[j] > 10 && [3, 7].indexOf(items[0].location) > -1 && swaptier > this.getEquippedItem(bodyLoc[j]).swaptier && this.getEquippedItem(bodyLoc[j]).classid !== 174) { // khalim's will adjustment
+				if ([3, 6, 7].indexOf(items[0].location) > -1 && swaptier > this.getEquippedItem(swapbodyLoc[j]).swaptier && this.getEquippedItem(swapbodyLoc[j]).classid !== 174) { // khalim's will adjustment
+					if (items[0].location === 6) {
+						Cubing.emptyCube();
+					}
+
 					if (!items[0].getFlag(0x10)) { // unid
 						tome = me.findItem(519, 0, 3);
 

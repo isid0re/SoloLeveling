@@ -245,7 +245,9 @@ Pather.changeAct = function () {
 		}
 	}
 
-	throw new Error("SoloLeveling: Failed to change Act");
+	print("SoloLeveling: Failed to change Act");
+
+	return false;
 };
 
 Pather.moveTo = function (x, y, retry, clearPath, pop) {
@@ -784,7 +786,7 @@ Pather.useWaypoint = function useWaypoint (targetArea, check) {
 
 				if (!getUIFlag(0x14)) {
 					print("waypoint retry " + (i + 1));
-					retry = Math.min(i + 1, 5)
+					retry = Math.min(i + 1, 5);
 					coord = CollMap.getRandCoordinate(me.x, -5 * retry, 5 * retry, me.y, -5 * retry, 5 * retry);
 					this.moveTo(coord.x, coord.y);
 					delay(200 + me.ping);

@@ -165,16 +165,16 @@ var PickitItems = {
 		"[name] == tomeofidentify",
 		"[name] == gold # [gold] >= me.charlvl * 3 * me.diff",
 		"me.normal && [name] == minorhealingpotion",
-		"[name] == lighthealingpotion",
-		"[name] == healingpotion",
+		"!me.hell && [name] == lighthealingpotion",
+		"!me.hell && [name] == healingpotion",
 		"[name] == greaterhealingpotion",
 		"[name] == superhealingpotion",
 		"me.normal && [name] == minormanapotion",
-		"[name] == lightmanapotion",
-		"[name] == manapotion",
+		"!me.hell && [name] == lightmanapotion",
+		"!me.hell && [name] == manapotion",
 		"[name] == greatermanapotion",
 		"[name] == supermanapotion",
-		"[name] == rejuvenationpotion",
+		"!me.hell && [name] == rejuvenationpotion",
 		"[name] == fullrejuvenationpotion",
 		"[name] == ScrollofTownPortal # # [MaxQuantity] == 20",
 		"[name] == scrollofidentify # # [MaxQuantity] == 20",
@@ -241,7 +241,7 @@ var Check = {
 
 			break;
 		case "countess": //countess
-			if (me.classic && !me.countess || !me.classic && (needRunes || !me.hell && !Check.Gold())) { // classic quest completed normal || have runes for difficulty
+			if (me.classic && !me.countess || !me.classic && (needRunes || !me.hell && me.lowgold)) { // classic quest completed normal || have runes for difficulty
 				return true;
 			}
 
@@ -399,16 +399,6 @@ var Check = {
 		default:
 			break;
 		}
-
-		return false;
-	},
-
-	Gold: function () {
-		if (me.normal && !Pather.accessToAct(2) || !me.lowgold) {
-			return true;
-		}
-
-		me.overhead('low gold');
 
 		return false;
 	},

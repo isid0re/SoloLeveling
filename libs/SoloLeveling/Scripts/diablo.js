@@ -327,13 +327,13 @@ function diablo () {
 		return true;
 	}
 
-	try {
-		Pather.changeAct();
-	} catch (err) {
+	if (!me.getQuest(28, 0)) {
 		Town.npcInteract("tyrael");
 		me.cancel();
 		delay(500 + me.ping);
 		Pather.useUnit(2, 566, 109);
+	} else {
+		Pather.changeAct();
 	}
 
 	return true;

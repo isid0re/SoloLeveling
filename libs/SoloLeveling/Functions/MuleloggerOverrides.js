@@ -331,7 +331,7 @@ MuleLogger.logEquippedItems = function () {
 			}
 
 			if (items[i].mode === 1 && (items[i].location === 11 || items[i].location === 12)) {
-				parsedItem.title += " (secondary equipped)";
+				parsedItem.title += " (swap equipped)";
 			}
 
 			if (items[i].mode === 0 && [603, 604, 605].indexOf(items[i].classid) === -1) {
@@ -366,9 +366,6 @@ MuleLogger.logEquippedItems = function () {
 	}
 
 	charClass = ["amazon.", "sorceress.", "necromancer.", "paladin.", "barbarian.", "druid.", "assassin."][me.classid];
-
-	// hccl = hardcore classic ladder
-	// scnl = softcore expan nonladder
 	FileTools.writeText("mules/" + realm + "/" + "SoloLeveling/" + me.account + "/" + charClass + "." + me.profile + "-" + me.name + "." + ( me.playertype ? "hc" : "sc" ) + (me.classic ? "c" : "" ) + ( (me.ladder || Developer.addLadderRW) ? "l" : "nl" ) + ".txt", finalString);
 	print("Item logging done.");
 };
