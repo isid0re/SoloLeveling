@@ -445,7 +445,7 @@ function LoadConfig () {
 			Config.KeepRunewords.push("([type] == circlet || [type] == helm) # [LightResist] >= 25");
 		}
 
-		if (Item.getEquippedItem(5).tier < 500) { // Ancients' Pledge
+		if (Item.getEquippedItem(5).tier < 304) { // Ancients' Pledge
 			if (!Check.haveItem("shield", "runeword", "Ancients' Pledge") && !me.hell) {
 				if (me.normal && !me.getItem(618)) {
 					Config.Recipes.push([Recipe.Rune, "Ral Rune"]);
