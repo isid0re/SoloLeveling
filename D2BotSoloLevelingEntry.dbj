@@ -696,12 +696,12 @@ function locationAction (location) {
 						if (StarterConfig.GlobalAccountPassword) {
 							setUp.account = randomString(12, true);
 							setUp.password = StarterConfig.GlobalAccountPassword;
-							print("Generating Account Information");
+							print("ÿc9SoloLevelingÿc0: Generating Account Information");
 							ControlAction.timeoutDelay("Generating Account Information", StarterConfig.DelayBeforeLogin * 1e3);
 						} else {
 							setUp.account = randomString(12, true);
 							setUp.password = randomString(12, true);
-							print("Generating Random Account Information");
+							print("ÿc9SoloLevelingÿc0: Generating Random Account Information");
 							ControlAction.timeoutDelay("Generating Random Account Information", StarterConfig.DelayBeforeLogin * 1e3);
 						}
 
@@ -1157,14 +1157,14 @@ function main () {
 
 	while (!setUp) {
 		D2Bot.getProfile();
-		print("Getting Profile");
+		print("ÿc9SoloLevelingÿc0: Getting Profile");
 		delay(500);
 	}
 
 	if (setUp.charName === "") {
 		setUp.charName = NameGen();
 		D2Bot.setProfile(null, null, setUp.charName);
-		print("Generating Character Name");
+		print("ÿc9SoloLevelingÿc0: Generating Character Name");
 		delay(50);
 	}
 

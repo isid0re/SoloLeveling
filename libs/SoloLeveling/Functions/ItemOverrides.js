@@ -657,7 +657,7 @@ Item.autoEquipCharm = function () {
 				if (tier > oldTier) {
 					print(items[0].name);
 
-					if (!equipped || this.equipCharm(items[0])) {
+					if (!equipped && this.equipCharm(items[0])) {
 						Misc.logItem("Equipped", me.getItem(-1, -1, items[0].gid));
 
 						if (Developer.logEquipped) {

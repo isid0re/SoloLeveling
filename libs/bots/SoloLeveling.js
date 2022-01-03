@@ -52,8 +52,8 @@ function SoloLeveling () {
 					include("SoloLeveling/Scripts/" + SetUp.scripts[k] + ".js");
 				}
 
-				let tick = getTickCount();
-				let currentExp = me.getStat(13);
+				let tick = getTickCount(),
+					currentExp = me.getStat(13);
 
 				for (j = 0; j < 5; j += 1) {
 					if (this[SetUp.scripts[k]]()) {
@@ -63,6 +63,11 @@ function SoloLeveling () {
 
 				if (Developer.logPerformance) {
 					Tracker.Script(tick, SetUp.scripts[k], currentExp);
+				}
+
+				if (updatedDifficulty) {
+					DataFile.updateStats("setDifficulty", updatedDifficulty);
+					D2Bot.setProfile(null, null, null, updatedDifficulty);
 				}
 
 				if (j === 5) {

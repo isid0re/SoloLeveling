@@ -134,7 +134,7 @@ Pather.checkWP = function (area) {
 };
 
 Pather.useTeleport = function () {
-	return this.teleport && !Config.NoTele && !me.getState(139) && !me.getState(140) && !me.inTown && !me.lowgold && ((me.classid === 1 && me.getSkill(54, 1) && ((me.getStat(8) / me.getStat(9)) * 100) >= 20) || me.getStat(97, 54));
+	return this.teleport && !Config.NoTele && !me.getState(139) && !me.getState(140) && !me.inTown && !me.lowgold && ((me.getSkill(54, 1) || me.getStat(97, 54)) && ((me.getStat(8) / me.getStat(9)) * 100) >= 20);
 };
 
 Pather.openDoors = function (x, y) {

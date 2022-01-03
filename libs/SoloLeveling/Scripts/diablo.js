@@ -330,7 +330,11 @@ function diablo () {
 	if (!me.getQuest(28, 0)) {
 		Town.npcInteract("tyrael");
 		me.cancel();
-		delay(500 + me.ping);
+
+		while (!getUnit(2, 566)) {
+			delay(250);
+		}
+
 		Pather.useUnit(2, 566, 109);
 	} else {
 		Pather.changeAct();

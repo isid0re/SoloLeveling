@@ -26,7 +26,11 @@ function duriel () {
 	Town.buyPots(8, "Thawing"); // thawing
 	Town.drinkPots();
 	Pather.usePortal(null, me.name);
-	delay(1000 + me.ping);
+
+	while (!getUnit(2, 100)) {
+		delay(250);
+	}
+
 	Pather.useUnit(2, 100, 73);
 
 	try {
