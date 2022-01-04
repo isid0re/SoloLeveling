@@ -28,8 +28,8 @@ include("common/Runewords.js");
 include("common/Storage.js");
 include("common/Town.js");
 
-if (!isIncluded("SoloLeveling/Functions/Globals.js")) {
-	include("SoloLeveling/Functions/Globals.js");
+if (!isIncluded("SoloLeveling/Functions/ItemOverrides.js")) {
+	include("SoloLeveling/Functions/ItemOverrides.js");
 }
 
 function main () {
@@ -97,7 +97,7 @@ function main () {
 	CraftingSystem.buildLists();
 	Runewords.init();
 	Cubing.init();
-	SetUp.include();
+	Item.setupCharms();
 
 	while (true) {
 		if (!me.inTown && (townCheck ||

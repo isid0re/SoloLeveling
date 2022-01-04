@@ -37,8 +37,8 @@ if (!isIncluded("SoloLeveling/Tools/Tracker.js")) {
 	include("SoloLeveling/Tools/Tracker.js");
 }
 
-if (!isIncluded("SoloLeveling/Functions/Globals.js")) {
-	include("SoloLeveling/Functions/Globals.js");
+if (!isIncluded("SoloLeveling/Functions/ItemOverrides.js")) {
+	include("SoloLeveling/Functions/ItemOverrides.js");
 }
 
 const sdk = require('../../libs/modules/sdk');
@@ -62,7 +62,7 @@ function main () {
 	CraftingSystem.buildLists();
 	Runewords.init();
 	Cubing.init();
-	SetUp.include();
+	Item.setupCharms();
 
 	if (Developer.Overlay) {
 		include("SoloLeveling/Tools/Overlay.js");
