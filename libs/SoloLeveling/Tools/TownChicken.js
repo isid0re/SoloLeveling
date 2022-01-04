@@ -28,6 +28,10 @@ include("common/Runewords.js");
 include("common/Storage.js");
 include("common/Town.js");
 
+if (!isIncluded("SoloLeveling/Functions/Globals.js")) {
+	include("SoloLeveling/Functions/Globals.js");
+}
+
 function main () {
 	var townCheck = false;
 
@@ -93,6 +97,7 @@ function main () {
 	CraftingSystem.buildLists();
 	Runewords.init();
 	Cubing.init();
+	SetUp.include();
 
 	while (true) {
 		if (!me.inTown && (townCheck ||
