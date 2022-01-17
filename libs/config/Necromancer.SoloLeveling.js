@@ -274,7 +274,7 @@ function LoadConfig () {
 			var white = [
 				"[Name] == DolRune # # [MaxQuantity] == 1",
 				"[Name] == IoRune # # [MaxQuantity] == 1",
-				"[Name] == wand && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [NecromancerSkills] + [poisonandboneskilltab] >= 1 && [Sockets] == 2 # [MaxQuantity] == 1"
+				"[type] == wand && [flag] != runeword && [Quality] >= Normal && [Quality] <= Superior # [poisonandboneskilltab] == 2 && [fcr] == 20 && [skillbonespear] == 3 && [Sockets] == 2 # [MaxQuantity] == 1"
 			];
 			NTIP.arrayLooping(white);
 
