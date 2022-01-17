@@ -142,7 +142,7 @@ function LoadConfig () {
 	var finalGear = !me.classic ? Check.Build().finalGear : false;
 	var levelingGear = [ // autoequip setup
 		//weapon
-		"([type] == wand || [type] == sword && ([Quality] >= Magic || [flag] == runeword) || [type] == knife && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
+		"([type] == wand || ([type] == sword || [type] == mace) && ([Quality] >= Magic || [flag] == runeword) || [type] == knife && [Quality] >= Magic) && [flag] != ethereal # [secondarymindamage] == 0 && [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//Helmet
 		"([type] == helm || [type] == circlet) && ([Quality] >= Magic || [flag] == runeword) && [flag] != ethereal # [itemchargedskill] >= 0 # [tier] == tierscore(item)",
 		//belt
