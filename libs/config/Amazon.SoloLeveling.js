@@ -63,7 +63,6 @@ function LoadConfig () {
 	Config.MiniShopBot = true;
 	Config.PacketShopping = true;
 	Config.TownCheck = me.findItem("tbk", 0, 3);
-	Config.LogExperience = false;
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
 	Config.OpenChests = me.hell ? 2 : true;
@@ -81,6 +80,7 @@ function LoadConfig () {
 	Config.LogMiddleRunes = true;
 	Config.LogHighRunes = true;
 	Config.ShowCubingInfo = true;
+	Config.LogExperience = false;
 
 	/* Town configuration. */
 	Config.HealHP = 99;
@@ -249,9 +249,13 @@ function LoadConfig () {
 	Config.AutoBuild.DebugMode = false;
 	Config.AutoBuild.Template = SetUp.getBuild();
 
-	// Class specific config
+	/* Class specific configuration. */
 	Config.LightningFuryDelay = 10; // Lightning fury interval in seconds. LF is treated as timed skill.
 	Config.SummonValkyrie = true; // Summon Valkyrie
+
+	/* Dodge configuration. */
+	Config.Dodge = Attack.usingBow() ? true : false;
+	Config.DodgeRange = 5;
 
 	/* LOD gear */
 	if (!me.classic) {

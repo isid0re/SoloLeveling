@@ -533,10 +533,10 @@ Object.defineProperty(Unit.prototype, 'staff', {
 	}
 });
 
-Object.defineProperty(Unit.prototype, 'horadricstaff', {
+Object.defineProperty(Unit.prototype, 'horadricstaffquest', {
 	get: function () {
 		if (this.type > 0) {
-			throw new Error("Unit.horadricstaff: Must be used with player units.");
+			throw new Error("Unit.horadricstaffquest: Must be used with player units.");
 		}
 
 		return this.getQuest(10, 0);

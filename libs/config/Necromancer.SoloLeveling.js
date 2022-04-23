@@ -64,7 +64,6 @@ function LoadConfig () {
 	Config.MiniShopBot = true;
 	Config.PacketShopping = true;
 	Config.TownCheck = me.findItem("tbk", 0, 3);
-	Config.LogExperience = false;
 	Config.PingQuit = [{Ping: 600, Duration: 10}];
 	Config.Silence = true;
 	Config.OpenChests = me.hell ? 2 : true;
@@ -82,6 +81,7 @@ function LoadConfig () {
 	Config.LogMiddleRunes = true;
 	Config.LogHighRunes = true;
 	Config.ShowCubingInfo = true;
+	Config.LogExperience = false;
 
 	/* Town configuration. */
 	Config.HealHP = 99;

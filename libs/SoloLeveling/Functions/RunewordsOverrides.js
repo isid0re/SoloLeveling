@@ -91,6 +91,6 @@ var Runeword = {
 	Principle: [617, 634, 611], // Ral + Gul + Eld
 	Rain: [618, 632, 615], // Ort + Mal + Ith
 	Treachery: [622, 619, 629], // Shael + Thul + Lem
-
+	//Test
 	Test: [624, 624, 624]
 };

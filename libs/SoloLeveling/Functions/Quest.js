@@ -7,7 +7,7 @@
 
 var Quest = {
 	preReqs: function () {
-		if (Pather.accessToAct(2) && !me.staff && !me.horadricstaff) { // horadric staff
+		if (Pather.accessToAct(2) && !me.staff && !me.horadricstaffquest) { // horadric staff
 			if (!me.amulet) {
 				if (!isIncluded("SoloLeveling/Scripts/amulet.js")) {
 					include("SoloLeveling/Scripts/amulet.js");
@@ -83,7 +83,7 @@ var Quest = {
 	},
 
 	cubeItems: function (outcome, ...classids) {
-		if (me.getItem(outcome) || outcome === 91 && me.horadricstaff || outcome === 174 && me.travincal) {
+		if (me.getItem(outcome) || outcome === 91 && me.horadricstaffquest || outcome === 174 && me.travincal) {
 			return true;
 		}
 
@@ -144,11 +144,10 @@ var Quest = {
 	},
 
 	placeStaff: function () {
-		let tick = getTickCount();
 		let orifice = getUnit(2, 152);
 		let hstaff = me.staff;
 
-		if (me.horadricstaff) {
+		if (me.horadricstaffquest) {
 			return true;
 		}
 
@@ -158,6 +157,7 @@ var Quest = {
 
 		if (!hstaff) {
 			Quest.cubeItems(91, 92, 521);
+			hstaff = Misc.poll(() => me.staff);
 		}
 
 		if (hstaff) {
@@ -183,22 +183,19 @@ var Quest = {
 					Storage.Inventory.MoveTo(hstaff);
 				}
 
+				hstaff = Misc.poll(() => me.staff);
 				me.cancel();
-				Pather.usePortal(null, me.name);
+
+				if (!hstaff) {
+					return false;
+				} else {
+					Pather.usePortal(null, me.name);
+				}
 			}
 		}
 
 		Pather.moveToPreset(me.area, 2, 152);
 		Misc.openChest(orifice);
-
-		if (!hstaff) {
-			if (getTickCount() - tick < 500) {
-				delay(500 + me.ping);
-			}
-
-			return false;
-		}
-
 		hstaff.toCursor();
 		submitItem();
 		delay(750 + me.ping);
@@ -352,12 +349,12 @@ var Quest = {
 		let something, tool;
 
 		switch (smashable) {
-		case 404:
+		case 404: // trav
 			something = getUnit(2, 404);
 			tool = 174;
 
 			break;
-		case 376:
+		case 376: // hellforge
 			something = getUnit(2, 376);
 			tool = 90;
 

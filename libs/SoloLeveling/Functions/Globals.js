@@ -271,13 +271,13 @@ var Check = {
 
 			break;
 		case "staff": //staff
-			if (Pather.accessToAct(2) && !me.shaft && !me.staff && !me.horadricstaff) {
+			if (Pather.accessToAct(2) && !me.shaft && !me.staff && !me.horadricstaffquest) {
 				return true;
 			}
 
 			break;
 		case "amulet": //ammy
-			if (Pather.accessToAct(2) && !me.amulet && !me.staff && !me.horadricstaff) {
+			if (Pather.accessToAct(2) && !me.amulet && !me.staff && !me.horadricstaffquest) {
 				return true;
 			}
 

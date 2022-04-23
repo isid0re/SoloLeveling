@@ -23,8 +23,8 @@ var build = {
 		[15, 1], // Poison Javelin
 		[20, 1], // Lightning Bolt
 		[25, 1], // Plague Javelin
-		[24, 13], // Charged Strike
-		[14, 12], // Power Strike
+		[24, 13, false], // Charged Strike
+		[14, 12, false], // Power Strike
 		[33, 1], // Pierce
 		[35, 1], // Lightning Fury
 		[33, 2], // Pierce
