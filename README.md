@@ -1,5 +1,5 @@
 ![SoloLeveling](https://i.imgur.com/6UMDGFk.png)
-* this project is no longer active-- and no longer works with the current versions of Kolbot. 
+## this project is no longer active-- and no longer works with the current versions of Kolbot. 
 
 SoloLeveling is the ***original*** multi-class single character leveling script for Kolbot. The overall goal of the project is to be the easiest to use and fastest leveling script for any character class.
 
